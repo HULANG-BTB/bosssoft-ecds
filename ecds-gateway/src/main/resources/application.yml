@@ -1,0 +1,46 @@
+server:
+  port: 7000
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedHeaders: "*"
+            allowedOrigins: "*"
+            allowedCredentials: true
+            allowedMethods:
+              - GET
+                POST
+                DELETE
+                PUT
+                OPTION
+      routes:
+        # - id: nacos-getway-provider-spring-cloud-provider-dept
+        #   uri: lb://SPRING-CLOUD-PROVIDER-DEPT
+        #   predicates:
+        #   - Path=/dept/**
+        #   filters:
+        #     - StripPrefix=0
+        - id: nacos-getway-provider-user
+          uri: lb://PROVIDER-USER
+          predicates:
+            - Path=/user/**
+          filters:
+            - StripPrefix=0
+        - id: nacos-getway-provider-role
+          uri: lb://PROVIDER-USER
+          predicates:
+            - Path=/role/**
+          filters:
+            - StripPrefix=0
+        - id: nacos-getway-provider-permission
+          uri: lb://PROVIDER-USER
+          predicates:
+            - Path=/permission/**
+          filters:
+            - StripPrefix=0
