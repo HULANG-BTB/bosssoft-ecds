@@ -42,6 +42,7 @@
         <module>ecds-financial-sign</module>
         <!--    单位签名    -->
         <module>ecds-unit-sign</module>
+        <module>ecds-base-controller</module>
     </modules>
 
     <packaging>pom</packaging>
