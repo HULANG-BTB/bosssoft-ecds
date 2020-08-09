@@ -3,10 +3,9 @@ package com.bosssoft.ecds.controller;
 
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.dto.PermissionDTO;
-import com.bosssoft.ecds.model.ResultType;
 import com.bosssoft.ecds.service.impl.PermissionServiceImpl;
 import com.bosssoft.ecds.utils.BeanUtil;
-import com.bosssoft.ecds.utils.ResponseUtil;
+import com.bosssoft.ecds.utils.ResponseUtils;
 import com.bosssoft.ecds.entity.vo.PageVO;
 import com.bosssoft.ecds.entity.vo.PermissionVO;
 import io.swagger.annotations.ApiOperation;
@@ -45,7 +44,7 @@ public class PermissionController {
         BeanUtil.copyProperties(permissionVO, permissionDTO);
         permissionDTO = permissionService.save(permissionDTO);
         BeanUtil.copyProperties(permissionDTO, permissionVO);
-        return ResponseUtil.getResponse(permissionVO, ResultType.OK);
+        return ResponseUtils.getResponse(permissionVO, ResponseUtils.ResultType.OK);
     }
 
     /**
@@ -59,7 +58,7 @@ public class PermissionController {
         PermissionDTO permissionDTO = new PermissionDTO();
         BeanUtil.copyProperties(permissionVO, permissionDTO);
         Boolean result = permissionService.update(permissionDTO);
-        return ResponseUtil.getResponse(result, ResultType.OK);
+        return ResponseUtils.getResponse(result, ResponseUtils.ResultType.OK);
     }
 
     /**
@@ -75,7 +74,7 @@ public class PermissionController {
         PermissionDTO permissionDTO = new PermissionDTO();
         BeanUtil.copyProperties(permissionVO, permissionDTO);
         Boolean result = permissionService.remove(permissionDTO);
-        return ResponseUtil.getResponse(result, ResultType.OK);
+        return ResponseUtils.getResponse(result, ResponseUtils.ResultType.OK);
     }
 
     /**
@@ -95,7 +94,7 @@ public class PermissionController {
         pageDTO = permissionService.listByPage(pageDTO);
 
         pageVO = BeanUtil.copyProperties(pageDTO, PageVO.class);
-        return ResponseUtil.getResponse(pageVO, ResultType.OK);
+        return ResponseUtils.getResponse(pageVO, ResponseUtils.ResultType.OK);
     }
 
     /**
@@ -113,7 +112,7 @@ public class PermissionController {
 
         List<PermissionDTO> permissionDTOList = permissionService.getByRid(permissionDTO);
         List<PermissionVO> permissionVOList = BeanUtil.copyListProperties(permissionDTOList, PermissionVO.class);
-        return ResponseUtil.getResponse(permissionVOList, ResultType.OK);
+        return ResponseUtils.getResponse(permissionVOList, ResponseUtils.ResultType.OK);
     }
 
     /**
@@ -125,7 +124,7 @@ public class PermissionController {
     public String listAll() {
         List<PermissionDTO> permissionDTOList = permissionService.listAll();
         List<PermissionVO> permissionVOList = BeanUtil.copyListProperties(permissionDTOList, PermissionVO.class);
-        return ResponseUtil.getResponse(permissionVOList, ResultType.OK);
+        return ResponseUtils.getResponse(permissionVOList, ResponseUtils.ResultType.OK);
     }
 
     /**
@@ -135,7 +134,7 @@ public class PermissionController {
     public String getTreeList() {
         List<PermissionDTO> treeList = permissionService.listByTree();
         List<PermissionVO> permissionVOList = BeanUtil.copyListProperties(treeList, PermissionVO::new);
-        return ResponseUtil.getResponse(permissionVOList, ResultType.OK);
+        return ResponseUtils.getResponse(permissionVOList, ResponseUtils.ResultType.OK);
     }
 
     /**
@@ -148,7 +147,7 @@ public class PermissionController {
     public String removeBatch(@RequestBody List<PermissionVO> permissionVOList) {
         List<PermissionDTO> permissionDTOList = BeanUtil.copyListProperties(permissionVOList, PermissionDTO.class);
         Boolean result = permissionService.removeBatch(permissionDTOList);
-        return ResponseUtil.getResponse(result, ResultType.OK);
+        return ResponseUtils.getResponse(result, ResponseUtils.ResultType.OK);
     }
 
 }

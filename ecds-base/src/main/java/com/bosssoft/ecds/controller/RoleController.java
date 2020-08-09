@@ -4,13 +4,12 @@ package com.bosssoft.ecds.controller;
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.dto.PermissionDTO;
 import com.bosssoft.ecds.entity.dto.RoleDTO;
-import com.bosssoft.ecds.model.ResultType;
 import com.bosssoft.ecds.service.impl.RoleServiceImpl;
 import com.bosssoft.ecds.utils.BeanUtil;
-import com.bosssoft.ecds.utils.ResponseUtil;
 import com.bosssoft.ecds.entity.vo.PageVO;
 import com.bosssoft.ecds.entity.vo.PermissionVO;
 import com.bosssoft.ecds.entity.vo.RoleVO;
+import com.bosssoft.ecds.utils.ResponseUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -51,7 +50,7 @@ public class RoleController {
         permissionVOList = BeanUtil.copyListProperties(permissionDTOList, PermissionVO.class);
         roleVO.setPermissions(permissionVOList);
 
-        return ResponseUtil.getResponse(roleVO, ResultType.OK);
+        return ResponseUtils.getResponse(roleVO, ResponseUtils.ResultType.OK);
     }
 
     /**
@@ -68,7 +67,7 @@ public class RoleController {
         roleDTO.setPermissions(permissionDTOList);
         // 执行业务逻辑
         Boolean result = roleService.update(roleDTO);
-        return ResponseUtil.getResponse(result, ResultType.OK);
+        return ResponseUtils.getResponse(result, ResponseUtils.ResultType.OK);
     }
 
     /**
@@ -81,7 +80,7 @@ public class RoleController {
         List<RoleDTO> roleDTOList = roleService.listAll();
         // 转换为VO
         List<RoleVO> roleVOList = BeanUtil.copyListProperties(roleDTOList, RoleVO.class);
-        return ResponseUtil.getResponse(roleVOList, ResultType.OK);
+        return ResponseUtils.getResponse(roleVOList, ResponseUtils.ResultType.OK);
     }
 
     /**
@@ -94,7 +93,7 @@ public class RoleController {
         List<RoleDTO> roleDTOList = roleService.listByUserId(id);
         // 转换为VO
         List<RoleVO> roleVOList = BeanUtil.copyListProperties(roleDTOList, RoleVO.class);
-        return ResponseUtil.getResponse(roleVOList, ResultType.OK);
+        return ResponseUtils.getResponse(roleVOList, ResponseUtils.ResultType.OK);
     }
 
     /**
@@ -113,7 +112,7 @@ public class RoleController {
         pageDTO = roleService.listByPage(pageDTO);
 
         pageVO = BeanUtil.copyProperties(pageDTO, PageVO.class);
-        return ResponseUtil.getResponse(pageVO, ResultType.OK);
+        return ResponseUtils.getResponse(pageVO, ResponseUtils.ResultType.OK);
     }
 
     /**
@@ -127,7 +126,7 @@ public class RoleController {
         roleVO.setId(id);
         RoleDTO roleDTO = BeanUtil.copyProperties(roleVO, RoleDTO.class);
         Boolean result = roleService.remove(roleDTO);
-        return ResponseUtil.getResponse(result, ResultType.OK);
+        return ResponseUtils.getResponse(result, ResponseUtils.ResultType.OK);
     }
 
     /**
@@ -139,7 +138,7 @@ public class RoleController {
     public String removeBatch(@RequestBody List<RoleVO> roleVOList) {
         List<RoleDTO> roleDTOList = BeanUtil.copyListProperties(roleVOList, RoleDTO.class);
         Boolean result = roleService.removeBatch(roleDTOList);
-        return ResponseUtil.getResponse(result, ResultType.OK);
+        return ResponseUtils.getResponse(result, ResponseUtils.ResultType.OK);
     }
 
 }

@@ -4,14 +4,13 @@ package com.bosssoft.ecds.controller;
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.dto.RoleDTO;
 import com.bosssoft.ecds.entity.dto.UserDTO;
-import com.bosssoft.ecds.model.ResultType;
 import com.bosssoft.ecds.service.impl.RoleServiceImpl;
 import com.bosssoft.ecds.service.impl.UserServiceImpl;
 import com.bosssoft.ecds.utils.BeanUtil;
-import com.bosssoft.ecds.utils.ResponseUtil;
 import com.bosssoft.ecds.entity.vo.PageVO;
 import com.bosssoft.ecds.entity.vo.RoleVO;
 import com.bosssoft.ecds.entity.vo.UserVO;
+import com.bosssoft.ecds.utils.ResponseUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -57,7 +56,7 @@ public class UserController {
         roleVOList = BeanUtil.copyListProperties(roleDTOList, RoleVO.class);
         userVO.setRoles(roleVOList);
 
-        return ResponseUtil.getResponse(userVO, ResultType.OK);
+        return ResponseUtils.getResponse(userVO, ResponseUtils.ResultType.OK);
     }
 
     /**
@@ -69,7 +68,7 @@ public class UserController {
     public String update(@RequestBody UserVO userVO) {
         UserDTO userDTO = BeanUtil.copyProperties(userVO, UserDTO.class);
         Boolean result = userService.update(userDTO);
-        return ResponseUtil.getResponse(result, ResultType.OK);
+        return ResponseUtils.getResponse(result, ResponseUtils.ResultType.OK);
     }
 
     /**
@@ -87,7 +86,7 @@ public class UserController {
         PageDTO pageDTO = BeanUtil.copyProperties(pageVO, PageDTO.class);
         PageDTO result = userService.listByPage(pageDTO);
         pageVO = BeanUtil.copyProperties(pageDTO, PageVO.class);
-        return ResponseUtil.getResponse(result, ResultType.OK);
+        return ResponseUtils.getResponse(pageVO, ResponseUtils.ResultType.OK);
     }
 
     /**
@@ -101,7 +100,7 @@ public class UserController {
         userVO.setId(id);
         UserDTO userDTO = BeanUtil.copyProperties(userVO, UserDTO.class);
         Boolean result = userService.remove(userDTO);
-        return ResponseUtil.getResponse(result, ResultType.OK);
+        return ResponseUtils.getResponse(result, ResponseUtils.ResultType.OK);
     }
 
     /**
@@ -113,14 +112,14 @@ public class UserController {
     public String removeBatch(@RequestBody List<UserVO> userVOList) {
         List<UserDTO> userDTOList = BeanUtil.copyListProperties(userVOList, UserDTO::new);
         Boolean result = userService.removeBatch(userDTOList);
-        return ResponseUtil.getResponse(result, ResultType.OK);
+        return ResponseUtils.getResponse(result, ResponseUtils.ResultType.OK);
     }
 
     @PutMapping("resetPassword")
     public String resetPassword(@RequestBody UserVO userVO) {
         UserDTO userDTO = BeanUtil.copyProperties(userVO, UserDTO.class);
         Boolean resetResult = userService.resetPassword(userDTO);
-        return ResponseUtil.getResponse(resetResult, ResultType.OK);
+        return ResponseUtils.getResponse(resetResult, ResponseUtils.ResultType.OK);
     }
 
 }
