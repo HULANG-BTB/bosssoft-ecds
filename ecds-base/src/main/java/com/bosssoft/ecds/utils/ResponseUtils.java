@@ -4,13 +4,12 @@ package com.bosssoft.ecds.utils;
  * @ClassName ResponseUitls
  * @Author AloneH
  * @Date 2020/8/9 9:31
- * @Description TODO
+ * @Description  统一响应类
  **/
 
 import cn.hutool.json.JSONUtil;
 import lombok.Data;
 
-import java.util.Objects;
 
 /**
  * 统一响应结果 工具类
@@ -26,7 +25,7 @@ public class ResponseUtils {
      * @author AloneH
      * @date 2020-07-25
      */
-    public static enum ResultType {
+    public enum ResultType {
 
         /**
          * {@code 100 Continue}.
@@ -457,9 +456,9 @@ public class ResponseUtils {
          */
         NETWORK_AUTHENTICATION_REQUIRED(511, "Network Authentication Required");
 
-        private Integer code;
+        private final Integer code;
 
-        private String msg;
+        private final String msg;
 
         ResultType(Integer code, String msg) {
             this.code = code;
@@ -472,15 +471,6 @@ public class ResponseUtils {
 
         public String getMsg() {
             return msg;
-        }
-
-        public static String getDescByValue(String code) {
-            for (ResultType enums : ResultType.values()) {
-                if (enums.getCode().equals(code)) {
-                    return enums.getMsg();
-                }
-            }
-            return null;
         }
 
     }

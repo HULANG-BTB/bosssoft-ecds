@@ -6,7 +6,7 @@ import com.bosssoft.ecds.entity.dto.RoleDTO;
 import com.bosssoft.ecds.entity.dto.UserDTO;
 import com.bosssoft.ecds.service.impl.RoleServiceImpl;
 import com.bosssoft.ecds.service.impl.UserServiceImpl;
-import com.bosssoft.ecds.utils.BeanUtil;
+import com.bosssoft.ecds.utils.MyBeanUtil;
 import com.bosssoft.ecds.entity.vo.PageVO;
 import com.bosssoft.ecds.entity.vo.RoleVO;
 import com.bosssoft.ecds.entity.vo.UserVO;
@@ -44,16 +44,16 @@ public class UserController {
     @PostMapping("save")
     public String save(@RequestBody UserVO userVO) {
         // 转换为DTO
-        UserDTO userDTO = BeanUtil.copyProperties(userVO, UserDTO.class);
+        UserDTO userDTO = MyBeanUtil.copyProperties(userVO, UserDTO.class);
         List<RoleVO> roleVOList = userVO.getRoles();
-        List<RoleDTO> roleDTOList = BeanUtil.copyListProperties(roleVOList, RoleDTO.class);
+        List<RoleDTO> roleDTOList = MyBeanUtil.copyListProperties(roleVOList, RoleDTO.class);
         userDTO.setRoles(roleDTOList);
         // 执行业务逻辑
         userDTO = userService.save(userDTO);
         // 转换为VO
-        userVO = BeanUtil.copyProperties(userDTO, UserVO.class);
+        userVO = MyBeanUtil.copyProperties(userDTO, UserVO.class);
         roleDTOList = userDTO.getRoles();
-        roleVOList = BeanUtil.copyListProperties(roleDTOList, RoleVO.class);
+        roleVOList = MyBeanUtil.copyListProperties(roleDTOList, RoleVO.class);
         userVO.setRoles(roleVOList);
 
         return ResponseUtils.getResponse(userVO, ResponseUtils.ResultType.OK);
@@ -66,7 +66,7 @@ public class UserController {
      */
     @PutMapping("update")
     public String update(@RequestBody UserVO userVO) {
-        UserDTO userDTO = BeanUtil.copyProperties(userVO, UserDTO.class);
+        UserDTO userDTO = MyBeanUtil.copyProperties(userVO, UserDTO.class);
         Boolean result = userService.update(userDTO);
         return ResponseUtils.getResponse(result, ResponseUtils.ResultType.OK);
     }
@@ -83,9 +83,9 @@ public class UserController {
         pageVO.setLimit(limit);
         pageVO.setPage(page);
         pageVO.setKeyword(keyword);
-        PageDTO pageDTO = BeanUtil.copyProperties(pageVO, PageDTO.class);
+        PageDTO pageDTO = MyBeanUtil.copyProperties(pageVO, PageDTO.class);
         PageDTO result = userService.listByPage(pageDTO);
-        pageVO = BeanUtil.copyProperties(pageDTO, PageVO.class);
+        pageVO = MyBeanUtil.copyProperties(pageDTO, PageVO.class);
         return ResponseUtils.getResponse(pageVO, ResponseUtils.ResultType.OK);
     }
 
@@ -98,7 +98,7 @@ public class UserController {
     public String remove(@PathVariable("id") Long id) {
         UserVO userVO = new UserVO();
         userVO.setId(id);
-        UserDTO userDTO = BeanUtil.copyProperties(userVO, UserDTO.class);
+        UserDTO userDTO = MyBeanUtil.copyProperties(userVO, UserDTO.class);
         Boolean result = userService.remove(userDTO);
         return ResponseUtils.getResponse(result, ResponseUtils.ResultType.OK);
     }
@@ -110,14 +110,14 @@ public class UserController {
      */
     @DeleteMapping("removeBatch")
     public String removeBatch(@RequestBody List<UserVO> userVOList) {
-        List<UserDTO> userDTOList = BeanUtil.copyListProperties(userVOList, UserDTO::new);
+        List<UserDTO> userDTOList = MyBeanUtil.copyListProperties(userVOList, UserDTO::new);
         Boolean result = userService.removeBatch(userDTOList);
         return ResponseUtils.getResponse(result, ResponseUtils.ResultType.OK);
     }
 
     @PutMapping("resetPassword")
     public String resetPassword(@RequestBody UserVO userVO) {
-        UserDTO userDTO = BeanUtil.copyProperties(userVO, UserDTO.class);
+        UserDTO userDTO = MyBeanUtil.copyProperties(userVO, UserDTO.class);
         Boolean resetResult = userService.resetPassword(userDTO);
         return ResponseUtils.getResponse(resetResult, ResponseUtils.ResultType.OK);
     }
