@@ -5,16 +5,24 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.bosssoft.ecds.common.response.CommonCode;
+import com.bosssoft.ecds.common.response.QueryResponseResult;
+import com.bosssoft.ecds.common.response.QueryResult;
+import com.bosssoft.ecds.common.response.ResponseResult;
+import com.bosssoft.ecds.dao.FabAgenDao;
 import com.bosssoft.ecds.dao.FabFinDeptDao;
+import com.bosssoft.ecds.entity.po.FabAgenPO;
 import com.bosssoft.ecds.entity.po.FabFinDept;
 import com.bosssoft.ecds.entity.vo.FabFinDeptVo;
+import com.bosssoft.ecds.enums.FabFinDeptResultCode;
+import com.bosssoft.ecds.service.FabAgenService;
 import com.bosssoft.ecds.service.FabFinDeptService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -29,6 +37,10 @@ import java.util.Map;
 public class FabFinDeptServiceImpl extends ServiceImpl<FabFinDeptDao, FabFinDept> implements FabFinDeptService {
     @Autowired
     private FabFinDeptDao fabFinDeptMapper;
+    @Autowired
+    private FabAgenDao fabAgenDao;
+    @Autowired
+    private FabAgenService fabAgenService;
 
     @Override
     /**
@@ -38,39 +50,32 @@ public class FabFinDeptServiceImpl extends ServiceImpl<FabFinDeptDao, FabFinDept
      * @param fabFinDept
      * @return com.boss.dept.entity.vo.ResponseData
      */
-    public String saveOrUpdateFabFinDept(FabFinDept fabFinDept) {
+    public ResponseResult saveOrUpdateFabFinDept(FabFinDept fabFinDept) {
         //检测参数合法性
         boolean flag = check(fabFinDept);
         if (!flag) {
-
+            return new ResponseResult(CommonCode.INVLIDATE);
         }
         //数据库操作
         //判断是insert操作还是update操作
-        Long fId = fabFinDept.getFId();
+        Long fId = fabFinDept.getId();
         boolean result = false;
         if (StringUtils.isEmpty(fId)) {
             //insert
-            //通过id生成工具生成id
-            fId = null;
-            //获取当前操作用户信息，插入到经办人字段
-            fabFinDept.setFId(fId);
-            //当前操作用户
-            String currentUser = null;
-            fabFinDept.setFOperator(currentUser);
-            //操作时间
-            fabFinDept.setFCreateTime(LocalDateTime.now());
+            // todo 通过id生成工具生成id
+            fId = 1000L;
+            fabFinDept.setId(fId);
             result = save(fabFinDept);
 
         } else {
-            //修改时间
-            fabFinDept.setFUpdateTime(LocalDateTime.now());
             //update
             result = updateById(fabFinDept);
         }
         if (result == false) {
             //数据库操作失败返回失败信息
+            return new ResponseResult(CommonCode.FAIL);
         }
-        return null;
+        return new ResponseResult(CommonCode.SUCCESS);
     }
 
 
@@ -83,39 +88,42 @@ public class FabFinDeptServiceImpl extends ServiceImpl<FabFinDeptDao, FabFinDept
      */
     private boolean check(FabFinDept fabFinDept) {
         //区划 code
-        if (StringUtils.isEmpty(fabFinDept.getFRgnCode())) {
+        if (StringUtils.isEmpty(fabFinDept.getRgnCode())) {
             return false;
         }
         //部门编码
-        if (StringUtils.isEmpty(fabFinDept.getFFindeptCode())) {
+        if (StringUtils.isEmpty(fabFinDept.getFindeptCode())) {
             return false;
         }
         //名称
-        if (StringUtils.isEmpty(fabFinDept.getFFindeptName())) {
+        if (StringUtils.isEmpty(fabFinDept.getFindeptName())) {
             return false;
         }
         //是否启用
-        if (fabFinDept.getFIsEnable() == null) {
+        if (fabFinDept.getIsEnable() == null) {
             return false;
         }
         return true;
     }
 
     @Override
-    public String del(Long id) {
+    public ResponseResult del(Long id) {
         if (id == null) {
             //返回错误信息
+            return new ResponseResult(CommonCode.INVLIDATE);
         }
         //校验改部门底下是否有单位挂靠
-        boolean result = checkFabAgen(id);
+        boolean result = checkHasFabAgen(id);
         if (result) {
             //若该部门存在挂靠单位，则无法删除，返回信息
+            return new ResponseResult(FabFinDeptResultCode.CATEGORY_HASSON);
         }
         boolean flag = removeById(id);
         if (!flag) {
             //返回数据库插入错误信息
+            return new ResponseResult(CommonCode.FAIL);
         }
-        return null;
+        return new ResponseResult(CommonCode.SUCCESS);
     }
 
     /**
@@ -125,8 +133,11 @@ public class FabFinDeptServiceImpl extends ServiceImpl<FabFinDeptDao, FabFinDept
      * @author lin.wanning
      * @date 2020/8/6
      */
-    private boolean checkFabAgen(Long id) {
-        // TODO: 2020/8/6
+    private boolean checkHasFabAgen(Long id) {
+        Integer count = fabAgenDao.selectCount(new LambdaQueryWrapper<FabAgenPO>().eq(FabAgenPO::getFindeptId, id));
+        if (count > 0) {
+            return true;
+        }
         return false;
     }
 
@@ -138,7 +149,7 @@ public class FabFinDeptServiceImpl extends ServiceImpl<FabFinDeptDao, FabFinDept
      * @date 2020/8/6
      */
     @Override
-    public String findAll(FabFinDeptVo fabFinDeptVo) {
+    public QueryResponseResult findAll(FabFinDeptVo fabFinDeptVo) {
         //分页参数校验
         int pageNumber = fabFinDeptVo.getPageNumber() == null ? 1 : fabFinDeptVo.getPageNumber();
         int pageSize = fabFinDeptVo.getPageSize() == null ? 10 : fabFinDeptVo.getPageSize();
@@ -149,14 +160,18 @@ public class FabFinDeptServiceImpl extends ServiceImpl<FabFinDeptDao, FabFinDept
             pageSize = 10;
         }
         //设置分页
-        Page<FabFinDept> pageInfo = new Page(pageNumber, pageSize);
+        Page<FabFinDept> pageInfo = new Page<FabFinDept>(pageNumber, pageSize);
         //查询参数
         Map<String, Object> map = new HashMap<>();
         map.put("f_findept_name", fabFinDeptVo.getFFindeptName());
         map.put("f_is_enable", fabFinDeptVo.getFIsEnable());
         //查询
         IPage<FabFinDept> pages = this.page(pageInfo, new QueryWrapper<FabFinDept>().allEq(map, false));
-        return null;
+        QueryResult<FabFinDept> queryResult = new QueryResult<FabFinDept>();
+        queryResult.setList(pages.getRecords());
+        queryResult.setTotal(pages.getTotal());
+        QueryResponseResult<FabFinDept> result = new QueryResponseResult(CommonCode.SUCCESS, queryResult);
+        return result;
     }
 
     @Override
@@ -167,8 +182,8 @@ public class FabFinDeptServiceImpl extends ServiceImpl<FabFinDeptDao, FabFinDept
      * @param
      * @return com.boss.dept.entity.vo.ResponseData
      */
-    public String findAllWithEnable() {
-        fabFinDeptMapper.selectList(new LambdaQueryWrapper<FabFinDept>().eq(FabFinDept::getFIsEnable, true));
-        return null;
+    public QueryResponseResult findAllWithEnable() {
+        List<FabFinDept> list = fabFinDeptMapper.selectList(new LambdaQueryWrapper<FabFinDept>().eq(FabFinDept::getIsEnable, true));
+        return new QueryResponseResult(CommonCode.SUCCESS, list);
     }
 }

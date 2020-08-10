@@ -1,12 +1,14 @@
 package com.bosssoft.ecds.entity.po;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.Version;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * <p>
@@ -26,71 +28,92 @@ public class FabFinDept implements Serializable {
      * 主键
      */
     @TableId(value = "f_id")
-    private Long fId;
+    private Long id;
 
     /**
      * 区划code
      */
-    private String fRgnCode;
+    @TableField("f_rgn_code")
+    private String rgnCode;
 
     /**
      * 编码
      */
-    private String fFindeptCode;
+    @TableField("f_findept_code")
+    private String findeptCode;
 
     /**
      * 名称
      */
-    private String fFindeptName;
+    @TableField("f_findept_name")
+    private String findeptName;
 
     /**
      * 是否启用
      */
-    private Boolean fIsEnable;
+    @TableField("f_is_enable")
+    private Boolean isEnable;
 
     /**
      * 经办人
      */
-    private String fOperator;
+    @TableField(value = "f_operator", fill = FieldFill.INSERT_UPDATE)
+    private String operator;
+
+    /**
+     * 经办人
+     */
+    @TableField(value = "f_operator_id", fill = FieldFill.INSERT_UPDATE)
+    private Long operatorId;
 
 
     /**
      * 创建时间
      */
-    private LocalDateTime fCreateTime;
+
+    @TableField(value = "f_create_time", fill = FieldFill.INSERT)
+    private Date createTime;
 
     /**
      * 联系人
      */
-    private String fLinkman;
+
+    @TableField("f_linkman")
+    private String linkman;
 
     /**
      * 电话
      */
-    private String fLinkTel;
+    @TableField("f_link_tel")
+    private String linkTel;
 
     /**
      * 地址
      */
-    private String fAddr;
+    @TableField("f_addr")
+    private String addr;
 
     /**
      * 版本号
      */
     @Version
-    private Integer fVersion;
+    @TableField("f_version")
+    private Integer version;
 
-    private LocalDateTime fUpdateTime;
+    @TableField(value = "f_update_time", fill = FieldFill.INSERT_UPDATE)
+    private Date updateTime;
 
     /**
      * 自定义1
      */
-    private String fCustom1;
+    @TableField("f_custom1")
+    private String custom1;
 
     /**
      * 自定义2
      */
-    private String fCustom2;
+    @TableField("f_custom2")
+    private String custom2;
 
 
 }
