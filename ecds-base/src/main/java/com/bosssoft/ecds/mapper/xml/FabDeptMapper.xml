@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bosssoft.ecds.dao.FabDeptDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.bosssoft.ecds.entity.po.FabDeptPO">
+        <id column="f_id" property="id" />
+        <result column="f_rgn_id" property="rgnId" />
+        <result column="f_dept_code" property="deptCode" />
+        <result column="f_dept_name" property="deptName" />
+        <result column="f_isenable" property="isenable" />
+        <result column="f_link_man" property="linkMan" />
+        <result column="f_link_tel" property="linkTel" />
+        <result column="f_addr" property="addr" />
+        <result column="f_operator" property="operator" />
+        <result column="f_operator_id" property="operatorId" />
+        <result column="f_create_time" property="createTime" />
+        <result column="f_update_time" property="updateTime" />
+        <result column="f_logic_delete" property="logicDelete" />
+        <result column="f_alter_code" property="alterCode" />
+        <result column="f_version" property="version" />
+        <result column="f_note" property="note" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        f_id, f_rgn_id, f_dept_code, f_dept_name, f_isenable, f_link_man, f_link_tel, f_addr, f_operator, f_operator_id, f_create_time, f_update_time, f_logic_delete, f_alter_code, f_version, f_note
+    </sql>
+
+</mapper>
