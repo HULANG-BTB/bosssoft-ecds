@@ -59,6 +59,20 @@ public class ItemController {
     }
 
     /**
+     * 批量修改数据，主要用于批量审核
+     *
+     * @param itemVOList
+     * @return
+     */
+    @ApiOperation(value = "批量修改")
+    @PostMapping("/batchupdate")
+    public String batchUpdateItem(@RequestBody List<ItemVO> itemVOList) {
+        List<ItemDTO> itemDTOS = MyBeanUtil.copyListProperties(itemVOList, ItemDTO::new);
+        boolean batchUpdate = itemService.batchUpdate(itemDTOS);
+        return ResponseUtils.getResponse(batchUpdate, ResponseUtils.ResultType.OK);
+    }
+
+    /**
      * 删除项目
      *
      * @param itemVO
@@ -83,7 +97,7 @@ public class ItemController {
     @PostMapping("/batchdelete")
     public String batchDelete(@RequestBody List<ItemVO> itemVOList) {
         List<ItemDTO> itemDTOS = MyBeanUtil.copyListProperties(itemVOList, ItemDTO::new);
-        boolean batchdelete = itemService.batchdelete(itemDTOS);
+        boolean batchdelete = itemService.batchDelete(itemDTOS);
         return ResponseUtils.getResponse(batchdelete, ResponseUtils.ResultType.OK);
     }
 

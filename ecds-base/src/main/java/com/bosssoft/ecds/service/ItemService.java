@@ -56,6 +56,8 @@ public interface ItemService extends IService<ItemPO> {
      * @param itemDTOS
      * @return boolean
      */
-    boolean batchdelete(List<ItemDTO> itemDTOS);
+    boolean batchDelete(List<ItemDTO> itemDTOS);
+
+    boolean batchUpdate(List<ItemDTO> itemDTOS);
 
 }

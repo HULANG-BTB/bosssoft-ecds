@@ -73,11 +73,17 @@ public class ItemServiceImpl extends ServiceImpl<ItemDao, ItemPO> implements Ite
     }
 
     @Override
-    public boolean batchdelete(List<ItemDTO> itemDTOS) {
+    public boolean batchDelete(List<ItemDTO> itemDTOS) {
         ArrayList<Long> idList = new ArrayList<>();
         for (Iterator<ItemDTO> iterator = itemDTOS.iterator(); iterator.hasNext(); ) {
             idList.add(iterator.next().getId());
         }
         return itemDao.deleteBatchIds(idList) == 1;
+    }
+
+    @Override
+    public boolean batchUpdate(List<ItemDTO> itemDTOS) {
+        List<ItemPO> itemPOS = MyBeanUtil.copyListProperties(itemDTOS, ItemPO::new);
+        return super.updateBatchById(itemPOS);
     }
 }
