@@ -28,7 +28,7 @@ public class Swagger2Config {
                 .apiInfo(getApiInfo())
                 .pathMapping("/")
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.boss.security.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.bosssoft.ecds.controller"))
                 .paths(PathSelectors.any())
                 .build();
     }

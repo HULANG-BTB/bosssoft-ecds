@@ -13,7 +13,7 @@ import java.util.function.Supplier;
  * @Date 2020/7/31 22:07
  * @Description TODO
  **/
-public class BeanUtil {
+public class BeanUtils {
 
     public static <T> T copyProperties(Object source, Class<T> tClass) {
         return cn.hutool.core.bean.BeanUtil.copyProperties(source, tClass);
@@ -44,8 +44,7 @@ public class BeanUtil {
 
     public static <S, T> List<T> copyListProperties(List<S> sources, Class<T> elementType) {
         JSONArray objects = JSONUtil.parseArray(sources);
-        List<T> ts = JSONUtil.toList(objects, elementType);
-        return ts;
+        return JSONUtil.toList(objects, elementType);
     }
 
 }
