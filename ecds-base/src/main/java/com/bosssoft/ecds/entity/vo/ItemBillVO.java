@@ -9,23 +9,35 @@ import lombok.Data;
  * @Date: 2020-08-10 09:38
  */
 @Data
-public class ItemBillVo {
+public class ItemBillVO {
 
+    /**
+     * 关联表主键
+     */
+    Long id;
+    /**
+     * 操作人
+     */
+    String operator;
     /**
      *  项目id
      *  在项目表中是 f_item_id
      *  在关系表中是f_item_id_code
      */
-    String FItemId;
+    String itemId;
     /**
      *  项目表中的项目名称
      */
-    String FItemName;
+    String itemName;
 
     /**
-     *  关系表中的是否启用
+     *  关系是否启用
      */
-    boolean FIsEnabled;
+    boolean enabled;
+    /**
+     * 项目是否启用
+     */
+    boolean itemIsEnabled;
 
 
 }
