@@ -5,10 +5,9 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.boss.dept.entity.vo.FabFinDeptVo;
-import com.boss.dept.entity.vo.ResponseData;
 import com.bosssoft.ecds.dao.FabFinDeptDao;
 import com.bosssoft.ecds.entity.po.FabFinDept;
+import com.bosssoft.ecds.entity.vo.FabFinDeptVo;
 import com.bosssoft.ecds.service.FabFinDeptService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,7 +38,7 @@ public class FabFinDeptServiceImpl extends ServiceImpl<FabFinDeptDao, FabFinDept
      * @param fabFinDept
      * @return com.boss.dept.entity.vo.ResponseData
      */
-    public ResponseData saveOrUpdateFabFinDept(FabFinDept fabFinDept) {
+    public String saveOrUpdateFabFinDept(FabFinDept fabFinDept) {
         //检测参数合法性
         boolean flag = check(fabFinDept);
         if (!flag) {
@@ -103,7 +102,7 @@ public class FabFinDeptServiceImpl extends ServiceImpl<FabFinDeptDao, FabFinDept
     }
 
     @Override
-    public ResponseData del(Long id) {
+    public String del(Long id) {
         if (id == null) {
             //返回错误信息
         }
@@ -139,7 +138,7 @@ public class FabFinDeptServiceImpl extends ServiceImpl<FabFinDeptDao, FabFinDept
      * @date 2020/8/6
      */
     @Override
-    public ResponseData findAll(FabFinDeptVo fabFinDeptVo) {
+    public String findAll(FabFinDeptVo fabFinDeptVo) {
         //分页参数校验
         int pageNumber = fabFinDeptVo.getPageNumber() == null ? 1 : fabFinDeptVo.getPageNumber();
         int pageSize = fabFinDeptVo.getPageSize() == null ? 10 : fabFinDeptVo.getPageSize();
@@ -168,7 +167,7 @@ public class FabFinDeptServiceImpl extends ServiceImpl<FabFinDeptDao, FabFinDept
      * @param
      * @return com.boss.dept.entity.vo.ResponseData
      */
-    public ResponseData findAllWithEnable() {
+    public String findAllWithEnable() {
         fabFinDeptMapper.selectList(new LambdaQueryWrapper<FabFinDept>().eq(FabFinDept::getFIsEnable, true));
         return null;
     }

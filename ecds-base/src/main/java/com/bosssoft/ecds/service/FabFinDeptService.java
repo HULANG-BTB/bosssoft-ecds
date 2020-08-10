@@ -1,9 +1,8 @@
 package com.bosssoft.ecds.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.boss.dept.entity.po.FabFinDept;
-import com.boss.dept.entity.vo.FabFinDeptVo;
-import com.boss.dept.entity.vo.ResponseData;
+import com.bosssoft.ecds.entity.po.FabFinDept;
+import com.bosssoft.ecds.entity.vo.FabFinDeptVo;
 
 /**
  * <p>
@@ -14,12 +13,12 @@ import com.boss.dept.entity.vo.ResponseData;
  * @since 2020-08-05
  */
 public interface FabFinDeptService extends IService<FabFinDept> {
-    ResponseData saveOrUpdateFabFinDept(FabFinDept fabFinDept);
+    String saveOrUpdateFabFinDept(FabFinDept fabFinDept);
 
-    ResponseData del(Long id);
+    String del(Long id);
 
-    ResponseData findAll(FabFinDeptVo fabFinDeptVo);
+    String findAll(FabFinDeptVo fabFinDeptVo);
 
-    ResponseData findAllWithEnable();
+    String findAllWithEnable();
 
 }
