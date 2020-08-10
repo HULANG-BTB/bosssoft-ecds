@@ -1,15 +1,15 @@
 package com.bosssoft.ecds.controller;
 
 
-import cn.hutool.core.bean.BeanUtil;
 import com.bosssoft.ecds.entity.dto.ItemDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.vo.ItemVO;
 import com.bosssoft.ecds.entity.vo.PageVO;
-import com.bosssoft.ecds.entity.vo.UserVO;
 import com.bosssoft.ecds.service.ItemService;
+import com.bosssoft.ecds.utils.MyBeanUtil;
 import com.bosssoft.ecds.utils.ResponseUtils;
-import lombok.extern.slf4j.Slf4j;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +25,6 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/item")
-@Slf4j
 public class ItemController {
 
     @Autowired
@@ -37,15 +36,12 @@ public class ItemController {
      * @param itemVO
      * @return
      */
+    @ApiOperation(value = "添加项目")
     @PostMapping("/save")
     public String addItem(@RequestBody ItemVO itemVO) {
-        ItemDTO itemDTO = BeanUtil.copyProperties(itemVO, ItemDTO.class);
-        int save = itemService.save(itemDTO);
-        if (save == 1) {
-            return ResponseUtils.getResponse("true", ResponseUtils.ResultType.CREATED);
-        } else {
-            return ResponseUtils.getResponse("false", ResponseUtils.ResultType.INTERNAL_SERVER_ERROR);
-        }
+        ItemDTO itemDTO = MyBeanUtil.myCopyProperties(itemVO, ItemDTO.class);
+        boolean save = itemService.save(itemDTO);
+        return ResponseUtils.getResponse(save, ResponseUtils.ResultType.CREATED);
     }
 
     /**
@@ -54,15 +50,12 @@ public class ItemController {
      * @param itemVO
      * @return
      */
+    @ApiOperation(value = "修改项目")
     @PostMapping("/update")
     public String updateItem(@RequestBody ItemVO itemVO) {
-        ItemDTO itemDTO = BeanUtil.copyProperties(itemVO, ItemDTO.class);
-        int update = itemService.update(itemDTO);
-        if (update == 1) {
-            return ResponseUtils.getResponse("true", ResponseUtils.ResultType.OK);
-        } else {
-            return ResponseUtils.getResponse("false", ResponseUtils.ResultType.INTERNAL_SERVER_ERROR);
-        }
+        ItemDTO itemDTO = MyBeanUtil.myCopyProperties(itemVO, ItemDTO.class);
+        boolean update = itemService.update(itemDTO);
+        return ResponseUtils.getResponse(update, ResponseUtils.ResultType.OK);
     }
 
     /**
@@ -71,23 +64,27 @@ public class ItemController {
      * @param itemVO
      * @return
      */
+    @ApiOperation(value = "删除项目")
+    @ApiImplicitParam(name = "id", value = "项目id", dataType = "Long")
     @PostMapping("/delete")
     public String deleteItem(@RequestBody ItemVO itemVO) {
-        ItemDTO itemDTO = BeanUtil.copyProperties(itemVO, ItemDTO.class);
-        int delete = itemService.delete(itemDTO);
-        if (delete == 1) {
-            return ResponseUtils.getResponse("true", ResponseUtils.ResultType.OK);
-        } else {
-            return ResponseUtils.getResponse("false", ResponseUtils.ResultType.INTERNAL_SERVER_ERROR);
-        }
+        ItemDTO itemDTO = MyBeanUtil.myCopyProperties(itemVO, ItemDTO.class);
+        boolean delete = itemService.delete(itemDTO);
+        return ResponseUtils.getResponse(delete, ResponseUtils.ResultType.OK);
     }
 
+    /**
+     * 批量删除
+     *
+     * @param itemVOList
+     * @return
+     */
+    @ApiOperation(value = "批量删除")
     @PostMapping("/batchdelete")
-    public String batchDelete(@RequestBody List<ItemVO> itemVOList){
-
-
-
-        return null;
+    public String batchDelete(@RequestBody List<ItemVO> itemVOList) {
+        List<ItemDTO> itemDTOS = MyBeanUtil.copyListProperties(itemVOList, ItemDTO::new);
+        boolean batchdelete = itemService.batchdelete(itemDTOS);
+        return ResponseUtils.getResponse(batchdelete, ResponseUtils.ResultType.OK);
     }
 
 
@@ -97,9 +94,10 @@ public class ItemController {
      * @param pageVO
      * @return
      */
-    @GetMapping("/listbypage")
+    @ApiOperation(value = "分页查询")
+    @PostMapping("/listbypage")
     public String listByPage(@RequestBody PageVO pageVO) {
-        PageDTO<ItemDTO> pageDTO = BeanUtil.copyProperties(pageVO, PageDTO.class);
+        PageDTO<ItemDTO> pageDTO = MyBeanUtil.myCopyProperties(pageVO, PageDTO.class);
         PageVO pageVO1 = itemService.listByPage(pageDTO);
         if (pageVO1 != null) {
             return ResponseUtils.getResponse(pageVO1, ResponseUtils.ResultType.OK);
@@ -107,6 +105,5 @@ public class ItemController {
             return ResponseUtils.getResponse(pageVO1, ResponseUtils.ResultType.INTERNAL_SERVER_ERROR);
         }
     }
-
 }
 

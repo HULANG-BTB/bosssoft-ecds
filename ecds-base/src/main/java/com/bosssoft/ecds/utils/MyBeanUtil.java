@@ -2,6 +2,7 @@ package com.bosssoft.ecds.utils;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONUtil;
 
@@ -18,11 +19,25 @@ import java.util.function.Supplier;
  **/
 public class MyBeanUtil {
 
-    public static void copyProperties(Object source, Object target) {
-        return cn.hutool.core.bean.BeanUtil.copyProperties(source,target);
+    private MyBeanUtil(){
+
     }
 
+    public static <T> T copyProperties(Object source, Class<T> tClass, String... ignoreProperties) {
+        T target = ReflectUtil.newInstanceIfPossible(tClass);
+        BeanUtil.copyProperties(source, target, CopyOptions.create().setIgnoreProperties(ignoreProperties));
+        return target;
+    }
 
+    public static void copyProperties(Object source, Object target, String... ignoreProperties) {
+        BeanUtil.copyProperties(source, target, CopyOptions.create().setIgnoreProperties(ignoreProperties));
+    }
+
+    public static <T> T myCopyProperties(Object source, Class<T> tClass, String... ignoreProperties) {
+        T target = ReflectUtil.newInstanceIfPossible(tClass);
+        BeanUtil.copyProperties(source, target, CopyOptions.create().setIgnoreProperties(ignoreProperties));
+        return target;
+    }
 
     /**
      * @author Johnson

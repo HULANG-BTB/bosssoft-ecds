@@ -1,6 +1,5 @@
 package com.bosssoft.ecds.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bosssoft.ecds.entity.dto.ItemDTO;
@@ -14,6 +13,8 @@ import com.bosssoft.ecds.utils.MyBeanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -31,20 +32,20 @@ public class ItemServiceImpl extends ServiceImpl<ItemDao, ItemPO> implements Ite
     private ItemDao itemDao;
 
     @Override
-    public int save(ItemDTO itemDTO) {
-        ItemPO itemPO = BeanUtil.copyProperties(itemDTO, ItemPO.class);
-        return itemDao.insert(itemPO);
+    public boolean save(ItemDTO itemDTO) {
+        ItemPO itemPO = MyBeanUtil.myCopyProperties(itemDTO, ItemPO.class);
+        return itemDao.insert(itemPO) == 1;
     }
 
     @Override
-    public int update(ItemDTO itemDTO) {
-        ItemPO itemPO = BeanUtil.copyProperties(itemDTO, ItemPO.class);
-        return itemDao.updateById(itemPO);
+    public boolean update(ItemDTO itemDTO) {
+        ItemPO itemPO = MyBeanUtil.myCopyProperties(itemDTO, ItemPO.class);
+        return itemDao.updateById(itemPO) == 1;
     }
 
     @Override
-    public int delete(ItemDTO itemDTO) {
-        return itemDao.deleteById(itemDTO.getId());
+    public boolean delete(ItemDTO itemDTO) {
+        return itemDao.deleteById(itemDTO.getId()) == 1;
     }
 
     @Override
@@ -55,7 +56,11 @@ public class ItemServiceImpl extends ServiceImpl<ItemDao, ItemPO> implements Ite
         itemDTOPage.setSize(pageDTO.getLimit());
         // 读取分页数据
         QueryWrapper<ItemPO> queryWrapper = new QueryWrapper<>();
-        queryWrapper.like(ItemPO.F_ID, pageDTO.getKeyword()).or().like(ItemPO.F_ITEM_NAME, pageDTO.getKeyword());
+        queryWrapper.like(ItemPO.F_ID, pageDTO.getKeyword())
+                .or()
+                .like(ItemPO.F_ITEM_NAME, pageDTO.getKeyword())
+                .or()
+                .like(ItemPO.F_ISENABLE,pageDTO.getKeyword());
         queryWrapper.orderByAsc(ItemPO.F_CREATE_TIME);
         // 读取分页数据
         Page<ItemPO> itemPOPage = super.page(itemDTOPage, queryWrapper);
@@ -64,6 +69,15 @@ public class ItemServiceImpl extends ServiceImpl<ItemDao, ItemPO> implements Ite
         List<ItemDTO> itemPOS = MyBeanUtil.copyListProperties(records, ItemDTO::new);
         pageDTO.setTotal(itemPOPage.getTotal());
         pageDTO.setItems(itemPOS);
-        return BeanUtil.copyProperties(pageDTO, PageVO.class);
+        return MyBeanUtil.myCopyProperties(pageDTO, PageVO.class);
+    }
+
+    @Override
+    public boolean batchdelete(List<ItemDTO> itemDTOS) {
+        ArrayList<Long> idList = new ArrayList<>();
+        for (Iterator<ItemDTO> iterator = itemDTOS.iterator(); iterator.hasNext(); ) {
+            idList.add(iterator.next().getId());
+        }
+        return itemDao.deleteBatchIds(idList) == 1;
     }
 }

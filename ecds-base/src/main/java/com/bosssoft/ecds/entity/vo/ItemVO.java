@@ -1,10 +1,12 @@
 package com.bosssoft.ecds.entity.vo;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -44,18 +46,22 @@ public class ItemVO {
 
     @ApiModelProperty(value = "项目生效日期")
     @TableField("f_item_effdate")
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
     private Date itemEffdate;
 
     @ApiModelProperty(value = "项目失效日期")
     @TableField("f_item_expdate")
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
     private Date itemExpdate;
 
     @ApiModelProperty(value = "记录生效日期")
     @TableField("f_effdate")
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
     private Date effdate;
 
     @ApiModelProperty(value = "记录截止日期")
     @TableField("f_expdate")
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
     private Date expdate;
 
     @ApiModelProperty(value = "是否启用")
