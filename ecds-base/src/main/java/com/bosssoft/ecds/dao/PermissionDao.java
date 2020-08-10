@@ -6,14 +6,6 @@ import com.bosssoft.ecds.entity.po.PermissionPO;
 import java.io.Serializable;
 import java.util.List;
 
-/**
- * <p>
- *  Mapper 接口
- * </p>
- *
- * @author AloneH
- * @since 2020-07-25
- */
 
 public interface PermissionDao extends BaseMapper<PermissionPO> {
     /**
