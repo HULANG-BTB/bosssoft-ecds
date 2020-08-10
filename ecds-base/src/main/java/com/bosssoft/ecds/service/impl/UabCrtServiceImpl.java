@@ -9,7 +9,7 @@ import com.bosssoft.ecds.entity.po.UabCrtPO;
 import com.bosssoft.ecds.dao.UabCrtDao;
 import com.bosssoft.ecds.service.UabCrtService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.bosssoft.ecds.utils.BeanUtil;
+import com.bosssoft.ecds.utils.MyBeanUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -39,7 +39,7 @@ public class UabCrtServiceImpl extends ServiceImpl<UabCrtDao, UabCrtPO> implemen
     @Override
     public UabCrtDTO save(UabCrtDTO uabCrtDTO) {
         UabCrtPO uabCrtPO = new UabCrtPO();
-        BeanUtil.copyProperties(uabCrtDTO, uabCrtPO);
+        MyBeanUtil.copyProperties(uabCrtDTO, uabCrtPO);
         super.save(uabCrtPO);
         return uabCrtDTO;
     }
@@ -56,7 +56,7 @@ public class UabCrtServiceImpl extends ServiceImpl<UabCrtDao, UabCrtPO> implemen
     @Override
     public boolean remove(UabCrtDTO uabCrtDTO) {
         UabCrtPO uabCrtPO = new UabCrtPO();
-        BeanUtil.copyProperties(uabCrtDTO, uabCrtPO);
+        MyBeanUtil.copyProperties(uabCrtDTO, uabCrtPO);
         return super.removeById(uabCrtPO.getId());
     }
 
@@ -72,7 +72,7 @@ public class UabCrtServiceImpl extends ServiceImpl<UabCrtDao, UabCrtPO> implemen
     @Override
     public boolean update(UabCrtDTO uabCrtDTO) {
         UabCrtPO uabCrtPO = new UabCrtPO();
-        BeanUtil.copyProperties(uabCrtDTO, uabCrtPO);
+        MyBeanUtil.copyProperties(uabCrtDTO, uabCrtPO);
         return super.updateById(uabCrtPO);
     }
 
@@ -88,9 +88,9 @@ public class UabCrtServiceImpl extends ServiceImpl<UabCrtDao, UabCrtPO> implemen
     @Override
     public UabCrtDTO getByCrtCode(UabCrtDTO uabCrtDTO) {
         UabCrtPO uabCrtPO = new UabCrtPO();
-        BeanUtil.copyProperties(uabCrtDTO, uabCrtPO);
+        MyBeanUtil.copyProperties(uabCrtDTO, uabCrtPO);
         UabCrtPO uabCrtPO1 = super.getOne(new QueryWrapper<UabCrtPO>(uabCrtPO));
-        return BeanUtil.copyProperties(uabCrtPO1, UabCrtDTO.class);
+        return MyBeanUtil.copyProperties(uabCrtPO1, UabCrtDTO.class);
     }
 
     /**
@@ -105,9 +105,9 @@ public class UabCrtServiceImpl extends ServiceImpl<UabCrtDao, UabCrtPO> implemen
     @Override
     public List<UabCrtDTO> getByAgenCode(UabCrtDTO uabCrtDTO) {
         UabCrtPO uabCrtPO = new UabCrtPO();
-        BeanUtil.copyProperties(uabCrtDTO, uabCrtPO);
+        MyBeanUtil.copyProperties(uabCrtDTO, uabCrtPO);
         List<UabCrtPO> uabCrtPOList = super.list(new QueryWrapper<UabCrtPO>(uabCrtPO));
-        return BeanUtil.copyListProperties(uabCrtPOList, UabCrtDTO.class);
+        return MyBeanUtil.copyListProperties(uabCrtPOList, UabCrtDTO.class);
     }
 
     /**
@@ -121,7 +121,7 @@ public class UabCrtServiceImpl extends ServiceImpl<UabCrtDao, UabCrtPO> implemen
     @Override
     public List<UabCrtDTO> listAll() {
         List<UabCrtPO> list = super.list();
-        List<UabCrtDTO> uabCrtDTOList = BeanUtil.copyListProperties(list,UabCrtDTO.class);
+        List<UabCrtDTO> uabCrtDTOList = MyBeanUtil.copyListProperties(list,UabCrtDTO.class);
         return uabCrtDTOList;
     }
 
@@ -145,7 +145,7 @@ public class UabCrtServiceImpl extends ServiceImpl<UabCrtDao, UabCrtPO> implemen
         Page<UabCrtPO> uabCrtPOPage1 = super.page(uabCrtPOPage, queryWrapper);
         List<UabCrtPO> records = uabCrtPOPage1.getRecords();
         // 转换数据
-        List<UabCrtDTO> userDTOList = BeanUtil.copyListProperties(records, UabCrtDTO.class);
+        List<UabCrtDTO> userDTOList = MyBeanUtil.copyListProperties(records, UabCrtDTO.class);
         pageDTO.setTotal(uabCrtPOPage1.getTotal());
         pageDTO.setItems(userDTOList);
         return pageDTO;

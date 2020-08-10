@@ -6,7 +6,7 @@ import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.vo.FabAgenVO;
 import com.bosssoft.ecds.entity.vo.PageVO;
 import com.bosssoft.ecds.service.FabAgenService;
-import com.bosssoft.ecds.utils.BeanUtil;
+import com.bosssoft.ecds.utils.MyBeanUtil;
 import com.bosssoft.ecds.utils.ResponseUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,9 +42,9 @@ public class FabAgenController {
     @PostMapping("/save")
     public String save(@RequestBody FabAgenVO fabAgenVO){
         FabAgenDTO fabAgenDTO = new FabAgenDTO();
-        BeanUtil.copyProperties(fabAgenVO,fabAgenDTO);
+        MyBeanUtil.copyProperties(fabAgenVO,fabAgenDTO);
         fabAgenDTO = fabAgenService.save(fabAgenDTO);
-        BeanUtil.copyProperties(fabAgenDTO,fabAgenVO);
+        MyBeanUtil.copyProperties(fabAgenDTO,fabAgenVO);
         return ResponseUtils.getResponse(fabAgenVO,ResponseUtils.ResultType.OK);
     }
 
@@ -60,9 +60,9 @@ public class FabAgenController {
     @PostMapping("/remove")
     public String remove(@RequestBody FabAgenVO fabAgenVO){
         FabAgenDTO fabAgenDTO = new FabAgenDTO();
-        BeanUtil.copyProperties(fabAgenVO,fabAgenDTO);
+        MyBeanUtil.copyProperties(fabAgenVO,fabAgenDTO);
         Boolean result = fabAgenService.remove(fabAgenDTO);
-        BeanUtil.copyProperties(fabAgenDTO,fabAgenVO);
+        MyBeanUtil.copyProperties(fabAgenDTO,fabAgenVO);
         return ResponseUtils.getResponse(result,ResponseUtils.ResultType.OK);
     }
 
@@ -78,9 +78,9 @@ public class FabAgenController {
     @PostMapping("/update")
     public String update(@RequestBody FabAgenVO fabAgenVO){
         FabAgenDTO fabAgenDTO = new FabAgenDTO();
-        BeanUtil.copyProperties(fabAgenVO,fabAgenDTO);
+        MyBeanUtil.copyProperties(fabAgenVO,fabAgenDTO);
         Boolean result = fabAgenService.update(fabAgenDTO);
-        BeanUtil.copyProperties(fabAgenDTO,fabAgenVO);
+        MyBeanUtil.copyProperties(fabAgenDTO,fabAgenVO);
         return ResponseUtils.getResponse(result,ResponseUtils.ResultType.OK);
     }
 
@@ -96,9 +96,9 @@ public class FabAgenController {
     @PostMapping("/getByAgenCode")
     public String getByAgenCode(@RequestBody FabAgenVO fabAgenVO){
         FabAgenDTO fabAgenDTO = new FabAgenDTO();
-        BeanUtil.copyProperties(fabAgenVO,fabAgenDTO);
+        MyBeanUtil.copyProperties(fabAgenVO,fabAgenDTO);
         fabAgenDTO = fabAgenService.getByAgenCode(fabAgenDTO);
-        BeanUtil.copyProperties(fabAgenDTO,fabAgenVO);
+        MyBeanUtil.copyProperties(fabAgenDTO,fabAgenVO);
         return ResponseUtils.getResponse(fabAgenVO,ResponseUtils.ResultType.OK);
     }
 
@@ -114,9 +114,9 @@ public class FabAgenController {
     @PostMapping("/getByAgenName")
     public String getByAgenName(@RequestBody FabAgenVO fabAgenVO){
         FabAgenDTO fabAgenDTO = new FabAgenDTO();
-        BeanUtil.copyProperties(fabAgenVO,fabAgenDTO);
+        MyBeanUtil.copyProperties(fabAgenVO,fabAgenDTO);
         fabAgenDTO = fabAgenService.getByAgenName(fabAgenDTO);
-        BeanUtil.copyProperties(fabAgenDTO,fabAgenVO);
+        MyBeanUtil.copyProperties(fabAgenDTO,fabAgenVO);
         return ResponseUtils.getResponse(fabAgenVO,ResponseUtils.ResultType.OK);
     }
 
@@ -131,7 +131,7 @@ public class FabAgenController {
     @GetMapping("/listAll")
     public String listAll(){
         List<FabAgenDTO> fabAgenDTOList = fabAgenService.listAll();
-        List<FabAgenVO> fabAgenVOList = BeanUtil.copyListProperties(fabAgenDTOList, FabAgenVO.class);
+        List<FabAgenVO> fabAgenVOList = MyBeanUtil.copyListProperties(fabAgenDTOList, FabAgenVO.class);
         return ResponseUtils.getResponse(fabAgenVOList,ResponseUtils.ResultType.OK);
     }
 
@@ -148,10 +148,10 @@ public class FabAgenController {
         pageVO.setLimit(limit);
         pageVO.setPage(page);
         pageVO.setKeyword(keyword);
-        PageDTO pageDTO = BeanUtil.copyProperties(pageVO, PageDTO.class);
+        PageDTO pageDTO = MyBeanUtil.copyProperties(pageVO, PageDTO.class);
         pageDTO = fabAgenService.listByPage(pageDTO);
 
-        pageVO = BeanUtil.copyProperties(pageDTO, PageVO.class);
+        pageVO = MyBeanUtil.copyProperties(pageDTO, PageVO.class);
         return ResponseUtils.getResponse(pageVO, ResponseUtils.ResultType.OK);
     }
 
@@ -163,7 +163,7 @@ public class FabAgenController {
      */
     @PostMapping("removeBatch")
     public String removeBatch(@RequestBody List<FabAgenVO> fabAgenVOList) {
-        List<FabAgenDTO> fabAgenDTOList = BeanUtil.copyListProperties(fabAgenVOList, FabAgenDTO.class);
+        List<FabAgenDTO> fabAgenDTOList = MyBeanUtil.copyListProperties(fabAgenVOList, FabAgenDTO.class);
         Boolean result = fabAgenService.removeBatch(fabAgenDTOList);
         return ResponseUtils.getResponse(result, ResponseUtils.ResultType.OK);
     }
@@ -180,9 +180,9 @@ public class FabAgenController {
     @PostMapping("/getByDeptCode")
     public String getByDeptCode(@RequestBody FabAgenVO fabAgenVO){
         FabAgenDTO fabAgenDTO = new FabAgenDTO();
-        BeanUtil.copyProperties(fabAgenVO,fabAgenDTO);
+        MyBeanUtil.copyProperties(fabAgenVO,fabAgenDTO);
         List<FabAgenDTO> fabAgenDTOList = fabAgenService.getByDeptCode(fabAgenDTO);
-        List<FabAgenVO> fabAgenVOList= BeanUtil.copyListProperties(fabAgenDTOList,FabAgenVO.class);
+        List<FabAgenVO> fabAgenVOList= MyBeanUtil.copyListProperties(fabAgenDTOList,FabAgenVO.class);
         return ResponseUtils.getResponse(fabAgenVOList,ResponseUtils.ResultType.OK);
     }
 }

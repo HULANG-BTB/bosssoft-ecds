@@ -9,7 +9,7 @@ import com.bosssoft.ecds.dao.FabDeptDao;
 import com.bosssoft.ecds.entity.po.PermissionPO;
 import com.bosssoft.ecds.service.FabDeptService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.bosssoft.ecds.utils.BeanUtil;
+import com.bosssoft.ecds.utils.MyBeanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +39,7 @@ public class FabDeptServiceImpl extends ServiceImpl<FabDeptDao, FabDeptPO> imple
     @Override
     public FabDeptDTO save(FabDeptDTO fabDeptDTO) {
         FabDeptPO fabDeptPO = new FabDeptPO();
-        BeanUtil.copyProperties(fabDeptDTO, fabDeptPO);
+        MyBeanUtil.copyProperties(fabDeptDTO, fabDeptPO);
         super.save(fabDeptPO);
         return fabDeptDTO;
     }
@@ -56,7 +56,7 @@ public class FabDeptServiceImpl extends ServiceImpl<FabDeptDao, FabDeptPO> imple
     @Override
     public boolean remove(FabDeptDTO fabDeptDTO) {
         FabDeptPO fabDeptPO = new FabDeptPO();
-        BeanUtil.copyProperties(fabDeptDTO, fabDeptPO);
+        MyBeanUtil.copyProperties(fabDeptDTO, fabDeptPO);
         return super.removeById(fabDeptPO.getId());
     }
 
@@ -72,7 +72,7 @@ public class FabDeptServiceImpl extends ServiceImpl<FabDeptDao, FabDeptPO> imple
     @Override
     public boolean update(FabDeptDTO fabDeptDTO) {
         FabDeptPO fabDeptPO = new FabDeptPO();
-        BeanUtil.copyProperties(fabDeptDTO, fabDeptPO);
+        MyBeanUtil.copyProperties(fabDeptDTO, fabDeptPO);
         return super.updateById(fabDeptPO);
     }
 
@@ -88,9 +88,9 @@ public class FabDeptServiceImpl extends ServiceImpl<FabDeptDao, FabDeptPO> imple
     @Override
     public FabDeptDTO getByDeptCode(FabDeptDTO fabDeptDTO) {
         FabDeptPO fabDeptPO = new FabDeptPO();
-        BeanUtil.copyProperties(fabDeptDTO, fabDeptPO);
+        MyBeanUtil.copyProperties(fabDeptDTO, fabDeptPO);
         FabDeptPO fabDeptPO1 = super.getOne(new QueryWrapper<FabDeptPO>(fabDeptPO));
-        return BeanUtil.copyProperties(fabDeptPO1, FabDeptDTO.class);
+        return MyBeanUtil.copyProperties(fabDeptPO1, FabDeptDTO.class);
     }
 
     /**
@@ -105,9 +105,9 @@ public class FabDeptServiceImpl extends ServiceImpl<FabDeptDao, FabDeptPO> imple
     @Override
     public FabDeptDTO getByDeptName(FabDeptDTO fabDeptDTO) {
         FabDeptPO fabDeptPO = new FabDeptPO();
-        BeanUtil.copyProperties(fabDeptDTO, fabDeptPO);
+        MyBeanUtil.copyProperties(fabDeptDTO, fabDeptPO);
         FabDeptPO fabDeptPO1 = super.getOne(new QueryWrapper<FabDeptPO>(fabDeptPO));
-        return BeanUtil.copyProperties(fabDeptPO1, FabDeptDTO.class);
+        return MyBeanUtil.copyProperties(fabDeptPO1, FabDeptDTO.class);
     }
 
     /**
@@ -121,7 +121,7 @@ public class FabDeptServiceImpl extends ServiceImpl<FabDeptDao, FabDeptPO> imple
     @Override
     public List<FabDeptDTO> listAll() {
         List<FabDeptPO> list = super.list();
-        List<FabDeptDTO> fabDeptDTOList = BeanUtil.copyListProperties(list, FabDeptDTO.class);
+        List<FabDeptDTO> fabDeptDTOList = MyBeanUtil.copyListProperties(list, FabDeptDTO.class);
         return fabDeptDTOList;
     }
 
@@ -145,7 +145,7 @@ public class FabDeptServiceImpl extends ServiceImpl<FabDeptDao, FabDeptPO> imple
         Page<FabDeptPO> fabDeptPOPage1 = super.page(fabDeptPOPage, queryWrapper);
         List<FabDeptPO> records = fabDeptPOPage1.getRecords();
         // 转换数据
-        List<FabDeptDTO> userDTOList = BeanUtil.copyListProperties(records, FabDeptDTO.class);
+        List<FabDeptDTO> userDTOList = MyBeanUtil.copyListProperties(records, FabDeptDTO.class);
         pageDTO.setTotal(fabDeptPOPage1.getTotal());
         pageDTO.setItems(userDTOList);
         return pageDTO;

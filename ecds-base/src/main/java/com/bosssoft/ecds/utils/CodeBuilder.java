@@ -11,7 +11,6 @@ import com.baomidou.mybatisplus.generator.config.StrategyConfig;
 import com.baomidou.mybatisplus.generator.config.po.TableFill;
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
-import org.junit.Test;
 
 import java.util.ArrayList;
 
@@ -19,10 +18,9 @@ import java.util.ArrayList;
  * @Author asus
  * @create 10/8/2020 上午9:02
  */
-public class CodeBuilder {
-    @Test
-    public void Test() {
 
+public class CodeBuilder {
+    public static void main(String[] args) {
         AutoGenerator autoGenerator = new AutoGenerator();
 
         // 数据库表名
@@ -134,7 +132,7 @@ public class CodeBuilder {
 
         autoGenerator.execute();
 
-
     }
+
 
 }

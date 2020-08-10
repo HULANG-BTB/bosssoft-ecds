@@ -9,7 +9,7 @@ import com.bosssoft.ecds.entity.po.FabAgenPO;
 import com.bosssoft.ecds.dao.FabAgenDao;
 import com.bosssoft.ecds.service.FabAgenService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.bosssoft.ecds.utils.BeanUtil;
+import com.bosssoft.ecds.utils.MyBeanUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -38,7 +38,7 @@ public class FabAgenServiceImpl extends ServiceImpl<FabAgenDao, FabAgenPO> imple
     @Override
     public FabAgenDTO save(FabAgenDTO fabAgenDTO) {
         FabAgenPO fabAgenPO = new FabAgenPO();
-        BeanUtil.copyProperties(fabAgenDTO, fabAgenPO);
+        MyBeanUtil.copyProperties(fabAgenDTO, fabAgenPO);
         super.save(fabAgenPO);
         return fabAgenDTO;
     }
@@ -55,7 +55,7 @@ public class FabAgenServiceImpl extends ServiceImpl<FabAgenDao, FabAgenPO> imple
     @Override
     public boolean remove(FabAgenDTO fabAgenDTO) {
         FabAgenPO fabAgenPO = new FabAgenPO();
-        BeanUtil.copyProperties(fabAgenDTO, fabAgenPO);
+        MyBeanUtil.copyProperties(fabAgenDTO, fabAgenPO);
         return super.removeById(fabAgenPO.getId());
     }
 
@@ -71,7 +71,7 @@ public class FabAgenServiceImpl extends ServiceImpl<FabAgenDao, FabAgenPO> imple
     @Override
     public boolean update(FabAgenDTO fabAgenDTO) {
         FabAgenPO fabAgenPO = new FabAgenPO();
-        BeanUtil.copyProperties(fabAgenDTO, fabAgenPO);
+        MyBeanUtil.copyProperties(fabAgenDTO, fabAgenPO);
         return super.updateById(fabAgenPO);
     }
 
@@ -87,9 +87,9 @@ public class FabAgenServiceImpl extends ServiceImpl<FabAgenDao, FabAgenPO> imple
     @Override
     public FabAgenDTO getByAgenCode(FabAgenDTO fabAgenDTO) {
         FabAgenPO fabAgenPO = new FabAgenPO();
-        BeanUtil.copyProperties(fabAgenDTO, fabAgenPO);
+        MyBeanUtil.copyProperties(fabAgenDTO, fabAgenPO);
         FabAgenPO fabAgenPO1 = super.getOne(new QueryWrapper<FabAgenPO>(fabAgenPO));
-        return BeanUtil.copyProperties(fabAgenPO1, FabAgenDTO.class);
+        return MyBeanUtil.copyProperties(fabAgenPO1, FabAgenDTO.class);
     }
 
     /**
@@ -104,9 +104,9 @@ public class FabAgenServiceImpl extends ServiceImpl<FabAgenDao, FabAgenPO> imple
     @Override
     public FabAgenDTO getByAgenName(FabAgenDTO fabAgenDTO) {
         FabAgenPO fabAgenPO = new FabAgenPO();
-        BeanUtil.copyProperties(fabAgenDTO, fabAgenPO);
+        MyBeanUtil.copyProperties(fabAgenDTO, fabAgenPO);
         FabAgenPO fabAgenPO1 = super.getOne(new QueryWrapper<FabAgenPO>(fabAgenPO));
-        return BeanUtil.copyProperties(fabAgenPO1, FabAgenDTO.class);
+        return MyBeanUtil.copyProperties(fabAgenPO1, FabAgenDTO.class);
     }
 
     /**
@@ -120,7 +120,7 @@ public class FabAgenServiceImpl extends ServiceImpl<FabAgenDao, FabAgenPO> imple
     @Override
     public List<FabAgenDTO> listAll() {
         List<FabAgenPO> list = super.list();
-        List<FabAgenDTO> fabAgenDTOList = BeanUtil.copyListProperties(list, FabAgenDTO.class);
+        List<FabAgenDTO> fabAgenDTOList = MyBeanUtil.copyListProperties(list, FabAgenDTO.class);
         return fabAgenDTOList;
     }
 
@@ -144,7 +144,7 @@ public class FabAgenServiceImpl extends ServiceImpl<FabAgenDao, FabAgenPO> imple
         Page<FabAgenPO> fabAgenPOPage1 = super.page(fabAgenPOPage, queryWrapper);
         List<FabAgenPO> records = fabAgenPOPage1.getRecords();
         // 转换数据
-        List<FabAgenDTO> userDTOList = BeanUtil.copyListProperties(records, FabAgenDTO.class);
+        List<FabAgenDTO> userDTOList = MyBeanUtil.copyListProperties(records, FabAgenDTO.class);
         pageDTO.setTotal(fabAgenPOPage1.getTotal());
         pageDTO.setItems(userDTOList);
         return pageDTO;
@@ -180,8 +180,8 @@ public class FabAgenServiceImpl extends ServiceImpl<FabAgenDao, FabAgenPO> imple
     @Override
     public List<FabAgenDTO> getByDeptCode(FabAgenDTO fabAgenDTO) {
         FabAgenPO fabAgenPO = new FabAgenPO();
-        BeanUtil.copyProperties(fabAgenDTO, fabAgenPO);
+        MyBeanUtil.copyProperties(fabAgenDTO, fabAgenPO);
         List<FabAgenPO> fabAgenPOList = super.list(new QueryWrapper<FabAgenPO>(fabAgenPO));
-        return BeanUtil.copyListProperties(fabAgenPOList, FabAgenDTO.class);
+        return MyBeanUtil.copyListProperties(fabAgenPOList, FabAgenDTO.class);
     }
 }

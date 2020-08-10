@@ -6,7 +6,7 @@ import com.bosssoft.ecds.entity.dto.UabCrtDTO;
 import com.bosssoft.ecds.entity.vo.PageVO;
 import com.bosssoft.ecds.entity.vo.UabCrtVO;
 import com.bosssoft.ecds.service.UabCrtService;
-import com.bosssoft.ecds.utils.BeanUtil;
+import com.bosssoft.ecds.utils.MyBeanUtil;
 import com.bosssoft.ecds.utils.ResponseUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,9 +42,9 @@ public class UabCrtController {
     @PostMapping("/save")
     public String save(@RequestBody UabCrtVO uabCrtVO){
         UabCrtDTO uabCrtDTO = new UabCrtDTO();
-        BeanUtil.copyProperties(uabCrtVO,uabCrtDTO);
+        MyBeanUtil.copyProperties(uabCrtVO,uabCrtDTO);
         uabCrtDTO = uabCrtService.save(uabCrtDTO);
-        BeanUtil.copyProperties(uabCrtDTO,uabCrtVO);
+        MyBeanUtil.copyProperties(uabCrtDTO,uabCrtVO);
         return ResponseUtils.getResponse(uabCrtVO,ResponseUtils.ResultType.OK);
     }
 
@@ -60,9 +60,9 @@ public class UabCrtController {
     @PostMapping("/remove")
     public String remove(@RequestBody UabCrtVO uabCrtVO){
         UabCrtDTO uabCrtDTO = new UabCrtDTO();
-        BeanUtil.copyProperties(uabCrtVO,uabCrtDTO);
+        MyBeanUtil.copyProperties(uabCrtVO,uabCrtDTO);
         Boolean result = uabCrtService.remove(uabCrtDTO);
-        BeanUtil.copyProperties(uabCrtDTO,uabCrtVO);
+        MyBeanUtil.copyProperties(uabCrtDTO,uabCrtVO);
         return ResponseUtils.getResponse(result,ResponseUtils.ResultType.OK);
     }
 
@@ -78,9 +78,9 @@ public class UabCrtController {
     @PostMapping("/update")
     public String update(@RequestBody UabCrtVO uabCrtVO){
         UabCrtDTO uabCrtDTO = new UabCrtDTO();
-        BeanUtil.copyProperties(uabCrtVO,uabCrtDTO);
+        MyBeanUtil.copyProperties(uabCrtVO,uabCrtDTO);
         Boolean result = uabCrtService.update(uabCrtDTO);
-        BeanUtil.copyProperties(uabCrtDTO,uabCrtVO);
+        MyBeanUtil.copyProperties(uabCrtDTO,uabCrtVO);
         return ResponseUtils.getResponse(result,ResponseUtils.ResultType.OK);
     }
 
@@ -96,9 +96,9 @@ public class UabCrtController {
     @PostMapping("/getByCrtCode")
     public String getByCrtCode(@RequestBody UabCrtVO uabCrtVO){
         UabCrtDTO uabCrtDTO = new UabCrtDTO();
-        BeanUtil.copyProperties(uabCrtVO,uabCrtDTO);
+        MyBeanUtil.copyProperties(uabCrtVO,uabCrtDTO);
         uabCrtDTO = uabCrtService.getByCrtCode(uabCrtDTO);
-        BeanUtil.copyProperties(uabCrtDTO,uabCrtVO);
+        MyBeanUtil.copyProperties(uabCrtDTO,uabCrtVO);
         return ResponseUtils.getResponse(uabCrtVO,ResponseUtils.ResultType.OK);
     }
 
@@ -114,9 +114,9 @@ public class UabCrtController {
     @PostMapping("/getByAgenCode")
     public String getByAgenCode(@RequestBody UabCrtVO uabCrtVO){
         UabCrtDTO uabCrtDTO = new UabCrtDTO();
-        BeanUtil.copyProperties(uabCrtVO,uabCrtDTO);
+        MyBeanUtil.copyProperties(uabCrtVO,uabCrtDTO);
         List<UabCrtDTO> uabCrtDTOList = uabCrtService.getByAgenCode(uabCrtDTO);
-        BeanUtil.copyListProperties(uabCrtDTOList,UabCrtVO.class);
+        MyBeanUtil.copyListProperties(uabCrtDTOList,UabCrtVO.class);
         return ResponseUtils.getResponse(uabCrtDTOList,ResponseUtils.ResultType.OK);
     }
 
@@ -131,7 +131,7 @@ public class UabCrtController {
     @GetMapping("/listAll")
     public String listAll(){
         List<UabCrtDTO> uabCrtDTOList = uabCrtService.listAll();
-        List<UabCrtVO> uabCrtVOList = BeanUtil.copyListProperties(uabCrtDTOList, UabCrtVO.class);
+        List<UabCrtVO> uabCrtVOList = MyBeanUtil.copyListProperties(uabCrtDTOList, UabCrtVO.class);
         return ResponseUtils.getResponse(uabCrtVOList,ResponseUtils.ResultType.OK);
     }
 
@@ -148,10 +148,10 @@ public class UabCrtController {
         pageVO.setLimit(limit);
         pageVO.setPage(page);
         pageVO.setKeyword(keyword);
-        PageDTO pageDTO = BeanUtil.copyProperties(pageVO, PageDTO.class);
+        PageDTO pageDTO = MyBeanUtil.copyProperties(pageVO, PageDTO.class);
         pageDTO = uabCrtService.listByPage(pageDTO);
 
-        pageVO = BeanUtil.copyProperties(pageDTO, PageVO.class);
+        pageVO = MyBeanUtil.copyProperties(pageDTO, PageVO.class);
         return ResponseUtils.getResponse(pageVO, ResponseUtils.ResultType.OK);
     }
 
@@ -163,7 +163,7 @@ public class UabCrtController {
      */
     @PostMapping("removeBatch")
     public String removeBatch(@RequestBody List<UabCrtVO> uabCrtVOList) {
-        List<UabCrtDTO> uabCrtDTOList = BeanUtil.copyListProperties(uabCrtVOList, UabCrtDTO.class);
+        List<UabCrtDTO> uabCrtDTOList = MyBeanUtil.copyListProperties(uabCrtVOList, UabCrtDTO.class);
         Boolean result = uabCrtService.removeBatch(uabCrtDTOList);
         return ResponseUtils.getResponse(result, ResponseUtils.ResultType.OK);
     }
