@@ -1,6 +1,7 @@
 package com.bosssoft.ecds.service;
 
-import com.bosssoft.ecds.entity.dto.ItemDTO;
+import com.bosssoft.ecds.common.response.QueryResponseResult;
+import com.bosssoft.ecds.common.response.ResponseResult;
 import com.bosssoft.ecds.entity.dto.ItemStdDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.po.ItemStdPO;
@@ -18,13 +19,14 @@ import java.util.List;
  * @since 2020-08-09
  */
 public interface ItemStdService extends IService<ItemStdPO> {
+
     /**
      * 插入项目标准
      *
      * @param itemStdDTO
      * @return boolean
      */
-    boolean save(ItemStdDTO itemStdDTO);
+    ResponseResult save(ItemStdDTO itemStdDTO);
 
     /**
      * 修改项目标准信息
@@ -32,7 +34,7 @@ public interface ItemStdService extends IService<ItemStdPO> {
      * @param itemStdDTO
      * @return boolean
      */
-    boolean update(ItemStdDTO itemStdDTO);
+    ResponseResult update(ItemStdDTO itemStdDTO);
 
     /**
      * 删除项目标准信息
@@ -40,7 +42,7 @@ public interface ItemStdService extends IService<ItemStdPO> {
      * @param itemStdDTO
      * @return boolean
      */
-    boolean delete(ItemStdDTO itemStdDTO);
+    ResponseResult delete(ItemStdDTO itemStdDTO);
 
     /**
      * 分页查询项目标准信息
@@ -48,7 +50,7 @@ public interface ItemStdService extends IService<ItemStdPO> {
      * @param  pageDTO
      * @return PageVO
      */
-    PageVO listByPage(PageDTO<ItemStdDTO> pageDTO);
+    QueryResponseResult<PageVO> listByPage(PageDTO<ItemStdDTO> pageDTO);
 
     /**
      * 批量删除项目标准信息
@@ -56,6 +58,6 @@ public interface ItemStdService extends IService<ItemStdPO> {
      * @param itemStdDTOS
      * @return boolean
      */
-    boolean batchdelete(List<ItemStdDTO> itemStdDTOS);
+    ResponseResult batchDelete(List<ItemStdDTO> itemStdDTOS);
 
 }

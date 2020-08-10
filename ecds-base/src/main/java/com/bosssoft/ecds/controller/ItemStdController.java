@@ -1,29 +1,27 @@
 package com.bosssoft.ecds.controller;
 
 
-import com.bosssoft.ecds.entity.dto.ItemDTO;
+import com.bosssoft.ecds.common.response.QueryResponseResult;
+import com.bosssoft.ecds.common.response.ResponseResult;
 import com.bosssoft.ecds.entity.dto.ItemStdDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.vo.ItemStdVO;
-import com.bosssoft.ecds.entity.vo.ItemVO;
 import com.bosssoft.ecds.entity.vo.PageVO;
 import com.bosssoft.ecds.service.ItemStdService;
 import com.bosssoft.ecds.utils.MyBeanUtil;
-import com.bosssoft.ecds.utils.ResponseUtils;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  *
  * @author wzh
@@ -32,6 +30,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/itemstd")
 public class ItemStdController {
+
     @Autowired
     private ItemStdService itemStdService;
 
@@ -43,10 +42,9 @@ public class ItemStdController {
      */
     @ApiOperation(value = "添加项目标准")
     @PostMapping("/save")
-    public String addItem(@RequestBody ItemStdVO itemStdVO) {
+    public ResponseResult addItem(@RequestBody ItemStdVO itemStdVO) {
         ItemStdDTO itemStdDTO = MyBeanUtil.myCopyProperties(itemStdVO, ItemStdDTO.class);
-        boolean save = itemStdService.save(itemStdDTO);
-        return ResponseUtils.getResponse(save, ResponseUtils.ResultType.CREATED);
+        return itemStdService.save(itemStdDTO);
     }
 
     /**
@@ -57,10 +55,9 @@ public class ItemStdController {
      */
     @ApiOperation(value = "修改项目标准")
     @PostMapping("/update")
-    public String updateItem(@RequestBody ItemStdVO itemStdVO) {
+    public ResponseResult updateItem(@RequestBody ItemStdVO itemStdVO) {
         ItemStdDTO itemStdDTO = MyBeanUtil.myCopyProperties(itemStdVO, ItemStdDTO.class);
-        boolean update = itemStdService.update(itemStdDTO);
-        return ResponseUtils.getResponse(update, ResponseUtils.ResultType.OK);
+        return itemStdService.update(itemStdDTO);
     }
 
     /**
@@ -72,10 +69,9 @@ public class ItemStdController {
     @ApiOperation(value = "删除项目标准")
     @ApiImplicitParam(name = "id", value = "项目id", dataType = "Long")
     @PostMapping("/delete")
-    public String deleteItem(@RequestBody ItemStdVO itemStdVO) {
+    public ResponseResult deleteItem(@RequestBody ItemStdVO itemStdVO) {
         ItemStdDTO itemStdDTO = MyBeanUtil.myCopyProperties(itemStdVO, ItemStdDTO.class);
-        boolean delete = itemStdService.delete(itemStdDTO);
-        return ResponseUtils.getResponse(delete, ResponseUtils.ResultType.OK);
+        return itemStdService.delete(itemStdDTO);
     }
 
     /**
@@ -86,12 +82,10 @@ public class ItemStdController {
      */
     @ApiOperation(value = "批量删除项目标准")
     @PostMapping("/batchdelete")
-    public String batchDelete(@RequestBody List<ItemStdVO> itemVOList) {
+    public ResponseResult batchDelete(@RequestBody List<ItemStdVO> itemVOList) {
         List<ItemStdDTO> itemStdDTOList = MyBeanUtil.copyListProperties(itemVOList, ItemStdDTO::new);
-        boolean batchdelete = itemStdService.batchdelete(itemStdDTOList);
-        return ResponseUtils.getResponse(batchdelete, ResponseUtils.ResultType.OK);
+        return itemStdService.batchDelete(itemStdDTOList);
     }
-
 
     /**
      * 分页查询
@@ -101,15 +95,9 @@ public class ItemStdController {
      */
     @ApiOperation(value = "分页查询项目标准")
     @PostMapping("/listbypage")
-    public String listByPage(@RequestBody PageVO pageVO) {
+    public QueryResponseResult<PageVO> listByPage(@RequestBody PageVO pageVO) {
         PageDTO<ItemStdDTO> pageDTO = MyBeanUtil.myCopyProperties(pageVO, PageDTO.class);
-        PageVO pageVO1 = itemStdService.listByPage(pageDTO);
-        if (pageVO1 != null) {
-            return ResponseUtils.getResponse(pageVO1, ResponseUtils.ResultType.OK);
-        } else {
-            return ResponseUtils.getResponse(pageVO1, ResponseUtils.ResultType.INTERNAL_SERVER_ERROR);
-        }
+        return itemStdService.listByPage(pageDTO);
     }
-
 }
 
