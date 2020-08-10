@@ -1,4 +1,4 @@
-package com.bosssoft.ecds.utils;
+package com.bosssoft.ecds.security.utils;
 
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONUtil;
@@ -13,7 +13,15 @@ import java.util.function.Supplier;
  * @Date 2020/7/31 22:07
  * @Description TODO
  **/
-public class BeanUtil extends cn.hutool.core.bean.BeanUtil {
+public class BeanUtils {
+
+    public static <T> T copyProperties(Object source, Class<T> tClass) {
+        return cn.hutool.core.bean.BeanUtil.copyProperties(source, tClass);
+    }
+
+    public static void copyProperties(Object source, Object target) {
+        cn.hutool.core.bean.BeanUtil.copyProperties(source, target);
+    }
 
     /**
      * @author Johnson
@@ -36,8 +44,7 @@ public class BeanUtil extends cn.hutool.core.bean.BeanUtil {
 
     public static <S, T> List<T> copyListProperties(List<S> sources, Class<T> elementType) {
         JSONArray objects = JSONUtil.parseArray(sources);
-        List<T> ts = JSONUtil.toList(objects, elementType);
-        return ts;
+        return JSONUtil.toList(objects, elementType);
     }
 
 }

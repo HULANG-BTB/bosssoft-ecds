@@ -1,6 +1,12 @@
 server:
   port: 7000
 spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://39.97.123.56:3306/ecds_financial?useUnicode=true&useSSL=false&characterEncoding=utf8
+    username: root
+    password: root
   cloud:
     gateway:
       discovery:
@@ -44,3 +50,18 @@ spring:
             - Path=/permission/**
           filters:
             - StripPrefix=0
+  redis:
+    host: localhost
+    port: 6379
+
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath*:/mapper/*.xml
+  type-aliases-package: com.bosssoft.ecds.entity.po
+
+rsa:
+  key:
+    public-key: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAzrf8brsm20Tg0l20fG4sZuK5fkEX3pN/5/atzuYgNuwNpVU5h+d4zcp6X4jog0hvvoBaFNEsk0XatOLrl+nci98sVBbViHW7RK5YY+bsm+dPanKFVTlyRdRKSgs52XVnW19yYYSv3zElAGX4IuPL8RlB+NRemdzEW0/g1kD7X7BdjoFYoF9B4LKh+8g7QALtzTroOEA3qbTmlPqeSsVVcnzA4zfB7SacfACdh/NroaaUO24oQKWXc7vbDhj2210ak8sIAt09tO/4kINV4nBh9RaS1d6+FlhBNHBXrYNxlUpFdYwKFK19vXzaEDHRc+BzqffgJR03Cgp4iVI0ypWJ0QIDAQAB"
+    private-key: "MIIEowIBAAKCAQEAzrf8brsm20Tg0l20fG4sZuK5fkEX3pN/5/atzuYgNuwNpVU5h+d4zcp6X4jog0hvvoBaFNEsk0XatOLrl+nci98sVBbViHW7RK5YY+bsm+dPanKFVTlyRdRKSgs52XVnW19yYYSv3zElAGX4IuPL8RlB+NRemdzEW0/g1kD7X7BdjoFYoF9B4LKh+8g7QALtzTroOEA3qbTmlPqeSsVVcnzA4zfB7SacfACdh/NroaaUO24oQKWXc7vbDhj2210ak8sIAt09tO/4kINV4nBh9RaS1d6+FlhBNHBXrYNxlUpFdYwKFK19vXzaEDHRc+BzqffgJR03Cgp4iVI0ypWJ0QIDAQABAoIBAF4Iq7fjQoW0C2EmZxfDNkeHE0IvciA5kJGAUQgw/q59Kqfu4MDFttpGJOyYZsxxgwNxd4jIrjJAMIDgSLNOGpk16ABIctIkXA+eD29CeJdi3WlatvRRsX26WCDegm49Tcru3CUoKqiovmA0AnA8l2URTEVYtb/gASJYb7qGzNJ1oosuZWvUo4hMB3Zt3R8eY5oSjAxCAMeC7xs32t/1eDQ1MoCxl3GOEds2Xf8ES7tzTvQgXW+ANhYY4//k76HB2CC3XFNZmgCJ3NkfPYY3bJdfrkn1OCruOGS42y8IMtvfROG0zASfkdWVJGbdqC2vnUrZe4WxSODBsk75yaALbZECgYEA6LknxDKQ4KPaSmx8RVCyiCvziAW0zgvTrev9VzWMTCdyUjHKUIkUipnVYKLBF0pMKXU8BI9fQERK2TlfCz3kjciUM0t5/bu/x+6A+Tb3lxLbGvGWHpbfBF2kNHRIYKBoVZNuf+28+ITjsKXlUCzOaMEWAm6hstSV6oVnCG494+sCgYEA42T81VzsXyJmg0x6Mp7OH7E7gd6LcCFD/EG/FrjA4jCmJUYfKUzw5OkAmdSnvmCis0ErbZPS6mr579wjM+4b07OfAFDXMvijy59US4Rxluy0zr7HfQuGz6drhA2dAx0NWODmFhN3qTVg2O+5tRS3nI+WJDQFBq56Q792Chl05jMCgYBuuIie45/iAJK+jdah87684ow+ztgyn5XaTUh+0U8qfCn7yQyEPHO1bXMDQuuy9Po/TzN6x+t9XABwUMdTReMTQbagoOwtN8IKkQJzjx9ElQgBTacqboU0Qoj5G8nDjw2UiUwtOSKK6k6ZoJP1DRw24oZiKdhsiI+6wDVA4ZI4eQKBgCAzz/5jP3IljADyFqgOh0BDuBqnKnYBsAAMS4RrO52MqCrFKGqP49l3Cce/LtYuFzxtcTn+YjMiXSzTrwSOptAvMsg3qpIkVgXjFWvwYKmv8dcJe3TA6iGEIxy7VM35EkfQ6aScsyh6T7HJGTKEsY/xYaDU4RVWJihr98psWnqzAoGBAJqnVr3MK0U36jdhWgvH6OgpfecyXBnWSuBjpLVC5bjFHZwTru9/4pqMWCv9hKzxa96JiXe8DSm634mM/z2dEbkE6BIyakme21I+zrrICnRGHu6PBfmzlfQLK4ocpfhUz273m8qQALVF93RfAfGp/BH3O9GfZzkYCoYVky46RYMR"
