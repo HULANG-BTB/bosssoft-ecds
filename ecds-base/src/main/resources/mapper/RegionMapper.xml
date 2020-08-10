@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bosssoft.ecds.dao.RegionMapper">
+
+    <resultMap id="regionMap" type="com.bosssoft.ecds.entity.vo.RegionExt">
+        <id property="id" column="one_id"></id>
+        <result property="code" column="one_code"></result>
+        <result property="name" column="one_name"></result>
+        <result property="parentId" column="one_parentid"></result>
+        <result property="assortment" column="one_assortment"></result>
+        <collection property="children" ofType="com.bosssoft.ecds.entity.vo.RegionExt">
+            <id property="id" column="two_id"></id>
+            <result property="code" column="two_code"></result>
+            <result property="name" column="two_name"></result>
+            <result property="parentId" column="two_parentid"></result>
+            <result property="assortment" column="two_assortment"></result>
+            <collection property="children" ofType="com.bosssoft.ecds.entity.vo.RegionExt">
+                <id property="id" column="three_id"></id>
+                <result property="code" column="three_code"></result>
+                <result property="name" column="three_name"></result>
+                <result property="parentId" column="three_parentid"></result>
+                <result property="assortment" column="three_assortment"></result>
+            </collection>
+        </collection>
+    </resultMap>
+
+    <resultMap id="provinceMap" type="com.bosssoft.ecds.entity.vo.RegionExt">
+        <id property="id" column="f_id"></id>
+        <result property="code" column="f_code"></result>
+        <result property="name" column="f_name"></result>
+        <result property="parentId" column="f_parentid"></result>
+        <result property="assortment" column="f_is_assortment"></result>
+    </resultMap>
+
+    <resultMap id="cityMap" type="com.bosssoft.ecds.entity.vo.RegionExt">
+        <id property="id" column="one_id"></id>
+        <result property="code" column="one_code"></result>
+        <result property="name" column="one_name"></result>
+        <result property="parentId" column="one_parentid"></result>
+        <result property="assortment" column="one_assortment"></result>
+        <collection property="children" ofType="com.bosssoft.ecds.entity.vo.RegionExt">
+            <id property="id" column="two_id"></id>
+            <result property="code" column="two_code"></result>
+            <result property="name" column="two_name"></result>
+            <result property="parentId" column="two_parentid"></result>
+            <result property="assortment" column="two_assortment"></result>
+        </collection>
+    </resultMap>
+
+    <select id="pageList"  resultType="com.bosssoft.ecds.entity.po.AuthRegion">
+        SELECT
+            f_id id,
+            f_code code,
+            f_name name,
+            f_mnem mnem,
+            f_parentid parentId,
+            f_level level,
+            f_is_assortment assortment,
+            f_is_leaf leaf,
+            f_is_enabled enabled,
+            f_is_toprgn topRegion,
+            f_busiparent_id busParentId,
+            f_org_name orgName,
+            f_remark remark,
+            f_operator_id operatorId,
+            f_operator operator,
+            f_create_time createTime,
+            f_update_time updateTime
+        FROM
+            afa_auth_region
+        <where>
+            <if test="query.id != null and query.id != ''">
+            AND f_id = #{query.id}
+            </if>
+            <if test="query.parentId != null and query.parentId != ''">
+            OR ( f_id = #{query.parentId} OR f_parentid = #{query.parentId} OR f_parentid IN ( SELECT f_id FROM afa_auth_region WHERE f_parentid = #{query.parentId} ) )
+            </if>
+            <if test="query.code != null and query.code != ''">
+                AND f_code like CONCAT(#{query.code},'%')
+            </if>
+            <if test="query.name != null and query.name != ''">
+                AND f_name like CONCAT(#{query.name},'%')
+            </if>
+        </where>
+    </select>
+
+    <select id="getAllRegion" resultMap="regionMap">
+        SELECT
+            one.f_id one_id,
+            one.f_name one_name,
+            one.f_code one_code,
+            one.f_parentid one_parentid,
+            one.f_is_assortment one_assortment,
+            two.f_id two_id,
+            two.f_name two_name,
+            two.f_code two_code,
+            two.f_parentid two_parentid,
+            two.f_is_assortment two_assortment,
+            three.f_id three_id,
+            three.f_name three_name,
+            three.f_code three_code,
+            three.f_parentid three_parentid,
+            three.f_is_assortment three_assortment
+        FROM
+            afa_auth_region one
+            LEFT JOIN afa_auth_region two ON one.f_id = two.f_parentid
+            LEFT JOIN afa_auth_region three ON two.f_id = three.f_parentid
+        WHERE
+            one.f_parentid =0
+        ORDER BY one.f_id,two.f_id,three.f_id
+    </select>
+
+    <select id="getProvince" resultMap="provinceMap">
+        SELECT
+            f_id,
+            f_code,
+            f_name,
+            f_parentid,
+            f_is_assortment
+        FROM
+            afa_auth_region
+        WHERE
+            f_level = 1
+            AND f_is_assortment = 1
+        ORDER BY f_id
+    </select>
+
+    <select id="getCity" resultMap="cityMap">
+        SELECT
+            one.f_id one_id,
+            one.f_code one_code,
+            one.f_name one_name,
+            one.f_parentid one_parentid,
+            one.f_is_assortment one_assortment,
+            two.f_id two_id,
+            two.f_code two_code,
+            two.f_name two_name,
+            two.f_parentid two_parentid,
+            two.f_is_assortment two_assortment
+        FROM
+            afa_auth_region one
+            LEFT JOIN afa_auth_region two ON one.f_id = two.f_parentid
+        WHERE
+            one.f_is_assortment = 1
+            AND two.f_is_assortment = 1
+        ORDER BY one.f_id,two.f_id
+    </select>
+
+
+</mapper>
