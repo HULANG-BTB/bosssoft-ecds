@@ -45,9 +45,11 @@ public class RoleController {
         // 执行业务逻辑
         roleDTO = roleService.save(roleDTO);
         // 转换为VO
+
         roleVO = MyBeanUtil.copyProperties(roleDTO, RoleVO.class);
         permissionDTOList = roleDTO.getPermissions();
         permissionVOList = MyBeanUtil.copyListProperties(permissionDTOList, PermissionVO.class);
+
         roleVO.setPermissions(permissionVOList);
 
         return ResponseUtils.getResponse(roleVO, ResponseUtils.ResultType.OK);
@@ -61,9 +63,11 @@ public class RoleController {
     @PutMapping("update")
     public String update(@RequestBody RoleVO roleVO) {
         // 转换为DTO
+
         RoleDTO roleDTO = MyBeanUtil.copyProperties(roleVO, RoleDTO.class);
         List<PermissionVO> permissionVOList = roleVO.getPermissions();
         List<PermissionDTO> permissionDTOList = MyBeanUtil.copyListProperties(permissionVOList, PermissionDTO.class);
+
         roleDTO.setPermissions(permissionDTOList);
         // 执行业务逻辑
         Boolean result = roleService.update(roleDTO);
@@ -88,7 +92,7 @@ public class RoleController {
      * @return
      */
     @GetMapping("listByUserId")
-    public String listByUserId(@RequestParam("id") String id) {
+    public String listByUserId(@RequestParam("id") Long id) {
         // 执行业务逻辑
         List<RoleDTO> roleDTOList = roleService.listByUserId(id);
         // 转换为VO
@@ -124,6 +128,7 @@ public class RoleController {
     public String remove(@PathVariable("id") Long id) {
         RoleVO roleVO = new RoleVO();
         roleVO.setId(id);
+
         RoleDTO roleDTO = MyBeanUtil.copyProperties(roleVO, RoleDTO.class);
         Boolean result = roleService.remove(roleDTO);
         return ResponseUtils.getResponse(result, ResponseUtils.ResultType.OK);

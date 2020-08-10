@@ -158,7 +158,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleDao, RolePO> implements Rol
      *
      * @return
      */
-    public List<RoleDTO> listByUserId(String id) {
+    public List<RoleDTO> listByUserId(Long id) {
         List<RolePO> rolePOList = super.getBaseMapper().selectByUid(id);
         List<RoleDTO> roleDTOList = MyBeanUtil.copyListProperties(rolePOList, RoleDTO::new);
         return roleDTOList;

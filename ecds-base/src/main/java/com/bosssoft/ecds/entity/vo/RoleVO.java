@@ -30,14 +30,14 @@ public class RoleVO extends Model<RoleVO> {
     @ApiModelProperty(value = "ID")
     private Long id;
 
-    @ApiModelProperty(value = "用户名")
-    private String username;
+    @ApiModelProperty(value = "角色Key")
+    private String role;
 
-    @ApiModelProperty(value = "密码")
-    private String password;
+    @ApiModelProperty(value = "名称")
+    private String name;
 
-    @ApiModelProperty(value = "昵称")
-    private String nickname;
+    @ApiModelProperty(value = "角色描述")
+    private String description;
 
     @ApiModelProperty(value = "经办人")
     private String operator;
@@ -52,7 +52,6 @@ public class RoleVO extends Model<RoleVO> {
     private Date updateTime;
 
     @ApiModelProperty(value = "逻辑删除")
-    @TableLogic
     private Boolean logicDelete;
 
     @ApiModelProperty(value = "乐观锁")
