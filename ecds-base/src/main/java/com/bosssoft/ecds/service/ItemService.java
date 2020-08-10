@@ -1,10 +1,11 @@
 package com.bosssoft.ecds.service;
 
+import com.bosssoft.ecds.common.response.QueryResponseResult;
+import com.bosssoft.ecds.common.response.ResponseResult;
 import com.bosssoft.ecds.entity.dto.ItemDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.po.ItemPO;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.bosssoft.ecds.entity.vo.ItemVO;
 import com.bosssoft.ecds.entity.vo.PageVO;
 
 import java.util.List;
@@ -18,13 +19,14 @@ import java.util.List;
  * @since 2020-08-09
  */
 public interface ItemService extends IService<ItemPO> {
+
     /**
      * 插入项目
      *
      * @param itemDTO
      * @return boolean
      */
-    boolean save(ItemDTO itemDTO);
+    ResponseResult save(ItemDTO itemDTO);
 
     /**
      * 修改项目信息
@@ -32,7 +34,7 @@ public interface ItemService extends IService<ItemPO> {
      * @param itemDTO
      * @return boolean
      */
-    boolean update(ItemDTO itemDTO);
+    ResponseResult update(ItemDTO itemDTO);
 
     /**
      * 删除项目信息
@@ -40,15 +42,15 @@ public interface ItemService extends IService<ItemPO> {
      * @param itemDTO
      * @return boolean
      */
-    boolean delete(ItemDTO itemDTO);
+    ResponseResult delete(ItemDTO itemDTO);
 
     /**
      * 分页查询项目信息
      *
-     * @param  pageDTO
+     * @param pageDTO
      * @return PageVO
      */
-    PageVO listByPage(PageDTO<ItemDTO> pageDTO);
+    QueryResponseResult<PageVO> listByPage(PageDTO<ItemDTO> pageDTO);
 
     /**
      * 批量删除项目信息
@@ -56,8 +58,14 @@ public interface ItemService extends IService<ItemPO> {
      * @param itemDTOS
      * @return boolean
      */
-    boolean batchDelete(List<ItemDTO> itemDTOS);
+    ResponseResult batchDelete(List<ItemDTO> itemDTOS);
 
-    boolean batchUpdate(List<ItemDTO> itemDTOS);
+    /**
+     * 批量审核
+     *
+     * @param itemDTOS
+     * @return
+     */
+    ResponseResult batchVerify(List<ItemDTO> itemDTOS);
 
 }

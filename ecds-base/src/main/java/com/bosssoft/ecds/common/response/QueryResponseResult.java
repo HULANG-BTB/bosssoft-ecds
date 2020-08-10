@@ -7,10 +7,10 @@ package com.bosssoft.ecds.common.response;
  */
 public class QueryResponseResult<T> extends ResponseResult{
 
-    public T query;
+    public T data;
 
-    public QueryResponseResult(ResultCode code,T query){
+    public QueryResponseResult(ResultCode code,T data){
         super(code);
-        this.query = query;
+        this.data = data;
     }
 }
