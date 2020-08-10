@@ -1,6 +1,8 @@
 package com.bosssoft.ecds.controller;
 
 
+import com.bosssoft.ecds.common.response.CommonCode;
+import com.bosssoft.ecds.common.response.QueryResponseResult;
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.dto.RoleDTO;
 import com.bosssoft.ecds.entity.dto.UserDTO;
@@ -42,7 +44,7 @@ public class UserController {
      * @return
      */
     @PostMapping("save")
-    public String save(@RequestBody UserVO userVO) {
+    public QueryResponseResult save(@RequestBody UserVO userVO) {
         // 转换为DTO
         UserDTO userDTO = MyBeanUtil.copyProperties(userVO, UserDTO.class);
         List<RoleVO> roleVOList = userVO.getRoles();
@@ -55,8 +57,7 @@ public class UserController {
         roleDTOList = userDTO.getRoles();
         roleVOList = MyBeanUtil.copyListProperties(roleDTOList, RoleVO.class);
         userVO.setRoles(roleVOList);
-
-        return ResponseUtils.getResponse(userVO, ResponseUtils.ResultType.OK);
+        return new QueryResponseResult(CommonCode.SUCCESS, userVO);
     }
 
     /**
@@ -65,10 +66,10 @@ public class UserController {
      * @return
      */
     @PutMapping("update")
-    public String update(@RequestBody UserVO userVO) {
+    public QueryResponseResult update(@RequestBody UserVO userVO) {
         UserDTO userDTO = MyBeanUtil.copyProperties(userVO, UserDTO.class);
         Boolean result = userService.update(userDTO);
-        return ResponseUtils.getResponse(result, ResponseUtils.ResultType.OK);
+        return new QueryResponseResult(CommonCode.SUCCESS, result);
     }
 
     /**
@@ -78,7 +79,7 @@ public class UserController {
      * @return
      */
     @GetMapping("listByPage")
-    public String listByPage(@RequestParam("page") Long page, @RequestParam("limit") Long limit, @RequestParam("keyword") String keyword) {
+    public QueryResponseResult listByPage(@RequestParam("page") Long page, @RequestParam("limit") Long limit, @RequestParam("keyword") String keyword) {
         PageVO pageVO = new PageVO();
         pageVO.setLimit(limit);
         pageVO.setPage(page);
@@ -86,7 +87,7 @@ public class UserController {
         PageDTO pageDTO = MyBeanUtil.copyProperties(pageVO, PageDTO.class);
         PageDTO result = userService.listByPage(pageDTO);
         pageVO = MyBeanUtil.copyProperties(pageDTO, PageVO.class);
-        return ResponseUtils.getResponse(pageVO, ResponseUtils.ResultType.OK);
+        return new QueryResponseResult(CommonCode.SUCCESS, pageVO);
     }
 
     /**
@@ -95,12 +96,12 @@ public class UserController {
      * @return
      */
     @DeleteMapping("remove/{id}")
-    public String remove(@PathVariable("id") Long id) {
+    public QueryResponseResult remove(@PathVariable("id") Long id) {
         UserVO userVO = new UserVO();
         userVO.setId(id);
         UserDTO userDTO = MyBeanUtil.copyProperties(userVO, UserDTO.class);
         Boolean result = userService.remove(userDTO);
-        return ResponseUtils.getResponse(result, ResponseUtils.ResultType.OK);
+        return new QueryResponseResult(CommonCode.SUCCESS, result);
     }
 
     /**
@@ -109,17 +110,17 @@ public class UserController {
      * @return
      */
     @DeleteMapping("removeBatch")
-    public String removeBatch(@RequestBody List<UserVO> userVOList) {
+    public QueryResponseResult removeBatch(@RequestBody List<UserVO> userVOList) {
         List<UserDTO> userDTOList = MyBeanUtil.copyListProperties(userVOList, UserDTO::new);
         Boolean result = userService.removeBatch(userDTOList);
-        return ResponseUtils.getResponse(result, ResponseUtils.ResultType.OK);
+        return new QueryResponseResult(CommonCode.SUCCESS, result);
     }
 
     @PutMapping("resetPassword")
-    public String resetPassword(@RequestBody UserVO userVO) {
+    public QueryResponseResult resetPassword(@RequestBody UserVO userVO) {
         UserDTO userDTO = MyBeanUtil.copyProperties(userVO, UserDTO.class);
         Boolean resetResult = userService.resetPassword(userDTO);
-        return ResponseUtils.getResponse(resetResult, ResponseUtils.ResultType.OK);
+        return new QueryResponseResult(CommonCode.SUCCESS, resetResult);
     }
 
 }
