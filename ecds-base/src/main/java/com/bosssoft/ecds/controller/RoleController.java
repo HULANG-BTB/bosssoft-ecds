@@ -5,7 +5,7 @@ import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.dto.PermissionDTO;
 import com.bosssoft.ecds.entity.dto.RoleDTO;
 import com.bosssoft.ecds.service.impl.RoleServiceImpl;
-import com.bosssoft.ecds.utils.BeanUtils;
+import com.bosssoft.ecds.utils.MyBeanUtil;
 import com.bosssoft.ecds.entity.vo.PageVO;
 import com.bosssoft.ecds.entity.vo.PermissionVO;
 import com.bosssoft.ecds.entity.vo.RoleVO;
@@ -38,16 +38,18 @@ public class RoleController {
     @PostMapping("save")
     public String save(@RequestBody RoleVO roleVO) {
         // 转换为DTO
-        RoleDTO roleDTO = BeanUtils.copyProperties(roleVO, RoleDTO.class);
+        RoleDTO roleDTO = MyBeanUtil.copyProperties(roleVO, RoleDTO.class);
         List<PermissionVO> permissionVOList = roleVO.getPermissions();
-        List<PermissionDTO> permissionDTOList = BeanUtils.copyListProperties(permissionVOList, PermissionDTO.class);
+        List<PermissionDTO> permissionDTOList = MyBeanUtil.copyListProperties(permissionVOList, PermissionDTO.class);
         roleDTO.setPermissions(permissionDTOList);
         // 执行业务逻辑
         roleDTO = roleService.save(roleDTO);
         // 转换为VO
-        roleVO = BeanUtils.copyProperties(roleDTO, RoleVO.class);
+
+        roleVO = MyBeanUtil.copyProperties(roleDTO, RoleVO.class);
         permissionDTOList = roleDTO.getPermissions();
-        permissionVOList = BeanUtils.copyListProperties(permissionDTOList, PermissionVO.class);
+        permissionVOList = MyBeanUtil.copyListProperties(permissionDTOList, PermissionVO.class);
+
         roleVO.setPermissions(permissionVOList);
 
         return ResponseUtils.getResponse(roleVO, ResponseUtils.ResultType.OK);
@@ -61,9 +63,11 @@ public class RoleController {
     @PutMapping("update")
     public String update(@RequestBody RoleVO roleVO) {
         // 转换为DTO
-        RoleDTO roleDTO = BeanUtils.copyProperties(roleVO, RoleDTO.class);
+
+        RoleDTO roleDTO = MyBeanUtil.copyProperties(roleVO, RoleDTO.class);
         List<PermissionVO> permissionVOList = roleVO.getPermissions();
-        List<PermissionDTO> permissionDTOList = BeanUtils.copyListProperties(permissionVOList, PermissionDTO.class);
+        List<PermissionDTO> permissionDTOList = MyBeanUtil.copyListProperties(permissionVOList, PermissionDTO.class);
+
         roleDTO.setPermissions(permissionDTOList);
         // 执行业务逻辑
         Boolean result = roleService.update(roleDTO);
@@ -79,7 +83,7 @@ public class RoleController {
         // 执行业务逻辑
         List<RoleDTO> roleDTOList = roleService.listAll();
         // 转换为VO
-        List<RoleVO> roleVOList = BeanUtils.copyListProperties(roleDTOList, RoleVO.class);
+        List<RoleVO> roleVOList = MyBeanUtil.copyListProperties(roleDTOList, RoleVO.class);
         return ResponseUtils.getResponse(roleVOList, ResponseUtils.ResultType.OK);
     }
 
@@ -92,7 +96,7 @@ public class RoleController {
         // 执行业务逻辑
         List<RoleDTO> roleDTOList = roleService.listByUserId(id);
         // 转换为VO
-        List<RoleVO> roleVOList = BeanUtils.copyListProperties(roleDTOList, RoleVO.class);
+        List<RoleVO> roleVOList = MyBeanUtil.copyListProperties(roleDTOList, RoleVO.class);
         return ResponseUtils.getResponse(roleVOList, ResponseUtils.ResultType.OK);
     }
 
@@ -108,10 +112,10 @@ public class RoleController {
         pageVO.setLimit(limit);
         pageVO.setPage(page);
         pageVO.setKeyword(keyword);
-        PageDTO pageDTO = BeanUtils.copyProperties(pageVO, PageDTO.class);
+        PageDTO pageDTO = MyBeanUtil.copyProperties(pageVO, PageDTO.class);
         pageDTO = roleService.listByPage(pageDTO);
 
-        pageVO = BeanUtils.copyProperties(pageDTO, PageVO.class);
+        pageVO = MyBeanUtil.copyProperties(pageDTO, PageVO.class);
         return ResponseUtils.getResponse(pageVO, ResponseUtils.ResultType.OK);
     }
 
@@ -124,7 +128,8 @@ public class RoleController {
     public String remove(@PathVariable("id") Long id) {
         RoleVO roleVO = new RoleVO();
         roleVO.setId(id);
-        RoleDTO roleDTO = BeanUtils.copyProperties(roleVO, RoleDTO.class);
+
+        RoleDTO roleDTO = MyBeanUtil.copyProperties(roleVO, RoleDTO.class);
         Boolean result = roleService.remove(roleDTO);
         return ResponseUtils.getResponse(result, ResponseUtils.ResultType.OK);
     }
@@ -136,7 +141,7 @@ public class RoleController {
      */
     @DeleteMapping("removeBatch")
     public String removeBatch(@RequestBody List<RoleVO> roleVOList) {
-        List<RoleDTO> roleDTOList = BeanUtils.copyListProperties(roleVOList, RoleDTO.class);
+        List<RoleDTO> roleDTOList = MyBeanUtil.copyListProperties(roleVOList, RoleDTO.class);
         Boolean result = roleService.removeBatch(roleDTOList);
         return ResponseUtils.getResponse(result, ResponseUtils.ResultType.OK);
     }
