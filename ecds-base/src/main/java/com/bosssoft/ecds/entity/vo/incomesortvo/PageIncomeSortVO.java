@@ -19,7 +19,6 @@ public class PageIncomeSortVO implements Serializable {
     /**
      * 当前收入类别id
      */
-    @NotNull(message = "收入类别ID不能为空")
     private Long id;
     /**
      * 每页条数
