@@ -23,10 +23,19 @@ public class CodeBuilder {
     public void Test() {
 
         AutoGenerator autoGenerator = new AutoGenerator();
-
+        /**
+         * "ubr_crt_info",
+         * "ubr_bill_out_voucher"
+         */
         // 数据库表名
         String[] tableList = {
-                "fbr_voucher"
+                "fbr_voucher",
+                "fbr_item_voucher",
+                "fbr_monitor_record_voucher",
+                "fbr_writeoff_voucher",
+                "fnr_bill_pay_voucher",
+                "fbr_stock_return_voucher",
+                "fbr_stock_deptinvalid_voucher"
         };
 
         // 作者
@@ -36,17 +45,18 @@ public class CodeBuilder {
         // 逻辑删除字段
         String deleted = "f_logic_delete";
         // 数据库表前缀
-        String tablePrefix = "fbr";
+        String tablePrefix = "ubr";
         // 字段前缀
         String columnPrefix = "f_";
         // 包名
         String packageName = "com.bosssoft.ecds";
 
         // JDBC
-        String dataBaseUrl = "jdbc:mysql://127.0.0.1/ecds_financial?serverTimezone=UTC&useUnicode=true&useSSL=false&characterEncoding=utf8";
+        String dataBaseUrl = "jdbc:mysql://39.97.123.56/ecds_financial?serverTimezone=UTC&useUnicode=true&useSSL=false&characterEncoding=utf8";
+        //String dataBaseUrl = "jdbc:mysql://39.97.123.56/ecds_unit?serverTimezone=UTC&useUnicode=true&useSSL=false&characterEncoding=utf8";
         String dataBaseDriverName = "com.mysql.cj.jdbc.Driver";
         String dataBaseUsername = "root";
-        String dataBasePassword = "123456";
+        String dataBasePassword = "root";
 
         // 自动填充配置
         // 根据自己的表结构修改

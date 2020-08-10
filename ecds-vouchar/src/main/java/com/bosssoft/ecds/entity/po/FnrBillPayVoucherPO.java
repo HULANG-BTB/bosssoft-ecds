@@ -18,7 +18,7 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 
+ *  归档票据缴销记录
  * </p>
  *
  * @author liuke
@@ -27,58 +27,38 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("fbr_voucher")
-@ApiModel(value="VoucherPO对象", description="")
-public class VoucherPO extends Model<VoucherPO> {
+@TableName("fnr_bill_pay_voucher")
+@ApiModel(value="FnrBillPayVoucherPO对象", description="")
+public class FnrBillPayVoucherPO extends Model<FnrBillPayVoucherPO> {
 
 
     @ApiModelProperty(value = "主键")
-    @TableId(value = "fid", type = IdType.AUTO)
-    private Long fid;
+    @TableId(value = "f_id", type = IdType.AUTO)
+    private Long id;
 
     @ApiModelProperty(value = "单位编码")
     @TableField("f_agen_idcode")
     private String agenIdcode;
 
-    @ApiModelProperty(value = "单位名称")
-    @TableField("f_agen_name")
-    private String agenName;
+    @ApiModelProperty(value = "预警票号")
+    @TableField("f_bill_no")
+    private String billNo;
 
-    @ApiModelProperty(value = "单位分类")
-    @TableField("f_sort")
-    private String sort;
+    @ApiModelProperty(value = "财政审核时间")
+    @TableField("f_author_time")
+    private Date authorTime;
 
-    @ApiModelProperty(value = "单位地址")
-    @TableField("f_addr")
-    private String addr;
+    @ApiModelProperty(value = "财政审核结果")
+    @TableField("f_author_result")
+    private String authorResult;
 
-    @ApiModelProperty(value = "票据领用数量")
-    @TableField("f_apply_number")
-    private Long applyNumber;
+    @ApiModelProperty(value = "财政结果审验人")
+    @TableField("f_sign_status")
+    private String signStatus;
 
-    @ApiModelProperty(value = "票据使用数量")
-    @TableField("f_use_number")
-    private Long useNumber;
-
-    @ApiModelProperty(value = "票据已审核数量")
-    @TableField("f_author_number")
-    private Long authorNumber;
-
-    @ApiModelProperty(value = "票据未审核数量")
-    @TableField("f_unauthor_number")
-    private Long unauthorNumber;
-
-    @ApiModelProperty(value = "票据预警票数")
-    @TableField("f_warn_number")
-    private Long warnNumber;
-
-    @ApiModelProperty(value = "票据退票数量")
-    @TableField("f_return_number")
-    private Long returnNumber;
-
-    @ApiModelProperty(value = "票据销毁数量")
-    @TableField("f_destory_number")
-    private Long destoryNumber;
+    @ApiModelProperty(value = "归档状态")
+    @TableField("f_is_save")
+    private Boolean isSave;
 
     @ApiModelProperty(value = "创建时间")
     @TableField(value = "f_create_time", fill = FieldFill.INSERT)
@@ -107,29 +87,19 @@ public class VoucherPO extends Model<VoucherPO> {
     private Boolean logicDelete;
 
 
-    public static final String FID = "fid";
+    public static final String F_ID = "f_id";
 
     public static final String F_AGEN_IDCODE = "f_agen_idcode";
 
-    public static final String F_AGEN_NAME = "f_agen_name";
+    public static final String F_BILL_NO = "f_bill_no";
 
-    public static final String F_SORT = "f_sort";
+    public static final String F_AUTHOR_TIME = "f_author_time";
 
-    public static final String F_ADDR = "f_addr";
+    public static final String F_AUTHOR_RESULT = "f_author_result";
 
-    public static final String F_APPLY_NUMBER = "f_apply_number";
+    public static final String F_SIGN_STATUS = "f_sign_status";
 
-    public static final String F_USE_NUMBER = "f_use_number";
-
-    public static final String F_AUTHOR_NUMBER = "f_author_number";
-
-    public static final String F_UNAUTHOR_NUMBER = "f_unauthor_number";
-
-    public static final String F_WARN_NUMBER = "f_warn_number";
-
-    public static final String F_RETURN_NUMBER = "f_return_number";
-
-    public static final String F_DESTORY_NUMBER = "f_destory_number";
+    public static final String F_IS_SAVE = "f_is_save";
 
     public static final String F_CREATE_TIME = "f_create_time";
 
@@ -145,7 +115,7 @@ public class VoucherPO extends Model<VoucherPO> {
 
     @Override
     protected Serializable pkVal() {
-        return this.fid;
+        return this.id;
     }
 
 }
