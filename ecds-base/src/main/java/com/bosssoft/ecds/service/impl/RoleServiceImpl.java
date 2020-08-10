@@ -10,7 +10,7 @@ import com.bosssoft.ecds.entity.po.PermissionPO;
 import com.bosssoft.ecds.entity.po.RolePO;
 import com.bosssoft.ecds.entity.po.RolePermissionPO;
 import com.bosssoft.ecds.service.RoleService;
-import com.bosssoft.ecds.utils.BeanUtil;
+import com.bosssoft.ecds.utils.MyBeanUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,12 +41,12 @@ public class RoleServiceImpl extends ServiceImpl<RoleDao, RolePO> implements Rol
      */
     public RoleDTO save(RoleDTO roleDTO) {
         // 转换为PO
-        RolePO rolePO = BeanUtil.copyProperties(roleDTO, RolePO.class);
-        List<PermissionPO> permissionPOList = BeanUtil.copyListProperties(roleDTO.getPermissions(), PermissionPO.class);
+        RolePO rolePO = MyBeanUtil.copyProperties(roleDTO, RolePO.class);
+        List<PermissionPO> permissionPOList = MyBeanUtil.copyListProperties(roleDTO.getPermissions(), PermissionPO.class);
         // 插入角色信息
         boolean roleSaveResult = super.save(rolePO);
         // 转换为DTO
-        roleDTO = BeanUtil.copyProperties(rolePO, RoleDTO.class);
+        roleDTO = MyBeanUtil.copyProperties(rolePO, RoleDTO.class);
         if (roleSaveResult) {
             // 持久层列表 角色权限列表
             List<RolePermissionPO> rolePermissionPOList = new ArrayList<>();
@@ -68,7 +68,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleDao, RolePO> implements Rol
      * @return
      */
     public Boolean remove(RoleDTO entity) {
-        RolePO rolePO = BeanUtil.copyProperties(entity, RolePO.class);
+        RolePO rolePO = MyBeanUtil.copyProperties(entity, RolePO.class);
         return super.removeById(rolePO.getId());
     }
 
@@ -80,10 +80,10 @@ public class RoleServiceImpl extends ServiceImpl<RoleDao, RolePO> implements Rol
     public Boolean update(RoleDTO roleDTO) {
         // 读取角色信息
         RolePO rolePO = super.getById(roleDTO.getId());
-        BeanUtil.copyProperties(roleDTO, rolePO);
+        MyBeanUtil.copyProperties(roleDTO, rolePO);
 
         // 读取权限列表
-        List<PermissionPO> newPermissionList = BeanUtil.copyListProperties(roleDTO.getPermissions(), PermissionPO.class);
+        List<PermissionPO> newPermissionList = MyBeanUtil.copyListProperties(roleDTO.getPermissions(), PermissionPO.class);
 
         // 读取用户已经拥有权限列表
         QueryWrapper<RolePermissionPO> rolePermissionPOQueryWrapper = new QueryWrapper<>();
@@ -149,7 +149,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleDao, RolePO> implements Rol
         queryWrapper.orderByAsc(RolePO.F_CREATE_TIME);
         List<RolePO> rolePOList = super.list(queryWrapper);
         // 转换数据
-        List<RoleDTO> roleDTOList = BeanUtil.copyListProperties(rolePOList, RoleDTO::new);
+        List<RoleDTO> roleDTOList = MyBeanUtil.copyListProperties(rolePOList, RoleDTO::new);
         return roleDTOList;
     }
 
@@ -160,7 +160,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleDao, RolePO> implements Rol
      */
     public List<RoleDTO> listByUserId(String id) {
         List<RolePO> rolePOList = super.getBaseMapper().selectByUid(id);
-        List<RoleDTO> roleDTOList = BeanUtil.copyListProperties(rolePOList, RoleDTO::new);
+        List<RoleDTO> roleDTOList = MyBeanUtil.copyListProperties(rolePOList, RoleDTO::new);
         return roleDTOList;
     }
 
@@ -183,7 +183,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleDao, RolePO> implements Rol
         Page<RolePO> rolePOPage = super.page(roleDTOPage, queryWrapper);
         List<RolePO> records = rolePOPage.getRecords();
         // 转换数据
-        List<RoleDTO> roleDTOList = BeanUtil.copyListProperties(records, RoleDTO::new);
+        List<RoleDTO> roleDTOList = MyBeanUtil.copyListProperties(records, RoleDTO::new);
         pageDTO.setTotal(rolePOPage.getTotal());
         pageDTO.setItems(roleDTOList);
         return pageDTO;

@@ -3,7 +3,7 @@ server:
 
 spring:
   datasource:
-    dynamic:
+dynamic:
       primary: master
       strict: false
       datasource:
@@ -19,7 +19,6 @@ spring:
           password: root
           driver-class-name: com.mysql.cj.jdbc.Driver
           type: com.alibaba.druid.pool.DruidDataSource
-
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

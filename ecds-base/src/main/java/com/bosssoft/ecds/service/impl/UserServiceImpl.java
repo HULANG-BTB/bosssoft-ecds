@@ -11,7 +11,7 @@ import com.bosssoft.ecds.entity.po.UserPO;
 import com.bosssoft.ecds.entity.po.UserRolePO;
 import com.bosssoft.ecds.service.UserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.bosssoft.ecds.utils.BeanUtil;
+import com.bosssoft.ecds.utils.MyBeanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,12 +44,12 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserPO> implements Use
      */
     public UserDTO save(UserDTO userDTO) {
         // 转换为PO
-        UserPO userPO = BeanUtil.copyProperties(userDTO, UserPO.class);
-        List<RolePO> rolePOList = BeanUtil.copyListProperties(userDTO.getRoles(), RolePO.class);
+        UserPO userPO = MyBeanUtil.copyProperties(userDTO, UserPO.class);
+        List<RolePO> rolePOList = MyBeanUtil.copyListProperties(userDTO.getRoles(), RolePO.class);
         // 插入用户信息
         boolean userSaveResult = super.save(userPO);
         // 转换为DTO
-        userDTO = BeanUtil.copyProperties(userPO, UserDTO.class);
+        userDTO = MyBeanUtil.copyProperties(userPO, UserDTO.class);
         if (userSaveResult) {
             ArrayList<UserRolePO> userRolePOS = new ArrayList<>();
             for (RolePO rolePO : rolePOList) {
@@ -70,7 +70,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserPO> implements Use
      * @return
      */
     public Boolean remove(UserDTO entity) {
-        UserPO userPO = BeanUtil.copyProperties(entity, UserPO.class);
+        UserPO userPO = MyBeanUtil.copyProperties(entity, UserPO.class);
         return super.removeById(userPO.getId());
     }
 
@@ -83,10 +83,10 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserPO> implements Use
     public Boolean update(UserDTO userDTO) {
         // 读取用户信息
         UserPO userPO = super.getById(userDTO.getId());
-        BeanUtil.copyProperties(userDTO, userPO);
+        MyBeanUtil.copyProperties(userDTO, userPO);
 
         // 读取角色列表
-        List<RolePO> newRoleList = BeanUtil.copyListProperties(userDTO.getRoles(), RolePO.class);
+        List<RolePO> newRoleList = MyBeanUtil.copyListProperties(userDTO.getRoles(), RolePO.class);
 
         // 读取用户已经拥有角色列表
         QueryWrapper<UserRolePO> userRolePOQueryWrapper = new QueryWrapper<>();
@@ -161,7 +161,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserPO> implements Use
         Page<UserPO> userPOPage = super.page(userDTOPage, queryWrapper);
         List<UserPO> records = userPOPage.getRecords();
         // 转换数据
-        List<UserDTO> userDTOList = BeanUtil.copyListProperties(records, UserDTO::new);
+        List<UserDTO> userDTOList = MyBeanUtil.copyListProperties(records, UserDTO::new);
         pageDTO.setTotal(userPOPage.getTotal());
         pageDTO.setItems(userDTOList);
         return pageDTO;
@@ -185,7 +185,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserPO> implements Use
     }
 
     public Boolean resetPassword(UserDTO userDTO) {
-        UserPO userPO = BeanUtil.copyProperties(userDTO, UserPO.class);
+        UserPO userPO = MyBeanUtil.copyProperties(userDTO, UserPO.class);
         userPO = super.getById(userPO.getId());
         String hashpw = BCrypt.hashpw(userDTO.getPassword());
         userPO.setPassword(hashpw);

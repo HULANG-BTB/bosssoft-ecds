@@ -8,7 +8,7 @@ import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.dto.PermissionDTO;
 import com.bosssoft.ecds.entity.po.PermissionPO;
 import com.bosssoft.ecds.service.PermissionService;
-import com.bosssoft.ecds.utils.BeanUtil;
+import com.bosssoft.ecds.utils.MyBeanUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionDao, Permission
      */
     public PermissionDTO save(PermissionDTO entity) {
         PermissionPO permissionPO = new PermissionPO();
-        BeanUtil.copyProperties(entity, permissionPO);
+        MyBeanUtil.copyProperties(entity, permissionPO);
         super.save(permissionPO);
         return entity;
     }
@@ -46,7 +46,7 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionDao, Permission
      */
     public Boolean remove(PermissionDTO entity) {
         PermissionPO permissionPO = new PermissionPO();
-        BeanUtil.copyProperties(entity, permissionPO);
+        MyBeanUtil.copyProperties(entity, permissionPO);
         return super.removeById(permissionPO.getId());
     }
 
@@ -58,7 +58,7 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionDao, Permission
      */
     public Boolean update(PermissionDTO entity) {
         PermissionPO permissionPO = super.getById(entity.getId());
-        BeanUtil.copyProperties(entity, permissionPO);
+        MyBeanUtil.copyProperties(entity, permissionPO);
         return super.updateById(permissionPO);
     }
 
@@ -70,7 +70,7 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionDao, Permission
      */
     public List<PermissionDTO> getByRid(PermissionDTO entity) {
         List<PermissionPO> byRid = super.getBaseMapper().getByRid(entity.getId());
-        List<PermissionDTO> permissionDTOList = BeanUtil.copyListProperties(byRid, PermissionDTO.class);
+        List<PermissionDTO> permissionDTOList = MyBeanUtil.copyListProperties(byRid, PermissionDTO.class);
         return permissionDTOList;
     }
 
@@ -84,7 +84,7 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionDao, Permission
         queryWrapper.orderByAsc(PermissionPO.F_URL);
         List<PermissionPO> permissionPOList = super.list(queryWrapper);
         // 转换数据
-        List<PermissionDTO> permissionDTOList = BeanUtil.copyListProperties(permissionPOList, PermissionDTO.class);
+        List<PermissionDTO> permissionDTOList = MyBeanUtil.copyListProperties(permissionPOList, PermissionDTO.class);
         return permissionDTOList;
     }
 
@@ -107,7 +107,7 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionDao, Permission
         Page<PermissionPO> rolePOPage = super.page(roleDTOPage, queryWrapper);
         List<PermissionPO> records = rolePOPage.getRecords();
         // 数据转换
-        List<PermissionDTO> permissionDTOList = BeanUtil.copyListProperties(records, PermissionDTO.class);
+        List<PermissionDTO> permissionDTOList = MyBeanUtil.copyListProperties(records, PermissionDTO.class);
         pageDTO.setTotal(rolePOPage.getTotal());
         pageDTO.setItems(permissionDTOList);
         return pageDTO;
@@ -120,7 +120,7 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionDao, Permission
      */
     public List<PermissionDTO> listByTree() {
         List<PermissionPO> permissions = this.getBaseMapper().queryTreeList(0L);
-        List<PermissionDTO> permissionDTOList = BeanUtil.copyListProperties(permissions, PermissionDTO::new);
+        List<PermissionDTO> permissionDTOList = MyBeanUtil.copyListProperties(permissions, PermissionDTO::new);
         return permissionDTOList;
     }
 
