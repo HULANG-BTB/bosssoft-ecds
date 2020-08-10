@@ -5,6 +5,7 @@ import com.bosssoft.ecds.common.response.QueryResponseResult;
 import com.bosssoft.ecds.entity.dto.IncomeSortDTO;
 import com.bosssoft.ecds.entity.vo.incomesortvo.AddIncomeSortVO;
 import com.bosssoft.ecds.entity.vo.incomesortvo.FuzzyQueryIncomeSortVO;
+import com.bosssoft.ecds.entity.vo.incomesortvo.PageIncomeSortVO;
 import com.bosssoft.ecds.entity.vo.incomesortvo.UpdateIncomeSortVO;
 import com.bosssoft.ecds.service.IncomeSortService;
 import io.swagger.annotations.Api;
@@ -25,7 +26,7 @@ import java.util.List;
  * @Date: 2020/8/5 19:09
  */
 @RestController
-@RequestMapping("/IncomeSort")
+@RequestMapping("/incomeSort")
 @Slf4j
 @Api(tags = "收入类别管理接口")
 public class IncomeSortController {
@@ -46,7 +47,12 @@ public class IncomeSortController {
         QueryResponseResult incomeSortDTOS = incomeSortService.pageQueryByName(fuzzyQueryIncomeSortVO);
         return incomeSortDTOS;
     }
-
+    @ApiOperation(value = "分页查询收入类别信息", notes = "通过id查询显示子级收入类别")
+    @PostMapping("/pageQueryById")
+    public Object pageQueryById(@RequestBody @Validated PageIncomeSortVO pageIncomeSortVO) {
+        QueryResponseResult incomeSortDTOS = incomeSortService.pageQueryById(pageIncomeSortVO);
+        return incomeSortDTOS;
+    }
     @ApiOperation(value = "更新收入类别信息", notes = "可以修改收入名称、是否底级、备注信息等")
     @PostMapping("/update")
     public Object update(@RequestBody @Validated UpdateIncomeSortVO updateIncomeSortVO) {

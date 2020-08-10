@@ -61,8 +61,8 @@ public class IncomeSortServiceImpl implements IncomeSortService {
         if (page < 0) {
             page = 0;
         }
-        if (size < 15) {
-            size = 15;
+        if (size < 10) {
+            size = 10;
         }
         pageInfo = new Page<>(page, size);
         return pageInfo;
@@ -76,11 +76,9 @@ public class IncomeSortServiceImpl implements IncomeSortService {
      */
     private QueryWrapper wrapIncomeSortVO(FuzzyQueryIncomeSortVO fuzzyQueryIncomeSortVO) {
         QueryWrapper<Object> queryWrapper = new QueryWrapper<>();
-
         if (!org.springframework.util.StringUtils.isEmpty(fuzzyQueryIncomeSortVO.getName())) {
             queryWrapper.like("f_name", fuzzyQueryIncomeSortVO.getName());
         }
-
         if (!org.springframework.util.StringUtils.isEmpty(fuzzyQueryIncomeSortVO.getCode())) {
             queryWrapper.like("f_code", fuzzyQueryIncomeSortVO.getCode());
         }
@@ -104,11 +102,8 @@ public class IncomeSortServiceImpl implements IncomeSortService {
         }
         Integer page = fuzzyQueryIncomeSortVO.getPage();
         Integer size = fuzzyQueryIncomeSortVO.getSize();
-
         Page<IncomeSortPO> pageTemp = new Page<>();
         Page<IncomeSortPO> pageInfo = getPage(page, size, pageTemp);
-
-
         QueryWrapper queryWrapper = wrapIncomeSortVO(fuzzyQueryIncomeSortVO);
 
         IPage<IncomeSortPO> iPage = incomeSortDao.selectPage(pageInfo, queryWrapper);
@@ -127,13 +122,14 @@ public class IncomeSortServiceImpl implements IncomeSortService {
         Page<IncomeSortPO> pageTemp = new Page<>();
         Page<IncomeSortPO> pageInfo = getPage(page, size, pageTemp);
         QueryWrapper<IncomeSortPO> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("f_id", pageIncomeSortVO.getId());
+        if(pageIncomeSortVO.getId()!=null){
+            queryWrapper.eq("f_id", pageIncomeSortVO.getId());
+        }
         IPage<IncomeSortPO> iPage = incomeSortDao.selectPage(pageInfo, queryWrapper);
         QueryResult<IncomeSortPO> queryResult = new QueryResult<>();
         queryResult.setList(iPage.getRecords());
         queryResult.setTotal(iPage.getTotal());
         return new QueryResponseResult<>(CommonCode.SUCCESS,queryResult);
-
     }
 
     @Override
