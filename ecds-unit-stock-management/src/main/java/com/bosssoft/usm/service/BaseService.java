@@ -22,7 +22,4 @@ public interface BaseService<B> {
 
      boolean delete(Serializable primaryKey);
 
-//     List<B> getsByExample(Example example);
-//
-//     B getByExample(Example example);
 }

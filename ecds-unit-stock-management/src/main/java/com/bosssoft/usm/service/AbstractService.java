@@ -4,13 +4,13 @@ package com.bosssoft.usm.service;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.Resource;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractService<B, M extends BaseMapper<B>> {
 
-    @Resource
+    @Autowired
     protected M mapper;
 
     public B getByPrimaryKey(Serializable key) {
@@ -29,7 +29,7 @@ public abstract class AbstractService<B, M extends BaseMapper<B>> {
     public List<B> getAll() {
         List<B> beans = mapper.selectList(null);
         if (beans == null) {
-            return null;
+            return new ArrayList<>();
         }
         return beans;
     }
@@ -37,13 +37,12 @@ public abstract class AbstractService<B, M extends BaseMapper<B>> {
     public Class<B> getBeanClass() {
         try {
             String name = this.getClass().getName();
-            String className = name.substring(name.lastIndexOf("."), name.lastIndexOf("Service"));
-            String packageName = name.substring(0, name.lastIndexOf("."));
-            packageName = packageName.substring(0, packageName.lastIndexOf("."));
+            String className = name.substring(name.lastIndexOf('.'), name.lastIndexOf("Service"));
+            String packageName = name.substring(0, name.lastIndexOf('.'));
+            packageName = packageName.substring(0, packageName.lastIndexOf('.'));
             packageName += ".bean";
             className = packageName + className;
-            Class<B> beanClass = (Class<B>) Class.forName(className);
-            return beanClass;
+            return (Class<B>) Class.forName(className);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -53,9 +52,7 @@ public abstract class AbstractService<B, M extends BaseMapper<B>> {
     public B createBeanObject() {
         try {
             return getBeanClass().newInstance();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
+        } catch (InstantiationException|IllegalAccessException e) {
             e.printStackTrace();
         }
         return null;
