@@ -13,6 +13,7 @@ import com.bosssoft.ecds.entity.vo.AddRegionVO;
 import com.bosssoft.ecds.entity.vo.EditRegionVO;
 import com.bosssoft.ecds.entity.vo.QueryRegionRequestVO;
 import com.bosssoft.ecds.entity.vo.RegionExt;
+import com.bosssoft.ecds.enums.RegionCode;
 import com.bosssoft.ecds.service.RegionService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,7 +90,7 @@ public class RegionServiceImp implements RegionService {
             .eq("f_code",addRegion.getCode());
         List<Map<String, Object>> maps = regionMapper.selectMaps(queryWrapper);
         if(maps.size() > 0){
-            return new ResponseResult(CommonCode.REGION_NAME_EXISTS);
+            return new ResponseResult(RegionCode.REGION_NAME_EXISTS);
         }
         AuthRegion authRegion = new AuthRegion();
         BeanUtils.copyProperties(addRegion,authRegion);
@@ -110,7 +111,7 @@ public class RegionServiceImp implements RegionService {
     public ResponseResult edit(EditRegionVO editRegion) {
         AuthRegion authRegion = regionMapper.selectById(editRegion.getId());
         if(authRegion == null){
-            return new ResponseResult(CommonCode.REGION_NOTEXISTS);
+            return new ResponseResult(RegionCode.REGION_NOTEXISTS);
         }
         BeanUtils.copyProperties(editRegion,authRegion);
         authRegion.setUpdateTime(new Date());
@@ -130,11 +131,11 @@ public class RegionServiceImp implements RegionService {
         map.put("f_parentid",id);
         List<AuthRegion> list = regionMapper.selectByMap(map);
         if(list.size() > 0){
-            return new ResponseResult(CommonCode.CATEGORY_HASSON);
+            return new ResponseResult(RegionCode.CATEGORY_HASSON);
         }
         AuthRegion authRegion = regionMapper.selectById(id);
         if(authRegion == null){
-            return  new ResponseResult(CommonCode.REGION_NOTEXISTS);
+            return  new ResponseResult(RegionCode.REGION_NOTEXISTS);
         }
         regionMapper.deleteById(id);
         return ResponseResult.SUCCESS();
@@ -169,7 +170,7 @@ public class RegionServiceImp implements RegionService {
     public QueryResponseResult getGrandId(Long pid) {
         AuthRegion authRegion = regionMapper.selectById(pid);
         if(authRegion == null){
-            return new QueryResponseResult(CommonCode.REGION_NOTEXISTS,null);
+            return new QueryResponseResult(RegionCode.REGION_NOTEXISTS,null);
         }
         return new QueryResponseResult(CommonCode.SUCCESS,authRegion.getParentId());
     }
