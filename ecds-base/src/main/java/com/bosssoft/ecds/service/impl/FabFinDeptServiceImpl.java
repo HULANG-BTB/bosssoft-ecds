@@ -17,6 +17,7 @@ import com.bosssoft.ecds.entity.vo.FabFinDeptVo;
 import com.bosssoft.ecds.enums.FabFinDeptResultCode;
 import com.bosssoft.ecds.service.FabAgenService;
 import com.bosssoft.ecds.service.FabFinDeptService;
+import com.bosssoft.ecds.utils.SnowflakeIdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -62,8 +63,7 @@ public class FabFinDeptServiceImpl extends ServiceImpl<FabFinDeptDao, FabFinDept
         boolean result = false;
         if (StringUtils.isEmpty(fId)) {
             //insert
-            // todo 通过id生成工具生成id
-            fId = 1000L;
+            fId = SnowflakeIdWorker.generateId();
             fabFinDept.setId(fId);
             result = save(fabFinDept);
 
