@@ -93,7 +93,7 @@ public class IncomeSortServiceImpl implements IncomeSortService {
         List<IncomeSortDTO> incomeSortTree = buildIncomeSortDTOTree(incomeSortDTOS, 0L);
         QueryResult<IncomeSortDTO> queryResult = new QueryResult<>();
         queryResult.setList(incomeSortTree);
-
+        queryResult.setTotal(incomeSortTree.size());
         return new QueryResponseResult<>(CommonCode.SUCCESS,queryResult);
     }
 

@@ -1,6 +1,6 @@
 package com.bosssoft.ecds.entity.vo.incomesortvo;
 
-import com.boss.trainee.incomedemo.constant.CheckConstant;
+import com.bosssoft.ecds.constant.CheckConstant;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;

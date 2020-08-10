@@ -1,6 +1,7 @@
 package com.bosssoft.ecds.entity.vo.incomesortvo;
 
-import com.boss.trainee.incomedemo.constant.PageConstant;
+
+import com.bosssoft.ecds.constant.PageConstant;
 
 import java.io.Serializable;
 import java.util.List;
