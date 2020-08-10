@@ -24,7 +24,7 @@ public interface IncomeSortService {
      *
      * @return
      */
-    List<IncomeSortDTO> getAll();
+    QueryResponseResult getAll();
 
     /**
      * 根据名称、编码分页获取收入信息

@@ -1,7 +1,9 @@
 package com.bosssoft.ecds.controller;
 
 
+import com.bosssoft.ecds.common.response.CommonCode;
 import com.bosssoft.ecds.common.response.QueryResponseResult;
+import com.bosssoft.ecds.common.response.ResponseResult;
 import com.bosssoft.ecds.entity.dto.IncomeSortDTO;
 import com.bosssoft.ecds.entity.vo.incomesortvo.AddIncomeSortVO;
 import com.bosssoft.ecds.entity.vo.incomesortvo.FuzzyQueryIncomeSortVO;
@@ -37,7 +39,7 @@ public class IncomeSortController {
     @ApiOperation(value = "获取所有收入类别信息", notes = "返回一个多级的树形结构数据")
     @GetMapping("/getAll")
     public Object getAll() {
-        List<IncomeSortDTO> incomeSortDTOS = incomeSortService.getAll();
+        QueryResponseResult incomeSortDTOS = incomeSortService.getAll();
         return incomeSortDTOS;
     }
 
@@ -57,14 +59,14 @@ public class IncomeSortController {
     @PostMapping("/update")
     public Object update(@RequestBody @Validated UpdateIncomeSortVO updateIncomeSortVO) {
         incomeSortService.update(updateIncomeSortVO);
-        return null;
+        return new ResponseResult(CommonCode.SUCCESS);
     }
 
     @ApiOperation(value = "新增收入类别信息")
     @PostMapping("/insert")
     public Object insert(@RequestBody @Validated AddIncomeSortVO addIncomeSortVO) {
         incomeSortService.add(addIncomeSortVO);
-        return true;
+        return new ResponseResult(CommonCode.SUCCESS);
     }
 
 }

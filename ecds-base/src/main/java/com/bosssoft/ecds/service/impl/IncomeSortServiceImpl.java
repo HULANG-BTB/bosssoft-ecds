@@ -88,10 +88,13 @@ public class IncomeSortServiceImpl implements IncomeSortService {
 
     @Override
 
-    public List<IncomeSortDTO> getAll() {
+    public QueryResponseResult getAll() {
         List<IncomeSortDTO> incomeSortDTOS = incomeSortDao.getAll();
         List<IncomeSortDTO> incomeSortTree = buildIncomeSortDTOTree(incomeSortDTOS, 0L);
-        return incomeSortTree;
+        QueryResult<IncomeSortDTO> queryResult = new QueryResult<>();
+        queryResult.setList(incomeSortTree);
+
+        return new QueryResponseResult<>(CommonCode.SUCCESS,queryResult);
     }
 
 
