@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bosssoft.ecds.dao.FabAgenDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.bosssoft.ecds.entity.po.FabAgenPO">
+        <id column="f_id" property="id" />
+        <result column="f_rgn_id" property="rgnId" />
+        <result column="f_agen_code" property="agenCode" />
+        <result column="f_eff_date" property="effDate" />
+        <result column="f_exp_date" property="expDate" />
+        <result column="f_agen_name" property="agenName" />
+        <result column="f_mnem" property="mnem" />
+        <result column="f_level" property="level" />
+        <result column="f_pid_code" property="pidCode" />
+        <result column="f_isleaf" property="isleaf" />
+        <result column="f_org_code" property="orgCode" />
+        <result column="f_dept_code" property="deptCode" />
+        <result column="f_findept_id" property="findeptId" />
+        <result column="f_ind_code" property="indCode" />
+        <result column="f_sort_code" property="sortCode" />
+        <result column="f_type_code" property="typeCode" />
+        <result column="f_isenable" property="isenable" />
+        <result column="f_istick_agen" property="istickAgen" />
+        <result column="f_isunpaid" property="isunpaid" />
+        <result column="f_isalarm_agen" property="isalarmAgen" />
+        <result column="f_addr" property="addr" />
+        <result column="f_zip" property="zip" />
+        <result column="f_link_man" property="linkMan" />
+        <result column="f_link_tel" property="linkTel" />
+        <result column="f_fin_mgr" property="finMgr" />
+        <result column="f_fin_mgr_tel" property="finMgrTel" />
+        <result column="f_province_id" property="provinceId" />
+        <result column="f_city_id" property="cityId" />
+        <result column="f_county_id" property="countyId" />
+        <result column="f_operator" property="operator" />
+        <result column="f_operator_id" property="operatorId" />
+        <result column="f_create_time" property="createTime" />
+        <result column="f_update_time" property="updateTime" />
+        <result column="f_logic_delete" property="logicDelete" />
+        <result column="f_version" property="version" />
+        <result column="f_note" property="note" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        f_id, f_rgn_id, f_agen_code, f_eff_date, f_exp_date, f_agen_name, f_mnem, f_level, f_pid_code, f_isleaf, f_org_code, f_dept_code, f_findept_id, f_ind_code, f_sort_code, f_type_code, f_isenable, f_istick_agen, f_isunpaid, f_isalarm_agen, f_addr, f_zip, f_link_man, f_link_tel, f_fin_mgr, f_fin_mgr_tel, f_province_id, f_city_id, f_county_id, f_operator, f_operator_id, f_create_time, f_update_time, f_logic_delete, f_version, f_note
+    </sql>
+
+</mapper>
