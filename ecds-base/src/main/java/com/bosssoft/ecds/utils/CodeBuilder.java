@@ -1,4 +1,4 @@
-package com.bosssoft.ecds;
+package com.bosssoft.ecds.utils;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.annotation.FieldFill;
@@ -11,38 +11,33 @@ import com.baomidou.mybatisplus.generator.config.StrategyConfig;
 import com.baomidou.mybatisplus.generator.config.po.TableFill;
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
 
 /**
- * @author 吴志鸿
- * @date 2020/8/9
- * @description
+ * @Author asus
+ * @create 10/8/2020 上午9:02
  */
 
-@SpringBootTest
-public class creatTest {
-    @Test
-    public void test(){
+public class CodeBuilder {
+    public static void main(String[] args) {
         AutoGenerator autoGenerator = new AutoGenerator();
 
         // 数据库表名
         String[] tableList = {
-                "uab_place",
+                "uab_crt"
         };
 
         // 作者
-        String author = "wzh";
+        String author = "vihenne";
         // 乐观锁字段
         String version = "f_version";
         // 逻辑删除字段
-        String deleted = "f_logic_delete";
+        String deleted = "f_deleted";
         // 数据库表前缀
-        String tablePrefix = "uab_";
+        String tablePrefix = "faa_";
         // 字段前缀
-        String columnPrefix = "u_";
+        String columnPrefix = "f_";
         // 包名
         String packageName = "com.bosssoft.ecds";
 
@@ -136,6 +131,8 @@ public class creatTest {
         autoGenerator.setStrategy(strategy);
 
         autoGenerator.execute();
-    }
-}
 
+    }
+
+
+}
