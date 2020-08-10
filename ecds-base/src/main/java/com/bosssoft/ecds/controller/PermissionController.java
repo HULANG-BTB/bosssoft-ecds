@@ -7,7 +7,6 @@ import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.dto.PermissionDTO;
 import com.bosssoft.ecds.service.impl.PermissionServiceImpl;
 import com.bosssoft.ecds.utils.MyBeanUtil;
-import com.bosssoft.ecds.utils.ResponseUtils;
 import com.bosssoft.ecds.entity.vo.PageVO;
 import com.bosssoft.ecds.entity.vo.PermissionVO;
 import io.swagger.annotations.ApiOperation;
@@ -41,12 +40,12 @@ public class PermissionController {
      */
     @ApiOperation(value = "添加权限")
     @PostMapping("save")
-    public QueryResponseResult save(@RequestBody PermissionVO permissionVO) {
+    public QueryResponseResult<PermissionVO> save(@RequestBody PermissionVO permissionVO) {
         PermissionDTO permissionDTO = new PermissionDTO();
         MyBeanUtil.copyProperties(permissionVO, permissionDTO);
         permissionDTO = permissionService.save(permissionDTO);
         MyBeanUtil.copyProperties(permissionDTO, permissionVO);
-        return new QueryResponseResult(CommonCode.SUCCESS, permissionVO);
+        return new QueryResponseResult<>(CommonCode.SUCCESS, permissionVO);
     }
 
     /**
@@ -56,11 +55,11 @@ public class PermissionController {
      * @return
      */
     @PutMapping("update")
-    public QueryResponseResult update(@RequestBody PermissionVO permissionVO) {
+    public QueryResponseResult<Boolean> update(@RequestBody PermissionVO permissionVO) {
         PermissionDTO permissionDTO = new PermissionDTO();
         MyBeanUtil.copyProperties(permissionVO, permissionDTO);
         Boolean result = permissionService.update(permissionDTO);
-        return new QueryResponseResult(CommonCode.SUCCESS, result);
+        return new QueryResponseResult<>(CommonCode.SUCCESS, result);
     }
 
     /**
@@ -70,13 +69,13 @@ public class PermissionController {
      * @return
      */
     @DeleteMapping("remove/{id}")
-    public QueryResponseResult remove(@PathVariable("id") Long id) {
+    public QueryResponseResult<Boolean> remove(@PathVariable("id") Long id) {
         PermissionVO permissionVO = new PermissionVO();
         permissionVO.setId(id);
         PermissionDTO permissionDTO = new PermissionDTO();
         MyBeanUtil.copyProperties(permissionVO, permissionDTO);
         Boolean result = permissionService.remove(permissionDTO);
-        return new QueryResponseResult(CommonCode.SUCCESS, result);
+        return new QueryResponseResult<>(CommonCode.SUCCESS, result);
     }
 
     /**
@@ -87,16 +86,16 @@ public class PermissionController {
      * @return
      */
     @GetMapping("listByPage")
-    public QueryResponseResult listByPage(@RequestParam("page") Long page, @RequestParam("limit") Long limit, @RequestParam("keyword") String keyword) {
+    public QueryResponseResult<PageVO> listByPage(@RequestParam("page") Long page, @RequestParam("limit") Long limit, @RequestParam("keyword") String keyword) {
         PageVO pageVO = new PageVO();
         pageVO.setLimit(limit);
         pageVO.setPage(page);
         pageVO.setKeyword(keyword);
-        PageDTO pageDTO = MyBeanUtil.copyProperties(pageVO, PageDTO.class);
+        PageDTO<PermissionDTO> pageDTO = MyBeanUtil.copyProperties(pageVO, PageDTO.class);
         pageDTO = permissionService.listByPage(pageDTO);
 
         pageVO = MyBeanUtil.copyProperties(pageDTO, PageVO.class);
-        return new QueryResponseResult(CommonCode.SUCCESS, pageVO);
+        return new QueryResponseResult<>(CommonCode.SUCCESS, pageVO);
     }
 
     /**
@@ -106,7 +105,7 @@ public class PermissionController {
      * @return
      */
     @GetMapping("getByRid/{id}")
-    public QueryResponseResult getByRid(@PathVariable("id") Long id) {
+    public QueryResponseResult<List<PermissionVO>> getByRid(@PathVariable("id") Long id) {
         PermissionVO permissionVO = new PermissionVO();
         permissionVO.setId(id);
 
@@ -114,7 +113,7 @@ public class PermissionController {
 
         List<PermissionDTO> permissionDTOList = permissionService.getByRid(permissionDTO);
         List<PermissionVO> permissionVOList = MyBeanUtil.copyListProperties(permissionDTOList, PermissionVO.class);
-        return new QueryResponseResult(CommonCode.SUCCESS, permissionVOList);
+        return new QueryResponseResult<>(CommonCode.SUCCESS, permissionVOList);
     }
 
     /**
@@ -123,20 +122,20 @@ public class PermissionController {
      * @return
      */
     @GetMapping("list")
-    public QueryResponseResult listAll() {
+    public QueryResponseResult<List<PermissionVO>> listAll() {
         List<PermissionDTO> permissionDTOList = permissionService.listAll();
         List<PermissionVO> permissionVOList = MyBeanUtil.copyListProperties(permissionDTOList, PermissionVO.class);
-        return new QueryResponseResult(CommonCode.SUCCESS, permissionVOList);
+        return new QueryResponseResult<>(CommonCode.SUCCESS, permissionVOList);
     }
 
     /**
      * 读取权限树列表
      */
     @GetMapping("listByTree")
-    public QueryResponseResult getTreeList() {
+    public QueryResponseResult<List<PermissionVO>> getTreeList() {
         List<PermissionDTO> treeList = permissionService.listByTree();
         List<PermissionVO> permissionVOList = MyBeanUtil.copyListProperties(treeList, PermissionVO::new);
-        return new QueryResponseResult(CommonCode.SUCCESS, permissionVOList);
+        return new QueryResponseResult<>(CommonCode.SUCCESS, permissionVOList);
     }
 
     /**
@@ -146,10 +145,10 @@ public class PermissionController {
      * @return
      */
     @DeleteMapping("removeBatch")
-    public QueryResponseResult removeBatch(@RequestBody List<PermissionVO> permissionVOList) {
+    public QueryResponseResult<Boolean> removeBatch(@RequestBody List<PermissionVO> permissionVOList) {
         List<PermissionDTO> permissionDTOList = MyBeanUtil.copyListProperties(permissionVOList, PermissionDTO.class);
         Boolean result = permissionService.removeBatch(permissionDTOList);
-        return new QueryResponseResult(CommonCode.SUCCESS, result);
+        return new QueryResponseResult<>(CommonCode.SUCCESS, result);
     }
 
 }
