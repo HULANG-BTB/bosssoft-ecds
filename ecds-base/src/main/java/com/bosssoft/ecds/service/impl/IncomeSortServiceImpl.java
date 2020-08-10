@@ -5,6 +5,9 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
+import com.bosssoft.ecds.common.response.CommonCode;
+import com.bosssoft.ecds.common.response.QueryResponseResult;
+import com.bosssoft.ecds.common.response.QueryResult;
 import com.bosssoft.ecds.dao.IncomeSortDao;
 import com.bosssoft.ecds.entity.dto.IncomeSortDTO;
 import com.bosssoft.ecds.entity.po.IncomeSortPO;
@@ -95,7 +98,7 @@ public class IncomeSortServiceImpl implements IncomeSortService {
 
 
     @Override
-    public QueryResponseResult<IncomeSortDTO> pageQueryByName(FuzzyQueryIncomeSortVO fuzzyQueryIncomeSortVO) {
+    public QueryResponseResult pageQueryByName(FuzzyQueryIncomeSortVO fuzzyQueryIncomeSortVO) {
         if (fuzzyQueryIncomeSortVO == null) {
             fuzzyQueryIncomeSortVO = new FuzzyQueryIncomeSortVO();
         }
@@ -110,15 +113,15 @@ public class IncomeSortServiceImpl implements IncomeSortService {
 
         IPage<IncomeSortPO> iPage = incomeSortDao.selectPage(pageInfo, queryWrapper);
 
-//        QueryResponseResult<IncomeSortPO> queryResponseResult = new QueryResponseResult<>();
-//        queryResponseResult.setList(iPage.getRecords());
+        QueryResult<IncomeSortPO> queryResult = new QueryResult<>();
+        queryResult.setList(iPage.getRecords());
+        queryResult.setTotal(iPage.getTotal());
+        return new QueryResponseResult<>(CommonCode.SUCCESS,queryResult);
 
-
-        return null;
     }
 
     @Override
-    public QueryResponseResult<IncomeSortDTO> pageQueryById(PageIncomeSortVO pageIncomeSortVO) {
+    public QueryResponseResult pageQueryById(PageIncomeSortVO pageIncomeSortVO) {
         Integer page = pageIncomeSortVO.getPage();
         Integer size = pageIncomeSortVO.getSize();
         Page<IncomeSortPO> pageTemp = new Page<>();
@@ -126,10 +129,11 @@ public class IncomeSortServiceImpl implements IncomeSortService {
         QueryWrapper<IncomeSortPO> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("f_id", pageIncomeSortVO.getId());
         IPage<IncomeSortPO> iPage = incomeSortDao.selectPage(pageInfo, queryWrapper);
-//        QueryResponseResult<IncomeSortPO> queryResponseResult = new QueryResponseResult<>();
-//        queryResponseResult.setList(iPage.getRecords());
+        QueryResult<IncomeSortPO> queryResult = new QueryResult<>();
+        queryResult.setList(iPage.getRecords());
+        queryResult.setTotal(iPage.getTotal());
+        return new QueryResponseResult<>(CommonCode.SUCCESS,queryResult);
 
-        return null;
     }
 
     @Override

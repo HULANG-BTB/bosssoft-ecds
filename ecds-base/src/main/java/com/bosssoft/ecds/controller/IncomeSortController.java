@@ -1,6 +1,7 @@
 package com.bosssoft.ecds.controller;
 
 
+import com.bosssoft.ecds.common.response.QueryResponseResult;
 import com.bosssoft.ecds.entity.dto.IncomeSortDTO;
 import com.bosssoft.ecds.entity.vo.incomesortvo.AddIncomeSortVO;
 import com.bosssoft.ecds.entity.vo.incomesortvo.FuzzyQueryIncomeSortVO;
@@ -42,8 +43,8 @@ public class IncomeSortController {
     @ApiOperation(value = "分页查询收入类别信息", notes = "通过名称(可以为空)、编码(可以为空)模糊查询")
     @PostMapping("/pageQuery")
     public Object pageQuery(@RequestBody @Validated FuzzyQueryIncomeSortVO fuzzyQueryIncomeSortVO) {
-//        QueryPageResponse<IncomeSortDTO> incomeSortDTOS = incomeSortService.pageQueryByName(fuzzyQueryIncomeSortVO);
-        return null;
+        QueryResponseResult incomeSortDTOS = incomeSortService.pageQueryByName(fuzzyQueryIncomeSortVO);
+        return incomeSortDTOS;
     }
 
     @ApiOperation(value = "更新收入类别信息", notes = "可以修改收入名称、是否底级、备注信息等")
