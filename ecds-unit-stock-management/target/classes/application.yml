@@ -8,3 +8,19 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
 server:
   port: 8080
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    call-setters-on-nulls: true
+    cache-enabled: false
+  global-config:
+    db-config:
+      id-type: auto
+      field-strategy: not_empty
+      #驼峰下划线转换
+      column-underline: true
+      db-type: mysql
+    refresh: false
+  mapper-locations: classpath:mapper/*.xml
+

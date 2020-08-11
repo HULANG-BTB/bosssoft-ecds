@@ -9,6 +9,8 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -68,10 +70,12 @@ public class StockReturnItemPO extends Model<StockReturnItemPO> {
 
     @ApiModelProperty(value = "创建时间")
     @TableField(value = "f_create_time", fill = FieldFill.INSERT)
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date createTime;
 
     @ApiModelProperty(value = "修改时间")
     @TableField(value = "f_update_time", fill = FieldFill.INSERT_UPDATE)
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date updateTime;
 
 
