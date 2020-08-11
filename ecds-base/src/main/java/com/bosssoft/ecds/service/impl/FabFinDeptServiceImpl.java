@@ -17,7 +17,6 @@ import com.bosssoft.ecds.entity.vo.FabFinDeptVo;
 import com.bosssoft.ecds.enums.FabFinDeptResultCode;
 import com.bosssoft.ecds.service.FabAgenService;
 import com.bosssoft.ecds.service.FabFinDeptService;
-import com.bosssoft.ecds.utils.SnowflakeIdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -51,7 +50,7 @@ public class FabFinDeptServiceImpl extends ServiceImpl<FabFinDeptDao, FabFinDept
      * @param fabFinDept
      * @return com.boss.dept.entity.vo.ResponseData
      */
-    public ResponseResult saveOrUpdateFabFinDept(FabFinDept fabFinDept) {
+    public ResponseResult saveOrUpdateFabFinDept(FabFinDeptVo fabFinDept) {
         //检测参数合法性
         boolean flag = check(fabFinDept);
         if (!flag) {
@@ -63,12 +62,12 @@ public class FabFinDeptServiceImpl extends ServiceImpl<FabFinDeptDao, FabFinDept
         boolean result = false;
         if (StringUtils.isEmpty(fId)) {
             //insert
-            fId = SnowflakeIdWorker.generateId();
             fabFinDept.setId(fId);
             result = save(fabFinDept);
 
         } else {
             //update
+            fabFinDept.setUpdateTime(null);
             result = updateById(fabFinDept);
         }
         if (result == false) {
@@ -86,10 +85,13 @@ public class FabFinDeptServiceImpl extends ServiceImpl<FabFinDeptDao, FabFinDept
      * @author lin.wanning
      * @date 2020/8/5
      */
-    private boolean check(FabFinDept fabFinDept) {
+    private boolean check(FabFinDeptVo fabFinDept) {
         //区划 code
-        if (StringUtils.isEmpty(fabFinDept.getRgnCode())) {
+        if (fabFinDept.getRgnCodeArray().isEmpty()) {
             return false;
+        } else {
+            String str = StringUtils.collectionToDelimitedString(fabFinDept.getRgnCodeArray(), ",");
+            fabFinDept.setRgnCode(str);
         }
         //部门编码
         if (StringUtils.isEmpty(fabFinDept.getFindeptCode())) {
@@ -108,6 +110,7 @@ public class FabFinDeptServiceImpl extends ServiceImpl<FabFinDeptDao, FabFinDept
 
     @Override
     public ResponseResult del(Long id) {
+
         if (id == null) {
             //返回错误信息
             return new ResponseResult(CommonCode.INVLIDATE);
@@ -163,10 +166,10 @@ public class FabFinDeptServiceImpl extends ServiceImpl<FabFinDeptDao, FabFinDept
         Page<FabFinDept> pageInfo = new Page<FabFinDept>(pageNumber, pageSize);
         //查询参数
         Map<String, Object> map = new HashMap<>();
-        map.put("f_findept_name", fabFinDeptVo.getFFindeptName());
-        map.put("f_is_enable", fabFinDeptVo.getFIsEnable());
+//        map.put("f_findept_name", fabFinDeptVo.getFindeptName());
+        map.put("f_is_enable", fabFinDeptVo.getIsEnable());
         //查询
-        IPage<FabFinDept> pages = this.page(pageInfo, new QueryWrapper<FabFinDept>().allEq(map, false));
+        IPage<FabFinDept> pages = this.page(pageInfo, new QueryWrapper<FabFinDept>().like("f_findept_name", fabFinDeptVo.getFindeptName()).allEq(map, false));
         QueryResult<FabFinDept> queryResult = new QueryResult<FabFinDept>();
         queryResult.setList(pages.getRecords());
         queryResult.setTotal(pages.getTotal());

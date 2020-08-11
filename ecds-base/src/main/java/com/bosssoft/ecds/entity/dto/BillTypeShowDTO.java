@@ -1,6 +1,8 @@
 package com.bosssoft.ecds.entity.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -13,7 +15,7 @@ import java.util.List;
  */
 @Data
 public class BillTypeShowDTO {
-
+    @JsonSerialize(using = ToStringSerializer.class)
     Long id;
 
     String code;

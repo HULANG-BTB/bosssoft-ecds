@@ -1,6 +1,9 @@
 package com.bosssoft.ecds.entity.vo;
 
+import com.bosssoft.ecds.entity.po.FabFinDept;
 import lombok.Data;
+
+import java.util.List;
 
 /**
  * @description: 归口部门查询条件
@@ -9,17 +12,12 @@ import lombok.Data;
  * @modified By:
  */
 @Data
-public class FabFinDeptVo {
-
+public class FabFinDeptVo extends FabFinDept {
     /**
-     * 名称
+     * 前端传来的区划数组
      */
-    private String fFindeptName;
 
-    /**
-     * 是否启用
-     */
-    private Boolean fIsEnable;
+    private List<String> rgnCodeArray;
 
 
     /**
