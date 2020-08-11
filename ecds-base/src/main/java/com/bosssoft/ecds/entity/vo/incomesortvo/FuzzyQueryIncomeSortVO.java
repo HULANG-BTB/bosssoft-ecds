@@ -39,7 +39,7 @@ public class FuzzyQueryIncomeSortVO implements Serializable {
     /**
      * 每页条数
      */
-    @NotNull(message = IncomeSortConstant.PAGE_SIZE_NOT_NULL)
+    @NotNull(message = IncomeSortConstant.PAGE_NUM_NOT_NULL)
     private Integer pageSize;
     /**
      * 页码
