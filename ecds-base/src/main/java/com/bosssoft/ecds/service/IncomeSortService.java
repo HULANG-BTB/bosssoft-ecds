@@ -77,5 +77,9 @@ public interface IncomeSortService {
     Boolean add(AddIncomeSortVO addIncomeSortVO);
 
 
+    /**
+     * 查询第一级收入类别
+     * @return
+     */
     QueryResponseResult getFirstIncomeSort();
 }
