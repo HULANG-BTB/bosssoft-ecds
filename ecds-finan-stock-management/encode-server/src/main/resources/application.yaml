@@ -6,13 +6,8 @@ spring:
     host: 39.108.14.141
     #redis端口号
     port: 6382
-<<<<<<< HEAD
     #redis密码
     password: 123456
-=======
-    #redis密码，默认为空
-#    password:
->>>>>>> 100e02259446914fd872eddf94b1e4843e19bb52
     #连接redis超时时间（毫秒）
 #    timeout:
     #jedis连接池
@@ -30,6 +25,7 @@ spring:
         max-idle: 10 # 连接池中的最大空闲连接
         min-idle: 5 # 连接池中的最小空闲连接
         max-wait: -1ms # 连接池最大阻塞等待时间（使用负值表示没有限制）
+
   # MySQL配置
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -51,3 +47,4 @@ mybatis-plus:
 redis:
   # 每次从关系型数据库中获取的号码数量
   getNumEveryTime: 5000
+
