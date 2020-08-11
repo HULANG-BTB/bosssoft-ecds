@@ -42,6 +42,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserPO> implements Use
      * @param userDTO
      * @return
      */
+    @Override
     public UserDTO save(UserDTO userDTO) {
         // 转换为PO
         UserPO userPO = MyBeanUtil.copyProperties(userDTO, UserPO.class);
@@ -69,6 +70,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserPO> implements Use
      * @param entity
      * @return
      */
+    @Override
     public Boolean remove(UserDTO entity) {
         UserPO userPO = MyBeanUtil.copyProperties(entity, UserPO.class);
         return super.removeById(userPO.getId());
@@ -80,6 +82,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserPO> implements Use
      * @param userDTO
      * @return
      */
+    @Override
     public Boolean update(UserDTO userDTO) {
         // 读取用户信息
         UserPO userPO = super.getById(userDTO.getId());
@@ -109,7 +112,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserPO> implements Use
                     break;
                 }
             }
-            if (shouldDelete) {
+            if (shouldDelete.booleanValue()) {
                 removeList.add(userRolePO.getId());
             }
         }
@@ -124,7 +127,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserPO> implements Use
                     break;
                 }
             }
-            if (shouldAdd) {
+            if (shouldAdd.booleanValue()) {
                 UserRolePO userRolePO = new UserRolePO();
                 userRolePO.setUserId(userDTO.getId());
                 userRolePO.setRoleId(rolePO.getId());
@@ -148,7 +151,8 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserPO> implements Use
      * @param pageDTO
      * @return
      */
-    public PageDTO listByPage(PageDTO pageDTO) {
+    @Override
+    public PageDTO<UserDTO> listByPage(PageDTO<UserDTO> pageDTO) {
         Page<UserPO> userDTOPage = new Page<>();
         // 设置分页信息
         userDTOPage.setCurrent(pageDTO.getPage());
@@ -173,6 +177,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserPO> implements Use
      * @param userDTOList
      * @return
      */
+    @Override
     public Boolean removeBatch(List<UserDTO> userDTOList) {
         List<Long> ids = new ArrayList<>();
         for (UserDTO userDTO : userDTOList) {
@@ -180,17 +185,21 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserPO> implements Use
                 ids.add(userDTO.getId());
             }
         }
-        boolean removeResult = super.removeByIds(ids);
-        return removeResult;
+        return super.removeByIds(ids);
     }
 
+    /**
+     * 重置密码
+     * @param userDTO
+     * @return
+     */
+    @Override
     public Boolean resetPassword(UserDTO userDTO) {
         UserPO userPO = MyBeanUtil.copyProperties(userDTO, UserPO.class);
         userPO = super.getById(userPO.getId());
         String hashpw = BCrypt.hashpw(userDTO.getPassword());
         userPO.setPassword(hashpw);
-        boolean updateResult = super.updateById(userPO);
-        return updateResult;
+        return super.updateById(userPO);
     }
 
 }
