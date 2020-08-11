@@ -27,11 +27,11 @@ public class PageIncomeSortVO implements Serializable {
      * 每页条数
      */
     @NotNull(message = "页面显示数据大小不能为空")
-    private Integer size;
+    private Integer pageSize;
     /**
      * 页码
      */
     @NotNull(message = "当前页码不能为空")
-    private Integer page;
+    private Integer pageNum;
 
 }

@@ -61,8 +61,8 @@ public class IncomeSortServiceImpl implements IncomeSortService {
         if (page < 0) {
             page = 0;
         }
-        if (size < 10) {
-            size = 10;
+        if (size < 5) {
+            size = 5;
         }
         pageInfo = new Page<>(page, size);
         return pageInfo;
@@ -76,12 +76,18 @@ public class IncomeSortServiceImpl implements IncomeSortService {
      */
     private QueryWrapper wrapIncomeSortVO(FuzzyQueryIncomeSortVO fuzzyQueryIncomeSortVO) {
         QueryWrapper<Object> queryWrapper = new QueryWrapper<>();
-        if (!org.springframework.util.StringUtils.isEmpty(fuzzyQueryIncomeSortVO.getName())) {
-            queryWrapper.like("f_name", fuzzyQueryIncomeSortVO.getName());
+        if (fuzzyQueryIncomeSortVO.getId()!=null){
+            queryWrapper.like("f_parent_id", fuzzyQueryIncomeSortVO.getId());
+
+        }else{
+            if (!org.springframework.util.StringUtils.isEmpty(fuzzyQueryIncomeSortVO.getName())) {
+                queryWrapper.like("f_name", fuzzyQueryIncomeSortVO.getName());
+            }
+            if (!org.springframework.util.StringUtils.isEmpty(fuzzyQueryIncomeSortVO.getCode())) {
+                queryWrapper.like("f_code", fuzzyQueryIncomeSortVO.getCode());
+            }
         }
-        if (!org.springframework.util.StringUtils.isEmpty(fuzzyQueryIncomeSortVO.getCode())) {
-            queryWrapper.like("f_code", fuzzyQueryIncomeSortVO.getCode());
-        }
+
         return queryWrapper;
     }
 
@@ -103,8 +109,8 @@ public class IncomeSortServiceImpl implements IncomeSortService {
         if (fuzzyQueryIncomeSortVO == null) {
             fuzzyQueryIncomeSortVO = new FuzzyQueryIncomeSortVO();
         }
-        Integer page = fuzzyQueryIncomeSortVO.getPage();
-        Integer size = fuzzyQueryIncomeSortVO.getSize();
+        Integer page = fuzzyQueryIncomeSortVO.getPageNum();
+        Integer size = fuzzyQueryIncomeSortVO.getPageSize();
         Page<IncomeSortPO> pageTemp = new Page<>();
         Page<IncomeSortPO> pageInfo = getPage(page, size, pageTemp);
         QueryWrapper queryWrapper = wrapIncomeSortVO(fuzzyQueryIncomeSortVO);
@@ -118,19 +124,20 @@ public class IncomeSortServiceImpl implements IncomeSortService {
 
     @Override
     public QueryResponseResult pageQueryById(PageIncomeSortVO pageIncomeSortVO) {
-        Integer page = pageIncomeSortVO.getPage();
-        Integer size = pageIncomeSortVO.getSize();
+        Integer page = pageIncomeSortVO.getPageNum();
+        Integer size = pageIncomeSortVO.getPageSize();
         Page<IncomeSortPO> pageTemp = new Page<>();
         Page<IncomeSortPO> pageInfo = getPage(page, size, pageTemp);
         QueryWrapper<IncomeSortPO> queryWrapper = new QueryWrapper<>();
         if(pageIncomeSortVO.getId()!=null){
-            queryWrapper.eq("f_id", pageIncomeSortVO.getId());
+            queryWrapper.eq("f_parent_id", pageIncomeSortVO.getId());
         }
         IPage<IncomeSortPO> iPage = incomeSortDao.selectPage(pageInfo, queryWrapper);
         QueryResult<IncomeSortPO> queryResult = new QueryResult<>();
         queryResult.setList(iPage.getRecords());
         queryResult.setTotal(iPage.getTotal());
         return new QueryResponseResult<>(CommonCode.SUCCESS,queryResult);
+
     }
 
     @Override
@@ -218,6 +225,7 @@ public class IncomeSortServiceImpl implements IncomeSortService {
         incomeSort.setUpdateTime(date);
         //版本号
         incomeSort.setVersion(0);
+        incomeSort.setLogicDelete(false);
         incomeSortDao.insert(incomeSort);
         return true;
     }
