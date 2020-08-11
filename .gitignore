@@ -1,5 +1,0 @@
-.idea
-*.iml
-*/target/*.*
-/ecds-finan-stock-management/src/main/java/com/bosssoft/ecds/util/HuTest.java
-/ecds-finan-stock-management/src/main/java/com/bosssoft/ecds/config/SwaggerConfig.java
