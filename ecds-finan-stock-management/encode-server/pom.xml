@@ -40,14 +40,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-<<<<<<< HEAD
-=======
-            <groupId>redis.clients</groupId>
-            <artifactId>jedis</artifactId>
-            <version>2.9.0</version>
-        </dependency>
-        <dependency>
->>>>>>> 100e02259446914fd872eddf94b1e4843e19bb52
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.12</version>
@@ -77,20 +69,8 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-<<<<<<< HEAD
-=======
-            <artifactId>spring-boot-starter-aop</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.retry</groupId>
-            <artifactId>spring-retry</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
->>>>>>> 100e02259446914fd872eddf94b1e4843e19bb52
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-
         <!--Redisson-->
         <dependency>
             <groupId>org.redisson</groupId>
