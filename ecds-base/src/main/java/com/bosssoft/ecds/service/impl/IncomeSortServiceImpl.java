@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bosssoft.ecds.common.response.CommonCode;
 import com.bosssoft.ecds.common.response.QueryResponseResult;
 import com.bosssoft.ecds.common.response.QueryResult;
+import com.bosssoft.ecds.constant.PageConstant;
 import com.bosssoft.ecds.dao.IncomeSortDao;
 import com.bosssoft.ecds.entity.dto.IncomeSortDTO;
 import com.bosssoft.ecds.entity.po.IncomeSortPO;
@@ -58,11 +59,11 @@ public class IncomeSortServiceImpl implements IncomeSortService {
     }
 
     private <T> Page<T> getPage(Integer page, Integer size, Page<T> pageInfo) {
-        if (page < 0) {
-            page = 0;
+        if (page < PageConstant.DEFAULT_PAGE_NO) {
+            page = PageConstant.DEFAULT_PAGE_NO;
         }
-        if (size < 5) {
-            size = 5;
+        if (size < PageConstant.DEFAULT_PAGE_SIZE) {
+            size = PageConstant.DEFAULT_PAGE_SIZE;
         }
         pageInfo = new Page<>(page, size);
         return pageInfo;

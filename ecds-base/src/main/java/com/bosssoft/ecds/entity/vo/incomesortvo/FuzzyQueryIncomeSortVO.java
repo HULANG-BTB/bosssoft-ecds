@@ -2,8 +2,10 @@ package com.bosssoft.ecds.entity.vo.incomesortvo;
 
 
 import com.bosssoft.ecds.constant.CheckConstant;
+import com.bosssoft.ecds.constant.IncomeSortConstant;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import io.swagger.models.auth.In;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
@@ -37,11 +39,11 @@ public class FuzzyQueryIncomeSortVO implements Serializable {
     /**
      * 每页条数
      */
-    @NotNull(message = "页面显示数据大小不能为空")
+    @NotNull(message = IncomeSortConstant.PAGE_SIZE_NOT_NULL)
     private Integer pageSize;
     /**
      * 页码
      */
-    @NotNull(message = "当前页码不能为空")
+    @NotNull(message = IncomeSortConstant.PAGE_NUM_NOT_NULL)
     private Integer pageNum;
 }

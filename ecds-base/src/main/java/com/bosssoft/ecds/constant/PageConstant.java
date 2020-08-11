@@ -11,7 +11,7 @@ public class PageConstant {
      * 默认页码
      * 默认页面内容长度
      */
-    public static final int DEFAULT_PAGE_NO = 1;
-    public static final int DEFAULT_PAGE_SIZE = 10;
+    public static final int DEFAULT_PAGE_NO = 0;
+    public static final int DEFAULT_PAGE_SIZE = 5;
 
 }
