@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/region")
-@Api(value = "区划信息管理")
+@Api(value = "区划信息管理",description = "区划信息管理" )
 public class RegionController {
 
     @Autowired
@@ -72,6 +72,7 @@ public class RegionController {
     }
 
     @GetMapping("/getGrandId/{parentId}")
+    @ApiOperation(value = "获取祖父节点ID")
     public QueryResponseResult getGrandId(@PathVariable("parentId") Long pid){
         return regionService.getGrandId(pid);
     }

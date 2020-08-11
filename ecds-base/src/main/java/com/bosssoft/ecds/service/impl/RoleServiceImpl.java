@@ -39,6 +39,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleDao, RolePO> implements Rol
      * @param roleDTO
      * @return
      */
+    @Override
     public RoleDTO save(RoleDTO roleDTO) {
         // 转换为PO
         RolePO rolePO = MyBeanUtil.copyProperties(roleDTO, RolePO.class);
@@ -67,6 +68,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleDao, RolePO> implements Rol
      * @param entity
      * @return
      */
+    @Override
     public Boolean remove(RoleDTO entity) {
         RolePO rolePO = MyBeanUtil.copyProperties(entity, RolePO.class);
         return super.removeById(rolePO.getId());
@@ -74,9 +76,11 @@ public class RoleServiceImpl extends ServiceImpl<RoleDao, RolePO> implements Rol
 
     /**
      * 更新角色信息
+     *
      * @param roleDTO
      * @return Boolean true 更新成功 false 更新失败
      */
+    @Override
     public Boolean update(RoleDTO roleDTO) {
         // 读取角色信息
         RolePO rolePO = super.getById(roleDTO.getId());
@@ -106,7 +110,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleDao, RolePO> implements Rol
                     break;
                 }
             }
-            if (shouldDelete) {
+            if (shouldDelete.booleanValue()) {
                 removeList.add(rolePermissionPO.getId());
             }
         }
@@ -121,7 +125,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleDao, RolePO> implements Rol
                     break;
                 }
             }
-            if (shouldAdd) {
+            if (shouldAdd.booleanValue()) {
                 RolePermissionPO rolePermissionPO = new RolePermissionPO();
                 rolePermissionPO.setRoleId(roleDTO.getId());
                 rolePermissionPO.setPermissionId(permissionPO.getId());
@@ -144,13 +148,13 @@ public class RoleServiceImpl extends ServiceImpl<RoleDao, RolePO> implements Rol
      *
      * @return
      */
+    @Override
     public List<RoleDTO> listAll() {
         QueryWrapper<RolePO> queryWrapper = new QueryWrapper<>();
         queryWrapper.orderByAsc(RolePO.F_CREATE_TIME);
         List<RolePO> rolePOList = super.list(queryWrapper);
         // 转换数据
-        List<RoleDTO> roleDTOList = MyBeanUtil.copyListProperties(rolePOList, RoleDTO::new);
-        return roleDTOList;
+        return MyBeanUtil.copyListProperties(rolePOList, RoleDTO::new);
     }
 
     /**
@@ -158,10 +162,10 @@ public class RoleServiceImpl extends ServiceImpl<RoleDao, RolePO> implements Rol
      *
      * @return
      */
+    @Override
     public List<RoleDTO> listByUserId(Long id) {
         List<RolePO> rolePOList = super.getBaseMapper().selectByUid(id);
-        List<RoleDTO> roleDTOList = MyBeanUtil.copyListProperties(rolePOList, RoleDTO::new);
-        return roleDTOList;
+        return MyBeanUtil.copyListProperties(rolePOList, RoleDTO::new);
     }
 
     /**
@@ -170,7 +174,8 @@ public class RoleServiceImpl extends ServiceImpl<RoleDao, RolePO> implements Rol
      * @param pageDTO
      * @return
      */
-    public PageDTO listByPage(PageDTO pageDTO) {
+    @Override
+    public PageDTO<RoleDTO> listByPage(PageDTO<RoleDTO> pageDTO) {
         Page<RolePO> roleDTOPage = new Page<>();
         // 设置分页信息
         roleDTOPage.setCurrent(pageDTO.getPage());
@@ -191,17 +196,18 @@ public class RoleServiceImpl extends ServiceImpl<RoleDao, RolePO> implements Rol
 
     /**
      * 批量删除角色
+     *
      * @param roleDTOList
      * @return
      */
+    @Override
     public Boolean removeBatch(List<RoleDTO> roleDTOList) {
         List<Long> ids = new ArrayList<>();
         for (RoleDTO roleDTO : roleDTOList) {
-            if (!roleDTO.getId().equals(0)) {
+            if (roleDTO.getId() != null) {
                 ids.add(roleDTO.getId());
             }
         }
-        boolean removeResult = this.removeByIds(ids);
-        return removeResult;
+        return this.removeByIds(ids);
     }
 }

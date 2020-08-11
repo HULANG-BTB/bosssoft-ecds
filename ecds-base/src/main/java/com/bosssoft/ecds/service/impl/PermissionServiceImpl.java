@@ -31,6 +31,7 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionDao, Permission
      * @param entity
      * @return
      */
+    @Override
     public PermissionDTO save(PermissionDTO entity) {
         PermissionPO permissionPO = new PermissionPO();
         MyBeanUtil.copyProperties(entity, permissionPO);
@@ -44,6 +45,7 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionDao, Permission
      * @param entity
      * @return
      */
+    @Override
     public Boolean remove(PermissionDTO entity) {
         PermissionPO permissionPO = new PermissionPO();
         MyBeanUtil.copyProperties(entity, permissionPO);
@@ -56,6 +58,7 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionDao, Permission
      * @param entity
      * @return
      */
+    @Override
     public Boolean update(PermissionDTO entity) {
         PermissionPO permissionPO = super.getById(entity.getId());
         MyBeanUtil.copyProperties(entity, permissionPO);
@@ -68,10 +71,10 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionDao, Permission
      * @param entity
      * @return
      */
+    @Override
     public List<PermissionDTO> getByRid(PermissionDTO entity) {
         List<PermissionPO> byRid = super.getBaseMapper().getByRid(entity.getId());
-        List<PermissionDTO> permissionDTOList = MyBeanUtil.copyListProperties(byRid, PermissionDTO.class);
-        return permissionDTOList;
+        return MyBeanUtil.copyListProperties(byRid, PermissionDTO.class);
     }
 
     /**
@@ -79,13 +82,13 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionDao, Permission
      *
      * @return
      */
+    @Override
     public List<PermissionDTO> listAll() {
         QueryWrapper<PermissionPO> queryWrapper = new QueryWrapper<>();
         queryWrapper.orderByAsc(PermissionPO.F_URL);
         List<PermissionPO> permissionPOList = super.list(queryWrapper);
         // 转换数据
-        List<PermissionDTO> permissionDTOList = MyBeanUtil.copyListProperties(permissionPOList, PermissionDTO.class);
-        return permissionDTOList;
+        return MyBeanUtil.copyListProperties(permissionPOList, PermissionDTO.class);
     }
 
     /**
@@ -94,7 +97,8 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionDao, Permission
      * @param pageDTO
      * @return
      */
-    public PageDTO listByPage(PageDTO pageDTO) {
+    @Override
+    public PageDTO<PermissionDTO> listByPage(PageDTO<PermissionDTO> pageDTO) {
         Page<PermissionPO> roleDTOPage = new Page<>();
         // 设置分页信息
         roleDTOPage.setCurrent(pageDTO.getPage());
@@ -118,10 +122,10 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionDao, Permission
      *
      * @return
      */
+    @Override
     public List<PermissionDTO> listByTree() {
         List<PermissionPO> permissions = this.getBaseMapper().queryTreeList(0L);
-        List<PermissionDTO> permissionDTOList = MyBeanUtil.copyListProperties(permissions, PermissionDTO::new);
-        return permissionDTOList;
+        return MyBeanUtil.copyListProperties(permissions, PermissionDTO::new);
     }
 
     /**
@@ -130,15 +134,15 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionDao, Permission
      * @param permissionDTOList
      * @return
      */
+    @Override
     public Boolean removeBatch(List<PermissionDTO> permissionDTOList) {
         List<Long> ids = new ArrayList<>();
         for (PermissionDTO permissionDTO : permissionDTOList) {
-            if (!permissionDTO.getId().equals(0)) {
+            if (permissionDTO.getId() != null) {
                 ids.add(permissionDTO.getId());
             }
         }
-        boolean removeResult = this.removeByIds(ids);
-        return removeResult;
+        return this.removeByIds(ids);
     }
 
 }
