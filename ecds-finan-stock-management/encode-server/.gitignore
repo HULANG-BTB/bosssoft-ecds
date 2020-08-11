@@ -19,7 +19,6 @@ target/
 *.ipr
 .idea
 .mvn
-HELP.md
 mvnw.cmd
 mvnw
 .gitignore
