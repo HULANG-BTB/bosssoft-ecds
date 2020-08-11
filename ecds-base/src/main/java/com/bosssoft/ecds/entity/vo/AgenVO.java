@@ -125,4 +125,6 @@ public class AgenVO extends Model<AgenVO> {
     @ApiModelProperty(value = "备注")
     private String note;
 
+    @ApiModelProperty(value = "部门名称")
+    private String deptName;
 }
