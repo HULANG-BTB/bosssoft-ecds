@@ -112,4 +112,13 @@ public interface IncomeSortDao extends BaseMapper<IncomeSortPO> {
             "WHERE f_id=#{id}")
     String getCode(Long id);
 
+    /**
+     * 获取所有层级为1的收入类别
+     * @return
+     */
+    @Select("SELECT f_id AS id,f_code AS CODE,f_name AS NAME\n" +
+            "FROM fab_income_sort\n" +
+            "WHERE f_level=1")
+    List<IncomeSortDTO> getFirst();
+
 }

@@ -15,7 +15,7 @@ import com.bosssoft.ecds.entity.vo.FabFinDeptVo;
  * @since 2020-08-05
  */
 public interface FabFinDeptService extends IService<FabFinDept> {
-    ResponseResult saveOrUpdateFabFinDept(FabFinDept fabFinDept);
+    ResponseResult saveOrUpdateFabFinDept(FabFinDeptVo fabFinDept);
 
     ResponseResult del(Long id);
 

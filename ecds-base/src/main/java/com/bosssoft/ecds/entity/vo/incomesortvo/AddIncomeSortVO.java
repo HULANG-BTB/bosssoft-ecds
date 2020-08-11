@@ -1,6 +1,8 @@
 package com.bosssoft.ecds.entity.vo.incomesortvo;
 
 import com.bosssoft.ecds.constant.CheckConstant;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
@@ -22,6 +24,7 @@ public class AddIncomeSortVO implements Serializable {
      * 收入类别自身id
      */
     @NotNull(message = "收入类别父级id不能为空")
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long parentId;
     /**
      * 收入种类编码
