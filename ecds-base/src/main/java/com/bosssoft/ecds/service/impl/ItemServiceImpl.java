@@ -1,5 +1,6 @@
 package com.bosssoft.ecds.service.impl;
 
+import cn.hutool.core.lang.Snowflake;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bosssoft.ecds.common.response.CommonCode;
@@ -14,6 +15,7 @@ import com.bosssoft.ecds.enums.ItemResultCode;
 import com.bosssoft.ecds.service.ItemService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bosssoft.ecds.utils.MyBeanUtil;
+import com.bosssoft.ecds.utils.SnowflakeIdWorker;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -41,6 +43,9 @@ public class ItemServiceImpl extends ServiceImpl<ItemDao, ItemPO> implements Ite
     public ResponseResult save(ItemDTO itemDTO) {
         // 将dto转化为po
         ItemPO itemPO = MyBeanUtil.myCopyProperties(itemDTO, ItemPO.class);
+        //雪花算法生成id
+        itemPO.setId(SnowflakeIdWorker.generateId());
+        System.out.println(itemPO);
         // 执行插入操作
         boolean save = super.save(itemPO);
         // 插入失败返回操作错误

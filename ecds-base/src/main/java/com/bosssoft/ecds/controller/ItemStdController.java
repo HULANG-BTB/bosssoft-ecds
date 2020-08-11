@@ -9,6 +9,7 @@ import com.bosssoft.ecds.entity.vo.ItemStdVO;
 import com.bosssoft.ecds.entity.vo.PageVO;
 import com.bosssoft.ecds.service.ItemStdService;
 import com.bosssoft.ecds.utils.MyBeanUtil;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/itemstd")
+@Api(value = "项目标准管理接口")
 public class ItemStdController {
 
     @Autowired

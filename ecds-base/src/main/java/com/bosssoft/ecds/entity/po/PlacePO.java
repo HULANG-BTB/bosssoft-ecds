@@ -34,65 +34,65 @@ public class PlacePO extends Model<PlacePO> {
 
     @ApiModelProperty(value = "主键")
     @TableId(value = "f_id", type = IdType.AUTO)
-    private Long fId;
+    private Long id;
 
     @ApiModelProperty(value = "区划ID")
     @TableField("f_rgn_id")
-    private String fRgnId;
+    private String rgnId;
 
     @ApiModelProperty(value = "开票点编码")
     @TableField("f_place_id")
-    private String fPlaceId;
+    private String placeId;
 
     @ApiModelProperty(value = "开票点名称")
     @TableField("f_place_name")
-    private String fPlaceName;
+    private String placeName;
 
     @ApiModelProperty(value = "上级单位编码")
     @TableField("f_agen_id")
-    private byte[] fAgenId;
+    private String agenId;
 
     @ApiModelProperty(value = "助记码")
     @TableField("f_mmen")
-    private String fMmen;
+    private String mmen;
 
     @ApiModelProperty(value = "级次")
     @TableField("f_level")
-    private Integer fLevel;
+    private Integer level;
 
     @ApiModelProperty(value = "是否启用")
     @TableField("f_isenable")
-    private Boolean fIsenable;
+    private Boolean isenable;
 
     @ApiModelProperty(value = "经办人")
     @TableField(value = "f_operator", fill = FieldFill.INSERT_UPDATE)
-    private String fOperator;
+    private String operator;
 
     @ApiModelProperty(value = "经办人ID")
     @TableField(value = "f_operator_id", fill = FieldFill.INSERT_UPDATE)
-    private Long fOperatorId;
+    private Long operatorId;
 
     @ApiModelProperty(value = "创建日期")
     @TableField(value = "f_create_time", fill = FieldFill.INSERT)
-    private Date fCreateTime;
+    private Date createTime;
 
     @ApiModelProperty(value = "最后修改时间")
     @TableField(value = "f_update_time", fill = FieldFill.INSERT_UPDATE)
-    private Date fUpdateTime;
+    private Date updateTime;
 
     @ApiModelProperty(value = "逻辑删除")
     @TableField("f_logic_delete")
     @TableLogic
-    private Boolean fLogicDelete;
+    private Boolean logicDelete;
 
     @ApiModelProperty(value = "版本号")
     @TableField("f_version")
     @Version
-    private Integer fVersion;
+    private Integer version;
 
     @ApiModelProperty(value = "备注")
     @TableField("f_note")
-    private String fNote;
+    private String note;
 
 
     public static final String F_ID = "f_id";
@@ -127,7 +127,7 @@ public class PlacePO extends Model<PlacePO> {
 
     @Override
     protected Serializable pkVal() {
-        return this.fId;
+        return this.id;
     }
 
 }
