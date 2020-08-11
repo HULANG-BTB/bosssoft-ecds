@@ -21,19 +21,33 @@ import java.util.List;
 @Repository
 public interface BillTypeDao extends BaseMapper<BillTypePO> {
 
+    /**
+     * 获取所有票据种类
+     *
+     * @return 票据种类List
+     */
     @Select("SELECT f_id as id,f_code as code,f_name as name,f_type_code as typeCode " +
             "FROM fab_bill " +
             "WHERE f_check_sort = 0 AND f_logic_delete = 0 " +
             "ORDER BY f_code")
     List<BillTypeDTO> getBillType();
 
+    /**
+     * 获取所有票据分类
+     *
+     * @return 票据分类List
+     */
     @Select("SELECT f_id as id,f_code as code,f_name as name " +
             "FROM fab_bill " +
             "WHERE f_check_sort = 1 AND f_logic_delete = 0 " +
             "ORDER BY f_code")
     List<BillSortDTO> getBillSort();
 
-
+    /**
+     * 获取所有票据种类及分类
+     *
+     * @return 票据种类及分类List
+     */
     @Select("SELECT f_id as id,f_code as code,f_name as name," +
             "f_bill_nature as billNature, f_memory_code as memoryCode," +
             "f_eff_date as effDate,f_exp_date as expDate,f_check_sort as checkSort," +
@@ -46,6 +60,12 @@ public interface BillTypeDao extends BaseMapper<BillTypePO> {
             "ORDER BY f_code ")
     List<BillTypeShowDTO> getAllBillType();
 
+    /**
+     * 按条件查询票据种类及分类
+     *
+     * @param param 查询的参数
+     * @return 查询的票据种类及分类List
+     */
     @Select("<script>" +
             "SELECT f_id as id,f_code as code,f_name as name," +
             "f_bill_nature as billNature, f_memory_code as memoryCode," +
