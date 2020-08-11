@@ -1,10 +1,11 @@
 package com.bosssoft.ecds.entity.po;
-
+import lombok.Data;
 import java.util.Date;
 
+@Data
 public class UneCbill {
 
-    private int fId;
+    private long fId;
 
     private String fRgnCode;
 
@@ -52,7 +53,7 @@ public class UneCbill {
 
     private String fOperator;
 
-    private int signId;
+    private long signId;
 
     private String fPayCode;
 
