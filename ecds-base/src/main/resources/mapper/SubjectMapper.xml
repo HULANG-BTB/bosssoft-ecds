@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bosssoft.ecds.dao.SubjectDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.bosssoft.ecds.entity.po.SubjectPO">
+        <id column="f_id" property="id" />
+        <result column="f_year" property="year" />
+        <result column="f_sub_code" property="subCode" />
+        <result column="f_sub_name" property="subName" />
+        <result column="f_level" property="level" />
+        <result column="f_is_leaf" property="isLeaf" />
+        <result column="f_parent_id" property="parentId" />
+        <result column="f_is_enable" property="isEnable" />
+        <result column="f_note" property="note" />
+        <result column="f_create_time" property="createTime" />
+        <result column="f_update_time" property="updateTime" />
+        <result column="f_operator_id" property="operatorId" />
+        <result column="f_operator" property="operator" />
+        <result column="f_version" property="version" />
+        <result column="f_logic_delete" property="logicDelete" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        f_id, f_year, f_sub_code, f_sub_name, f_level, f_is_leaf, f_parent_id, f_is_enable, f_note, f_create_time, f_update_time, f_operator_id, f_operator, f_version, f_logic_delete
+    </sql>
+
+</mapper>
