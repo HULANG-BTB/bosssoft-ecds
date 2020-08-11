@@ -2,13 +2,13 @@ package com.bosssoft.ecds.controller;
 
 import com.bosssoft.ecds.common.response.QueryResponseResult;
 import com.bosssoft.ecds.common.response.ResponseResult;
-import com.bosssoft.ecds.entity.po.FabFinDept;
 import com.bosssoft.ecds.entity.vo.FabFinDeptVo;
 import com.bosssoft.ecds.service.FabFinDeptService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,13 +29,13 @@ public class FabFinDeptController {
 
     @ApiOperation(value = "保存，修改操作")
     @PostMapping("/save")
-    ResponseResult saveOrUpdateFabFinDept(@RequestBody FabFinDept fabFinDept) {
+    ResponseResult saveOrUpdateFabFinDept(@RequestBody FabFinDeptVo fabFinDept) {
         return fabFinDeptService.saveOrUpdateFabFinDept(fabFinDept);
     }
 
     @ApiOperation(value = "删除项目")
-    @DeleteMapping("/delete")
-    ResponseResult delete(@RequestBody Long id) {
+    @DeleteMapping("/delete/{id}")
+    ResponseResult delete(@PathVariable("id") Long id) {
         return fabFinDeptService.del(id);
     }
 
