@@ -14,6 +14,8 @@ public enum CommonCode implements ResultCode {
     FAIL(false,11111,"操作失败！"),
     //参数输入有误时返回的状态码
     INVLIDATE(false,10003,"非法参数！"),
+    PARAM_VALID_ERROR(false,10004, "参数验证错误"),
+    METHOD_NOT_SUPPORTED(false,1005, "请求方法不受支持"),
 
     SERVER_ERROR(false,99999,"抱歉，系统繁忙，请稍后重试！"),
     ;
