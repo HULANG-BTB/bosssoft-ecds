@@ -1,5 +1,7 @@
 package com.bosssoft.ecds.entity.vo.incomesortvo;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
@@ -19,6 +21,7 @@ public class PageIncomeSortVO implements Serializable {
     /**
      * 当前收入类别id
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
     /**
      * 每页条数

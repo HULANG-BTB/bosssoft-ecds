@@ -1,5 +1,7 @@
 package com.bosssoft.ecds.entity.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
 import java.util.List;
@@ -14,6 +16,7 @@ public class IncomeSortDTO {
     /**
      * 收入种类id
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
     /**
      * 收入种类编码
@@ -34,6 +37,7 @@ public class IncomeSortDTO {
     /**
      * 父级id
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long parentId;
 
     /**
