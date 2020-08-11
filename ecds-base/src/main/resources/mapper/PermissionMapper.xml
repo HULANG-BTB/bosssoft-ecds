@@ -21,7 +21,7 @@
                 column="f_id"
                 ofType="com.bosssoft.ecds.entity.po.PermissionPO"
                 javaType="java.util.List"
-                select="com.boss.security.dao.PermissionDao.queryTreeList"
+                select="com.bosssoft.ecds.dao.PermissionDao.queryTreeList"
                 >
         </collection>
     </resultMap>

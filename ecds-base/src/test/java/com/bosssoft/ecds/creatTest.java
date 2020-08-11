@@ -22,6 +22,7 @@ import java.util.ArrayList;
  * @description
  */
 
+@SpringBootTest
 public class creatTest {
     @Test
     public void test(){

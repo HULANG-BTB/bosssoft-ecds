@@ -1,13 +1,13 @@
 package com.bosssoft.ecds.controller;
 
-
+import com.bosssoft.ecds.common.response.QueryResponseResult;
+import com.bosssoft.ecds.common.response.ResponseResult;
 import com.bosssoft.ecds.entity.dto.ItemDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.vo.ItemVO;
 import com.bosssoft.ecds.entity.vo.PageVO;
 import com.bosssoft.ecds.service.ItemService;
 import com.bosssoft.ecds.utils.MyBeanUtil;
-import com.bosssoft.ecds.utils.ResponseUtils;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +23,7 @@ import java.util.List;
  * @author wzh
  * @since 2020-08-09
  */
+
 @RestController
 @RequestMapping("/item")
 public class ItemController {
@@ -33,15 +34,14 @@ public class ItemController {
     /**
      * 插入项目相关信息
      *
-     * @param itemVO
+     * @param itemVO 项目相关信息
      * @return
      */
     @ApiOperation(value = "添加项目")
     @PostMapping("/save")
-    public String addItem(@RequestBody ItemVO itemVO) {
+    public ResponseResult addItem(@RequestBody ItemVO itemVO) {
         ItemDTO itemDTO = MyBeanUtil.myCopyProperties(itemVO, ItemDTO.class);
-        boolean save = itemService.save(itemDTO);
-        return ResponseUtils.getResponse(save, ResponseUtils.ResultType.CREATED);
+        return itemService.save(itemDTO);
     }
 
     /**
@@ -52,24 +52,22 @@ public class ItemController {
      */
     @ApiOperation(value = "修改项目")
     @PostMapping("/update")
-    public String updateItem(@RequestBody ItemVO itemVO) {
+    public ResponseResult updateItem(@RequestBody ItemVO itemVO) {
         ItemDTO itemDTO = MyBeanUtil.myCopyProperties(itemVO, ItemDTO.class);
-        boolean update = itemService.update(itemDTO);
-        return ResponseUtils.getResponse(update, ResponseUtils.ResultType.OK);
+        return itemService.update(itemDTO);
     }
 
     /**
-     * 批量修改数据，主要用于批量审核
+     * 主要用于批量审核,修改项目启用状态，输入需要修改
      *
-     * @param itemVOList
+     * @param itemVOList 需要修改审核的项目id
      * @return
      */
-    @ApiOperation(value = "批量修改")
-    @PostMapping("/batchupdate")
-    public String batchUpdateItem(@RequestBody List<ItemVO> itemVOList) {
+    @ApiOperation(value = "批量审核")
+    @PostMapping("/batchVerify")
+    public ResponseResult updateBatchVerifyItem(@RequestBody List<ItemVO> itemVOList) {
         List<ItemDTO> itemDTOS = MyBeanUtil.copyListProperties(itemVOList, ItemDTO::new);
-        boolean batchUpdate = itemService.batchUpdate(itemDTOS);
-        return ResponseUtils.getResponse(batchUpdate, ResponseUtils.ResultType.OK);
+        return itemService.batchVerify(itemDTOS);
     }
 
     /**
@@ -81,10 +79,9 @@ public class ItemController {
     @ApiOperation(value = "删除项目")
     @ApiImplicitParam(name = "id", value = "项目id", dataType = "Long")
     @PostMapping("/delete")
-    public String deleteItem(@RequestBody ItemVO itemVO) {
+    public ResponseResult deleteItem(@RequestBody ItemVO itemVO) {
         ItemDTO itemDTO = MyBeanUtil.myCopyProperties(itemVO, ItemDTO.class);
-        boolean delete = itemService.delete(itemDTO);
-        return ResponseUtils.getResponse(delete, ResponseUtils.ResultType.OK);
+        return itemService.delete(itemDTO);
     }
 
     /**
@@ -94,13 +91,11 @@ public class ItemController {
      * @return
      */
     @ApiOperation(value = "批量删除")
-    @PostMapping("/batchdelete")
-    public String batchDelete(@RequestBody List<ItemVO> itemVOList) {
+    @PostMapping("/batchDelete")
+    public ResponseResult batchDelete(@RequestBody List<ItemVO> itemVOList) {
         List<ItemDTO> itemDTOS = MyBeanUtil.copyListProperties(itemVOList, ItemDTO::new);
-        boolean batchdelete = itemService.batchDelete(itemDTOS);
-        return ResponseUtils.getResponse(batchdelete, ResponseUtils.ResultType.OK);
+        return itemService.batchDelete(itemDTOS);
     }
-
 
     /**
      * 分页查询
@@ -110,14 +105,9 @@ public class ItemController {
      */
     @ApiOperation(value = "分页查询")
     @PostMapping("/listbypage")
-    public String listByPage(@RequestBody PageVO pageVO) {
+    public QueryResponseResult<PageVO> listByPage(@RequestBody PageVO pageVO) {
         PageDTO<ItemDTO> pageDTO = MyBeanUtil.myCopyProperties(pageVO, PageDTO.class);
-        PageVO pageVO1 = itemService.listByPage(pageDTO);
-        if (pageVO1 != null) {
-            return ResponseUtils.getResponse(pageVO1, ResponseUtils.ResultType.OK);
-        } else {
-            return ResponseUtils.getResponse(pageVO1, ResponseUtils.ResultType.INTERNAL_SERVER_ERROR);
-        }
+        return itemService.listByPage(pageDTO);
     }
 }
 
