@@ -218,6 +218,6 @@ public class BillTypeServiceImpl implements BillTypeService {
 
     private boolean checkDate(Date effDate, Date expDate) {
         // 检查生效日期和失效日期的大小关系
-        return effDate.compareTo(expDate) < 0;
+        return effDate.compareTo(expDate) >= 0;
     }
 }
