@@ -43,6 +43,18 @@ public class RegionServiceImp implements RegionService {
     @Override
     public QueryResponseResult<List> getAllRegion() {
         List<RegionExt> allRegion = regionMapper.getAllRegion();
+        for(RegionExt ext : allRegion){
+            if(ext.getChildren().size() != 0){
+                for(RegionExt extC : ext.getChildren()){
+                    if(extC.getChildren().size() == 0){
+                        extC.setChildren(null);
+                    }
+                }
+            }else{
+                ext.setChildren(null);
+            }
+
+        }
         return new QueryResponseResult(CommonCode.SUCCESS,allRegion);
     }
 
