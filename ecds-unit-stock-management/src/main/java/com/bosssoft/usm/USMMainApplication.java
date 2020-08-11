@@ -10,7 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @description
  */
 @SpringBootApplication
-@MapperScan("com.bosssoft.usm.dao.mapper")
+@MapperScan("com.bosssoft.usm.dao")
 public class USMMainApplication {
     public static void main(String[] args) {
         SpringApplication.run(USMMainApplication.class,args);
