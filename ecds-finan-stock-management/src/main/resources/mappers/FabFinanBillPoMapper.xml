@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bosssoft.ecds.mapper.FabFinanBillMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.bosssoft.ecds.entity.FabFinanBillPo">
+        <id column="f_id" property="fId" />
+        <result column="f_bill_code" property="fBillCode" />
+        <result column="f_bill_precode" property="fBillPrecode" />
+        <result column="f_bill_id" property="fBillId" />
+        <result column="f_warehouse_id" property="fWarehouseId" />
+        <result column="f_bill_name" property="fBillName" />
+        <result column="f_agen_code" property="fAgenCode" />
+        <result column="f_agen_name" property="fAgenName" />
+        <result column="f_eff_date" property="fEffDate" />
+        <result column="f_exp_date" property="fExpDate" />
+        <result column="f_oper_id" property="fOperId" />
+        <result column="f_operator" property="fOperator" />
+        <result column="f_ope_date" property="fOpeDate" />
+        <result column="f_is_putout" property="fIsPutout" />
+        <result column="f_is_return" property="fIsReturn" />
+        <result column="f_is_invalid" property="fIsInvalid" />
+        <result column="f_create_time" property="fCreateTime" />
+        <result column="f_update_time" property="fUpdateTime" />
+        <result column="f_version" property="fVersion" />
+        <result column="f_rgn_code" property="fRgnCode" />
+        <result column="f_hx_status" property="fHxStatus" />
+        <result column="f_logic_delete" property="fLogicDelete" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        f_id, f_bill_code, f_bill_precode, f_bill_id, f_warehouse_id, f_bill_name, f_agen_code, f_agen_name, f_eff_date, f_exp_date, f_oper_id, f_operator, f_ope_date, f_is_putout, f_is_return, f_is_invalid, f_create_time, f_update_time, f_version, f_rgn_code, f_hx_status, f_logic_delete
+    </sql>
+
+</mapper>

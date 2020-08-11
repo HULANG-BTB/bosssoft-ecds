@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bosssoft.ecds.mapper.FbeStockOutnoticeItemMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.bosssoft.ecds.entity.FbeStockOutnoticeItemPo">
+        <id column="f_id" property="fId" />
+        <result column="f_pid" property="fPid" />
+        <result column="f_no" property="fNo" />
+        <result column="f_bill_code" property="fBillCode" />
+        <result column="f_bill_name" property="fBillName" />
+        <result column="f_number" property="fNumber" />
+        <result column="f_bill_no1" property="fBillNo1" />
+        <result column="f_bill_no2" property="fBillNo2" />
+        <result column="f_create_time" property="fCreateTime" />
+        <result column="f_update_time" property="fUpdateTime" />
+        <result column="f_version" property="fVersion" />
+        <result column="f_logic_delete" property="fLogicDelete" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        f_id, f_pid, f_no, f_bill_code, f_bill_name, f_number, f_bill_no1, f_bill_no2, f_create_time, f_update_time, f_version, f_logic_delete
+    </sql>
+
+</mapper>

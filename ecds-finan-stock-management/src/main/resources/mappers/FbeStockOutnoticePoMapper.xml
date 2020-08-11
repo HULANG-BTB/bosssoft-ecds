@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bosssoft.ecds.mapper.FbeStockOutnoticeMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.bosssoft.ecds.entity.FbeStockOutnoticePo">
+        <id column="f_id" property="fId" />
+        <result column="f_no" property="fNo" />
+        <result column="f_rgn_code" property="fRgnCode" />
+        <result column="f_warehouse_id" property="fWarehouseId" />
+        <result column="f_date" property="fDate" />
+        <result column="f_use_man" property="fUseMan" />
+        <result column="f_link_tel" property="fLinkTel" />
+        <result column="f_link_address" property="fLinkAddress" />
+        <result column="f_author" property="fAuthor" />
+        <result column="f_memo" property="fMemo" />
+        <result column="f_version" property="fVersion" />
+        <result column="f_abstact" property="fAbstact" />
+        <result column="f_create_time" property="fCreateTime" />
+        <result column="f_update_time" property="fUpdateTime" />
+        <result column="f_logic_delete" property="fLogicDelete" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        f_id, f_no, f_rgn_code, f_warehouse_id, f_date, f_use_man, f_link_tel, f_link_address, f_author, f_memo, f_version, f_abstact, f_create_time, f_update_time, f_logic_delete
+    </sql>
+
+</mapper>
