@@ -1,11 +1,12 @@
 package com.bosssoft.ecds.entity.po;
 
+import lombok.Data;
+
 import java.util.Date;
 
+@Data
 public class UnePayBook {
     private int fId;
-
-    private String fRgnCode;
 
     private String fAgenidCode;
 
@@ -23,30 +24,10 @@ public class UnePayBook {
 
     private String fBillId;
 
-    private String fBillBatchCode;
-
-    private String fBillNo;
-
-    private String fMemo;
-
-    private String fPayerId;
-
     private String fPayerName;
-
-    private String fPayerTel;
 
     private int fRecAccType;
 
-    private String fCheckCode;
-
-    private String fOperator;
-
-    private String fPayBillId;
-
-    private String fPayBillBatchCode;
-
-    private String fpaybillNo;
-
-    private String fPayerEmail;
-
+    private String fFinalDate;
+    
 }
