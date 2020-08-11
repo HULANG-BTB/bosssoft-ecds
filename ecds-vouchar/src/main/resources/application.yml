@@ -5,7 +5,7 @@ spring:
     username: root
     password: root
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/duid
+    url: jdbc:mysql://39.97.123.56/ecds_financial?serverTimezone=UTC&useUnicode=true&useSSL=false&characterEncoding=utf8
     type: com.alibaba.druid.pool.DruidDataSource
     #   数据源其他配置
     initialSize: 5
@@ -25,4 +25,11 @@ spring:
     useGlobalDataSourceStat: true
     connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
 server:
-  port: 75675
+  port: 8999
+mybatis-plus:
+  type-aliases-package: com.bosssoft.ecds.entity.po
+  mapper-locations: classpath*:/mappers/*.xml
+  global-config:
+      db-config:
+        logic-delete-value: 1 # 逻辑已删除值(默认为 1)
+        logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)

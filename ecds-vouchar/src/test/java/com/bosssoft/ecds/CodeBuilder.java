@@ -1,3 +1,4 @@
+/*
 package com.bosssoft.ecds;
 
 import com.baomidou.mybatisplus.annotation.DbType;
@@ -15,15 +16,18 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
+*/
 /**
  * @author liuke
- */
+ *//*
+
 public class CodeBuilder {
     @Test
     public void Test() {
 
         AutoGenerator autoGenerator = new AutoGenerator();
-        /**
+        */
+/**
          * "ubr_crt_info",
          * "ubr_bill_out_voucher"
          * "fbr_stock_return_voucher",
@@ -33,7 +37,8 @@ public class CodeBuilder {
          * "fbr_monitor_record_voucher",
          * "fbr_writeoff_voucher",
          * "fnr_bill_pay_voucher"
-         */
+         *//*
+
         // 数据库表名
         String[] tableList = {
                 "fnr_bill_pay_voucher"
@@ -141,3 +146,4 @@ public class CodeBuilder {
         autoGenerator.execute();
     }
 }
+*/
