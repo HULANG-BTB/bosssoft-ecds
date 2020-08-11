@@ -2,10 +2,10 @@ package com.bosssoft.ecds.controller;
 
 
 import com.bosssoft.ecds.entity.dto.PageDTO;
-import com.bosssoft.ecds.entity.dto.UabCrtDTO;
+import com.bosssoft.ecds.entity.dto.CrtDTO;
 import com.bosssoft.ecds.entity.vo.PageVO;
-import com.bosssoft.ecds.entity.vo.UabCrtVO;
-import com.bosssoft.ecds.service.UabCrtService;
+import com.bosssoft.ecds.entity.vo.CrtVO;
+import com.bosssoft.ecds.service.CrtService;
 import com.bosssoft.ecds.utils.MyBeanUtil;
 import com.bosssoft.ecds.utils.ResponseUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -24,11 +24,11 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@RequestMapping("/uabCrt")
-public class UabCrtController {
+@RequestMapping("/crt")
+public class CrtController {
 
     @Autowired
-    UabCrtService uabCrtService;
+    CrtService uabCrtService;
 
     /**
      *
@@ -40,8 +40,8 @@ public class UabCrtController {
      * @time: 09/08/2020 上午10:17
      */
     @PostMapping("/save")
-    public String save(@RequestBody UabCrtVO uabCrtVO){
-        UabCrtDTO uabCrtDTO = new UabCrtDTO();
+    public String save(@RequestBody CrtVO uabCrtVO){
+        CrtDTO uabCrtDTO = new CrtDTO();
         MyBeanUtil.copyProperties(uabCrtVO,uabCrtDTO);
         uabCrtDTO = uabCrtService.save(uabCrtDTO);
         MyBeanUtil.copyProperties(uabCrtDTO,uabCrtVO);
@@ -58,8 +58,8 @@ public class UabCrtController {
      * @time: 09/08/2020 上午10:17
      */
     @PostMapping("/remove")
-    public String remove(@RequestBody UabCrtVO uabCrtVO){
-        UabCrtDTO uabCrtDTO = new UabCrtDTO();
+    public String remove(@RequestBody CrtVO uabCrtVO){
+        CrtDTO uabCrtDTO = new CrtDTO();
         MyBeanUtil.copyProperties(uabCrtVO,uabCrtDTO);
         Boolean result = uabCrtService.remove(uabCrtDTO);
         MyBeanUtil.copyProperties(uabCrtDTO,uabCrtVO);
@@ -76,8 +76,8 @@ public class UabCrtController {
      * @time: 09/08/2020 上午10:17
      */
     @PostMapping("/update")
-    public String update(@RequestBody UabCrtVO uabCrtVO){
-        UabCrtDTO uabCrtDTO = new UabCrtDTO();
+    public String update(@RequestBody CrtVO uabCrtVO){
+        CrtDTO uabCrtDTO = new CrtDTO();
         MyBeanUtil.copyProperties(uabCrtVO,uabCrtDTO);
         Boolean result = uabCrtService.update(uabCrtDTO);
         MyBeanUtil.copyProperties(uabCrtDTO,uabCrtVO);
@@ -94,8 +94,8 @@ public class UabCrtController {
      * @time: 09/08/2020 上午10:17
      */
     @PostMapping("/getByCrtCode")
-    public String getByCrtCode(@RequestBody UabCrtVO uabCrtVO){
-        UabCrtDTO uabCrtDTO = new UabCrtDTO();
+    public String getByCrtCode(@RequestBody CrtVO uabCrtVO){
+        CrtDTO uabCrtDTO = new CrtDTO();
         MyBeanUtil.copyProperties(uabCrtVO,uabCrtDTO);
         uabCrtDTO = uabCrtService.getByCrtCode(uabCrtDTO);
         MyBeanUtil.copyProperties(uabCrtDTO,uabCrtVO);
@@ -112,11 +112,11 @@ public class UabCrtController {
      * @time: 09/08/2020 上午10:17
      */
     @PostMapping("/getByAgenCode")
-    public String getByAgenCode(@RequestBody UabCrtVO uabCrtVO){
-        UabCrtDTO uabCrtDTO = new UabCrtDTO();
+    public String getByAgenCode(@RequestBody CrtVO uabCrtVO){
+        CrtDTO uabCrtDTO = new CrtDTO();
         MyBeanUtil.copyProperties(uabCrtVO,uabCrtDTO);
-        List<UabCrtDTO> uabCrtDTOList = uabCrtService.getByAgenCode(uabCrtDTO);
-        MyBeanUtil.copyListProperties(uabCrtDTOList,UabCrtVO.class);
+        List<CrtDTO> uabCrtDTOList = uabCrtService.getByAgenCode(uabCrtDTO);
+        MyBeanUtil.copyListProperties(uabCrtDTOList, CrtVO.class);
         return ResponseUtils.getResponse(uabCrtDTOList,ResponseUtils.ResultType.OK);
     }
 
@@ -130,24 +130,19 @@ public class UabCrtController {
      */
     @GetMapping("/listAll")
     public String listAll(){
-        List<UabCrtDTO> uabCrtDTOList = uabCrtService.listAll();
-        List<UabCrtVO> uabCrtVOList = MyBeanUtil.copyListProperties(uabCrtDTOList, UabCrtVO.class);
+        List<CrtDTO> uabCrtDTOList = uabCrtService.listAll();
+        List<CrtVO> uabCrtVOList = MyBeanUtil.copyListProperties(uabCrtDTOList, CrtVO.class);
         return ResponseUtils.getResponse(uabCrtVOList,ResponseUtils.ResultType.OK);
     }
 
     /**
      * 通过分页查询
      *
-     * @param page
-     * @param limit
+     * @param pageVO
      * @return
      */
-    @GetMapping("listByPage")
-    public String listByPage(@RequestParam("page") Long page, @RequestParam("limit") Long limit, @RequestParam("keyword") String keyword) {
-        PageVO pageVO = new PageVO();
-        pageVO.setLimit(limit);
-        pageVO.setPage(page);
-        pageVO.setKeyword(keyword);
+    @PostMapping("listByPage")
+    public String listByPage(@RequestBody PageVO pageVO) {
         PageDTO pageDTO = MyBeanUtil.copyProperties(pageVO, PageDTO.class);
         pageDTO = uabCrtService.listByPage(pageDTO);
 
@@ -162,8 +157,8 @@ public class UabCrtController {
      * @return
      */
     @PostMapping("removeBatch")
-    public String removeBatch(@RequestBody List<UabCrtVO> uabCrtVOList) {
-        List<UabCrtDTO> uabCrtDTOList = MyBeanUtil.copyListProperties(uabCrtVOList, UabCrtDTO.class);
+    public String removeBatch(@RequestBody List<CrtVO> uabCrtVOList) {
+        List<CrtDTO> uabCrtDTOList = MyBeanUtil.copyListProperties(uabCrtVOList, CrtDTO.class);
         Boolean result = uabCrtService.removeBatch(uabCrtDTOList);
         return ResponseUtils.getResponse(result, ResponseUtils.ResultType.OK);
     }

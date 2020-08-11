@@ -1,12 +1,10 @@
 package com.bosssoft.ecds.entity.dto;
 
-import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
 
 import java.util.Date;
 
@@ -17,7 +15,7 @@ import java.util.Date;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @ApiModel(value="FabAgenDTO对象", description="")
-public class FabAgenDTO extends Model<FabAgenDTO> {
+public class AgenDTO extends Model<AgenDTO> {
 
     @ApiModelProperty(value = "主键")
     private Long id;

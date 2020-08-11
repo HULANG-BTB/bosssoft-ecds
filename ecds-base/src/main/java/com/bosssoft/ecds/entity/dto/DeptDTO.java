@@ -14,7 +14,7 @@ import java.util.Date;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @ApiModel(value="FabDeptDTO对象", description="")
-public class FabDeptDTO extends Model<FabDeptDTO> {
+public class DeptDTO extends Model<DeptDTO> {
 
 
     @ApiModelProperty(value = "主键")

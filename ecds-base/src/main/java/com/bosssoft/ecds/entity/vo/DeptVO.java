@@ -15,7 +15,7 @@ import java.util.Date;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @ApiModel(value="FabDeptVO对象", description="")
-public class FabDeptVO extends Model<FabDeptVO> {
+public class DeptVO extends Model<DeptVO> {
 
     @ApiModelProperty(value = "主键")
     private Long id;

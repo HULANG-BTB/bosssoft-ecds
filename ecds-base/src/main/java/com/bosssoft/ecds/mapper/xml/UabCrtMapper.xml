@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.bosssoft.ecds.dao.UabCrtDao">
+<mapper namespace="com.bosssoft.ecds.dao.CrtDao">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.bosssoft.ecds.entity.po.UabCrtPO">
+    <resultMap id="BaseResultMap" type="com.bosssoft.ecds.entity.po.CrtPO">
         <id column="f_id" property="id" />
         <result column="f_agen_code" property="agenCode" />
         <result column="f_agen_name" property="agenName" />

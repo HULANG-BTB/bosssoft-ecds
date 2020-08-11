@@ -28,7 +28,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @TableName("uab_crt")
 @ApiModel(value="UabCrtPO对象", description="")
-public class UabCrtPO extends Model<UabCrtPO> {
+public class CrtPO extends Model<CrtPO> {
 
 
     @ApiModelProperty(value = "主键")

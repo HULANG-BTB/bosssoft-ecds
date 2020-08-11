@@ -9,13 +9,13 @@ import com.bosssoft.ecds.common.response.CommonCode;
 import com.bosssoft.ecds.common.response.QueryResponseResult;
 import com.bosssoft.ecds.common.response.QueryResult;
 import com.bosssoft.ecds.common.response.ResponseResult;
-import com.bosssoft.ecds.dao.FabAgenDao;
+import com.bosssoft.ecds.dao.AgenDao;
 import com.bosssoft.ecds.dao.FabFinDeptDao;
-import com.bosssoft.ecds.entity.po.FabAgenPO;
+import com.bosssoft.ecds.entity.po.AgenPO;
 import com.bosssoft.ecds.entity.po.FabFinDept;
 import com.bosssoft.ecds.entity.vo.FabFinDeptVo;
 import com.bosssoft.ecds.enums.FabFinDeptResultCode;
-import com.bosssoft.ecds.service.FabAgenService;
+import com.bosssoft.ecds.service.AgenService;
 import com.bosssoft.ecds.service.FabFinDeptService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,9 +38,9 @@ public class FabFinDeptServiceImpl extends ServiceImpl<FabFinDeptDao, FabFinDept
     @Autowired
     private FabFinDeptDao fabFinDeptMapper;
     @Autowired
-    private FabAgenDao fabAgenDao;
+    private AgenDao fabAgenDao;
     @Autowired
-    private FabAgenService fabAgenService;
+    private AgenService fabAgenService;
 
     @Override
     /**
@@ -137,7 +137,7 @@ public class FabFinDeptServiceImpl extends ServiceImpl<FabFinDeptDao, FabFinDept
      * @date 2020/8/6
      */
     private boolean checkHasFabAgen(Long id) {
-        Integer count = fabAgenDao.selectCount(new LambdaQueryWrapper<FabAgenPO>().eq(FabAgenPO::getFindeptId, id));
+        Integer count = fabAgenDao.selectCount(new LambdaQueryWrapper<AgenPO>().eq(AgenPO::getFindeptId, id));
         if (count > 0) {
             return true;
         }

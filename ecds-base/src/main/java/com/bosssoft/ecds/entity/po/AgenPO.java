@@ -28,7 +28,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @TableName("fab_agen")
 @ApiModel(value="FabAgenPO对象", description="")
-public class FabAgenPO extends Model<FabAgenPO> {
+public class AgenPO extends Model<AgenPO> {
 
 
     @ApiModelProperty(value = "主键")

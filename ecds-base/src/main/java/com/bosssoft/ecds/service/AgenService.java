@@ -1,9 +1,8 @@
 package com.bosssoft.ecds.service;
 
-import com.bosssoft.ecds.entity.dto.FabAgenDTO;
-import com.bosssoft.ecds.entity.dto.FabDeptDTO;
+import com.bosssoft.ecds.entity.dto.AgenDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
-import com.bosssoft.ecds.entity.po.FabAgenPO;
+import com.bosssoft.ecds.entity.po.AgenPO;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -16,7 +15,7 @@ import java.util.List;
  * @author vihenne
  * @since 2020-08-09
  */
-public interface FabAgenService extends IService<FabAgenPO> {
+public interface AgenService extends IService<AgenPO> {
 
     /**
      *
@@ -27,7 +26,7 @@ public interface FabAgenService extends IService<FabAgenPO> {
      * @author: YuHangChen
      * @time: 09/08/2020 上午10:17
      */
-    public FabAgenDTO save(FabAgenDTO fabAgenDTO);
+    public AgenDTO save(AgenDTO fabAgenDTO);
 
     /**
      *
@@ -38,7 +37,7 @@ public interface FabAgenService extends IService<FabAgenPO> {
      * @author: YuHangChen
      * @time: 09/08/2020 上午10:17
      */
-    public boolean remove(FabAgenDTO fabAgenDTO);
+    public boolean remove(AgenDTO fabAgenDTO);
 
     /**
      *
@@ -49,7 +48,7 @@ public interface FabAgenService extends IService<FabAgenPO> {
      * @author: YuHangChen
      * @time: 09/08/2020 上午10:17
      */
-    public boolean update(FabAgenDTO fabAgenDTO);
+    public boolean update(AgenDTO fabAgenDTO);
 
     /**
      *
@@ -60,7 +59,7 @@ public interface FabAgenService extends IService<FabAgenPO> {
      * @author: YuHangChen
      * @time: 09/08/2020 上午10:17
      */
-    public FabAgenDTO getByAgenCode(FabAgenDTO fabAgenDTO);
+    public AgenDTO getByAgenCode(AgenDTO fabAgenDTO);
 
     /**
      *
@@ -71,7 +70,7 @@ public interface FabAgenService extends IService<FabAgenPO> {
      * @author: YuHangChen
      * @time: 09/08/2020 上午10:17
      */
-    public FabAgenDTO getByAgenName(FabAgenDTO fabAgenDTO);
+    public AgenDTO getByAgenName(AgenDTO fabAgenDTO);
 
     /**
      *
@@ -82,7 +81,7 @@ public interface FabAgenService extends IService<FabAgenPO> {
      * @author: YuHangChen
      * @time: 09/08/2020 上午10:17
      */
-    public List<FabAgenDTO> getByDeptCode(FabAgenDTO fabAgenDTO);
+    public List<AgenDTO> getByDeptCode(AgenDTO fabAgenDTO);
 
     /**
      *
@@ -92,7 +91,7 @@ public interface FabAgenService extends IService<FabAgenPO> {
      * @author: YuHangChen
      * @time: 09/08/2020 上午10:17
      */
-    public List<FabAgenDTO> listAll();
+    public List<AgenDTO> listAll();
 
     /**
      * 分页读取
@@ -108,6 +107,6 @@ public interface FabAgenService extends IService<FabAgenPO> {
      * @param fabAgenDTOList
      * @return
      */
-    public Boolean removeBatch(List<FabAgenDTO> fabAgenDTOList);
+    public Boolean removeBatch(List<AgenDTO> fabAgenDTOList);
 
 }
