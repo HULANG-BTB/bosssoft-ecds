@@ -9,11 +9,11 @@ import org.springframework.stereotype.Service;
 /**
  * <p>
  *  服务实现类
- *  归档领用信息
+ *  归档领用
  * </p>
  *
  * @author liuke
- * @since 2020-08-10
+ * @since 2020-08-11
  */
 @Service
 public class CrtInfoServiceImpl extends ServiceImpl<CrtInfoDao, CrtInfoPO> implements CrtInfoService {

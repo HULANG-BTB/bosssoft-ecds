@@ -1,20 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.bosssoft.ecds.dao.CrtInfoDao">
-    <!--归档领用信息-->
+<mapper namespace="com.bosssoft.ecds.dao.MonitorRecordVoucherDao">
+    <!--归档预警记录-->
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.bosssoft.ecds.entity.po.CrtInfoPO">
+    <resultMap id="BaseResultMap" type="com.bosssoft.ecds.entity.po.MonitorRecordVoucherPO">
         <id column="f_id" property="id" />
         <result column="f_agen_idcode" property="agenIdcode" />
-        <result column="f_apply_user" property="applyUser" />
-        <result column="f_apply_time" property="applyTime" />
-        <result column="f_batch_id" property="batchId" />
+        <result column="f_mnt_time" property="mntTime" />
+        <result column="f_mnt_cont" property="mntCont" />
         <result column="f_bill_code" property="billCode" />
-        <result column="f_bill_no1" property="billNo1" />
-        <result column="f_bill_no2" property="billNo2" />
-        <result column="f_warehouse_id" property="warehouseId" />
-        <result column="f_number" property="number" />
-        <result column="f_use_number" property="useNumber" />
+        <result column="f_bill_no" property="billNo" />
+        <result column="f_evt_name" property="evtName" />
         <result column="f_is_save" property="isSave" />
         <result column="f_create_time" property="createTime" />
         <result column="f_update_time" property="updateTime" />
@@ -26,7 +22,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        f_id, f_agen_idcode, f_apply_user, f_apply_time, f_batch_id, f_bill_code, f_bill_no1, f_bill_no2, f_warehouse_id, f_number, f_use_number, f_is_save, f_create_time, f_update_time, f_operator_id, f_operator, f_version, f_logic_delete
+        f_id, f_agen_idcode, f_mnt_time, f_mnt_cont, f_bill_code, f_bill_no, f_evt_name, f_is_save, f_create_time, f_update_time, f_operator_id, f_operator, f_version, f_logic_delete
     </sql>
 
 </mapper>

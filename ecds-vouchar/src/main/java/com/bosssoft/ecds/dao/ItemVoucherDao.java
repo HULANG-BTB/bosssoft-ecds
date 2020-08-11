@@ -1,6 +1,6 @@
 package com.bosssoft.ecds.dao;
 
-import com.bosssoft.ecds.entity.po.BillOutVoucherPO;
+import com.bosssoft.ecds.entity.po.ItemVoucherPO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author liuke
  * @since 2020-08-11
  */
-public interface BillOutVoucherDao extends BaseMapper<BillOutVoucherPO> {
+public interface ItemVoucherDao extends BaseMapper<ItemVoucherPO> {
 
 }

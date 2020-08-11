@@ -18,17 +18,17 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- *  归档票据发票记录
+ * 
  * </p>
  *
  * @author liuke
- * @since 2020-08-10
+ * @since 2020-08-11
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @TableName("ubr_bill_out_voucher")
-@ApiModel(value="BillOutVoucherPO对象", description="")
+@ApiModel(value="BillOutVoucherPO对象", description="票据发票")
 public class BillOutVoucherPO extends Model<BillOutVoucherPO> {
 
 

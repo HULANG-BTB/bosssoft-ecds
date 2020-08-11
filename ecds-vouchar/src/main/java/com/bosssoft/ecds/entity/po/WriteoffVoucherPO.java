@@ -27,9 +27,9 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("ubr_crt_info")
-@ApiModel(value="CrtInfoPO对象", description="归档领用")
-public class CrtInfoPO extends Model<CrtInfoPO> {
+@TableName("fbr_writeoff_voucher")
+@ApiModel(value="WriteoffVoucherPO对象", description="审验记录")
+public class WriteoffVoucherPO extends Model<WriteoffVoucherPO> {
 
 
     @ApiModelProperty(value = "主键")
@@ -40,41 +40,25 @@ public class CrtInfoPO extends Model<CrtInfoPO> {
     @TableField("f_agen_idcode")
     private String agenIdcode;
 
-    @ApiModelProperty(value = "申请人姓名")
-    @TableField("f_apply_user")
-    private String applyUser;
+    @ApiModelProperty(value = "预警票号")
+    @TableField("f_bill_no")
+    private String billNo;
 
-    @ApiModelProperty(value = "申请时间")
-    @TableField("f_apply_time")
-    private Date applyTime;
+    @ApiModelProperty(value = "(审核)签名人名字")
+    @TableField("f_sign_name")
+    private String signName;
 
-    @ApiModelProperty(value = "票据批次id")
-    @TableField("f_batch_id")
-    private String batchId;
+    @ApiModelProperty(value = "(审核)签名时间")
+    @TableField("f_sign_time")
+    private Date signTime;
 
-    @ApiModelProperty(value = "票据代码")
-    @TableField("f_bill_code")
-    private String billCode;
+    @ApiModelProperty(value = "(审核)签名状态")
+    @TableField("f_sign_status")
+    private Boolean signStatus;
 
-    @ApiModelProperty(value = "票据起始票号")
-    @TableField("f_bill_no1")
-    private String billNo1;
-
-    @ApiModelProperty(value = "票据结束票号")
-    @TableField("f_bill_no2")
-    private String billNo2;
-
-    @ApiModelProperty(value = "领用仓库id")
-    @TableField("f_warehouse_id")
-    private Long warehouseId;
-
-    @ApiModelProperty(value = "票据领用数量")
-    @TableField("f_number")
-    private Long number;
-
-    @ApiModelProperty(value = "票据使用数量")
-    @TableField("f_use_number")
-    private Long useNumber;
+    @ApiModelProperty(value = "审核未通过原因")
+    @TableField("f_sta_reason")
+    private String staReason;
 
     @ApiModelProperty(value = "归档状态")
     @TableField("f_is_save")
@@ -111,23 +95,15 @@ public class CrtInfoPO extends Model<CrtInfoPO> {
 
     public static final String F_AGEN_IDCODE = "f_agen_idcode";
 
-    public static final String F_APPLY_USER = "f_apply_user";
+    public static final String F_BILL_NO = "f_bill_no";
 
-    public static final String F_APPLY_TIME = "f_apply_time";
+    public static final String F_SIGN_NAME = "f_sign_name";
 
-    public static final String F_BATCH_ID = "f_batch_id";
+    public static final String F_SIGN_TIME = "f_sign_time";
 
-    public static final String F_BILL_CODE = "f_bill_code";
+    public static final String F_SIGN_STATUS = "f_sign_status";
 
-    public static final String F_BILL_NO1 = "f_bill_no1";
-
-    public static final String F_BILL_NO2 = "f_bill_no2";
-
-    public static final String F_WAREHOUSE_ID = "f_warehouse_id";
-
-    public static final String F_NUMBER = "f_number";
-
-    public static final String F_USE_NUMBER = "f_use_number";
+    public static final String F_STA_REASON = "f_sta_reason";
 
     public static final String F_IS_SAVE = "f_is_save";
 

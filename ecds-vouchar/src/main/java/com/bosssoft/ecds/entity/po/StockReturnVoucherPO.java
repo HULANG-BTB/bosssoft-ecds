@@ -27,9 +27,9 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("ubr_crt_info")
-@ApiModel(value="CrtInfoPO对象", description="归档领用")
-public class CrtInfoPO extends Model<CrtInfoPO> {
+@TableName("fbr_stock_return_voucher")
+@ApiModel(value="StockReturnVoucherPO对象", description="归档退票")
+public class StockReturnVoucherPO extends Model<StockReturnVoucherPO> {
 
 
     @ApiModelProperty(value = "主键")
@@ -40,41 +40,53 @@ public class CrtInfoPO extends Model<CrtInfoPO> {
     @TableField("f_agen_idcode")
     private String agenIdcode;
 
-    @ApiModelProperty(value = "申请人姓名")
-    @TableField("f_apply_user")
-    private String applyUser;
-
-    @ApiModelProperty(value = "申请时间")
-    @TableField("f_apply_time")
-    private Date applyTime;
-
     @ApiModelProperty(value = "票据批次id")
-    @TableField("f_batch_id")
-    private String batchId;
+    @TableField("f_bill_batch_id")
+    private Long billBatchId;
 
     @ApiModelProperty(value = "票据代码")
     @TableField("f_bill_code")
     private String billCode;
 
-    @ApiModelProperty(value = "票据起始票号")
+    @ApiModelProperty(value = "票据起始号码")
     @TableField("f_bill_no1")
     private String billNo1;
 
-    @ApiModelProperty(value = "票据结束票号")
+    @ApiModelProperty(value = "票据终止号码")
     @TableField("f_bill_no2")
     private String billNo2;
 
-    @ApiModelProperty(value = "领用仓库id")
-    @TableField("f_warehouse_id")
-    private Long warehouseId;
-
-    @ApiModelProperty(value = "票据领用数量")
+    @ApiModelProperty(value = "退票数量")
     @TableField("f_number")
     private Long number;
 
-    @ApiModelProperty(value = "票据使用数量")
-    @TableField("f_use_number")
-    private Long useNumber;
+    @ApiModelProperty(value = "票据退票人姓名")
+    @TableField("f_returner")
+    private String returner;
+
+    @ApiModelProperty(value = "票据退票时间")
+    @TableField("f_date")
+    private Date date;
+
+    @ApiModelProperty(value = "票据退票原因")
+    @TableField("f_return_reason")
+    private String returnReason;
+
+    @ApiModelProperty(value = "退票审核时间")
+    @TableField("f_change_time")
+    private Date changeTime;
+
+    @ApiModelProperty(value = "退票审核人姓名")
+    @TableField("f_change_name")
+    private String changeName;
+
+    @ApiModelProperty(value = "退票审核状态")
+    @TableField("f_change_state")
+    private Integer changeState;
+
+    @ApiModelProperty(value = "退票审核意见（未通过原因）")
+    @TableField("f_change_situ")
+    private String changeSitu;
 
     @ApiModelProperty(value = "归档状态")
     @TableField("f_is_save")
@@ -111,11 +123,7 @@ public class CrtInfoPO extends Model<CrtInfoPO> {
 
     public static final String F_AGEN_IDCODE = "f_agen_idcode";
 
-    public static final String F_APPLY_USER = "f_apply_user";
-
-    public static final String F_APPLY_TIME = "f_apply_time";
-
-    public static final String F_BATCH_ID = "f_batch_id";
+    public static final String F_BILL_BATCH_ID = "f_bill_batch_id";
 
     public static final String F_BILL_CODE = "f_bill_code";
 
@@ -123,11 +131,21 @@ public class CrtInfoPO extends Model<CrtInfoPO> {
 
     public static final String F_BILL_NO2 = "f_bill_no2";
 
-    public static final String F_WAREHOUSE_ID = "f_warehouse_id";
-
     public static final String F_NUMBER = "f_number";
 
-    public static final String F_USE_NUMBER = "f_use_number";
+    public static final String F_RETURNER = "f_returner";
+
+    public static final String F_DATE = "f_date";
+
+    public static final String F_RETURN_REASON = "f_return_reason";
+
+    public static final String F_CHANGE_TIME = "f_change_time";
+
+    public static final String F_CHANGE_NAME = "f_change_name";
+
+    public static final String F_CHANGE_STATE = "f_change_state";
+
+    public static final String F_CHANGE_SITU = "f_change_situ";
 
     public static final String F_IS_SAVE = "f_is_save";
 

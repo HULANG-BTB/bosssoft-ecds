@@ -1,6 +1,5 @@
 package com.bosssoft.ecds.dao;
 
-import com.bosssoft.ecds.entity.po.FbrItemVoucherPO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

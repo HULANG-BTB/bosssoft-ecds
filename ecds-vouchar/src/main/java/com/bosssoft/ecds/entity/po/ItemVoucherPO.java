@@ -1,5 +1,6 @@
 package com.bosssoft.ecds.entity.po;
 
+import java.math.BigDecimal;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
@@ -27,9 +28,9 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("ubr_crt_info")
-@ApiModel(value="CrtInfoPO对象", description="归档领用")
-public class CrtInfoPO extends Model<CrtInfoPO> {
+@TableName("fbr_item_voucher")
+@ApiModel(value="ItemVoucherPO对象", description="归档可用")
+public class ItemVoucherPO extends Model<ItemVoucherPO> {
 
 
     @ApiModelProperty(value = "主键")
@@ -40,41 +41,17 @@ public class CrtInfoPO extends Model<CrtInfoPO> {
     @TableField("f_agen_idcode")
     private String agenIdcode;
 
-    @ApiModelProperty(value = "申请人姓名")
-    @TableField("f_apply_user")
-    private String applyUser;
+    @ApiModelProperty(value = "科目名称")
+    @TableField("f_sub_name")
+    private String subName;
 
-    @ApiModelProperty(value = "申请时间")
-    @TableField("f_apply_time")
-    private Date applyTime;
+    @ApiModelProperty(value = "项目名称")
+    @TableField("f_item_name")
+    private String itemName;
 
-    @ApiModelProperty(value = "票据批次id")
-    @TableField("f_batch_id")
-    private String batchId;
-
-    @ApiModelProperty(value = "票据代码")
-    @TableField("f_bill_code")
-    private String billCode;
-
-    @ApiModelProperty(value = "票据起始票号")
-    @TableField("f_bill_no1")
-    private String billNo1;
-
-    @ApiModelProperty(value = "票据结束票号")
-    @TableField("f_bill_no2")
-    private String billNo2;
-
-    @ApiModelProperty(value = "领用仓库id")
-    @TableField("f_warehouse_id")
-    private Long warehouseId;
-
-    @ApiModelProperty(value = "票据领用数量")
-    @TableField("f_number")
-    private Long number;
-
-    @ApiModelProperty(value = "票据使用数量")
-    @TableField("f_use_number")
-    private Long useNumber;
+    @ApiModelProperty(value = "收费费用")
+    @TableField("f_charge")
+    private BigDecimal charge;
 
     @ApiModelProperty(value = "归档状态")
     @TableField("f_is_save")
@@ -111,23 +88,11 @@ public class CrtInfoPO extends Model<CrtInfoPO> {
 
     public static final String F_AGEN_IDCODE = "f_agen_idcode";
 
-    public static final String F_APPLY_USER = "f_apply_user";
+    public static final String F_SUB_NAME = "f_sub_name";
 
-    public static final String F_APPLY_TIME = "f_apply_time";
+    public static final String F_ITEM_NAME = "f_item_name";
 
-    public static final String F_BATCH_ID = "f_batch_id";
-
-    public static final String F_BILL_CODE = "f_bill_code";
-
-    public static final String F_BILL_NO1 = "f_bill_no1";
-
-    public static final String F_BILL_NO2 = "f_bill_no2";
-
-    public static final String F_WAREHOUSE_ID = "f_warehouse_id";
-
-    public static final String F_NUMBER = "f_number";
-
-    public static final String F_USE_NUMBER = "f_use_number";
+    public static final String F_CHARGE = "f_charge";
 
     public static final String F_IS_SAVE = "f_is_save";
 

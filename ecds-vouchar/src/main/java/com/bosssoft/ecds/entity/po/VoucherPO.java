@@ -27,9 +27,9 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("ubr_crt_info")
-@ApiModel(value="CrtInfoPO对象", description="归档领用")
-public class CrtInfoPO extends Model<CrtInfoPO> {
+@TableName("fbr_voucher")
+@ApiModel(value="VoucherPO对象", description="归档总览")
+public class VoucherPO extends Model<VoucherPO> {
 
 
     @ApiModelProperty(value = "主键")
@@ -40,45 +40,45 @@ public class CrtInfoPO extends Model<CrtInfoPO> {
     @TableField("f_agen_idcode")
     private String agenIdcode;
 
-    @ApiModelProperty(value = "申请人姓名")
-    @TableField("f_apply_user")
-    private String applyUser;
+    @ApiModelProperty(value = "单位名称")
+    @TableField("f_agen_name")
+    private String agenName;
 
-    @ApiModelProperty(value = "申请时间")
-    @TableField("f_apply_time")
-    private Date applyTime;
+    @ApiModelProperty(value = "单位分类")
+    @TableField("f_kind_name")
+    private String kindName;
 
-    @ApiModelProperty(value = "票据批次id")
-    @TableField("f_batch_id")
-    private String batchId;
-
-    @ApiModelProperty(value = "票据代码")
-    @TableField("f_bill_code")
-    private String billCode;
-
-    @ApiModelProperty(value = "票据起始票号")
-    @TableField("f_bill_no1")
-    private String billNo1;
-
-    @ApiModelProperty(value = "票据结束票号")
-    @TableField("f_bill_no2")
-    private String billNo2;
-
-    @ApiModelProperty(value = "领用仓库id")
-    @TableField("f_warehouse_id")
-    private Long warehouseId;
+    @ApiModelProperty(value = "单位地址")
+    @TableField("f_link_addr")
+    private String linkAddr;
 
     @ApiModelProperty(value = "票据领用数量")
-    @TableField("f_number")
-    private Long number;
+    @TableField("f_apply_number")
+    private Long applyNumber;
 
     @ApiModelProperty(value = "票据使用数量")
     @TableField("f_use_number")
     private Long useNumber;
 
-    @ApiModelProperty(value = "归档状态")
-    @TableField("f_is_save")
-    private Boolean isSave;
+    @ApiModelProperty(value = "票据已审核数量")
+    @TableField("f_author_number")
+    private Long authorNumber;
+
+    @ApiModelProperty(value = "票据未审核数量")
+    @TableField("f_unauthor_number")
+    private Long unauthorNumber;
+
+    @ApiModelProperty(value = "票据预警票数")
+    @TableField("f_warn_number")
+    private Long warnNumber;
+
+    @ApiModelProperty(value = "票据退票数量")
+    @TableField("f_return_number")
+    private Long returnNumber;
+
+    @ApiModelProperty(value = "票据销毁数量")
+    @TableField("f_destory_number")
+    private Long destoryNumber;
 
     @ApiModelProperty(value = "创建时间")
     @TableField(value = "f_create_time", fill = FieldFill.INSERT)
@@ -111,25 +111,25 @@ public class CrtInfoPO extends Model<CrtInfoPO> {
 
     public static final String F_AGEN_IDCODE = "f_agen_idcode";
 
-    public static final String F_APPLY_USER = "f_apply_user";
+    public static final String F_AGEN_NAME = "f_agen_name";
 
-    public static final String F_APPLY_TIME = "f_apply_time";
+    public static final String F_KIND_NAME = "f_kind_name";
 
-    public static final String F_BATCH_ID = "f_batch_id";
+    public static final String F_LINK_ADDR = "f_link_addr";
 
-    public static final String F_BILL_CODE = "f_bill_code";
-
-    public static final String F_BILL_NO1 = "f_bill_no1";
-
-    public static final String F_BILL_NO2 = "f_bill_no2";
-
-    public static final String F_WAREHOUSE_ID = "f_warehouse_id";
-
-    public static final String F_NUMBER = "f_number";
+    public static final String F_APPLY_NUMBER = "f_apply_number";
 
     public static final String F_USE_NUMBER = "f_use_number";
 
-    public static final String F_IS_SAVE = "f_is_save";
+    public static final String F_AUTHOR_NUMBER = "f_author_number";
+
+    public static final String F_UNAUTHOR_NUMBER = "f_unauthor_number";
+
+    public static final String F_WARN_NUMBER = "f_warn_number";
+
+    public static final String F_RETURN_NUMBER = "f_return_number";
+
+    public static final String F_DESTORY_NUMBER = "f_destory_number";
 
     public static final String F_CREATE_TIME = "f_create_time";
 

@@ -27,9 +27,9 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("ubr_crt_info")
-@ApiModel(value="CrtInfoPO对象", description="归档领用")
-public class CrtInfoPO extends Model<CrtInfoPO> {
+@TableName("fbr_monitor_record_voucher")
+@ApiModel(value="MonitorRecordVoucherPO对象", description="归档预警")
+public class MonitorRecordVoucherPO extends Model<MonitorRecordVoucherPO> {
 
 
     @ApiModelProperty(value = "主键")
@@ -40,41 +40,25 @@ public class CrtInfoPO extends Model<CrtInfoPO> {
     @TableField("f_agen_idcode")
     private String agenIdcode;
 
-    @ApiModelProperty(value = "申请人姓名")
-    @TableField("f_apply_user")
-    private String applyUser;
+    @ApiModelProperty(value = "票据预警时间")
+    @TableField("f_mnt_time")
+    private Date mntTime;
 
-    @ApiModelProperty(value = "申请时间")
-    @TableField("f_apply_time")
-    private Date applyTime;
+    @ApiModelProperty(value = "预警内容")
+    @TableField("f_mnt_cont")
+    private String mntCont;
 
-    @ApiModelProperty(value = "票据批次id")
-    @TableField("f_batch_id")
-    private String batchId;
-
-    @ApiModelProperty(value = "票据代码")
+    @ApiModelProperty(value = "预警票号编码")
     @TableField("f_bill_code")
     private String billCode;
 
-    @ApiModelProperty(value = "票据起始票号")
-    @TableField("f_bill_no1")
-    private String billNo1;
+    @ApiModelProperty(value = "预警票号")
+    @TableField("f_bill_no")
+    private String billNo;
 
-    @ApiModelProperty(value = "票据结束票号")
-    @TableField("f_bill_no2")
-    private String billNo2;
-
-    @ApiModelProperty(value = "领用仓库id")
-    @TableField("f_warehouse_id")
-    private Long warehouseId;
-
-    @ApiModelProperty(value = "票据领用数量")
-    @TableField("f_number")
-    private Long number;
-
-    @ApiModelProperty(value = "票据使用数量")
-    @TableField("f_use_number")
-    private Long useNumber;
+    @ApiModelProperty(value = "监控事项(规则)")
+    @TableField("f_evt_name")
+    private String evtName;
 
     @ApiModelProperty(value = "归档状态")
     @TableField("f_is_save")
@@ -111,23 +95,15 @@ public class CrtInfoPO extends Model<CrtInfoPO> {
 
     public static final String F_AGEN_IDCODE = "f_agen_idcode";
 
-    public static final String F_APPLY_USER = "f_apply_user";
+    public static final String F_MNT_TIME = "f_mnt_time";
 
-    public static final String F_APPLY_TIME = "f_apply_time";
-
-    public static final String F_BATCH_ID = "f_batch_id";
+    public static final String F_MNT_CONT = "f_mnt_cont";
 
     public static final String F_BILL_CODE = "f_bill_code";
 
-    public static final String F_BILL_NO1 = "f_bill_no1";
+    public static final String F_BILL_NO = "f_bill_no";
 
-    public static final String F_BILL_NO2 = "f_bill_no2";
-
-    public static final String F_WAREHOUSE_ID = "f_warehouse_id";
-
-    public static final String F_NUMBER = "f_number";
-
-    public static final String F_USE_NUMBER = "f_use_number";
+    public static final String F_EVT_NAME = "f_evt_name";
 
     public static final String F_IS_SAVE = "f_is_save";
 

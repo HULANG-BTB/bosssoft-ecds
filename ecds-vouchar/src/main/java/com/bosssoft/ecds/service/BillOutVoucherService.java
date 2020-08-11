@@ -6,11 +6,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
 /**
  * <p>
  *  服务类
- *  归档票据发票记录
+ *  票据发票
  * </p>
  *
  * @author liuke
- * @since 2020-08-10
+ * @since 2020-08-11
  */
 public interface BillOutVoucherService extends IService<BillOutVoucherPO> {
 

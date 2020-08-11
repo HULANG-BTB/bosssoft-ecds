@@ -6,11 +6,10 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 /**
  * <p>
  *  Mapper 接口
- *  归档领用信息
  * </p>
  *
  * @author liuke
- * @since 2020-08-10
+ * @since 2020-08-11
  */
 public interface CrtInfoDao extends BaseMapper<CrtInfoPO> {
 
