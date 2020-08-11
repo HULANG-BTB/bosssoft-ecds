@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bosssoft.ecds.common.response.CommonCode;
 import com.bosssoft.ecds.common.response.QueryResponseResult;
 import com.bosssoft.ecds.common.response.QueryResult;
+import com.bosssoft.ecds.constant.IncomeSortConstant;
 import com.bosssoft.ecds.constant.PageConstant;
 import com.bosssoft.ecds.dao.IncomeSortDao;
 import com.bosssoft.ecds.entity.dto.IncomeSortDTO;
@@ -78,8 +79,8 @@ public class IncomeSortServiceImpl implements IncomeSortService {
     private QueryWrapper wrapIncomeSortVO(FuzzyQueryIncomeSortVO fuzzyQueryIncomeSortVO) {
         QueryWrapper<Object> queryWrapper = new QueryWrapper<>();
         if (fuzzyQueryIncomeSortVO.getId()!=null){
-            queryWrapper.like("f_parent_id", fuzzyQueryIncomeSortVO.getId());
-
+            queryWrapper.eq("f_parent_id", fuzzyQueryIncomeSortVO.getId())
+            .or().eq("f_id",fuzzyQueryIncomeSortVO.getId());
         }else{
             if (!org.springframework.util.StringUtils.isEmpty(fuzzyQueryIncomeSortVO.getName())) {
                 queryWrapper.like("f_name", fuzzyQueryIncomeSortVO.getName());
@@ -97,7 +98,7 @@ public class IncomeSortServiceImpl implements IncomeSortService {
 
     public QueryResponseResult getAll() {
         List<IncomeSortDTO> incomeSortDTOS = incomeSortDao.getAll();
-        List<IncomeSortDTO> incomeSortTree = buildIncomeSortDTOTree(incomeSortDTOS, 0L);
+        List<IncomeSortDTO> incomeSortTree = buildIncomeSortDTOTree(incomeSortDTOS, IncomeSortConstant.INIT_ALL_NUM);
         QueryResult<IncomeSortDTO> queryResult = new QueryResult<>();
         queryResult.setList(incomeSortTree);
         queryResult.setTotal(incomeSortTree.size());
@@ -159,7 +160,7 @@ public class IncomeSortServiceImpl implements IncomeSortService {
         if (incomeSortDao.selectOne(queryWrapper) != null) {
 //            throw new MyIncomeSortException(InComeResultCode.INCOME_CODE_EXISTS);
         }
-        if (parentId.equals(0L)) {
+        if (parentId.equals(IncomeSortConstant.INIT_ALL_NUM)) {
             if (code.length() == 1) {
                 return true;
             }else {
@@ -205,8 +206,8 @@ public class IncomeSortServiceImpl implements IncomeSortService {
         incomeSort.setName(addIncomeSortVO.getName());
         Long parentId = addIncomeSortVO.getParentId();
         Boolean leaf = true;
-        Integer level = new Integer(1);
-        if (parentId.equals(0L)) {
+        Integer level = IncomeSortConstant.LEVEL_NUM;
+        if (parentId.equals(IncomeSortConstant.INIT_ALL_NUM)) {
             leaf = false;
         } else {
             level = incomeSortDao.getLevel(parentId) + 1;
@@ -225,7 +226,7 @@ public class IncomeSortServiceImpl implements IncomeSortService {
         //更新时间
         incomeSort.setUpdateTime(date);
         //版本号
-        incomeSort.setVersion(0);
+        incomeSort.setVersion(IncomeSortConstant.VERSION_NUM);
         incomeSort.setLogicDelete(false);
         incomeSortDao.insert(incomeSort);
         return true;

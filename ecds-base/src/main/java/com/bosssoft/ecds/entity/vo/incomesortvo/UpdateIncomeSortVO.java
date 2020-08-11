@@ -37,7 +37,7 @@ public class UpdateIncomeSortVO implements Serializable {
     /**
      * 是否底级
      */
-    @NotNull(message = "是否底级不能为空")
+    @NotNull(message = IncomeSortConstant.LEAF_NOT_NULL)
     private Boolean leaf;
     /**
      * 备注信息
