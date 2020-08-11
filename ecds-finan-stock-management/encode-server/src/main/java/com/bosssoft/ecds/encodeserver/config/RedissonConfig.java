@@ -27,7 +27,7 @@ public class RedissonConfig {
                         "redis://39.108.14.141:7002",
                         "redis://39.108.14.141:7003",
                         "redis://39.108.14.141:7004",
-                        "redis://39.108.14.141:7005");
+                        "redis://39.108.14.141:7005").setPassword("123456");
         return Redisson.create(config);
     }
 
