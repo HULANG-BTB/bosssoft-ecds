@@ -10,7 +10,7 @@
         <result property="name" column="one_name"></result>
         <result property="parentId" column="one_parentid"></result>
         <result property="assortment" column="one_assortment"></result>
-        <collection property="children" ofType="com.bosssoft.ecds.entity.vo.RegionExt">
+        <collection property="children"  ofType="com.bosssoft.ecds.entity.vo.RegionExt">
             <id property="id" column="two_id"></id>
             <result property="code" column="two_code"></result>
             <result property="name" column="two_name"></result>
@@ -108,7 +108,7 @@
             LEFT JOIN afa_auth_region two ON one.f_id = two.f_parentid
             LEFT JOIN afa_auth_region three ON two.f_id = three.f_parentid
         WHERE
-            one.f_parentid =0
+            one.f_parentid = 0
         ORDER BY one.f_id,two.f_id,three.f_id
     </select>
 
