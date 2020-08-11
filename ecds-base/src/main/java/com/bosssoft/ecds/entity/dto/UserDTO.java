@@ -22,7 +22,6 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("faa_user")
 @ApiModel(value="UserPO对象", description="")
 public class UserDTO extends Model<UserDTO> {
 
@@ -38,6 +37,12 @@ public class UserDTO extends Model<UserDTO> {
 
     @ApiModelProperty(value = "昵称")
     private String nickname;
+
+    @ApiModelProperty(value = "所属单位编码")
+    private String agenCode;
+
+    @ApiModelProperty(value = "电话号码")
+    private String phone;
 
     @ApiModelProperty(value = "经办人")
     private String operator;
