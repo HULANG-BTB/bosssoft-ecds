@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 @SpringBootApplication
 @MapperScan("com.bosssoft.ecds.encodeserver.mapper")
+
 public class EncodeServerApplication {
 
     public static void main(String[] args) {

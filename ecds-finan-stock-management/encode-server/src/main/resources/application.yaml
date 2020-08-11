@@ -6,8 +6,13 @@ spring:
     host: 39.108.14.141
     #redis端口号
     port: 6382
+<<<<<<< HEAD
     #redis密码
     password: 123456
+=======
+    #redis密码，默认为空
+#    password:
+>>>>>>> 100e02259446914fd872eddf94b1e4843e19bb52
     #连接redis超时时间（毫秒）
 #    timeout:
     #jedis连接池
