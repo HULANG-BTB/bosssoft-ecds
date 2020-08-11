@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * @Author 黄杰峰
  * @Date 2020/8/7 0007 15:26
- * @Description 获取财政号码控制器
+ * @Description 获取财政票据号码控制器
  */
 @RestController
 public class CodeController {
