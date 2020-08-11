@@ -4,7 +4,6 @@ package com.bosssoft.ecds.controller;
 import com.bosssoft.ecds.common.response.CommonCode;
 import com.bosssoft.ecds.common.response.QueryResponseResult;
 import com.bosssoft.ecds.common.response.ResponseResult;
-import com.bosssoft.ecds.entity.dto.IncomeSortDTO;
 import com.bosssoft.ecds.entity.vo.incomesortvo.AddIncomeSortVO;
 import com.bosssoft.ecds.entity.vo.incomesortvo.FuzzyQueryIncomeSortVO;
 import com.bosssoft.ecds.entity.vo.incomesortvo.PageIncomeSortVO;
@@ -21,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
 
 /**
  * @author: Jianbinbing
@@ -67,6 +65,12 @@ public class IncomeSortController {
     public Object insert(@RequestBody @Validated AddIncomeSortVO addIncomeSortVO) {
         incomeSortService.add(addIncomeSortVO);
         return new ResponseResult(CommonCode.SUCCESS);
+    }
+
+    @ApiOperation(value = "查询第一级的收入类别")
+    @PostMapping("/getFirst")
+    public Object getFirst(){
+        return incomeSortService.getFirstIncomeSort();
     }
 
 }

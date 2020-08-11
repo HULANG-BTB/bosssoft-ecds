@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.Version;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -34,7 +36,8 @@ public class IncomeSortPO extends Model<IncomeSortPO> {
     /**
      * 收入种类id
      */
-    @TableId(value = "f_id", type = IdType.AUTO)
+    @TableId(value = "f_id")
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
     /**
      * 收入种类编码
@@ -86,6 +89,7 @@ public class IncomeSortPO extends Model<IncomeSortPO> {
      * 操作人id
      */
     @TableField(value = "f_operator_id", fill = FieldFill.INSERT_UPDATE)
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long operatorId;
     /**
      * 操作人

@@ -1,16 +1,9 @@
 package com.bosssoft.ecds.service;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.dto.RoleDTO;
-import com.bosssoft.ecds.entity.po.PermissionPO;
 import com.bosssoft.ecds.entity.po.RolePO;
-import com.bosssoft.ecds.entity.po.RolePermissionPO;
-import com.bosssoft.ecds.utils.MyBeanUtil;
-
-import java.util.ArrayList;
 import java.util.List;
 
 /**

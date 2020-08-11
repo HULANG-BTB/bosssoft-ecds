@@ -108,9 +108,7 @@ public class IncomeSortServiceImpl implements IncomeSortService {
         Page<IncomeSortPO> pageTemp = new Page<>();
         Page<IncomeSortPO> pageInfo = getPage(page, size, pageTemp);
         QueryWrapper queryWrapper = wrapIncomeSortVO(fuzzyQueryIncomeSortVO);
-
         IPage<IncomeSortPO> iPage = incomeSortDao.selectPage(pageInfo, queryWrapper);
-
         QueryResult<IncomeSortPO> queryResult = new QueryResult<>();
         queryResult.setList(iPage.getRecords());
         queryResult.setTotal(iPage.getTotal());
@@ -222,6 +220,15 @@ public class IncomeSortServiceImpl implements IncomeSortService {
         incomeSort.setVersion(0);
         incomeSortDao.insert(incomeSort);
         return true;
+    }
+
+    @Override
+    public QueryResponseResult getFirstIncomeSort() {
+        List<IncomeSortDTO> incomeSortDTOList=incomeSortDao.getFirst();
+        QueryResult<IncomeSortDTO> queryResult=new QueryResult<>();
+        queryResult.setList(incomeSortDTOList);
+        QueryResponseResult queryResponseResult=new QueryResponseResult(CommonCode.SUCCESS,queryResult);
+        return queryResponseResult;
     }
 
 

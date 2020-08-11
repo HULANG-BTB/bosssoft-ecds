@@ -1,5 +1,6 @@
 package com.bosssoft.ecds.service.impl;
 
+import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bosssoft.ecds.entity.dto.PageDTO;
@@ -23,6 +24,7 @@ import java.util.List;
  * @since 2020-08-10
  */
 @Service
+@DS("slave")
 public class PayerServiceImpl extends ServiceImpl<PayerDao, PayerPO> implements PayerService {
 
     /**
