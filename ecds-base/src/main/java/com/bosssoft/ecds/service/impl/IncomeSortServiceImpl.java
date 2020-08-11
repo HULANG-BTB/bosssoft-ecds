@@ -224,5 +224,10 @@ public class IncomeSortServiceImpl implements IncomeSortService {
         return true;
     }
 
+    @Override
+    public QueryResponseResult getFirstIncomeSort() {
+        return null;
+    }
+
 
 }

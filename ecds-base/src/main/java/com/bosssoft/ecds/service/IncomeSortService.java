@@ -75,4 +75,7 @@ public interface IncomeSortService {
      * @return
      */
     Boolean add(AddIncomeSortVO addIncomeSortVO);
+
+
+    QueryResponseResult getFirstIncomeSort();
 }
