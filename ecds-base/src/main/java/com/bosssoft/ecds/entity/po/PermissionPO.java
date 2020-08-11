@@ -7,7 +7,6 @@ import java.util.Date;
 import java.util.List;
 
 import com.baomidou.mybatisplus.extension.activerecord.Model;
-import com.bosssoft.ecds.entity.dto.PermissionDTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
