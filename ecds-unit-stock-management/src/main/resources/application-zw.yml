@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    username: root
+    password: 123456
+    url: jdbc:mysql://localhost:3306/non-tax?serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8&useSSL=false
+    driver-class-name: com.mysql.cj.jdbc.Driver
+mybatis-plus:
+  mapper-locations: classpath:com/bosssoft/usm/mapper/xml/*.xml
+  configuration:
+    call-setters-on-nulls: true
+    cache-enabled: false
+  global-config:
+    db-config:
+      id-type: auto
