@@ -27,11 +27,34 @@ public class SubjectServiceImpl extends ServiceImpl<SubjectDao, SubjectPO> imple
     @Autowired
     private  SubjectDao subjectDao;
 
+
+    /**
+     * 获得所有三级科目
+     * @param
+     * @return
+     */
     public List<SubjectDTO> getThird(){
         QueryWrapper<SubjectPO> queryWrapper = new QueryWrapper<>();
         queryWrapper.select("level","3");
         List<SubjectPO> list = this.list(queryWrapper);
-        return MyBeanUtil.copyListProperties(list,SubjectDTO.class);
+        return MyBeanUtil.copyListProperties(list,SubjectDTO::new);
     }
 
+    /**
+     *根据3级科目id返回其及其下4级科目
+     * @param pid
+     * @return
+     */
+    public List<SubjectDTO> getFourthByPID(long pid){
+        List<SubjectDTO> subjectDTOS =new ArrayList<>();
+        SubjectPO subjectPO = this.getById(pid);
+        SubjectDTO subjectDTO = MyBeanUtil.copyProperties(subjectPO, SubjectDTO.class);
+        subjectDTOS.add(subjectDTO);
+        QueryWrapper<SubjectPO> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(SubjectPO.F_PARENT_ID,pid).orderByAsc(SubjectPO.F_CREATE_TIME);
+        List<SubjectPO> subjectPOS = this.getBaseMapper().selectList(queryWrapper);
+        List<SubjectDTO> subjectDTOS1 = MyBeanUtil.copyListProperties(subjectPOS, SubjectDTO::new);
+        subjectDTOS.addAll(subjectDTOS1);
+        return subjectDTOS;
+    }
 }
