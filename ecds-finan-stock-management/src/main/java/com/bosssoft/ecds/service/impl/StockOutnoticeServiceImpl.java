@@ -8,6 +8,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * <p>
  * 服务实现类
@@ -34,6 +36,23 @@ public class StockOutnoticeServiceImpl extends ServiceImpl<StockOutnoticeMapper,
     @Override
     public Long getNewBussNo() {
         BUSSNO = Long.valueOf(stockOutnoticeMapper.selectCount(null).toString()) ;
+        return null;
+    }
+
+    /**
+     * 根据审核状态获取出库请求信息
+     * 0新建（在前台请求新增时默认，无用），
+     * 1已保存（未审核），
+     * 2已提交（待审核），
+     * 3审核通过，
+     * 4审核退回
+     *
+     * @param changeState 审核状态
+     *
+     * @return 出库请求list
+     */
+    @Override
+    public List<StockOutnoticePo> queryByChangeState(Integer changeState) {
         return null;
     }
 

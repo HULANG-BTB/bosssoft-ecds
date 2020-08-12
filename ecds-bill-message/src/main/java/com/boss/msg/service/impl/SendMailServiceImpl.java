@@ -3,6 +3,7 @@ package com.boss.msg.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.aliyuncs.utils.StringUtils;
 import com.boss.msg.entity.po.MailPo;
+import com.boss.msg.entity.vo.BillVo;
 import com.boss.msg.mapper.MailMapper;
 import com.boss.msg.entity.dto.MailDto;
 import com.boss.msg.service.SendMailService;
@@ -91,7 +92,7 @@ public class SendMailServiceImpl implements SendMailService {
             // 增强邮件对象
             enhanceMail(mailDto);
             // 邮件发件人
-            messageHelper.setFrom(mailDto.getMailFrom());
+            messageHelper.setFrom(getMailSendFrom());
             // 邮件收信人
             messageHelper.setTo(mailDto.getMailTo().split(SPLIT_SYMBOL));
             // 邮件主题
@@ -154,7 +155,7 @@ public class SendMailServiceImpl implements SendMailService {
             Template template = freeMarkerConfigurer.getConfiguration().getTemplate(localTemplate);
 
             // 解析正文内容
-            Object model = JSON.parse(content);
+            BillVo model = JSON.parseObject(content, BillVo.class);
 
             // 传入数据模型到模板，替代模板中的占位符，并将模板转化为html字符串
             return FreeMarkerTemplateUtils.processTemplateIntoString(template, model);

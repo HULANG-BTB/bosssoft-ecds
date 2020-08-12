@@ -10,13 +10,14 @@ package com.bosssoft.ecds.util;
 import cn.hutool.json.JSONUtil;
 import lombok.Data;
 
+
 /**
  * 统一响应结果 工具类
  *
  * @author AloneH
  * @date 2020-07-25
  */
-public class ResponseUtils {
+public class ResponseUtil {
 
     /**
      * 响应状态码

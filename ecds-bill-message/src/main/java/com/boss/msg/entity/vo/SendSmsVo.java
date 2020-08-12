@@ -2,17 +2,12 @@ package com.boss.msg.entity.vo;
 
 import lombok.Data;
 
-import java.util.Date;
 
 /**
  * @author zhangxiaohui
  */
 @Data
-public class SmsVo{
-    /**
-     * 短信id
-     */
-    private Long id;
+public class SendSmsVo {
 
     /**
      * 短信发送人
@@ -30,19 +25,5 @@ public class SmsVo{
      */
     private String content;
 
-    /**
-     * 发送时间
-     */
-    private Date sentDate;
 
-
-    /**
-     * 状态
-     */
-    private Boolean isSent;
-
-    /**
-     * 报错信息
-     */
-    private String error;
 }
