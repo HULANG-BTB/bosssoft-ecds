@@ -83,7 +83,7 @@ public class ItemStdController {
      * @return
      */
     @ApiOperation(value = "批量删除项目标准")
-    @PostMapping("/batchdelete")
+    @PostMapping("/batchDelete")
     public ResponseResult batchDelete(@RequestBody List<ItemStdVO> itemVOList) {
         List<ItemStdDTO> itemStdDTOList = MyBeanUtil.copyListProperties(itemVOList, ItemStdDTO::new);
         return itemStdService.batchDelete(itemStdDTOList);
@@ -96,7 +96,7 @@ public class ItemStdController {
      * @return
      */
     @ApiOperation(value = "分页查询项目标准")
-    @PostMapping("/listbypage")
+    @PostMapping("/listByPage")
     public QueryResponseResult<PageVO> listByPage(@RequestBody PageVO pageVO) {
         PageDTO<ItemStdDTO> pageDTO = MyBeanUtil.myCopyProperties(pageVO, PageDTO.class);
         return itemStdService.listByPage(pageDTO);

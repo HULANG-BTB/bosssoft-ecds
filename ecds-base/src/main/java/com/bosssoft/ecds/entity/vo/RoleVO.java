@@ -1,6 +1,5 @@
 package com.bosssoft.ecds.entity.vo;
 
-import com.baomidou.mybatisplus.annotation.Version;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -8,6 +7,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
@@ -29,10 +29,12 @@ public class RoleVO extends Model<RoleVO> {
     @ApiModelProperty(value = "ID")
     private Long id;
 
-    @ApiModelProperty(value = "角色Key")
+    @ApiModelProperty(value = "角色Key", required = true)
+    @NotNull(message = "角色Key不能为空")
     private String role;
 
-    @ApiModelProperty(value = "名称")
+    @ApiModelProperty(value = "名称", required = true)
+    @NotNull(message = "名称不能为空")
     private String name;
 
     @ApiModelProperty(value = "角色描述")

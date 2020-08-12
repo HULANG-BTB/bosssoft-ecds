@@ -101,9 +101,9 @@ public class PayerServiceImpl extends ServiceImpl<PayerDao, PayerPO> implements 
     public PageDTO<PayerDTO> listByPage(PageDTO<PayerDTO> pageDTO) {
         // 读取用户信息
         // TODO 上线删除代码
-        // Long auth_id = Long.valueOf(httpServletRequest.getHeader("auth_id"));
-        Long auth_id = 1L;
-        UserPO userPO = userService.getById(auth_id);
+        // Long authId = Long.valueOf(httpServletRequest.getHeader("auth_id"));
+        Long authId = 1L;
+        UserPO userPO = userService.getById(authId);
 
         Page<PayerPO> payerPOPage = new Page<>();
         // 设置分页信息
