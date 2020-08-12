@@ -17,9 +17,11 @@ import java.util.Date;
 public class DateVO {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
+    // @JsonFormat(pattern = "yyyy-MM-dd")
     private Date startTime;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
+    // @JsonFormat(pattern = "yyyy-MM-dd")
     private Date endTime;
 
 }

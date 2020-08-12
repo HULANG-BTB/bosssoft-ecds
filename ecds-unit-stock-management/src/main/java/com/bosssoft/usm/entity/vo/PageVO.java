@@ -15,4 +15,5 @@ public class PageVO {
     private int pageNum;
 
     private int pageSize;
+
 }

@@ -20,5 +20,7 @@
     <sql id="Base_Column_List">
         f_id, f_pid, f_no, f_bill_code, f_number, f_bill_no1, f_bill_no2, f_version, f_create_time, f_update_time
     </sql>
+    
+    
 
 </mapper>

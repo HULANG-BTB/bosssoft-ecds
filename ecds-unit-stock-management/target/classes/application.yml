@@ -22,5 +22,5 @@ mybatis-plus:
       column-underline: true
       db-type: mysql
     refresh: false
-  mapper-locations: classpath:mapper/*.xml
+  mapper-locations: classpath:com/bosssoft/usm/mapper/xml/*.xml
 

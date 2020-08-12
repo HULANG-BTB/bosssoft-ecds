@@ -37,7 +37,7 @@ public class StockReturnItemController {
      * @return
      */
     @GetMapping("/getInfo")
-    public StockReturnItemPO getSrockReturnItemPOById(@RequestBody String id) {
+    public StockReturnItemPO getSrockReturnItemPOById(Long id) {
         return stockReturnItemService.getById(id);
     }
 
@@ -161,7 +161,7 @@ public class StockReturnItemController {
      * @param no
      * @return
      */
-    @PostMapping("/deleteInfoWrap")
+    @DeleteMapping("/deleteInfoWrap")
     public String deleteByProperty(@RequestParam String no){
         QueryWrapper<StockReturnItemPO> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("f_no",no);
@@ -172,6 +172,8 @@ public class StockReturnItemController {
             return StatusCode.DELETE_FAILED;
         }
     }
+
+
 
 }
 

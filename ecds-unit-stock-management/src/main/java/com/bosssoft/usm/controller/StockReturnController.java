@@ -8,12 +8,18 @@ import com.bosssoft.usm.config.StatusCode;
 import com.bosssoft.usm.entity.po.StockReturnPO;
 import com.bosssoft.usm.entity.vo.DateVO;
 import com.bosssoft.usm.entity.vo.PageVO;
+import com.bosssoft.usm.entity.vo.StockReturnItemVO;
+import com.bosssoft.usm.entity.vo.StockReturnVO;
 import com.bosssoft.usm.service.StockReturnService;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Delete;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
@@ -27,6 +33,7 @@ import java.util.*;
  */
 @RestController
 @RequestMapping("/stock-return-po")
+@Slf4j
 public class StockReturnController {
 
     @Autowired
@@ -38,8 +45,9 @@ public class StockReturnController {
      * @return
      */
     @GetMapping("/getInfo")
-    public StockReturnPO getSrockReturnPOById(@RequestBody String id) {
-        return stockReturnService.getById(id);
+    public StockReturnPO getSrockReturnPOById(Long id) {
+        StockReturnPO stockReturnPO = stockReturnService.getById(id);
+        return stockReturnPO;
     }
 
     /**
@@ -50,14 +58,14 @@ public class StockReturnController {
     @GetMapping("/getListMap")
     public Collection<StockReturnPO> getListMap(@RequestParam String no) {
         Map<String,Object> map = new HashMap<>();
-        //kay是字段名 value是字段值
+        // kay是字段名 value是字段值
         map.put("f_no",no);
         Collection<StockReturnPO> stockReturnPOList = stockReturnService.listByMap(map);
         return stockReturnPOList;
     }
 
     /**
-     * 用条件构造器根据编制日期查询退票信息
+     * 用条件构造器根据业务单号查询退票信息
      * @param stockReturnPO
      * @return
      */
@@ -156,7 +164,7 @@ public class StockReturnController {
      * @param stockReturnPO
      * @return
      */
-    @PostMapping("/deleteInfo")
+    @DeleteMapping("/deleteInfo")
     public String deleteById(@RequestBody StockReturnPO stockReturnPO) {
         boolean status = stockReturnService.removeById(stockReturnPO.getId());
         if(status == true){
@@ -171,7 +179,7 @@ public class StockReturnController {
      * @param stockReturnPOS
      * @return
      */
-    @PostMapping("/deleteInfos")
+    @DeleteMapping("/deleteInfos")
     public String deleteByIds(@RequestBody List<StockReturnPO> stockReturnPOS) {
        List<Long> ids = new ArrayList<>();
        for(int i=0; i<stockReturnPOS.size(); i++) {
@@ -187,10 +195,10 @@ public class StockReturnController {
 
     /**
      * 根据业务单号删除信息
-     * @param no
+     * @param no 业务单号
      * @return
      */
-    @PostMapping("/deleteInfoWrap")
+    @DeleteMapping("/deleteInfoWrap")
     public String deleteByProperty(@RequestParam String no){
         QueryWrapper<StockReturnPO> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("f_no",no);
@@ -202,5 +210,62 @@ public class StockReturnController {
         }
     }
 
+    /**************************退票主表和退票明细表进行多表联合操作****************************/
+
+    /**
+     * 添加退票申请
+     * @param stockReturnVO 退票VO
+     * @return
+     */
+    @PostMapping("/addStockReturn")
+    public String addStockRetrun(@RequestBody StockReturnVO stockReturnVO){
+        String status = stockReturnService.addStockReturnPO(stockReturnVO);
+        return status;
+    }
+
+    /**
+     * 列出所有的退票主表信息
+     * @return
+     */
+    @GetMapping("/getListStockReturn")
+    public List<StockReturnVO> getStockReturn(){
+        return stockReturnService.stockRetrunVOList();
+    }
+
+    /**
+     * 根据业务单号查询退票明细信息
+     * @param no 业务单号
+     * @return
+     */
+    @GetMapping("/getListStockReturnItem")
+    public List<StockReturnItemVO> getStockReturnItem(Long no){
+        return stockReturnService.stockReturnItemVOList(no);
+    }
+
+    /**
+     * 根据业务单号查询单条退票主信息信息
+     * @param no 业务单号
+     * @return
+     */
+    @GetMapping("/getListStockReturnByNo")
+    public StockReturnVO getStockReturn(Long no){
+        return stockReturnService.stockRetrunVOListByNo(no);
+    }
+
+    /**
+     * 根据编制日期区间查询
+     * @param dateVO
+     * @return
+     */
+    @GetMapping("/getListStockReturnByDate")
+    public List<StockReturnVO> getStockReturnListByDate(@RequestBody  DateVO dateVO){
+        log.info("时间："+dateVO.getStartTime().toString());
+        return stockReturnService.stockReturnVOlistByDate(dateVO);
+    }
+
+    @PutMapping("/updateByNo")
+    public String updateByNo(@RequestBody StockReturnVO stockReturnVO){
+        return null;
+    }
 }
 
