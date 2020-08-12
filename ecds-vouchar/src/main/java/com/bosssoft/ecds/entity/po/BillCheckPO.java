@@ -27,9 +27,9 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("fbr_stock_deptinvalid_voucher")
-@ApiModel(value="StockDeptinvalidVoucherPO对象", description="归档票据销毁")
-public class StockDeptinvalidVoucherPO extends Model<StockDeptinvalidVoucherPO> {
+@TableName("fbr_writeoff_voucher")
+@ApiModel(value="WriteoffVoucherPO对象", description="审验记录")
+public class BillCheckPO extends Model<BillCheckPO> {
 
 
     @ApiModelProperty(value = "主键")
@@ -40,49 +40,25 @@ public class StockDeptinvalidVoucherPO extends Model<StockDeptinvalidVoucherPO> 
     @TableField("f_agen_idcode")
     private String agenIdCode;
 
-    @ApiModelProperty(value = "票据代码")
-    @TableField("f_batch_code")
-    private String batchCode;
+    @ApiModelProperty(value = "票号")
+    @TableField("f_bill_no")
+    private String billNo;
 
-    @ApiModelProperty(value = "预警票据起始号码")
-    @TableField("f_bill_no1")
-    private Long billNo1;
+    @ApiModelProperty(value = "(审核)签名人名字")
+    @TableField("f_sign_name")
+    private String signName;
 
-    @ApiModelProperty(value = "预警票据终止号码")
-    @TableField("f_bill_no2")
-    private Long billNo2;
+    @ApiModelProperty(value = "(审核)签名时间")
+    @TableField("f_sign_time")
+    private Date signTime;
 
-    @ApiModelProperty(value = "票据数量")
-    @TableField("f_number")
-    private Integer number;
+    @ApiModelProperty(value = "(审核)签名状态")
+    @TableField("f_sign_status")
+    private Boolean signStatus;
 
-    @ApiModelProperty(value = "票据使用状态")
-    @TableField("f_usage_status")
-    private String usageStatus;
-
-    @ApiModelProperty(value = "票据销毁业务单号")
-    @TableField("f_destory_no")
-    private String destoryNo;
-
-    @ApiModelProperty(value = "票据销毁时间")
-    @TableField("f_destory_date")
-    private Date destoryDate;
-
-    @ApiModelProperty(value = "票据销毁编制人")
-    @TableField("f_apply_author")
-    private String applyAuthor;
-
-    @ApiModelProperty(value = "审核人")
-    @TableField("f_change_man")
-    private String changeMan;
-
-    @ApiModelProperty(value = "票据销毁备注信息")
-    @TableField("f_destory_memo")
-    private String destoryMemo;
-
-    @ApiModelProperty(value = "票据销毁类型")
-    @TableField("f_destory_type")
-    private String destoryType;
+    @ApiModelProperty(value = "审核未通过原因")
+    @TableField("f_sta_reason")
+    private String staReason;
 
     @ApiModelProperty(value = "归档状态")
     @TableField("f_is_save")
@@ -119,27 +95,15 @@ public class StockDeptinvalidVoucherPO extends Model<StockDeptinvalidVoucherPO> 
 
     public static final String F_AGEN_IDCODE = "f_agen_idcode";
 
-    public static final String F_BATCH_CODE = "f_batch_code";
+    public static final String F_BILL_NO = "f_bill_no";
 
-    public static final String F_BILL_NO1 = "f_bill_no1";
+    public static final String F_SIGN_NAME = "f_sign_name";
 
-    public static final String F_BILL_NO2 = "f_bill_no2";
+    public static final String F_SIGN_TIME = "f_sign_time";
 
-    public static final String F_NUMBER = "f_number";
+    public static final String F_SIGN_STATUS = "f_sign_status";
 
-    public static final String F_USAGE_STATUS = "f_usage_status";
-
-    public static final String F_DESTORY_NO = "f_destory_no";
-
-    public static final String F_DESTORY_DATE = "f_destory_date";
-
-    public static final String F_APPLY_AUTHOR = "f_apply_author";
-
-    public static final String F_CHANGE_MAN = "f_change_man";
-
-    public static final String F_DESTORY_MEMO = "f_destory_memo";
-
-    public static final String F_DESTORY_TYPE = "f_destory_type";
+    public static final String F_STA_REASON = "f_sta_reason";
 
     public static final String F_IS_SAVE = "f_is_save";
 

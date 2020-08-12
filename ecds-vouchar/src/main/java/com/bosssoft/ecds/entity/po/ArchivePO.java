@@ -27,9 +27,9 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("fbr_voucher")
+@TableName("fbr_archive")
 @ApiModel(value="VoucherPO对象", description="归档总览")
-public class VoucherPO extends Model<VoucherPO> {
+public class ArchivePO extends Model<ArchivePO> {
 
 
     @ApiModelProperty(value = "主键")
@@ -37,8 +37,8 @@ public class VoucherPO extends Model<VoucherPO> {
     private Long id;
 
     @ApiModelProperty(value = "单位编码")
-    @TableField("f_agen_idcode")
-    private String agenIdCode;
+    @TableField("f_agen_code")
+    private String agenCode;
 
     @ApiModelProperty(value = "单位名称")
     @TableField("f_agen_name")
@@ -66,7 +66,7 @@ public class VoucherPO extends Model<VoucherPO> {
 
     @ApiModelProperty(value = "票据未审核数量")
     @TableField("f_unauthor_number")
-    private Long unauthorNumber;
+    private Long unAuthorNumber;
 
     @ApiModelProperty(value = "票据预警票数")
     @TableField("f_warn_number")

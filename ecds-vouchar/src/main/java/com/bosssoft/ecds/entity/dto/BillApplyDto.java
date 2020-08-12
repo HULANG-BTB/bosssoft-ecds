@@ -7,7 +7,7 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-@ApiModel(value = "票据领用信息", description = "单位端")
+@ApiModel(value = "BillApplyDto", description = "单位端票据领用信息")
 public class BillApplyDto {
 
     @ApiModelProperty(value = "申请人姓名")
@@ -22,14 +22,17 @@ public class BillApplyDto {
     @ApiModelProperty(value = "票据代码")
     private String billCode;
 
+    @ApiModelProperty(value = "票据名称")
+    private String billName;
+
     @ApiModelProperty(value = "票据起始票号")
     private String billNo1;
 
     @ApiModelProperty(value = "票据结束票号")
     private String billNo2;
 
-    @ApiModelProperty(value = "领用仓库id")
-    private Long warehouseId;
+    /*@ApiModelProperty(value = "领用仓库id")
+    private Long warehouseId;*/
 
     @ApiModelProperty(value = "票据领用数量")
     private Long number;

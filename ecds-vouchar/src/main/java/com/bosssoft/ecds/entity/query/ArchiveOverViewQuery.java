@@ -5,10 +5,10 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
-@ApiModel("归档总览信息查询对象")
-public class OverViewArchiveQuery {
+@ApiModel(value = "OverViewArchiveQuery", description = "归档总览信息查询对象")
+public class ArchiveOverViewQuery {
     @ApiModelProperty("单位编码")
-    private String agenIdCode;
+    private String agenCode;
     @ApiModelProperty("单位名称")
     private String agenName;
 }

@@ -8,12 +8,14 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Data
-@ApiModel(value="可用项目信息Dto", description="可用项目")
+@ApiModel(value="ItemAvailableInfoDto", description="可用项目信息传输")
 public class ItemAvailableInfoDto implements Serializable {
 
     @ApiModelProperty(value = "科目名称")
     private String subName;
-
+    /**
+     * 项目名称查询fab_bill 表
+     */
     @ApiModelProperty(value = "项目名称")
     private String itemName;
 

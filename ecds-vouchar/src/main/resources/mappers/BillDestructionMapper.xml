@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.bosssoft.ecds.dao.StockDeptinvalidVoucherDao">
+<mapper namespace="com.bosssoft.ecds.dao.BillDestructionDao">
     <!--归档票据销毁记录-->
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.bosssoft.ecds.entity.po.StockDeptinvalidVoucherPO">
+    <resultMap id="BaseResultMap" type="com.bosssoft.ecds.entity.po.BillDestructionPO">
         <id column="f_id" property="id" />
         <result column="f_agen_idcode" property="agenIdcode" />
         <result column="f_batch_code" property="batchCode" />
