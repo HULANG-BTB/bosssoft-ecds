@@ -1,9 +1,4 @@
 spring:
-  datasource:
-    username: root
-    password: root
-    url: jdbc:mysql://localhost:3306/notax?serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8&useSSL=false
-    driver-class-name: com.mysql.cj.jdbc.Driver
   application:
     name: nacos-service-usm
   cloud:
@@ -19,6 +14,8 @@ spring:
     host: 192.168.110.128
     username: guest
     password: guest
+  profiles:
+    active: zw
 
 server:
   port: 8080
@@ -26,4 +23,6 @@ server:
 mybatis-plus:
   configuration:
     map-underscore-to-camel-case: true
+
+
 
