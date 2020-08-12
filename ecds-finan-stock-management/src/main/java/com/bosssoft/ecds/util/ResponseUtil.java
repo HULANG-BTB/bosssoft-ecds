@@ -17,7 +17,7 @@ import lombok.Data;
  * @author AloneH
  * @date 2020-07-25
  */
-public class ResponseUtils {
+public class ResponseUtil {
 
     /**
      * 响应状态码

@@ -89,7 +89,7 @@ public class StockOutnoticePo extends Model<StockOutnoticePo> {
     @TableField(value = "f_update_time", fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
 
-    @ApiModelProperty(value = "审核状态")
+    @ApiModelProperty(value = "审核状态(0新建1保存2提交3通过4退回）")
     @TableField("f_change_state")
     private Integer changeState;
 

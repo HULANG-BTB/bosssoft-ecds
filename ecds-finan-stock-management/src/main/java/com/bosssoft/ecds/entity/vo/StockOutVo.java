@@ -1,5 +1,6 @@
 package com.bosssoft.ecds.entity.vo;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -12,7 +13,7 @@ import java.util.Date;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author misheep
@@ -21,7 +22,7 @@ import java.util.Date;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@ApiModel(value="StockOutVo对象", description="")
+@ApiModel(value = "StockOutVo对象", description = "")
 public class StockOutVo extends Model<StockOutVo> {
 
     @ApiModelProperty(value = "业务单号")
@@ -52,7 +53,6 @@ public class StockOutVo extends Model<StockOutVo> {
     private String billNo2;
 
 
-
     @ApiModelProperty(value = "申请日期")
     private Date date;
 
@@ -67,6 +67,9 @@ public class StockOutVo extends Model<StockOutVo> {
 
     @ApiModelProperty(value = "编制人")
     private String author;
+
+    @ApiModelProperty(value = "审核状态(0未1提交2通过3退回）")
+    private Integer changeState;
 
     @ApiModelProperty(value = "备注")
     private String memo;
