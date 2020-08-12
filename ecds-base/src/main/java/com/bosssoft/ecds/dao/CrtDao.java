@@ -1,6 +1,6 @@
 package com.bosssoft.ecds.dao;
 
-import com.bosssoft.ecds.entity.po.FabDeptPO;
+import com.bosssoft.ecds.entity.po.CrtPO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
@@ -9,8 +9,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * </p>
  *
  * @author vihenne
- * @since 2020-08-09
+ * @since 2020-08-10
  */
-public interface FabDeptDao extends BaseMapper<FabDeptPO> {
+public interface CrtDao extends BaseMapper<CrtPO> {
 
 }

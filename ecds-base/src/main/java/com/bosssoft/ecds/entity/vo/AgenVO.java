@@ -1,23 +1,21 @@
-package com.bosssoft.ecds.entity.dto;
+package com.bosssoft.ecds.entity.vo;
 
-import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
 
 import java.util.Date;
 
 /**
  * @Author asus
- * @create 9/8/2020 下午4:31
+ * @create 9/8/2020 下午4:46
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@ApiModel(value="FabAgenDTO对象", description="")
-public class FabAgenDTO extends Model<FabAgenDTO> {
+@ApiModel(value="FabAgenVO对象", description="")
+public class AgenVO extends Model<AgenVO> {
 
     @ApiModelProperty(value = "主键")
     private Long id;
@@ -127,4 +125,6 @@ public class FabAgenDTO extends Model<FabAgenDTO> {
     @ApiModelProperty(value = "备注")
     private String note;
 
+    @ApiModelProperty(value = "部门名称")
+    private String deptName;
 }

@@ -8,13 +8,12 @@ import java.util.List;
 
 /**
  * @author: Jianbinbing
- * @Date: 2020/8/5 14:09
+ * @Date: 2020/8/12 9:07
  */
 @Data
-public class IncomeSortDTO {
-
+public class IncomeSubjectDTO {
     /**
-     * 收入种类id
+     * id
      */
     @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
@@ -26,29 +25,8 @@ public class IncomeSortDTO {
      * 收入种类名称
      */
     private String name;
-    /**
-     * 是否底级
-     */
-    private Boolean leaf;
-    /**
-     * 级次
-     */
-    private Integer level;
-    /**
-     * 父级id
-     */
-    @JsonSerialize(using = ToStringSerializer.class)
-    private Long parentId;
 
-    /**
-     * 版本号
-     */
-    private Integer version;
-
-    /**
-     * 收入种类子级
-     */
-    private List<IncomeSortDTO> incomeSortDTOList;
+    private List<IncomeSubjectDTO> incomeSubjectDTOList;
 
 
 }

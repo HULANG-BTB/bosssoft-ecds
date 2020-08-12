@@ -1,6 +1,9 @@
 package com.bosssoft.ecds.entity.vo.incomesortvo;
 
 import com.bosssoft.ecds.constant.CheckConstant;
+import com.bosssoft.ecds.constant.IncomeSortConstant;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
@@ -21,19 +24,19 @@ public class AddIncomeSortVO implements Serializable {
     /**
      * 收入类别自身id
      */
-    @NotNull(message = "收入类别父级id不能为空")
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long parentId;
     /**
      * 收入种类编码
      */
-    @NotNull(message = "收入类别编码不能为空")
-    @Pattern(regexp = CheckConstant.INTEGER_REGULAR, message = "编码只能为数字型字符串")
+    @NotNull(message = IncomeSortConstant.INCOME_SORT_CODE_NOT_NULL)
+    @Pattern(regexp = CheckConstant.INTEGER_REGULAR, message = IncomeSortConstant.CODE_IS_INTEGER)
     private String code;
     /**
      * 收入种类名称
      */
-    @NotNull(message = "收入类别名称不能为空")
-    @Pattern(regexp = CheckConstant.CHINESE_REGULAR, message = "名称必须全为中文")
+    @NotNull(message = IncomeSortConstant.INCOME_SORT_NAME_NOT_NULL)
+    @Pattern(regexp = CheckConstant.CHINESE_REGULAR, message = IncomeSortConstant.NAME_IS_CHINESE)
     private String name;
 
     /**

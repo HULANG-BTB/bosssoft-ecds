@@ -8,6 +8,8 @@
         <result column="f_username" property="username" />
         <result column="f_password" property="password" />
         <result column="f_nickname" property="nickname" />
+        <result column="f_agen_code" property="agenCode" />
+        <result column="f_phone" property="phone" />
         <result column="f_operator" property="operator" />
         <result column="f_operator_id" property="operatorId" />
         <result column="f_create_time" property="createTime" />

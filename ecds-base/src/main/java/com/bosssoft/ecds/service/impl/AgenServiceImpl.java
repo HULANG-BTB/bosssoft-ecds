@@ -2,12 +2,11 @@ package com.bosssoft.ecds.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.bosssoft.ecds.entity.dto.FabAgenDTO;
-import com.bosssoft.ecds.entity.dto.FabDeptDTO;
+import com.bosssoft.ecds.entity.dto.AgenDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
-import com.bosssoft.ecds.entity.po.FabAgenPO;
-import com.bosssoft.ecds.dao.FabAgenDao;
-import com.bosssoft.ecds.service.FabAgenService;
+import com.bosssoft.ecds.entity.po.AgenPO;
+import com.bosssoft.ecds.dao.AgenDao;
+import com.bosssoft.ecds.service.AgenService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bosssoft.ecds.utils.MyBeanUtil;
 import org.springframework.stereotype.Service;
@@ -24,7 +23,7 @@ import java.util.List;
  * @since 2020-08-09
  */
 @Service
-public class FabAgenServiceImpl extends ServiceImpl<FabAgenDao, FabAgenPO> implements FabAgenService {
+public class AgenServiceImpl extends ServiceImpl<AgenDao, AgenPO> implements AgenService {
 
     /**
      *
@@ -36,8 +35,8 @@ public class FabAgenServiceImpl extends ServiceImpl<FabAgenDao, FabAgenPO> imple
      * @time: 09/08/2020 上午10:17
      */
     @Override
-    public FabAgenDTO save(FabAgenDTO fabAgenDTO) {
-        FabAgenPO fabAgenPO = new FabAgenPO();
+    public AgenDTO save(AgenDTO fabAgenDTO) {
+        AgenPO fabAgenPO = new AgenPO();
         MyBeanUtil.copyProperties(fabAgenDTO, fabAgenPO);
         super.save(fabAgenPO);
         return fabAgenDTO;
@@ -53,8 +52,8 @@ public class FabAgenServiceImpl extends ServiceImpl<FabAgenDao, FabAgenPO> imple
      * @time: 09/08/2020 上午10:17
      */
     @Override
-    public boolean remove(FabAgenDTO fabAgenDTO) {
-        FabAgenPO fabAgenPO = new FabAgenPO();
+    public boolean remove(AgenDTO fabAgenDTO) {
+        AgenPO fabAgenPO = new AgenPO();
         MyBeanUtil.copyProperties(fabAgenDTO, fabAgenPO);
         return super.removeById(fabAgenPO.getId());
     }
@@ -69,8 +68,8 @@ public class FabAgenServiceImpl extends ServiceImpl<FabAgenDao, FabAgenPO> imple
      * @time: 09/08/2020 上午10:17
      */
     @Override
-    public boolean update(FabAgenDTO fabAgenDTO) {
-        FabAgenPO fabAgenPO = new FabAgenPO();
+    public boolean update(AgenDTO fabAgenDTO) {
+        AgenPO fabAgenPO = new AgenPO();
         MyBeanUtil.copyProperties(fabAgenDTO, fabAgenPO);
         return super.updateById(fabAgenPO);
     }
@@ -85,11 +84,11 @@ public class FabAgenServiceImpl extends ServiceImpl<FabAgenDao, FabAgenPO> imple
      * @time: 09/08/2020 上午10:17
      */
     @Override
-    public FabAgenDTO getByAgenCode(FabAgenDTO fabAgenDTO) {
-        FabAgenPO fabAgenPO = new FabAgenPO();
+    public AgenDTO getByAgenCode(AgenDTO fabAgenDTO) {
+        AgenPO fabAgenPO = new AgenPO();
         MyBeanUtil.copyProperties(fabAgenDTO, fabAgenPO);
-        FabAgenPO fabAgenPO1 = super.getOne(new QueryWrapper<FabAgenPO>(fabAgenPO));
-        return MyBeanUtil.copyProperties(fabAgenPO1, FabAgenDTO.class);
+        AgenPO fabAgenPO1 = super.getOne(new QueryWrapper<AgenPO>(fabAgenPO));
+        return MyBeanUtil.copyProperties(fabAgenPO1, AgenDTO.class);
     }
 
     /**
@@ -102,11 +101,11 @@ public class FabAgenServiceImpl extends ServiceImpl<FabAgenDao, FabAgenPO> imple
      * @time: 09/08/2020 上午10:17
      */
     @Override
-    public FabAgenDTO getByAgenName(FabAgenDTO fabAgenDTO) {
-        FabAgenPO fabAgenPO = new FabAgenPO();
+    public AgenDTO getByAgenName(AgenDTO fabAgenDTO) {
+        AgenPO fabAgenPO = new AgenPO();
         MyBeanUtil.copyProperties(fabAgenDTO, fabAgenPO);
-        FabAgenPO fabAgenPO1 = super.getOne(new QueryWrapper<FabAgenPO>(fabAgenPO));
-        return MyBeanUtil.copyProperties(fabAgenPO1, FabAgenDTO.class);
+        AgenPO fabAgenPO1 = super.getOne(new QueryWrapper<AgenPO>(fabAgenPO));
+        return MyBeanUtil.copyProperties(fabAgenPO1, AgenDTO.class);
     }
 
     /**
@@ -118,9 +117,9 @@ public class FabAgenServiceImpl extends ServiceImpl<FabAgenDao, FabAgenPO> imple
      * @time: 09/08/2020 上午10:17
      */
     @Override
-    public List<FabAgenDTO> listAll() {
-        List<FabAgenPO> list = super.list();
-        List<FabAgenDTO> fabAgenDTOList = MyBeanUtil.copyListProperties(list, FabAgenDTO.class);
+    public List<AgenDTO> listAll() {
+        List<AgenPO> list = super.list();
+        List<AgenDTO> fabAgenDTOList = MyBeanUtil.copyListProperties(list, AgenDTO.class);
         return fabAgenDTOList;
     }
 
@@ -132,19 +131,20 @@ public class FabAgenServiceImpl extends ServiceImpl<FabAgenDao, FabAgenPO> imple
      */
     @Override
     public PageDTO listByPage(PageDTO pageDTO) {
-        Page<FabAgenPO> fabAgenPOPage = new Page<>();
+        Page<AgenPO> fabAgenPOPage = new Page<>();
         // 设置分页信息
         fabAgenPOPage.setCurrent(pageDTO.getPage());
         fabAgenPOPage.setSize(pageDTO.getLimit());
         // 读取分页数据
-        QueryWrapper<FabAgenPO> queryWrapper = new QueryWrapper<>();
-        queryWrapper.like(FabAgenPO.F_ID, pageDTO.getKeyword()).or().like(FabAgenPO.F_AGEN_CODE, pageDTO.getKeyword()).or().like(FabAgenPO.F_AGEN_NAME, pageDTO.getKeyword());
-        queryWrapper.orderByAsc(FabAgenPO.F_CREATE_TIME);
+        QueryWrapper<AgenPO> queryWrapper = new QueryWrapper<>();
+        queryWrapper.like(AgenPO.F_DEPT_CODE, pageDTO.getKeyword()).or().like(AgenPO.F_AGEN_CODE, pageDTO.getKeyword()).or().like(AgenPO.F_AGEN_NAME, pageDTO.getKeyword())
+                .or().like(AgenPO.F_SORT_CODE, pageDTO.getKeyword()).or().like(AgenPO.F_ISENABLE, pageDTO.getKeyword()).or().like(AgenPO.F_IND_CODE, pageDTO.getKeyword());
+        queryWrapper.orderByAsc(AgenPO.F_CREATE_TIME);
         // 读取分页数据
-        Page<FabAgenPO> fabAgenPOPage1 = super.page(fabAgenPOPage, queryWrapper);
-        List<FabAgenPO> records = fabAgenPOPage1.getRecords();
+        Page<AgenPO> fabAgenPOPage1 = super.page(fabAgenPOPage, queryWrapper);
+        List<AgenPO> records = fabAgenPOPage1.getRecords();
         // 转换数据
-        List<FabAgenDTO> userDTOList = MyBeanUtil.copyListProperties(records, FabAgenDTO.class);
+        List<AgenDTO> userDTOList = MyBeanUtil.copyListProperties(records, AgenDTO.class);
         pageDTO.setTotal(fabAgenPOPage1.getTotal());
         pageDTO.setItems(userDTOList);
         return pageDTO;
@@ -157,9 +157,9 @@ public class FabAgenServiceImpl extends ServiceImpl<FabAgenDao, FabAgenPO> imple
      * @return
      */
     @Override
-    public Boolean removeBatch(List<FabAgenDTO> fabAgenDTOList) {
+    public Boolean removeBatch(List<AgenDTO> fabAgenDTOList) {
         List<Long> ids = new ArrayList<>();
-        for (FabAgenDTO fabAgenDTO : fabAgenDTOList) {
+        for (AgenDTO fabAgenDTO : fabAgenDTOList) {
             if (!fabAgenDTO.getId().equals(0L)) {
                 ids.add(fabAgenDTO.getId());
             }
@@ -178,10 +178,10 @@ public class FabAgenServiceImpl extends ServiceImpl<FabAgenDao, FabAgenPO> imple
      * @time: 09/08/2020 上午10:17
      */
     @Override
-    public List<FabAgenDTO> getByDeptCode(FabAgenDTO fabAgenDTO) {
-        FabAgenPO fabAgenPO = new FabAgenPO();
+    public List<AgenDTO> getByDeptCode(AgenDTO fabAgenDTO) {
+        AgenPO fabAgenPO = new AgenPO();
         MyBeanUtil.copyProperties(fabAgenDTO, fabAgenPO);
-        List<FabAgenPO> fabAgenPOList = super.list(new QueryWrapper<FabAgenPO>(fabAgenPO));
-        return MyBeanUtil.copyListProperties(fabAgenPOList, FabAgenDTO.class);
+        List<AgenPO> fabAgenPOList = super.list(new QueryWrapper<AgenPO>(fabAgenPO));
+        return MyBeanUtil.copyListProperties(fabAgenPOList, AgenDTO.class);
     }
 }

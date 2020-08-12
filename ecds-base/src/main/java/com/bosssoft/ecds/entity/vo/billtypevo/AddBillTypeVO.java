@@ -1,10 +1,13 @@
 package com.bosssoft.ecds.entity.vo.billtypevo;
 
+import com.bosssoft.ecds.constant.CheckConstant;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
+import javax.validation.constraints.Future;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -19,6 +22,7 @@ import static com.bosssoft.ecds.constant.BillTypeConstant.*;
 public class AddBillTypeVO {
 
     @NotBlank(message = CODE_NOT_BLANK)
+    @Pattern(regexp = CheckConstant.INTEGER_REGULAR, message = "编码只能为数字型字符串")
     String code;
 
     @NotBlank(message = NAME_NOT_BLANK)
@@ -35,6 +39,7 @@ public class AddBillTypeVO {
     Date effDate;
 
     @NotNull(message = EXP_DATE_NOT_NULL)
+    @Future(message = DATE_FUTURE)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     Date expDate;
 

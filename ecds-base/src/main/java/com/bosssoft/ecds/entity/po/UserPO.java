@@ -49,6 +49,14 @@ public class UserPO extends Model<UserPO> {
     @TableField("f_nickname")
     private String nickname;
 
+    @ApiModelProperty(value = "所属单位编码")
+    @TableField("f_agen_code")
+    private String agenCode;
+
+    @ApiModelProperty(value = "电话号码")
+    @TableField("f_phone")
+    private String phone;
+
     @ApiModelProperty(value = "经办人")
     @TableField(value = "f_operator", fill = FieldFill.INSERT_UPDATE)
     private String operator;
@@ -87,6 +95,10 @@ public class UserPO extends Model<UserPO> {
     public static final String F_PASSWORD = "f_password";
 
     public static final String F_NICKNAME = "f_nickname";
+
+    public static final String F_AGEN_CODE = "f_agen_code";
+
+    public static final String F_PHONE = "f_phone";
 
     public static final String F_OPERATOR = "f_operator";
 

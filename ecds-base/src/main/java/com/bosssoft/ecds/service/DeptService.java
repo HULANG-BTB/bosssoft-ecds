@@ -1,8 +1,8 @@
 package com.bosssoft.ecds.service;
 
-import com.bosssoft.ecds.entity.dto.FabDeptDTO;
+import com.bosssoft.ecds.entity.dto.DeptDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
-import com.bosssoft.ecds.entity.po.FabDeptPO;
+import com.bosssoft.ecds.entity.po.DeptPO;
 import com.baomidou.mybatisplus.extension.service.IService;
 import java.util.List;
 
@@ -14,7 +14,7 @@ import java.util.List;
  * @author vihenne
  * @since 2020-08-09
  */
-public interface FabDeptService extends IService<FabDeptPO> {
+public interface DeptService extends IService<DeptPO> {
 
     /**
      *
@@ -25,7 +25,7 @@ public interface FabDeptService extends IService<FabDeptPO> {
      * @author: YuHangChen
      * @time: 09/08/2020 上午10:17
      */
-    public FabDeptDTO save(FabDeptDTO fabDeptDTO);
+    public DeptDTO save(DeptDTO fabDeptDTO);
 
     /**
      *
@@ -36,7 +36,7 @@ public interface FabDeptService extends IService<FabDeptPO> {
      * @author: YuHangChen
      * @time: 09/08/2020 上午10:17
      */
-    public boolean remove(FabDeptDTO fabDeptDTO);
+    public boolean remove(DeptDTO fabDeptDTO);
 
     /**
      *
@@ -47,7 +47,7 @@ public interface FabDeptService extends IService<FabDeptPO> {
      * @author: YuHangChen
      * @time: 09/08/2020 上午10:17
      */
-    public boolean update(FabDeptDTO fabDeptDTO);
+    public boolean update(DeptDTO fabDeptDTO);
 
     /**
      *
@@ -58,7 +58,7 @@ public interface FabDeptService extends IService<FabDeptPO> {
      * @author: YuHangChen
      * @time: 09/08/2020 上午10:17
      */
-    public FabDeptDTO getByDeptCode(FabDeptDTO fabDeptDTO);
+    public DeptDTO getByDeptCode(DeptDTO fabDeptDTO);
 
     /**
      *
@@ -69,7 +69,7 @@ public interface FabDeptService extends IService<FabDeptPO> {
      * @author: YuHangChen
      * @time: 09/08/2020 上午10:17
      */
-    public FabDeptDTO getByDeptName(FabDeptDTO fabDeptDTO);
+    public DeptDTO getByDeptName(DeptDTO fabDeptDTO);
 
     /**
      *
@@ -79,7 +79,7 @@ public interface FabDeptService extends IService<FabDeptPO> {
      * @author: YuHangChen
      * @time: 09/08/2020 上午10:17
      */
-    public List<FabDeptDTO> listAll();
+    public List<DeptDTO> listAll();
 
     /**
      * 分页读取
@@ -95,5 +95,5 @@ public interface FabDeptService extends IService<FabDeptPO> {
      * @param fabDeptDTOList
      * @return
      */
-    public Boolean removeBatch(List<FabDeptDTO> fabDeptDTOList);
+    public Boolean removeBatch(List<DeptDTO> fabDeptDTOList);
 }

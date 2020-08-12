@@ -1,17 +1,16 @@
 package com.bosssoft.ecds.controller;
 
 
-import com.bosssoft.ecds.entity.dto.FabDeptDTO;
+import com.bosssoft.ecds.entity.dto.DeptDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
-import com.bosssoft.ecds.entity.dto.PermissionDTO;
-import com.bosssoft.ecds.entity.vo.FabDeptVO;
+import com.bosssoft.ecds.entity.vo.DeptVO;
 import com.bosssoft.ecds.entity.vo.PageVO;
-import com.bosssoft.ecds.entity.vo.PermissionVO;
-import com.bosssoft.ecds.service.FabDeptService;
+import com.bosssoft.ecds.service.DeptService;
 import com.bosssoft.ecds.utils.MyBeanUtil;
 import com.bosssoft.ecds.utils.ResponseUtils;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.util.RequestUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,24 +26,26 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@RequestMapping("/fabDept")
-public class FabDeptController {
+@Api(value = "部门管理接口")
+@RequestMapping("/dept")
+public class DeptController {
 
     @Autowired
-    FabDeptService fabDeptService;
+    DeptService fabDeptService;
 
     /**
      *
      *
-     * @description: 新增部门。
+     * @description: 新增单位。
      * @param {FabDeptVO} fabDeptVO
      * @return: {String}
      * @author: YuHangChen
      * @time: 09/08/2020 上午10:17
      */
+    @ApiOperation(value = "新增单位")
     @PostMapping("/save")
-    public String save(@RequestBody FabDeptVO fabDeptVO){
-        FabDeptDTO fabDeptDTO = new FabDeptDTO();
+    public String save(@RequestBody DeptVO fabDeptVO){
+        DeptDTO fabDeptDTO = new DeptDTO();
         MyBeanUtil.copyProperties(fabDeptVO,fabDeptDTO);
         fabDeptDTO = fabDeptService.save(fabDeptDTO);
         MyBeanUtil.copyProperties(fabDeptDTO,fabDeptVO);
@@ -60,9 +61,10 @@ public class FabDeptController {
      * @author: YuHangChen
      * @time: 09/08/2020 上午10:17
      */
+    @ApiOperation(value = "按部门编码删除部门")
     @PostMapping("/remove")
-    public String remove(@RequestBody FabDeptVO fabDeptVO){
-        FabDeptDTO fabDeptDTO = new FabDeptDTO();
+    public String remove(@RequestBody DeptVO fabDeptVO){
+        DeptDTO fabDeptDTO = new DeptDTO();
         MyBeanUtil.copyProperties(fabDeptVO,fabDeptDTO);
         Boolean result = fabDeptService.remove(fabDeptDTO);
         MyBeanUtil.copyProperties(fabDeptDTO,fabDeptVO);
@@ -78,9 +80,10 @@ public class FabDeptController {
      * @author: YuHangChen
      * @time: 09/08/2020 上午10:17
      */
+    @ApiOperation(value = "用于修改部门信息")
     @PostMapping("/update")
-    public String update(@RequestBody FabDeptVO fabDeptVO){
-        FabDeptDTO fabDeptDTO = new FabDeptDTO();
+    public String update(@RequestBody DeptVO fabDeptVO){
+        DeptDTO fabDeptDTO = new DeptDTO();
         MyBeanUtil.copyProperties(fabDeptVO,fabDeptDTO);
         Boolean result = fabDeptService.update(fabDeptDTO);
         MyBeanUtil.copyProperties(fabDeptDTO,fabDeptVO);
@@ -96,9 +99,10 @@ public class FabDeptController {
      * @author: YuHangChen
      * @time: 09/08/2020 上午10:17
      */
+    @ApiOperation(value = "根据部门编码查询部门")
     @PostMapping("/getByDeptCode")
-    public String getByDeptCode(@RequestBody FabDeptVO fabDeptVO){
-        FabDeptDTO fabDeptDTO = new FabDeptDTO();
+    public String getByDeptCode(@RequestBody DeptVO fabDeptVO){
+        DeptDTO fabDeptDTO = new DeptDTO();
         MyBeanUtil.copyProperties(fabDeptVO,fabDeptDTO);
         fabDeptDTO = fabDeptService.getByDeptCode(fabDeptDTO);
         MyBeanUtil.copyProperties(fabDeptDTO,fabDeptVO);
@@ -114,9 +118,10 @@ public class FabDeptController {
      * @author: YuHangChen
      * @time: 09/08/2020 上午10:17
      */
+    @ApiOperation(value = "根据部门名查询部门")
     @PostMapping("/getByDeptName")
-    public String getByDeptName(@RequestBody FabDeptVO fabDeptVO){
-        FabDeptDTO fabDeptDTO = new FabDeptDTO();
+    public String getByDeptName(@RequestBody DeptVO fabDeptVO){
+        DeptDTO fabDeptDTO = new DeptDTO();
         MyBeanUtil.copyProperties(fabDeptVO,fabDeptDTO);
         fabDeptDTO = fabDeptService.getByDeptName(fabDeptDTO);
         MyBeanUtil.copyProperties(fabDeptDTO,fabDeptVO);
@@ -131,26 +136,23 @@ public class FabDeptController {
      * @author: YuHangChen
      * @time: 09/08/2020 上午10:17
      */
+    @ApiOperation(value = "用于查看部门列表")
     @GetMapping("/listAll")
     public String listAll(){
-        List<FabDeptDTO> fabDeptDTOList = fabDeptService.listAll();
-        List<FabDeptVO> fabDeptVOList = MyBeanUtil.copyListProperties(fabDeptDTOList, FabDeptVO.class);
+        List<DeptDTO> fabDeptDTOList = fabDeptService.listAll();
+        List<DeptVO> fabDeptVOList = MyBeanUtil.copyListProperties(fabDeptDTOList, DeptVO.class);
         return ResponseUtils.getResponse(fabDeptVOList,ResponseUtils.ResultType.OK);
     }
 
     /**
      * 通过分页查询
      *
-     * @param page
-     * @param limit
+     * @param pageVO
      * @return
      */
-    @GetMapping("listByPage")
-    public String listByPage(@RequestParam("page") Long page, @RequestParam("limit") Long limit, @RequestParam("keyword") String keyword) {
-        PageVO pageVO = new PageVO();
-        pageVO.setLimit(limit);
-        pageVO.setPage(page);
-        pageVO.setKeyword(keyword);
+    @ApiOperation(value = "通过分页查询")
+    @PostMapping("listByPage")
+    public String listByPage(@RequestBody PageVO pageVO) {
         PageDTO pageDTO = MyBeanUtil.copyProperties(pageVO, PageDTO.class);
         pageDTO = fabDeptService.listByPage(pageDTO);
 
@@ -164,9 +166,10 @@ public class FabDeptController {
      * @param fabDeptVOList
      * @return
      */
+    @ApiOperation(value = "批量删除")
     @PostMapping("removeBatch")
-    public String removeBatch(@RequestBody List<FabDeptVO> fabDeptVOList) {
-        List<FabDeptDTO> fabDeptDTOList = MyBeanUtil.copyListProperties(fabDeptVOList, FabDeptDTO.class);
+    public String removeBatch(@RequestBody List<DeptVO> fabDeptVOList) {
+        List<DeptDTO> fabDeptDTOList = MyBeanUtil.copyListProperties(fabDeptVOList, DeptDTO.class);
         Boolean result = fabDeptService.removeBatch(fabDeptDTOList);
         return ResponseUtils.getResponse(result, ResponseUtils.ResultType.OK);
     }
