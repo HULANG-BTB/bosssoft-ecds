@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.math.BigInteger;
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -59,9 +60,15 @@ public class FabAgenBillController {
         return EntityUtil.POToDTO(fbeStockFinanceapply,billApplyDto);
     }
 
-    @GetMapping("test")
-    public void test(){
-//        rabbitTemplate.convertAndSend("amq.direct","cao","666");
+    @GetMapping("testSend")
+    public void testSend(){
+        HashMap<String, String> map = new HashMap<>();
+        map.put("666","888");
+        rabbitTemplate.convertAndSend("amq.direct","theKey",map);
+    }
+
+    @GetMapping("testReceive")
+    public void testReceive(){
         Object o = rabbitTemplate.receiveAndConvert("dfQ");
         System.out.println(o);
     }

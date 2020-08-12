@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 /**
  * @author 张东海
  * @date 2020/8/12
- * @description
+ * @description 实体类工具类，用于PO、DTO、VO间的互相转换等操作
  */
 public class EntityUtil {
     public static <P,D> D POToDTO(P po,D dto){

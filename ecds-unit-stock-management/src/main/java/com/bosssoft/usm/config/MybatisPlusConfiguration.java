@@ -15,7 +15,7 @@ import java.util.Date;
 /**
  * @author 张东海
  * @date 2020/8/10
- * @description
+ * @description MybatisPlus配置类
  */
 @Configuration
 @EnableTransactionManagement(proxyTargetClass = true)

@@ -3,12 +3,16 @@ package com.bosssoft.usm.service;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 封装了若干单表基本增删改查操作的抽象服务
+ * @param <B> 实体类PO
+ * @param <M> 实体类PO对应Mapper接口
+ */
 public abstract class AbstractService<B, M extends BaseMapper<B>> {
 
     @Autowired
