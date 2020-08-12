@@ -9,7 +9,5 @@ public class testController {
 
     private UnePayBookServiceImp unePayBookServiceImp;
 
-    @RequestMapping("/paybook")
-
 
 }
