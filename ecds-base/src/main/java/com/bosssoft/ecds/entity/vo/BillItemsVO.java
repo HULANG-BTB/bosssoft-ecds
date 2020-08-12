@@ -2,6 +2,7 @@ package com.bosssoft.ecds.entity.vo;
 
 import lombok.Data;
 
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 /**
@@ -12,6 +13,8 @@ import java.util.List;
  */
 @Data
 public class BillItemsVO {
+    @NotEmpty
     private String billCode;
+    @NotEmpty
     private List<String> itemIds;
 }

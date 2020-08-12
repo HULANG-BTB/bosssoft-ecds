@@ -11,6 +11,7 @@ import com.bosssoft.ecds.service.FabItemBillService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.websocket.server.PathParam;
@@ -30,13 +31,13 @@ public class ItemBillController {
 
     @PostMapping("/insert")
     @ApiOperation(value = "添加票据项目关系", notes = "")
-    public QueryResponseResult insertIntoItemBill(@RequestBody BillItemsInsertVO itemsInsertVO) {
+    public QueryResponseResult insertIntoItemBill(@RequestBody @Validated BillItemsInsertVO itemsInsertVO) {
         return new QueryResponseResult<Boolean>(CommonCode.SUCCESS, fabItemBillService.insertIntoItemBill(itemsInsertVO));
     }
 
     @PostMapping("/insertbatch")
     @ApiOperation(value = "批量添加票据项目关系", notes = "")
-    public QueryResponseResult insertBatchItemBill(@RequestBody BillItemsVO billItemsVO) {
+    public QueryResponseResult insertBatchItemBill(@RequestBody @Validated BillItemsVO billItemsVO) {
         return new QueryResponseResult<Boolean>(CommonCode.SUCCESS, fabItemBillService.insertBatchItemBill(billItemsVO));
     }
 
@@ -61,13 +62,13 @@ public class ItemBillController {
 
     @PostMapping("/getnocontactitem")
     @ApiOperation(value = "获取与票据种类无关的项目 分页与模糊查询", notes = " ")
-    public QueryResponseResult getNoContactItem(@RequestBody SelectItemVO selectItemVO) {
+    public QueryResponseResult getNoContactItem(@RequestBody @Validated SelectItemVO selectItemVO) {
         return new QueryResponseResult<IPage>(CommonCode.SUCCESS, fabItemBillService.selectNoContactItem(selectItemVO));
     }
 
     @PostMapping("/check")
     @ApiOperation(value = "查看票据种类与项目是否有关", notes = " ")
-    public QueryResponseResult check(@RequestBody BillItemsInsertVO itemsInsertVO) {
+    public QueryResponseResult check(@RequestBody @Validated BillItemsInsertVO itemsInsertVO) {
         return new QueryResponseResult<Boolean>(CommonCode.SUCCESS, fabItemBillService.checkItemBill(itemsInsertVO));
     }
 
