@@ -10,7 +10,6 @@ package com.bosssoft.ecds.util;
 import cn.hutool.json.JSONUtil;
 import lombok.Data;
 
-
 /**
  * 统一响应结果 工具类
  *
