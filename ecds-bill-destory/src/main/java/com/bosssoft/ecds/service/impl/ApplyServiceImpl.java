@@ -1,6 +1,6 @@
 package com.bosssoft.ecds.service.impl;
 
-import com.bosssoft.ecds.po.ApplyPo;
+import com.bosssoft.ecds.entity.po.ApplyPo;
 import com.bosssoft.ecds.dao.ApplyDao;
 import com.bosssoft.ecds.service.ApplyService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

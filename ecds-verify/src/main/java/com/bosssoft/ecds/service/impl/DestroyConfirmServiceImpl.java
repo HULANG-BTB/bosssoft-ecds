@@ -2,7 +2,7 @@ package com.bosssoft.ecds.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bosssoft.ecds.dao.DestroyConfirmDao;
-import com.bosssoft.ecds.po.DestroyConfirmPo;
+import com.bosssoft.ecds.entity.po.DestroyConfirmPo;
 import com.bosssoft.ecds.service.DestroyConfirmService;
 import org.springframework.stereotype.Service;
 

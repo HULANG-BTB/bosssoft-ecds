@@ -1,4 +1,4 @@
-package com.bosssoft.ecds.po;
+package com.bosssoft.ecds.entity.po;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;

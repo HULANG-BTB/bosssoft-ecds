@@ -1,7 +1,7 @@
 package com.bosssoft.ecds.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.bosssoft.ecds.po.DestroyConfirmPo;
+import com.bosssoft.ecds.entity.po.DestroyConfirmPo;
 
 /**
  * <p>

@@ -1,6 +1,6 @@
 package com.bosssoft.ecds.service;
 
-import com.bosssoft.ecds.po.ItemPo;
+import com.bosssoft.ecds.entity.po.ItemPo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
