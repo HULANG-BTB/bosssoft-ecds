@@ -4,6 +4,7 @@ package com.bosssoft.ecds.service;
 import com.bosssoft.ecds.common.response.QueryResponseResult;
 import com.bosssoft.ecds.entity.dto.IncomeSortDTO;
 import com.bosssoft.ecds.entity.vo.incomesortvo.AddIncomeSortVO;
+import com.bosssoft.ecds.entity.vo.incomesortvo.DeleteIncomeSortVO;
 import com.bosssoft.ecds.entity.vo.incomesortvo.FuzzyQueryIncomeSortVO;
 import com.bosssoft.ecds.entity.vo.incomesortvo.PageIncomeSortVO;
 import com.bosssoft.ecds.entity.vo.incomesortvo.UpdateIncomeSortVO;
@@ -82,9 +83,9 @@ public interface IncomeSortService {
     /**
      * 删除指定的收入类别
      *
-     * @param id
+     * @param deleteIncomeSortVO
      * @return
      */
-    Boolean delete(Long id);
+    Boolean delete(DeleteIncomeSortVO deleteIncomeSortVO);
 
 }

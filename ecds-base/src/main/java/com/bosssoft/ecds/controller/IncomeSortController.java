@@ -5,6 +5,7 @@ import com.bosssoft.ecds.common.response.CommonCode;
 import com.bosssoft.ecds.common.response.QueryResponseResult;
 import com.bosssoft.ecds.common.response.ResponseResult;
 import com.bosssoft.ecds.entity.vo.incomesortvo.AddIncomeSortVO;
+import com.bosssoft.ecds.entity.vo.incomesortvo.DeleteIncomeSortVO;
 import com.bosssoft.ecds.entity.vo.incomesortvo.FuzzyQueryIncomeSortVO;
 import com.bosssoft.ecds.entity.vo.incomesortvo.UpdateIncomeSortVO;
 import com.bosssoft.ecds.service.IncomeSortService;
@@ -61,7 +62,7 @@ public class IncomeSortController {
         return new ResponseResult(CommonCode.SUCCESS);
     }
 
-    @ApiOperation(value = "新增收入类别信息")
+    @ApiOperation(value = "新增收入类别信息", notes = "类别名称和编码唯一")
     @PostMapping("/insert")
     public Object insert(@RequestBody @Validated AddIncomeSortVO addIncomeSortVO) {
         incomeSortService.add(addIncomeSortVO);
@@ -72,6 +73,14 @@ public class IncomeSortController {
     @PostMapping("/getFirst")
     public Object getFirst() {
         return incomeSortService.getFirstIncomeSort();
+    }
+
+    @ApiOperation(value = "删除指定的收入类别", notes = "逻辑删除")
+    @PostMapping("delete")
+    public Object delete(@RequestBody DeleteIncomeSortVO deleteIncomeSortVO) {
+
+
+        return new ResponseResult(CommonCode.SUCCESS);
     }
 
 }

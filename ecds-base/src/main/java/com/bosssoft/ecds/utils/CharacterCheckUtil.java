@@ -2,8 +2,6 @@ package com.bosssoft.ecds.utils;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * 字符串校验
@@ -13,6 +11,13 @@ import java.util.regex.Pattern;
  */
 public class CharacterCheckUtil {
 
+    /**
+     * 比较两个字符串是否是包含关系
+     *
+     * @param str
+     * @param otherStr
+     * @return
+     */
     public static boolean characterComparison(String str, String otherStr) {
         if (str.length() >= otherStr.length()) {
             return false;
@@ -23,4 +28,5 @@ public class CharacterCheckUtil {
         }
         return true;
     }
+
 }

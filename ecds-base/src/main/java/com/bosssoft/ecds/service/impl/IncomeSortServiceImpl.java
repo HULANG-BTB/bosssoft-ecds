@@ -13,6 +13,7 @@ import com.bosssoft.ecds.dao.IncomeSortDao;
 import com.bosssoft.ecds.entity.dto.IncomeSortDTO;
 import com.bosssoft.ecds.entity.po.IncomeSortPO;
 import com.bosssoft.ecds.entity.vo.incomesortvo.AddIncomeSortVO;
+import com.bosssoft.ecds.entity.vo.incomesortvo.DeleteIncomeSortVO;
 import com.bosssoft.ecds.entity.vo.incomesortvo.FuzzyQueryIncomeSortVO;
 import com.bosssoft.ecds.entity.vo.incomesortvo.PageIncomeSortVO;
 import com.bosssoft.ecds.entity.vo.incomesortvo.UpdateIncomeSortVO;
@@ -89,7 +90,7 @@ public class IncomeSortServiceImpl implements IncomeSortService {
             }
         }
         queryWrapper.orderByAsc("f_level");
-        queryWrapper.orderByDesc("f_code");
+        queryWrapper.orderByAsc("f_code");
         return queryWrapper;
     }
 
@@ -161,8 +162,9 @@ public class IncomeSortServiceImpl implements IncomeSortService {
         if (incomeSortDao.selectOne(queryWrapper) != null) {
 //            throw new MyIncomeSortException(InComeResultCode.INCOME_CODE_EXISTS);
         }
-
+        //如果是父级id为0
         if (parentId.equals(IncomeSortConstant.INIT_ALL_NUM)) {
+            //则编码长度只能为1位
             if (code.length() == 1) {
                 return true;
             } else {
@@ -248,10 +250,14 @@ public class IncomeSortServiceImpl implements IncomeSortService {
     }
 
     @Override
-    public Boolean delete(Long id) {
+    public Boolean delete(DeleteIncomeSortVO deleteIncomeSortVO) {
+        Long id = deleteIncomeSortVO.getId();
+        if (incomeSortDao.selectById(id) == null) {
+//            throw new MyIncomeSortException(InComeResultCode.INCOME_CODE_NUM_ERROR);
+        }
 
 
-        return null;
+        return true;
     }
 
 
