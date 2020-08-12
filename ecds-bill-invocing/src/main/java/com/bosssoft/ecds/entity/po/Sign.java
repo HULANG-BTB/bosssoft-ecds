@@ -1,5 +1,8 @@
 package com.bosssoft.ecds.entity.po;
 
+import lombok.Data;
+
+@Data
 public class Sign {
 
     private int fId;
