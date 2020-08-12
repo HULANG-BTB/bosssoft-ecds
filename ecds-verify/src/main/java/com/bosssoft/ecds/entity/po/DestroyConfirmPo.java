@@ -1,4 +1,4 @@
-package com.bosssoft.ecds.po;
+package com.bosssoft.ecds.entity.po;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("fbe_destory_DestroyConfirm")
+@TableName("fbe_destroy_confirm")
 public class DestroyConfirmPo implements Serializable {
 
     private static final long serialVersionUID = 1L;
