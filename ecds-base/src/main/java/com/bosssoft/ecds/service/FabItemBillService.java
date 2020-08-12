@@ -1,27 +1,34 @@
 package com.bosssoft.ecds.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.bosssoft.ecds.entity.vo.ItemBillVO;
+import com.bosssoft.ecds.entity.dto.ItemDTO;
+import com.bosssoft.ecds.entity.vo.*;
 
 public interface FabItemBillService {
+
     /**
-     * 根据票据种类查询与之关联的项目,分页查询
+     * 根据票据种类查询与之关联的项目,分页查询,项目名称模糊查询
      *
-     * @param pagenum
-     * @param pagesize
-     * @param billCode 票据种类编码
+     * @param selectItemVO pagenum 请求的页数 pagesize 页面大小 billCode 票据种类编码 itemName 项目名称
      * @return 返回存了一页的ItemBillVO
      */
-    IPage<ItemBillVO> selectItemByBillCode(Integer pagenum, Integer pagesize, String billCode);
+    IPage<ItemBillVO> selectItemWithBillCode(SelectItemVO selectItemVO);
 
     /**
      * 将项目与票据种类进行关联
      *
-     * @param billCode 票据种类编码
-     * @param itemId   项目id
+     * @param itemsInsertVO 包含 billCode 票据种类编码  itemId   项目id
      * @return 操作是否成功
      */
-    boolean insertIntoItemBill(String billCode, String itemId);
+    boolean insertIntoItemBill(BillItemsInsertVO itemsInsertVO);
+
+    /**
+     * 批量将项目与票据种类进行关联
+     *
+     * @param billItemsVO 票据种类编码 存储项目id的List
+     * @return 操作是否成功
+     */
+    boolean insertBatchItemBill(BillItemsVO billItemsVO);
 
 
     /**
@@ -43,10 +50,16 @@ public interface FabItemBillService {
     /**
      * 项目与票据种类是否有关联
      *
-     * @param billCode 票据种类编码
-     * @param itemId   项目id
+     * @param itemsInsertVO 包含 billCode 票据种类编码 itemId   项目id
      * @return true 有关联  false 无关联
      */
+    boolean checkItemBill(BillItemsInsertVO itemsInsertVO);
 
-    boolean checkItemBill(String billCode, String itemId);
+    /**
+     * 查询与项目种类无关的项目
+     *
+     * @param selectItemVO
+     * @return
+     */
+    IPage selectNoContactItem(SelectItemVO selectItemVO);
 }

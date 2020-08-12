@@ -3,12 +3,15 @@ package com.bosssoft.ecds.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.bosssoft.ecds.common.response.CommonCode;
 import com.bosssoft.ecds.common.response.QueryResponseResult;
-import com.bosssoft.ecds.common.response.ResultCode;
+import com.bosssoft.ecds.entity.vo.BillItemsInsertVO;
+import com.bosssoft.ecds.entity.vo.BillItemsVO;
+import com.bosssoft.ecds.entity.vo.ItemBillVO;
+import com.bosssoft.ecds.entity.vo.SelectItemVO;
 import com.bosssoft.ecds.service.FabItemBillService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.websocket.server.PathParam;
 
@@ -20,34 +23,52 @@ import javax.websocket.server.PathParam;
  */
 @RestController
 @RequestMapping("/itembill")
+@Api(value = "票据与项目关系管理", description = "票据与项目关系管理 ")
 public class ItemBillController {
     @Autowired
     FabItemBillService fabItemBillService;
 
-    @PostMapping("/getitembybillcode")
-    public QueryResponseResult getItemByBillCode(@PathParam("billCode") String billCode, @PathParam("pageNum") Integer pageNum, @PathParam("pageSize") Integer pageSize) {
-        return new QueryResponseResult<IPage>(CommonCode.SUCCESS, fabItemBillService.selectItemByBillCode(pageNum, pageSize, billCode));
+    @PostMapping("/insert")
+    @ApiOperation(value = "添加票据项目关系", notes = "")
+    public QueryResponseResult insertIntoItemBill(@RequestBody BillItemsInsertVO itemsInsertVO) {
+        return new QueryResponseResult<Boolean>(CommonCode.SUCCESS, fabItemBillService.insertIntoItemBill(itemsInsertVO));
     }
 
-    @PostMapping("/insert")
-    public QueryResponseResult insertIntoItemBill(@PathParam("billCode") String billCode, @PathParam("itemId") String itemId) {
-        return new QueryResponseResult<Boolean>(CommonCode.SUCCESS, fabItemBillService.insertIntoItemBill(billCode, itemId));
+    @PostMapping("/insertbatch")
+    @ApiOperation(value = "批量添加票据项目关系", notes = "")
+    public QueryResponseResult insertBatchItemBill(@RequestBody BillItemsVO billItemsVO) {
+        return new QueryResponseResult<Boolean>(CommonCode.SUCCESS, fabItemBillService.insertBatchItemBill(billItemsVO));
     }
 
     @PostMapping("/delete")
-    public QueryResponseResult deleteFromItemBill(@PathParam("id") Long id) {
-        return new QueryResponseResult<Boolean>(CommonCode.SUCCESS, fabItemBillService.deleteFromItemBill(id));
+    @ApiOperation(value = "删除票据项目关系", notes = "")
+    public QueryResponseResult deleteFromItemBill(@RequestBody ItemBillVO itemBillVO) {
+        return new QueryResponseResult<Boolean>(CommonCode.SUCCESS, fabItemBillService.deleteFromItemBill(itemBillVO.getId()));
     }
 
     @PostMapping("/turnenabled")
-    public QueryResponseResult turnEnabled(@PathParam("id") Long id) {
-        return new QueryResponseResult<Boolean>(CommonCode.SUCCESS, fabItemBillService.turnEnabled(id));
+    @ApiOperation(value = "更改启用关系状态", notes = "1 启用 0 停用")
+    public QueryResponseResult turnEnabled(@RequestBody ItemBillVO itemBillVO) {
+        return new QueryResponseResult<Boolean>(CommonCode.SUCCESS, fabItemBillService.turnEnabled(itemBillVO.getId()));
+    }
+
+
+    @PostMapping("/getitemwithbillcode")
+    @ApiOperation(value = "获取与票据种类有关的项目 分页与模糊查询", notes = " ")
+    public QueryResponseResult getItemWithBillCode(@RequestBody SelectItemVO selectItemVO) {
+        return new QueryResponseResult<IPage>(CommonCode.SUCCESS, fabItemBillService.selectItemWithBillCode(selectItemVO));
+    }
+
+    @PostMapping("/getnocontactitem")
+    @ApiOperation(value = "获取与票据种类无关的项目 分页与模糊查询", notes = " ")
+    public QueryResponseResult getNoContactItem(@RequestBody SelectItemVO selectItemVO) {
+        return new QueryResponseResult<IPage>(CommonCode.SUCCESS, fabItemBillService.selectNoContactItem(selectItemVO));
     }
 
     @PostMapping("/check")
-    public QueryResponseResult check(@PathParam("billCode") String billCode, @PathParam("itemId") String itemId) {
-        return new QueryResponseResult<Boolean>(CommonCode.SUCCESS, fabItemBillService.checkItemBill(billCode, itemId));
+    @ApiOperation(value = "查看票据种类与项目是否有关", notes = " ")
+    public QueryResponseResult check(@RequestBody BillItemsInsertVO itemsInsertVO) {
+        return new QueryResponseResult<Boolean>(CommonCode.SUCCESS, fabItemBillService.checkItemBill(itemsInsertVO));
     }
-
 
 }

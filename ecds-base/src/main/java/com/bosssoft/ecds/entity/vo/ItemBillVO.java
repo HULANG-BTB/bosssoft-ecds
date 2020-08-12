@@ -1,5 +1,7 @@
 package com.bosssoft.ecds.entity.vo;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
 /**
@@ -14,30 +16,34 @@ public class ItemBillVO {
     /**
      * 关联表主键
      */
-    Long id;
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Long id;
+    /**
+     * 票据种类编码
+     */
+    private String billCode;
     /**
      * 操作人
      */
-    String operator;
+    private String operator;
     /**
-     *  项目id
-     *  在项目表中是 f_item_id
-     *  在关系表中是f_item_id_code
+     * 项目id
+     * 在项目表中是 f_item_id
+     * 在关系表中是f_item_id_code
      */
-    String itemId;
+    private String itemId;
     /**
-     *  项目表中的项目名称
+     * 项目表中的项目名称
      */
-    String itemName;
-
+    private String itemName;
     /**
-     *  关系是否启用
+     * 关系是否启用
      */
-    boolean enabled;
+    private Boolean enabled;
     /**
      * 项目是否启用
      */
-    boolean itemIsEnabled;
+    private Boolean itemIsEnabled;
 
 
 }
