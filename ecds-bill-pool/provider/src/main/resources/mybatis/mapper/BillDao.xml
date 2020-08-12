@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bosssoft.ecds.dao.BillDao">
+    <insert id="insertBill">
+        insert into fbb_billpool (f_rgn_code, f_type, f_sort, f_batch, f_bill_code, f_operator, f_operator_id)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.regionCode}, #{item.type}, #{item.sort}, #{item.batch}, #{item.billCode}, #{item.operator},
+            #{item.operatorID})
+        </foreach>
+    </insert>
+
+    <resultMap id="billResultMap" type="billPo">
+        <id column="f_id" property="id"/>
+        <result column="f_rgn_code" property="regionCode"/>
+        <result column="f_type" property="type"/>
+        <result column="f_sort" property="sort"/>
+        <result column="f_batch" property="batch"/>
+        <result column="f_bill_code" property="billCode"/>
+        <result column="f_operator" property="operator"/>
+        <result column="f_operator_id" property="operatorID"/>
+        <result column="f_create_time" property="createTime"/>
+        <result column="f_update_time" property="updateTime"/>
+    </resultMap>
+
+    <select id="retrieveNumber" resultType="int">
+        select count(*) from fbb_billpool
+    </select>
+
+    <select id="retrieveList" resultMap="billResultMap" parameterType="int">
+        select * from fbb_billpool order by f_id asc limit 0, #{number}
+    </select>
+
+    <delete id="deleteList">
+        delete from fbb_billpool where f_id in
+        <foreach collection="list" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>
