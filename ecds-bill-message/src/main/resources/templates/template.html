@@ -9,8 +9,14 @@
     <div align="left">
         <div>您开具了财政电子票据，票据信息如下：</div>
         <br>
-        <div>code:${code}</div>
-        <div>msg:${msg}</div>
+        <div>开票日期：${billDate?string('yyyy-MM-dd hh:mm:ss')}</div>
+        <div>票据类型：${billType}</div>
+        <div>票据代码：${billPreCode}</div>
+        <div>票据号码：${billCode}</div>
+        <div>校验码：${billVerifyCode}</div>
+        <div>开票部门：${billDep}</div>
+        <div>交款人：${payer}</div>
+        <div>总金额：${billAmount} 元</div>
     </div>
 </div>
 

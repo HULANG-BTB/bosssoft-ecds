@@ -1,10 +1,9 @@
 package com.boss.msg.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.aliyuncs.exceptions.ClientException;
 import com.boss.msg.entity.dto.SmsDto;
-import com.boss.msg.entity.vo.PageResult;
-import com.boss.msg.entity.vo.SmsQueryVo;
-import com.boss.msg.entity.vo.SmsVo;
+import com.boss.msg.entity.vo.*;
 import com.boss.msg.service.SendSmsService;
 import com.boss.msg.service.SmsService;
 import com.boss.msg.util.DozerUtils;
@@ -13,6 +12,8 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -36,8 +37,11 @@ public class SmsController {
      * @return 发件成功与否
      */
     @PostMapping("/send")
-    public String sendSms(@RequestBody SmsVo smsVo) throws ClientException, ExecutionException, InterruptedException {
-        boolean b = sendsmsService.sendSms(DozerUtils.map(smsVo, SmsDto.class)).get();
+    public String sendSms(@RequestBody SendSmsVo smsVo) throws ClientException, ExecutionException, InterruptedException {
+        BillVo billVo = new BillVo(new Date(), "电子票据", "12345678", "1234567890", "a1b2c3", "测试单位", "zhangsan", new BigDecimal(500));
+        smsVo.setContent(JSON.toJSONString(billVo));
+        SmsDto smsDto = DozerUtils.map(smsVo, SmsDto.class);
+        boolean b = sendsmsService.sendSms(smsDto).get();
 
         if (b) {
             return ResponseUtils.getResponse(

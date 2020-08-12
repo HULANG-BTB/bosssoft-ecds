@@ -1,9 +1,8 @@
 package com.boss.msg.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.boss.msg.entity.dto.MailDto;
-import com.boss.msg.entity.vo.MailQueryVo;
-import com.boss.msg.entity.vo.MailVo;
-import com.boss.msg.entity.vo.PageResult;
+import com.boss.msg.entity.vo.*;
 import com.boss.msg.service.MailService;
 import com.boss.msg.service.SendMailService;
 import com.boss.msg.util.DozerUtils;
@@ -13,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -32,15 +33,15 @@ public class MailController {
     private MailService mailService;
 
     @RequestMapping("/send")
-    public boolean mailTest(MailVo mailVo) throws ExecutionException, InterruptedException {
-        mailVo = new MailVo();
-        mailVo.setMailTo("386455317@qq.com");
-        mailVo.setSubject("subject");
-        mailVo.setContent("{\"code\":\"123\",\"msg\":\"231\"}");
+    public boolean mailTest(@RequestBody SendMailVo mailVo) throws ExecutionException, InterruptedException {
+        mailVo.setSubject("电子票据开票通知");
+        BillVo billVo = new BillVo(new Date(), "电子票据", "12345678", "1234567890", "a1b2c3", "测试单位", "zhangsan", new BigDecimal(500));
+        mailVo.setContent(JSON.toJSONString(billVo));
         /*File file = new File("D://编程规范.pdf");
         ArrayList<File> files = Lists.newArrayList(file);
         mailVo.setFiles(files);*/
-        return sendMailService.sendMail(DozerUtils.map(mailVo, MailDto.class)).get().getIsSent();
+        MailDto mailDto = DozerUtils.map(mailVo, MailDto.class);
+        return sendMailService.sendMail(mailDto).get().getIsSent();
     }
 
     /**

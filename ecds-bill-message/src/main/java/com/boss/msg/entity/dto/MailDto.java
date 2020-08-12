@@ -46,6 +46,7 @@ public class MailDto {
     /**
      * 发送时间
      */
+    @JsonSerialize(using=ToStringSerializer.class)
     private Date sentDate;
 
 
