@@ -1,4 +1,5 @@
 package com.bosssoft.ecds.entity.po;
+
 import lombok.Data;
 import java.util.Date;
 
