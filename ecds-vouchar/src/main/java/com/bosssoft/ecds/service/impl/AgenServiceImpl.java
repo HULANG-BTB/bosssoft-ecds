@@ -11,6 +11,7 @@ import com.bosssoft.ecds.entity.po.ArchivePO;
 import com.bosssoft.ecds.entity.query.ArchiveOverViewQuery;
 import com.bosssoft.ecds.service.AgenService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Service;
  * @since 2020-08-12
  */
 @Service
+@Slf4j
 public class AgenServiceImpl extends ServiceImpl<AgenDao, AgenPO> implements AgenService {
     @Autowired
     private AgenDao agenDao;
@@ -37,8 +39,7 @@ public class AgenServiceImpl extends ServiceImpl<AgenDao, AgenPO> implements Age
         QueryWrapper<AgenPO> wrapper = new QueryWrapper();
         LambdaQueryWrapper<AgenPO> lambdaQueryWrapper = wrapper
                 .lambda()
-                .eq(AgenPO::getAgenName, query.getAgenName())
-                .and(qw -> qw.eq(AgenPO::getAgenCode, query.getAgenCode()));
+                .eq(AgenPO::getAgenCode, query.getAgenCode());
         AgenPO agenPO = agenDao.selectOne(lambdaQueryWrapper);
         AgenDto agenDto = new AgenDto();
         BeanUtil.copyProperties(agenPO, agenDto);

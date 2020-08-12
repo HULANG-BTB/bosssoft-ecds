@@ -3,7 +3,7 @@
 <mapper namespace="com.bosssoft.ecds.dao.StockReturnVoucherDao">
     <!--归档退票记录-->
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.bosssoft.ecds.entity.po.StockReturnVoucherPO">
+    <resultMap id="BaseResultMap" type="com.bosssoft.ecds.entity.po.BillReturnPO">
         <id column="f_id" property="id" />
         <result column="f_agen_idcode" property="agenIdcode" />
         <result column="f_bill_batch_id" property="billBatchId" />

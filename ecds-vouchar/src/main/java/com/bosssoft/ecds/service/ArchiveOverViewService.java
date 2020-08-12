@@ -5,6 +5,8 @@ import com.bosssoft.ecds.entity.po.ArchivePO;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.bosssoft.ecds.entity.query.ArchiveOverViewQuery;
 
+import java.util.List;
+
 /**
  * <p>
  *  服务类
@@ -21,4 +23,10 @@ public interface ArchiveOverViewService extends IService<ArchivePO> {
      * @return OverViewArchiveDto
      */
     ArchiveOverViewDto queryOverViewArchiveInfo(ArchiveOverViewQuery archiveOverViewQuery);
+
+    /**
+     *  财政端查询  查询所有单位的信息，以及票据使用情况。
+     * @return List<ArchiveOverViewDto>
+     */
+    List<ArchiveOverViewDto> queryOverViewArchiveAllInfo();
 }

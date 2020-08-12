@@ -1,6 +1,6 @@
 package com.bosssoft.ecds.dao;
 
-import com.bosssoft.ecds.entity.po.StockReturnVoucherPO;
+import com.bosssoft.ecds.entity.po.BillReturnPO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author liuke
  * @since 2020-08-11
  */
-public interface StockReturnVoucherDao extends BaseMapper<StockReturnVoucherPO> {
+public interface BillReturnDao extends BaseMapper<BillReturnPO> {
 
 }

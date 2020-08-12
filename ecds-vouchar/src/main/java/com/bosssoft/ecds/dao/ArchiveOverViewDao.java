@@ -22,5 +22,4 @@ public interface ArchiveOverViewDao extends BaseMapper<ArchivePO> {
      */
     ArchiveOverViewDto queryOverViewArchiveInfo(ArchiveOverViewQuery archiveOverViewQuery);
 
-
 }

@@ -1,7 +1,7 @@
 package com.bosssoft.ecds.service;
 
 import com.bosssoft.ecds.entity.dto.BillReturnDto;
-import com.bosssoft.ecds.entity.po.StockReturnVoucherPO;
+import com.bosssoft.ecds.entity.po.BillReturnPO;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.List;
  * @author liuke
  * @since 2020-08-11
  */
-public interface BillReturnService extends IService<StockReturnVoucherPO> {
+public interface BillReturnService extends IService<BillReturnPO> {
     /**
      * 根据单位编码，获取单位退票的信息
      * @param agenIdCode

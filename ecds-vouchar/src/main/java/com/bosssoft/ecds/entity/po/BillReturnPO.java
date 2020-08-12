@@ -27,9 +27,9 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("fbr_stock_return_voucher")
-@ApiModel(value="StockReturnVoucherPO对象", description="归档退票")
-public class StockReturnVoucherPO extends Model<StockReturnVoucherPO> {
+@TableName("fbr_bill_return")
+@ApiModel(value="BillReturnPO对象", description="归档退票")
+public class BillReturnPO extends Model<BillReturnPO> {
 
 
     @ApiModelProperty(value = "主键")
@@ -37,8 +37,8 @@ public class StockReturnVoucherPO extends Model<StockReturnVoucherPO> {
     private Long id;
 
     @ApiModelProperty(value = "单位编码")
-    @TableField("f_agen_idcode")
-    private String agenIdCode;
+    @TableField("f_agen_code")
+    private String agenCode;
 
     @ApiModelProperty(value = "票据批次id")
     @TableField("f_bill_batch_id")

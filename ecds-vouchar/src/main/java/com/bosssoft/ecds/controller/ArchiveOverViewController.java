@@ -1,6 +1,5 @@
 package com.bosssoft.ecds.controller;
 
-
 import cn.hutool.core.bean.BeanUtil;
 import com.bosssoft.ecds.entity.dto.ArchiveOverViewDto;
 import com.bosssoft.ecds.entity.query.ArchiveOverViewQuery;
@@ -10,6 +9,9 @@ import com.bosssoft.ecds.util.ResponseUtils;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>
@@ -28,7 +30,7 @@ public class ArchiveOverViewController {
     private ArchiveOverViewService service;
 
     /**
-     * 根据单位信息查询单位票据归档的简略信息
+     * 根据单位信息查询单位票据归档的信息
      * @param query
      * @return String
      */
@@ -38,6 +40,31 @@ public class ArchiveOverViewController {
         ArchiveOverViewVo vo = new ArchiveOverViewVo();
         BeanUtil.copyProperties(archiveOverViewDto,vo);
         return ResponseUtils.getResponse(vo,ResponseUtils.ResultType.OK);
+    }
+
+    /**
+     * 获取所有单位的归档信息,并且展示给前台
+     * @return
+     */
+    @GetMapping("/allInfo")
+    public String queryArchiveAllInfo(){
+        /**
+         * 获取全部的单位信息
+         */
+        List<ArchiveOverViewDto> archiveOverViewDtos = service.queryOverViewArchiveAllInfo();
+        List<ArchiveOverViewVo> voList = new ArrayList<>();
+
+        /**
+         * 类型转换
+         */
+        ArchiveOverViewVo vo = null;
+        for (ArchiveOverViewDto dto:archiveOverViewDtos) {
+            vo = new ArchiveOverViewVo();
+            BeanUtil.copyProperties(dto, vo);
+            voList.add(vo);
+        }
+
+        return ResponseUtils.getResponse(voList,ResponseUtils.ResultType.OK);
     }
 
     /**

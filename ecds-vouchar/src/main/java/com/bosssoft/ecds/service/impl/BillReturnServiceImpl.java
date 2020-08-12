@@ -1,8 +1,8 @@
 package com.bosssoft.ecds.service.impl;
 
+import com.bosssoft.ecds.dao.BillReturnDao;
 import com.bosssoft.ecds.entity.dto.BillReturnDto;
-import com.bosssoft.ecds.entity.po.StockReturnVoucherPO;
-import com.bosssoft.ecds.dao.StockReturnVoucherDao;
+import com.bosssoft.ecds.entity.po.BillReturnPO;
 import com.bosssoft.ecds.service.BillReturnService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
@@ -19,9 +19,10 @@ import java.util.List;
  * @since 2020-08-11
  */
 @Service
-public class BillReturnServiceImpl extends ServiceImpl<StockReturnVoucherDao, StockReturnVoucherPO> implements BillReturnService {
+public class BillReturnServiceImpl extends ServiceImpl<BillReturnDao, BillReturnPO> implements BillReturnService {
     @Override
     public List<BillReturnDto> queryBillReturnInfo(String agenIdCode) {
         return null;
     }
+
 }

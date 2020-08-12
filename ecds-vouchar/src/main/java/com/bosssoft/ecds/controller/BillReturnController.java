@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api("归档退票接口")
 @RestController
 @RequestMapping("/stock-return-voucher-po")
-public class StockReturnVoucherController {
+public class BillReturnController {
 
 }
 
