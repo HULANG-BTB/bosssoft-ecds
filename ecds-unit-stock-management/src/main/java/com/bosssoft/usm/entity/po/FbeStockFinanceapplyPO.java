@@ -4,9 +4,10 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.Data;
+import lombok.Setter;
 
-import java.util.Date;
+import java.math.BigInteger;
+import java.time.LocalDateTime;
 
 /**
  * fbe_stock_financeapply
@@ -14,17 +15,18 @@ import java.util.Date;
  * @author bianj
  * @version 1.0.0 2020-08-10
  */
-@Data
+@Setter
 @TableName("fbe_stock_financeapply")
 public class FbeStockFinanceapplyPO {
 
     /** 申领表_主键 */
     @TableId(type = IdType.AUTO)
-    private Long fId;
+
+    private BigInteger fId;
 
     /** 单号 */
     @TableField
-    private Long fNo;
+    private BigInteger fNo;
 
     /** 区域编码 */
     @TableField
@@ -32,11 +34,11 @@ public class FbeStockFinanceapplyPO {
 
     /** 单位编码 */
     @TableField
-    private Long fCode;
+    private BigInteger fAgenIdCode;
 
     /** 单位名称 */
     @TableField
-    private String fName;
+    private String fAgenName;
 
     /** 单位类型 */
     @TableField
@@ -80,15 +82,18 @@ public class FbeStockFinanceapplyPO {
 
     /** 创建日期 */
     @TableField
-    private Date fCreateTime;
+    private LocalDateTime fCreateTime;
 
     /** 更新日期 */
     @TableField
-    private Date fUpdateTime;
+    private LocalDateTime fUpdateTime;
+
+    @TableField
+    private Integer fChangeState;
 
     /** 审核日期 */
     @TableField
-    private Date fChangeDate;
+    private LocalDateTime fChangeDate;
 
     /** 审核人 */
     @TableField
@@ -106,4 +111,95 @@ public class FbeStockFinanceapplyPO {
     @TableField
     private Boolean fLogicDelete;
 
+    public BigInteger getfId() {
+        return fId;
+    }
+
+    public BigInteger getfNo() {
+        return fNo;
+    }
+
+    public String getfRgnCode() {
+        return fRgnCode;
+    }
+
+    public BigInteger getfAgenIdCode() {
+        return fAgenIdCode;
+    }
+
+    public String getfAgenName() {
+        return fAgenName;
+    }
+
+    public String getfKindName() {
+        return fKindName;
+    }
+
+    public String getfBillCode() {
+        return fBillCode;
+    }
+
+    public Integer getfBatchNum() {
+        return fBatchNum;
+    }
+
+    public String getfLinkMan() {
+        return fLinkMan;
+    }
+
+    public String getfLinkTel() {
+        return fLinkTel;
+    }
+
+    public String getfLinkAddr() {
+        return fLinkAddr;
+    }
+
+    public String getfAuthor() {
+        return fAuthor;
+    }
+
+    public String getfMemo() {
+        return fMemo;
+    }
+
+    public Integer getfVersion() {
+        return fVersion;
+    }
+
+    public String getfAbstract() {
+        return fAbstract;
+    }
+
+    public LocalDateTime getfCreateTime() {
+        return fCreateTime;
+    }
+
+    public LocalDateTime getfUpdateTime() {
+        return fUpdateTime;
+    }
+
+    public Integer getfChangeState() {
+        return fChangeState;
+    }
+
+    public LocalDateTime getfChangeDate() {
+        return fChangeDate;
+    }
+
+    public String getfChangeMan() {
+        return fChangeMan;
+    }
+
+    public String getfChangeSitu() {
+        return fChangeSitu;
+    }
+
+    public Integer getfStatus() {
+        return fStatus;
+    }
+
+    public Boolean getfLogicDelete() {
+        return fLogicDelete;
+    }
 }

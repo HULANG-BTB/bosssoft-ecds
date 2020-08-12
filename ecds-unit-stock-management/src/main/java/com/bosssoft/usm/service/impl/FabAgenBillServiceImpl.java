@@ -5,6 +5,7 @@ import com.bosssoft.usm.entity.po.FabAgenBillPO;
 import com.bosssoft.usm.service.AbstractService;
 import com.bosssoft.usm.service.FabAgenBillService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author 张东海
@@ -14,4 +15,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class FabAgenBillServiceImpl extends AbstractService<FabAgenBillPO, FabAgenBillMapper>
     implements FabAgenBillService {
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void update(FabAgenBillPO bean) {
+        super.update(bean);
+    }
 }

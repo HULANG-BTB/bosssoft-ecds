@@ -11,6 +11,7 @@ import com.bosssoft.usm.service.impl.FbeStockFinanceapplyServiceImpl;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.math.BigInteger;
 import java.util.List;
 
 @RestController
@@ -20,7 +21,7 @@ public class FbeStockFinanceapplyController {
     FbeStockFinanceapplyServiceImpl fbeStockFinanceapplyService;
 
     @GetMapping("fbeStockFinanceapply")
-    public FbeStockFinanceapplyPO getById(Integer id){
+    public FbeStockFinanceapplyPO getById(BigInteger id){
         return fbeStockFinanceapplyService.getByPrimaryKey(id);
     }
 
@@ -40,7 +41,7 @@ public class FbeStockFinanceapplyController {
     }
 
     @DeleteMapping("fbeStockFinanceapply")
-    public void delete(Integer id){
+    public void delete(BigInteger id){
         fbeStockFinanceapplyService.delete(id);
     }
 }
