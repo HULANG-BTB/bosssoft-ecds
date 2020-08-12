@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
@@ -28,13 +29,16 @@ public class PermissionVO extends Model<PermissionVO> {
     @ApiModelProperty(value = "父权限ID")
     private Long parentId;
 
-    @ApiModelProperty(value = "地址")
+    @ApiModelProperty(value = "地址", required = true)
+    @NotNull(message = "URL不能为空")
     private String url;
 
-    @ApiModelProperty(value = "名称")
+    @ApiModelProperty(value = "名称", required = true)
+    @NotNull(message = "权限名称不能为空")
     private String name;
 
-    @ApiModelProperty(value = "访问方法")
+    @ApiModelProperty(value = "访问方法", required = true)
+    @NotNull(message = "访问方式不能为空")
     private String method;
 
     @ApiModelProperty(value = "经办人ID")
@@ -48,12 +52,6 @@ public class PermissionVO extends Model<PermissionVO> {
 
     @ApiModelProperty(value = "修改时间")
     private Date updateTime;
-
-    @ApiModelProperty(value = "逻辑删除")
-    private Boolean logicDelete;
-
-    @ApiModelProperty(value = "乐观锁")
-    private Integer version;
 
     @ApiModelProperty(value = "备注")
     private String note;

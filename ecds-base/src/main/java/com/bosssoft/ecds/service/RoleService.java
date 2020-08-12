@@ -10,7 +10,7 @@ import java.util.List;
  * @InterfaceName RoleService
  * @Author AloneH
  * @Date 2020/7/29 20:52
- * @Description TODO
+ * @Description 角色模块 Serive
  **/
 
 public interface RoleService extends IService<RolePO> {

@@ -8,6 +8,8 @@ import com.bosssoft.ecds.entity.vo.PageVO;
 import com.bosssoft.ecds.service.DeptService;
 import com.bosssoft.ecds.utils.MyBeanUtil;
 import com.bosssoft.ecds.utils.ResponseUtils;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +26,7 @@ import java.util.List;
  */
 @Slf4j
 @RestController
+@Api(value = "部门管理接口")
 @RequestMapping("/dept")
 public class DeptController {
 
@@ -33,12 +36,13 @@ public class DeptController {
     /**
      *
      *
-     * @description: 新增部门。
+     * @description: 新增单位。
      * @param {FabDeptVO} fabDeptVO
      * @return: {String}
      * @author: YuHangChen
      * @time: 09/08/2020 上午10:17
      */
+    @ApiOperation(value = "新增单位")
     @PostMapping("/save")
     public String save(@RequestBody DeptVO fabDeptVO){
         DeptDTO fabDeptDTO = new DeptDTO();
@@ -57,6 +61,7 @@ public class DeptController {
      * @author: YuHangChen
      * @time: 09/08/2020 上午10:17
      */
+    @ApiOperation(value = "按部门编码删除部门")
     @PostMapping("/remove")
     public String remove(@RequestBody DeptVO fabDeptVO){
         DeptDTO fabDeptDTO = new DeptDTO();
@@ -75,6 +80,7 @@ public class DeptController {
      * @author: YuHangChen
      * @time: 09/08/2020 上午10:17
      */
+    @ApiOperation(value = "用于修改部门信息")
     @PostMapping("/update")
     public String update(@RequestBody DeptVO fabDeptVO){
         DeptDTO fabDeptDTO = new DeptDTO();
@@ -93,6 +99,7 @@ public class DeptController {
      * @author: YuHangChen
      * @time: 09/08/2020 上午10:17
      */
+    @ApiOperation(value = "根据部门编码查询部门")
     @PostMapping("/getByDeptCode")
     public String getByDeptCode(@RequestBody DeptVO fabDeptVO){
         DeptDTO fabDeptDTO = new DeptDTO();
@@ -111,6 +118,7 @@ public class DeptController {
      * @author: YuHangChen
      * @time: 09/08/2020 上午10:17
      */
+    @ApiOperation(value = "根据部门名查询部门")
     @PostMapping("/getByDeptName")
     public String getByDeptName(@RequestBody DeptVO fabDeptVO){
         DeptDTO fabDeptDTO = new DeptDTO();
@@ -128,6 +136,7 @@ public class DeptController {
      * @author: YuHangChen
      * @time: 09/08/2020 上午10:17
      */
+    @ApiOperation(value = "用于查看部门列表")
     @GetMapping("/listAll")
     public String listAll(){
         List<DeptDTO> fabDeptDTOList = fabDeptService.listAll();
@@ -141,6 +150,7 @@ public class DeptController {
      * @param pageVO
      * @return
      */
+    @ApiOperation(value = "通过分页查询")
     @PostMapping("listByPage")
     public String listByPage(@RequestBody PageVO pageVO) {
         PageDTO pageDTO = MyBeanUtil.copyProperties(pageVO, PageDTO.class);
@@ -156,6 +166,7 @@ public class DeptController {
      * @param fabDeptVOList
      * @return
      */
+    @ApiOperation(value = "批量删除")
     @PostMapping("removeBatch")
     public String removeBatch(@RequestBody List<DeptVO> fabDeptVOList) {
         List<DeptDTO> fabDeptDTOList = MyBeanUtil.copyListProperties(fabDeptVOList, DeptDTO.class);

@@ -1,6 +1,7 @@
 package com.bosssoft.ecds.service.impl;
 
 import cn.hutool.crypto.digest.BCrypt;
+import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bosssoft.ecds.entity.dto.PageDTO;
@@ -28,6 +29,7 @@ import java.util.List;
  * @since 2020-07-25
  */
 @Service
+@DS("master")
 public class UserServiceImpl extends ServiceImpl<UserDao, UserPO> implements UserService {
 
     @Autowired

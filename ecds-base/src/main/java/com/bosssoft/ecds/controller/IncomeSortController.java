@@ -5,8 +5,8 @@ import com.bosssoft.ecds.common.response.CommonCode;
 import com.bosssoft.ecds.common.response.QueryResponseResult;
 import com.bosssoft.ecds.common.response.ResponseResult;
 import com.bosssoft.ecds.entity.vo.incomesortvo.AddIncomeSortVO;
+import com.bosssoft.ecds.entity.vo.incomesortvo.DeleteIncomeSortVO;
 import com.bosssoft.ecds.entity.vo.incomesortvo.FuzzyQueryIncomeSortVO;
-import com.bosssoft.ecds.entity.vo.incomesortvo.PageIncomeSortVO;
 import com.bosssoft.ecds.entity.vo.incomesortvo.UpdateIncomeSortVO;
 import com.bosssoft.ecds.service.IncomeSortService;
 import io.swagger.annotations.Api;
@@ -47,12 +47,14 @@ public class IncomeSortController {
         QueryResponseResult incomeSortDTOS = incomeSortService.pageQueryByName(fuzzyQueryIncomeSortVO);
         return incomeSortDTOS;
     }
+
     @ApiOperation(value = "分页查询收入类别信息", notes = "通过id查询显示子级收入类别")
     @PostMapping("/pageQueryById")
     public Object pageQueryById(@RequestBody @Validated FuzzyQueryIncomeSortVO fuzzyQueryIncomeSortVO) {
         QueryResponseResult incomeSortDTOS = incomeSortService.pageQueryByName(fuzzyQueryIncomeSortVO);
         return incomeSortDTOS;
     }
+
     @ApiOperation(value = "更新收入类别信息", notes = "可以修改收入名称、是否底级、备注信息等")
     @PostMapping("/update")
     public Object update(@RequestBody @Validated UpdateIncomeSortVO updateIncomeSortVO) {
@@ -60,7 +62,7 @@ public class IncomeSortController {
         return new ResponseResult(CommonCode.SUCCESS);
     }
 
-    @ApiOperation(value = "新增收入类别信息")
+    @ApiOperation(value = "新增收入类别信息", notes = "类别名称和编码唯一")
     @PostMapping("/insert")
     public Object insert(@RequestBody @Validated AddIncomeSortVO addIncomeSortVO) {
         incomeSortService.add(addIncomeSortVO);
@@ -69,8 +71,16 @@ public class IncomeSortController {
 
     @ApiOperation(value = "查询第一级的收入类别")
     @PostMapping("/getFirst")
-    public Object getFirst(){
+    public Object getFirst() {
         return incomeSortService.getFirstIncomeSort();
+    }
+
+    @ApiOperation(value = "删除指定的收入类别", notes = "逻辑删除")
+    @PostMapping("delete")
+    public Object delete(@RequestBody DeleteIncomeSortVO deleteIncomeSortVO) {
+
+
+        return new ResponseResult(CommonCode.SUCCESS);
     }
 
 }

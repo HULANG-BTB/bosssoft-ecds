@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -28,10 +29,12 @@ public class PayerVO extends Model<PayerVO> {
     @ApiModelProperty(value = "主键")
     private Long id;
 
-    @ApiModelProperty(value = "交款人ID")
+    @ApiModelProperty(value = "交款人ID", required = true)
+    @NotNull(message = "缴款人ID不能为空")
     private Long payerId;
 
-    @ApiModelProperty(value = "交款人名称")
+    @ApiModelProperty(value = "交款人名称", required = true)
+    @NotNull(message = "缴款人名称不能为空")
     private String payerName;
 
     @ApiModelProperty(value = "助记码")
@@ -84,12 +87,6 @@ public class PayerVO extends Model<PayerVO> {
 
     @ApiModelProperty(value = "最后修改时间")
     private Date updateTime;
-
-    @ApiModelProperty(value = "逻辑删除")
-    private Boolean logicDelete;
-
-    @ApiModelProperty(value = "版本号")
-    private Integer version;
 
     @ApiModelProperty(value = "备注")
     private String note;
