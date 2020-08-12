@@ -19,7 +19,7 @@ import java.util.Date;
  */
 @Data
 @TableName("fab_item_bill")
-public class FabItemBillPo implements Serializable {
+public class FabItemBillPO implements Serializable {
 
     private static final long serialVersionUID=1L;
 
@@ -35,7 +35,7 @@ public class FabItemBillPo implements Serializable {
     /**
      * 项目编码
      */
-    @TableField("f_item_code")
+    @TableField("f_item_id_code")
     private String fItemIdCode;
 
     /**
@@ -47,25 +47,25 @@ public class FabItemBillPo implements Serializable {
     /**
      * 操作人id
      */
-    @TableField("f_oper_Id")
-    private String operatorId;
+    @TableField(value = "f_oper_Id", fill = FieldFill.INSERT_UPDATE)
+    private Long operatorId;
 
     /**
      * 操作人名称
      */
-    @TableField("f_operator")
+    @TableField(value = "f_operator", fill = FieldFill.INSERT_UPDATE)
     private String operator;
 
     /**
      * 创建时间
      */
-    @TableField("f_create_date")
+    @TableField(value = "f_create_time", fill = FieldFill.INSERT)
     private Date createTime;
 
     /**
      * 最后操作时间
      */
-    @TableField("f_update_date")
+    @TableField(value = "f_update_time", fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
 
     /**

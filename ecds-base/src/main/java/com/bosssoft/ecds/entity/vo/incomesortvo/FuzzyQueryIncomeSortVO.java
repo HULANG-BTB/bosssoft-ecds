@@ -1,15 +1,12 @@
 package com.bosssoft.ecds.entity.vo.incomesortvo;
 
 
-import com.bosssoft.ecds.constant.CheckConstant;
 import com.bosssoft.ecds.constant.IncomeSortConstant;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import io.swagger.models.auth.In;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 
 /**

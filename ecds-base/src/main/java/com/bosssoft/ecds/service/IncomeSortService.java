@@ -1,17 +1,13 @@
 package com.bosssoft.ecds.service;
 
 
-
-
-
 import com.bosssoft.ecds.common.response.QueryResponseResult;
 import com.bosssoft.ecds.entity.dto.IncomeSortDTO;
 import com.bosssoft.ecds.entity.vo.incomesortvo.AddIncomeSortVO;
+import com.bosssoft.ecds.entity.vo.incomesortvo.DeleteIncomeSortVO;
 import com.bosssoft.ecds.entity.vo.incomesortvo.FuzzyQueryIncomeSortVO;
 import com.bosssoft.ecds.entity.vo.incomesortvo.PageIncomeSortVO;
 import com.bosssoft.ecds.entity.vo.incomesortvo.UpdateIncomeSortVO;
-
-import java.util.List;
 
 /**
  * @author: Jianbinbing
@@ -79,7 +75,17 @@ public interface IncomeSortService {
 
     /**
      * 查询第一级收入类别
+     *
      * @return
      */
     QueryResponseResult getFirstIncomeSort();
+
+    /**
+     * 删除指定的收入类别
+     *
+     * @param deleteIncomeSortVO
+     * @return
+     */
+    Boolean delete(DeleteIncomeSortVO deleteIncomeSortVO);
+
 }
