@@ -49,12 +49,6 @@ public class PermissionVO extends Model<PermissionVO> {
     @ApiModelProperty(value = "修改时间")
     private Date updateTime;
 
-    @ApiModelProperty(value = "逻辑删除")
-    private Boolean logicDelete;
-
-    @ApiModelProperty(value = "乐观锁")
-    private Integer version;
-
     @ApiModelProperty(value = "备注")
     private String note;
 

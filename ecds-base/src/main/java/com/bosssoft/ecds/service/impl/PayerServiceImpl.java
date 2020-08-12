@@ -7,11 +7,14 @@ import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.dto.PayerDTO;
 import com.bosssoft.ecds.entity.po.PayerPO;
 import com.bosssoft.ecds.dao.PayerDao;
+import com.bosssoft.ecds.entity.po.UserPO;
 import com.bosssoft.ecds.service.PayerService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bosssoft.ecds.utils.MyBeanUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +29,12 @@ import java.util.List;
 @Service
 @DS("slave")
 public class PayerServiceImpl extends ServiceImpl<PayerDao, PayerPO> implements PayerService {
+
+    @Autowired
+    UserServiceImpl userService;
+
+    @Autowired
+    HttpServletRequest httpServletRequest;
 
     /**
      * 保存接口
@@ -90,6 +99,12 @@ public class PayerServiceImpl extends ServiceImpl<PayerDao, PayerPO> implements 
      */
     @Override
     public PageDTO<PayerDTO> listByPage(PageDTO<PayerDTO> pageDTO) {
+        // 读取用户信息
+        // TODO 上线删除代码
+        // Long auth_id = Long.valueOf(httpServletRequest.getHeader("auth_id"));
+        Long auth_id = 1L;
+        UserPO userPO = userService.getById(auth_id);
+
         Page<PayerPO> payerPOPage = new Page<>();
         // 设置分页信息
         payerPOPage.setCurrent(pageDTO.getPage());
@@ -105,7 +120,7 @@ public class PayerServiceImpl extends ServiceImpl<PayerDao, PayerPO> implements 
                 .like(PayerPO.F_PAYER_ACCTNAME, pageDTO.getKeyword())
                 .or()
                 .like(PayerPO.F_PAYER_BANKNAME, pageDTO.getKeyword());
-
+        queryWrapper.eq(PayerPO.F_AGEN_IDCODE, userPO.getAgenCode());
         queryWrapper.orderByAsc(PayerPO.F_CREATE_TIME);
         // 读取分页数据
         payerPOPage = super.page(payerPOPage, queryWrapper);

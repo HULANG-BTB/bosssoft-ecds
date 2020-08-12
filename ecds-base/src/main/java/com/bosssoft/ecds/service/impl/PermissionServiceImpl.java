@@ -1,5 +1,6 @@
 package com.bosssoft.ecds.service.impl;
 
+import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -23,6 +24,7 @@ import java.util.List;
  * @since 2020-07-25
  */
 @Service
+@DS("master")
 public class PermissionServiceImpl extends ServiceImpl<PermissionDao, PermissionPO> implements PermissionService {
 
     /**

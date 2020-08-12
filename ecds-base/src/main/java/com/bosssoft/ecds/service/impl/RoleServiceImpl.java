@@ -1,5 +1,6 @@
 package com.bosssoft.ecds.service.impl;
 
+import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -28,6 +29,7 @@ import java.util.List;
  */
 @Service
 @Slf4j
+@DS("master")
 public class RoleServiceImpl extends ServiceImpl<RoleDao, RolePO> implements RoleService {
 
     @Autowired

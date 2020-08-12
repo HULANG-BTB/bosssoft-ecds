@@ -1,6 +1,5 @@
 package com.bosssoft.ecds.entity.vo;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -49,12 +48,6 @@ public class UserVO extends Model<UserVO> {
 
     @ApiModelProperty(value = "修改时间")
     private Date updateTime;
-
-    @ApiModelProperty(value = "乐观锁")
-    private Integer version;
-
-    @ApiModelProperty(value = "逻辑删除")
-    private Integer deleted;
 
     @ApiModelProperty(value = "角色列表")
     private List<RoleVO> roles;
