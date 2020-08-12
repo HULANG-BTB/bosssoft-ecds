@@ -6,11 +6,11 @@ import com.bosssoft.ecds.encodeserver.service.GetCodeService;
 import lombok.extern.log4j.Log4j2;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.annotation.Resource;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -27,8 +27,7 @@ public class getCodeTest {
 
     @Autowired
     private GetCodeService getCodeService;
-    @Autowired
-    private RedissonClient redissonClient;
+
     ThreadPoolExecutor pool = new ThreadPoolExecutor(0, 10,
             1, TimeUnit.SECONDS,
             new SynchronousQueue<>());

@@ -71,10 +71,23 @@ public class GetCodeServiceImpl implements GetCodeService {
             boolean isLock = redLock.tryLock(100L, 10L, TimeUnit.SECONDS);
             if (isLock) {
                 // 红锁上锁，进行赋码
+                /*// 判断财政代码是否创建（体现在MySQL中是否有对应数据），若未创建，直接返回null，在控制器处理。会多查询一次MySQL？考虑在Redis操作
+                if (!isCodeCreated(getFinanceNumDto)) {
+                    return null;
+                }*/
+
+                // 财政代码已创建
                 // 若票据代码对应redis hash记录未创建，则需要创建，否则直接取即可。
-                if (!isRedisCreated(financeCode)) {
-                    createNewHashInRedis(getFinanceNumDto);
+                try {
+                    if (!isRedisCreated(financeCode)) {
+                        createNewHashInRedis(getFinanceNumDto);
+                    }
+                } catch (NullPointerException nullPointerException) {
+                    // 释放锁后再返回null
+                    redLock.unlock();
+                    return null;
                 }
+
                 // Redis库存充足or初始化完成，取出库存码
                 financeCodeSeg = getCodeFromRedis(getFinanceNumDto);
 
@@ -138,7 +151,7 @@ public class GetCodeServiceImpl implements GetCodeService {
      * 在redis中新建hash记录
      * @param getFinanceNumDto
      */
-    public void createNewHashInRedis(GetFinanceNumDto getFinanceNumDto) {
+    public void createNewHashInRedis(GetFinanceNumDto getFinanceNumDto) throws NullPointerException{
         // 新建redis记录
         RMap<Object, Object> map = redissonClient.getMap("code" + getFinanceNumDto.getFinanceCode(), StringCodec.INSTANCE);
 
@@ -166,7 +179,7 @@ public class GetCodeServiceImpl implements GetCodeService {
      * @param getFinanceCodeDTO
      * @return
      */
-    public NumSegDto getBatchCodeFromSql(GetFinanceNumDto getFinanceCodeDTO) {
+    public NumSegDto getBatchCodeFromSql(GetFinanceNumDto getFinanceCodeDTO) throws NullPointerException{
         NumSegDto numSegDto = new NumSegDto();
         // 建立查询映射
         Map<String, Object> selectMap = getSelectMap(getFinanceCodeDTO);
@@ -188,7 +201,6 @@ public class GetCodeServiceImpl implements GetCodeService {
         }
     }
 
-
     /**
      * MySQL中添加指定票据代码对应记录
      * @param createFinanceCodeDTO
@@ -196,11 +208,22 @@ public class GetCodeServiceImpl implements GetCodeService {
      */
     @Override
     public boolean createNewCode(CreateFinanceCodeDto createFinanceCodeDTO) {
-        CodePo codePO = new CodePo();
-        BeanUtil.copyProperties(createFinanceCodeDTO, codePO);
-        codePO.setFCreateTime(new Timestamp(System.currentTimeMillis()));
-        codePO.setFUpdateTime(new Timestamp(System.currentTimeMillis()));
-        int insertNum = codeMapper.insert(codePO);
+        CodePo codePo = new CodePo();
+
+        // 未防止对已创建的票据代码进行创建，需要多查询一次MySQL数据库（创建操作并不是频繁发生的，对性能影响不大）
+        Map<String, Object> selectMap = getSelectMap(createFinanceCodeDTO);
+        CodePo queryCodePo = codeMapper.selectOne(new QueryWrapper<CodePo>().allEq(selectMap));
+        if (queryCodePo != null) {
+            // 数据库中已存在该财政代码，需避免重复创建
+            return false;
+        }
+
+        // 根据CreateFinanceCodeDto对CodePO进行初始化操作并存入数据库
+        BeanUtil.copyProperties(createFinanceCodeDTO, codePo);
+        codePo.setFCreateTime(new Timestamp(System.currentTimeMillis()));
+        codePo.setFUpdateTime(new Timestamp(System.currentTimeMillis()));
+        codePo.setFEndCode(0);
+        int insertNum = codeMapper.insert(codePo);
         return insertNum > 0;
     }
 
@@ -253,4 +276,17 @@ public class GetCodeServiceImpl implements GetCodeService {
         return map;
     }
 
+    /**
+     * 根据CreateFinanceNumDto建立查询映射
+     * @param createFinanceCodeDto
+     * @return
+     */
+    public Map<String, Object> getSelectMap(CreateFinanceCodeDto createFinanceCodeDto) {
+        Map<String, Object> map = new HashMap<>(8);
+        map.put("f_regi_id", createFinanceCodeDto.getFRegiId());
+        map.put("f_sort_id", createFinanceCodeDto.getFSortId());
+        map.put("f_type_id", createFinanceCodeDto.getFTypeId());
+        map.put("f_annual_id", createFinanceCodeDto.getFAnnualId());
+        return map;
+    }
 }

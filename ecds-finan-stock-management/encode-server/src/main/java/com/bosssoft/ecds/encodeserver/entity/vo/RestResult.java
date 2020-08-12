@@ -47,6 +47,10 @@ public class RestResult implements Serializable {
         return result;
     }
 
+    public static RestResult failure(String failureMsg) {
+        return new RestResult(ResultCode.FAILURE, failureMsg);
+    }
+
     public static RestResult isSuccess(boolean success) {
         if (success) {
             return success();

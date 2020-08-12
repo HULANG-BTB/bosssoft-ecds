@@ -3,8 +3,10 @@ package com.bosssoft.ecds.encodeserver.controller;
 import com.bosssoft.ecds.encodeserver.entity.dto.CreateFinanceCodeDto;
 import com.bosssoft.ecds.encodeserver.entity.dto.NumSegDto;
 import com.bosssoft.ecds.encodeserver.entity.dto.GetFinanceNumDto;
+import com.bosssoft.ecds.encodeserver.entity.vo.EncodeResult;
 import com.bosssoft.ecds.encodeserver.entity.vo.RestResult;
 import com.bosssoft.ecds.encodeserver.service.GetCodeService;
+import com.bosssoft.ecds.encodeserver.util.ResponseUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,14 +31,28 @@ public class CodeController {
      * @return
      */
     @PostMapping("/getBatchCode")
-    public RestResult getBatchCode(@RequestBody GetFinanceNumDto getFinanceNumDto) {
+    public EncodeResult getBatchCode(@RequestBody GetFinanceNumDto getFinanceNumDto) {
         NumSegDto batchCode = getCodeService.getBatchCode(getFinanceNumDto);
-        return RestResult.success(batchCode);
+        if (batchCode != null) {
+            return EncodeResult.getEncodeResult(200, "赋码成功", batchCode);
+        } else {
+            return EncodeResult.getEncodeResult(500, "财政代码未创建，请创建后再赋码");
+        }
     }
 
+    /**
+     * 财政对未使用的票据代码申请赋码操作时，需要先进行创建(?)
+     *  需识别当前代码是否已经创建，避免重复创建
+     * @param createFinanceCodeDto
+     * @return
+     */
     @PostMapping("/createCode")
-    public RestResult createCode(@RequestBody CreateFinanceCodeDto createFinanceCodeDto) {
+    public EncodeResult createCode(@RequestBody CreateFinanceCodeDto createFinanceCodeDto) {
         boolean createdFlag = getCodeService.createNewCode(createFinanceCodeDto);
-        return RestResult.success(createdFlag);
+        if (createdFlag) {
+            return EncodeResult.getEncodeResult(200, "财政代码创建成功");
+        } else {
+            return EncodeResult.getEncodeResult(500, "财政代码创建失败，该代码已创建，请勿重复创建");
+        }
     }
 }
