@@ -15,10 +15,18 @@ import java.util.List;
  * @since 2020-08-10
  */
 public interface SubjectService extends IService<SubjectPO> {
+
     /**
      *根据3级科目id返回其及其下4级科目
      * @param pid
      * @return
      */
      List<SubjectDTO> getFourthByPID(long pid);
+
+    /**
+     *添加预算科目
+     * @param subjectDTO
+     * @return
+     */
+    public boolean add(SubjectDTO subjectDTO);
 }

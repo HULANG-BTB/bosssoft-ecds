@@ -33,7 +33,7 @@ public class IncomeSortSubjectPO extends Model<IncomeSortSubjectPO> {
 
 
     @ApiModelProperty(value = "主键")
-    @TableId(value = "f_id", type = IdType.AUTO)
+    @TableId(value = "f_id", type = IdType.ASSIGN_ID)
     private Long id;
 
     @ApiModelProperty(value = "收入类别id")
