@@ -66,7 +66,7 @@ public class WriteOffPO {
 
     @ApiModelProperty(value = "状态：1 未审验，2 已审验")
     @TableField("f_change_state")
-    private Date fChangeState;
+    private short fChangeState;
 
     @ApiModelProperty(value = "审验申请单业务唯一号")
     @TableField("f_apply_id")

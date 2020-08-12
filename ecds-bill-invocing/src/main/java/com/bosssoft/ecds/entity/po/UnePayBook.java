@@ -1,43 +1,74 @@
 package com.bosssoft.ecds.entity.po;
 
-import lombok.Data;
 import java.util.Date;
 
-@Data
 public class UnePayBook {
-    private long fId;
+    private int fId;
 
-    //开票单位编码
+    //区划编码
+    private String fRgnCode;
+
+    //单位识别码
     private String fAgenidCode;
 
-    //开票单位名称
+    //单位名称
     private String fAgenName;
 
-    //开票点id
+    //开票点ID
     private short fPlaceId;
 
-    //开票点代码
+    //开票点编码
     private String fPlaceCode;
 
     //开票点名称
     private String fPlaceName;
 
-    //开具缴款书日期
+    //开票日期
     private Date fDate;
 
     //编制人
     private String fAuther;
 
-    //对应票据
+    //票据ID
     private String fBillId;
 
-    //缴款人
+    //票据批次号
+    private String fBillBatchCode;
+
+    //票据序号
+    private String fBillNo;
+
+    //备注
+    private String fMemo;
+
+    //缴款人ID
+    private String fPayerId;
+
+    //缴款人姓名
     private String fPayerName;
 
-    //个人
+    //缴款人电话
+    private String fPayerTel;
+
+    //账户类型
     private int fRecAccType;
 
-    //最后缴款日期
-    private String fFinalDate;
-    
+    //校验码
+    private String fCheckCode;
+
+    //操作人
+    private String fOperator;
+
+    //缴款书票据ID
+    private String fPayBillId;
+
+    //缴款书票据编码
+    private String fPayBillBatchCode;
+
+    //缴款书票据序号
+    private String fpaybillNo;
+
+    //缴款人邮箱
+    private String fPayerEmail;
+
 }
