@@ -38,7 +38,7 @@ public class CrtInfoPO extends Model<CrtInfoPO> {
 
     @ApiModelProperty(value = "单位编码")
     @TableField("f_agen_idcode")
-    private String agenIdcode;
+    private String agenIdCode;
 
     @ApiModelProperty(value = "申请人姓名")
     @TableField("f_apply_user")

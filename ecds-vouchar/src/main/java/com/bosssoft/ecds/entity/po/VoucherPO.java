@@ -38,7 +38,7 @@ public class VoucherPO extends Model<VoucherPO> {
 
     @ApiModelProperty(value = "单位编码")
     @TableField("f_agen_idcode")
-    private String agenIdcode;
+    private String agenIdCode;
 
     @ApiModelProperty(value = "单位名称")
     @TableField("f_agen_name")

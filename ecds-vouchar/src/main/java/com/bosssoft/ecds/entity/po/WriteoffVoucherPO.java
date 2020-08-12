@@ -38,9 +38,9 @@ public class WriteoffVoucherPO extends Model<WriteoffVoucherPO> {
 
     @ApiModelProperty(value = "单位编码")
     @TableField("f_agen_idcode")
-    private String agenIdcode;
+    private String agenIdCode;
 
-    @ApiModelProperty(value = "预警票号")
+    @ApiModelProperty(value = "票号")
     @TableField("f_bill_no")
     private String billNo;
 

@@ -38,7 +38,7 @@ public class MonitorRecordVoucherPO extends Model<MonitorRecordVoucherPO> {
 
     @ApiModelProperty(value = "单位编码")
     @TableField("f_agen_idcode")
-    private String agenIdcode;
+    private String agenIdCode;
 
     @ApiModelProperty(value = "票据预警时间")
     @TableField("f_mnt_time")

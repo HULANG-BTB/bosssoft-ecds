@@ -38,7 +38,7 @@ public class BillOutVoucherPO extends Model<BillOutVoucherPO> {
 
     @ApiModelProperty(value = "单位编码")
     @TableField("f_agen_idcode")
-    private String agenIdcode;
+    private String agenIdCode;
 
     @ApiModelProperty(value = "开票点id")
     @TableField("f_place_id")

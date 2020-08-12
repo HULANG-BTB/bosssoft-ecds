@@ -16,7 +16,7 @@ import com.bosssoft.ecds.entity.query.OverViewArchiveQuery;
  */
 public interface VoucherDao extends BaseMapper<VoucherPO> {
     /**
-     * 根据传来的查询信息，查询出归档总览表中简略信息
+     * 根据传来的查询信息，查询出归档总览表中信息  （已归档状态下）
      * @param overViewArchiveQuery
      * @return OverViewArchiveDto
      */
