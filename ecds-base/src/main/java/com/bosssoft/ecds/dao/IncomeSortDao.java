@@ -2,6 +2,7 @@ package com.bosssoft.ecds.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.bosssoft.ecds.entity.dto.IncomeSortDTO;
+import com.bosssoft.ecds.entity.dto.IncomeSubjectDTO;
 import com.bosssoft.ecds.entity.po.IncomeSortPO;
 import org.apache.ibatis.annotations.Many;
 import org.apache.ibatis.annotations.Param;
@@ -14,7 +15,7 @@ import java.util.List;
 
 /**
  * <p>
- *  Mapper 接口
+ * Mapper 接口
  * </p>
  *
  * @author AloneH
@@ -27,20 +28,17 @@ public interface IncomeSortDao extends BaseMapper<IncomeSortPO> {
      *
      * @return IncomeSortDTO
      */
-    @Select("SELECT f_id,f_code,f_name,f_is_leaf,f_level,f_parent_id\n" +
+    @Select("SELECT f_id,f_code,f_name\n" +
             "FROM fab_income_sort\n" +
             "WHERE f_logic_delete=0 and f_parent_id=0")
     @Results(id = "incomeTree", value = {
             @Result(property = "id", column = "f_id"),
             @Result(property = "code", column = "f_code"),
             @Result(property = "name", column = "f_name"),
-            @Result(property = "leaf", column = "f_is_leaf"),
-            @Result(property = "level", column = "f_level"),
-            @Result(property = "parentId", column = "f_parent_id"),
-            @Result(property = "incomeSortDTOList", column = "f_id",
-                    many = @Many(select = "com.boss.trainee.incomedemo.dao.IncomeSortDAO.getTreeByParentId"))
+            @Result(property = "incomeSubjectDTOList", column = "f_id",
+                    many = @Many(select = "com.bosssoft.ecds.dao.IncomeSortDao.getTreeByParentId"))
     })
-    List<IncomeSortDTO> getIncomeSortTreeList();
+    List<IncomeSubjectDTO> getIncomeSortTreeList();
 
     /**
      * 递归查询的子查询部分
@@ -48,18 +46,18 @@ public interface IncomeSortDao extends BaseMapper<IncomeSortPO> {
      * @param parentId
      * @return IncomeSortDTO
      */
-    @Select("SELECT f_id,f_code,f_name,f_is_leaf,f_level,f_parent_id\n" +
+    @Select("SELECT f_id,f_code,f_name\n" +
             "FROM fab_income_sort\n" +
             "WHERE f_logic_delete=0 and f_parent_id=#{parentId}")
     @Results(id = "income", value = {
             @Result(property = "id", column = "f_id"),
             @Result(property = "code", column = "f_code"),
             @Result(property = "name", column = "f_name"),
-            @Result(property = "leaf", column = "f_is_leaf"),
-            @Result(property = "level", column = "f_level"),
-            @Result(property = "parentId", column = "f_parent_id")
+            @Result(property = "incomeSubjectDTOList", column = "f_id",
+                    many = @Many(select = "com.bosssoft.ecds.dao.SubjectDao.getIncomeSubject"))
+
     })
-    List<IncomeSortDTO> getTreeByParentId(String parentId);
+    List<IncomeSubjectDTO> getTreeByParentId(String parentId);
 
     /**
      * 根据收入种类id分页获取该种类的子类信息
@@ -70,7 +68,7 @@ public interface IncomeSortDao extends BaseMapper<IncomeSortPO> {
     @Select("SELECT f_id,f_code,f_name,f_is_leaf,f_level,f_parent_id\n" +
             "FROM fab_income_sort\n" +
             "WHERE f_logic_delete=0 and f_parent_id=#{id}\n"
-            )
+    )
     List<IncomeSortDTO> getById(@Param("id") String id);
 
     /**
@@ -79,7 +77,7 @@ public interface IncomeSortDao extends BaseMapper<IncomeSortPO> {
      * @return
      */
     @Select("select f_id as id,f_code as code,f_name as name,f_is_leaf as leaf,f_level as level,f_parent_id as parentId\n" +
-            "FROM fab_income_sort\n"+
+            "FROM fab_income_sort\n" +
             "where f_logic_delete=0")
     List<IncomeSortDTO> getAll();
 
@@ -115,6 +113,7 @@ public interface IncomeSortDao extends BaseMapper<IncomeSortPO> {
 
     /**
      * 获取所有层级为1的收入类别
+     *
      * @return
      */
     @Select("SELECT f_id AS id,f_code AS CODE,f_name AS NAME\n" +
