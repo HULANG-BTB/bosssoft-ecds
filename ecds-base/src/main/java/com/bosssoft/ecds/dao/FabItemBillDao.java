@@ -47,20 +47,12 @@ public interface FabItemBillDao extends BaseMapper<FabItemBillPO> {
             "from ( select * from  fab_item_bill " +
             "<if test = 'fBillCode !=null  and fBillCode !=\"\" '>" +
             " where f_bill_code=#{fBillCode} </if> " +
-            ")a left JOIN fab_item b  on  a.f_item_id_code=b.f_item_id where  b.f_isenable='1' " +
+            ")a left JOIN fab_item b  on  a.f_item_id_code=b.f_item_id    " +
             "<if test = 'itemName !=null  and itemName !=\"\" '>" +
-            " and b.f_item_name like #{itemName} </if> " +
+            " where b.f_item_name like #{itemName} </if> " +
             "</script>"})
     IPage<ItemBillVO> selectItemWithBillCode(Page<?> page, @Param("fBillCode") String fBillCode, @Param("itemName") String itemName);
 
-    /**
-     * 根据票据种类查询有关的项目id
-     *
-     * @param fBillCode
-     * @return
-     */
-    @Select("select distinct f_item_id_code from fab_item_bill  WHERE f_bill_code=#{fBillCode}")
-    Set<String> selectContactItemId(@Param("fBillCode") String fBillCode);
 
     /**
      * 查询与票据无关的项目信息
