@@ -1,12 +1,14 @@
 package com.bosssoft.ecds.entity.po;
 
+import lombok.Data;
 import java.util.Date;
 
+@Data
 public class UneCbillItem {
 
-    private int fId;
+    private long fId;
 
-    private int fpid;
+    private long fpid;
 
     private int fSortNo;
 
@@ -17,6 +19,10 @@ public class UneCbillItem {
     private String fUnits;
 
     private int fNumber;
+
+    private double fStd;
+
+    private double fAmt;
 
     private int fVersion;
 

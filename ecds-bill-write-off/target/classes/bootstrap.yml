@@ -1,3 +1,5 @@
+server:
+  port: 8072
 spring:
   application:
     name: wirteoff-service
@@ -5,5 +7,8 @@ spring:
     nacos:
       discovery:
         server-addr: 127.0.0.1:8848
-
-
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://39.97.123.56:3306/ecds_financial?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: root
