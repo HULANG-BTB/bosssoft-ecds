@@ -1,7 +1,9 @@
 package com.bosssoft.ecds.dao;
 
+import com.bosssoft.ecds.entity.dto.OverViewArchiveDto;
 import com.bosssoft.ecds.entity.po.VoucherPO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.bosssoft.ecds.entity.query.OverViewArchiveQuery;
 
 /**
  * <p>
@@ -13,5 +15,12 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @since 2020-08-11
  */
 public interface VoucherDao extends BaseMapper<VoucherPO> {
+    /**
+     * 根据传来的查询信息，查询出归档总览表中简略信息
+     * @param overViewArchiveQuery
+     * @return OverViewArchiveDto
+     */
+    OverViewArchiveDto queryOverViewArchiveInfo(OverViewArchiveQuery overViewArchiveQuery);
+
 
 }
