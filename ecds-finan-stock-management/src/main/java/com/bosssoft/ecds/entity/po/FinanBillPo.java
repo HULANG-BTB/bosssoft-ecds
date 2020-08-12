@@ -28,7 +28,7 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @TableName("fab_finan_bill")
-@ApiModel(value="FinanBillPO对象", description="")
+@ApiModel(value="FinanBillPo对象", description="")
 public class FinanBillPo extends Model<FinanBillPo> {
 
 

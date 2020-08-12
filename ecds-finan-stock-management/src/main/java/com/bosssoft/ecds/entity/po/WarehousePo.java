@@ -25,7 +25,7 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @TableName("fab_warehouse")
-@ApiModel(value="WarehousePO对象", description="")
+@ApiModel(value="WarehousePo对象", description="")
 public class WarehousePo extends Model<WarehousePo> {
 
 

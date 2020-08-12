@@ -27,7 +27,7 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @TableName("fbe_stock_outnotice_change")
-@ApiModel(value="StockOutnoticeChangePO对象", description="")
+@ApiModel(value="StockOutnoticeChangePo对象", description="")
 public class StockOutnoticeChangePo extends Model<StockOutnoticeChangePo> {
 
 
