@@ -1,6 +1,6 @@
 package com.bosssoft.ecds.service;
 
-import com.bosssoft.ecds.entity.po.StockOutnoticeItemPO;
+import com.bosssoft.ecds.entity.po.StockOutnoticeItemPo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author misheep
  * @since 2020-08-11
  */
-public interface StockOutnoticeItemService extends IService<StockOutnoticeItemPO> {
+public interface StockOutnoticeItemService extends IService<StockOutnoticeItemPo> {
 
 }

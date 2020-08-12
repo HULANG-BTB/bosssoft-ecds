@@ -3,7 +3,6 @@ package com.bosssoft.ecds.entity.po;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
-import com.baomidou.mybatisplus.annotation.Version;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -27,7 +26,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @TableName("fab_warehouse")
 @ApiModel(value="WarehousePO对象", description="")
-public class WarehousePO extends Model<WarehousePO> {
+public class WarehousePo extends Model<WarehousePo> {
 
 
     @ApiModelProperty(value = "仓库表_主键")

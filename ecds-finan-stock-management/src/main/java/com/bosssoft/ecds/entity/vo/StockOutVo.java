@@ -1,20 +1,14 @@
-package com.bosssoft.ecds.entity.po;
+package com.bosssoft.ecds.entity.vo;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
-import java.util.Date;
-import com.baomidou.mybatisplus.annotation.Version;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableLogic;
-import com.baomidou.mybatisplus.annotation.TableField;
-import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * <p>
@@ -27,88 +21,58 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("fbe_stock_outnotice")
-@ApiModel(value="StockOutnoticePO对象", description="")
-public class StockOutnoticePO extends Model<StockOutnoticePO> {
-
-
-    @ApiModelProperty(value = "主键")
-    @TableId(value = "f_id", type = IdType.AUTO)
-    private Long id;
+@ApiModel(value="StockOutVo对象", description="")
+public class StockOutVo extends Model<StockOutVo> {
 
     @ApiModelProperty(value = "业务单号")
-    @TableField("f_no")
     private Long no;
 
     @ApiModelProperty(value = "区划编码")
-    @TableField("f_rgn_code")
     private String rgnCode;
 
     @ApiModelProperty(value = "仓库ID")
-    @TableField("f_warehouse_id")
     private Long warehouseId;
 
+    /**
+     * 下列为主要项
+     */
+    @ApiModelProperty(value = "票据代码（8位）")
+    private String billCode;
+
+    @ApiModelProperty(value = "票据名称")
+    private String billName;
+
+    @ApiModelProperty(value = "数量")
+    private Integer number;
+
+    @ApiModelProperty(value = "起始号")
+    private String billNo1;
+
+    @ApiModelProperty(value = "终止号")
+    private String billNo2;
+
+
+
     @ApiModelProperty(value = "申请日期")
-    @TableField("f_date")
     private Date date;
 
     @ApiModelProperty(value = "领用人")
-    @TableField("f_use_man")
     private String useMan;
 
     @ApiModelProperty(value = "联系电话")
-    @TableField("f_link_tel")
     private String linkTel;
 
     @ApiModelProperty(value = "联系地址")
-    @TableField("f_link_address")
     private String linkAddress;
 
     @ApiModelProperty(value = "编制人")
-    @TableField("f_author")
     private String author;
 
     @ApiModelProperty(value = "备注")
-    @TableField("f_memo")
     private String memo;
 
-    @ApiModelProperty(value = "版本号")
-    @TableField("f_version")
-    @Version
-    private Boolean version;
-
     @ApiModelProperty(value = "摘要")
-    @TableField("f_abstact")
     private String abstact;
-
-    @ApiModelProperty(value = "创建时间")
-    @TableField(value = "f_create_time", fill = FieldFill.INSERT)
-    private Date createTime;
-
-    @ApiModelProperty(value = "最后修改时间")
-    @TableField(value = "f_update_time", fill = FieldFill.INSERT_UPDATE)
-    private Date updateTime;
-
-    @ApiModelProperty(value = "审核状态")
-    @TableField("f_change_state")
-    private Integer changeState;
-
-    @ApiModelProperty(value = "审核日期")
-    @TableField("f_change_date")
-    private Date changeDate;
-
-    @ApiModelProperty(value = "审核人")
-    @TableField("f_change_man")
-    private String changeMan;
-
-    @ApiModelProperty(value = "审核意见")
-    @TableField("f_change_situ")
-    private String changeSitu;
-
-    @ApiModelProperty(value = "逻辑删除(0未删除1删除)")
-    @TableField("f_logic_delete")
-    @TableLogic
-    private Boolean logicDelete;
 
 
     public static final String F_ID = "f_id";
@@ -148,10 +112,5 @@ public class StockOutnoticePO extends Model<StockOutnoticePO> {
     public static final String F_CHANGE_SITU = "f_change_situ";
 
     public static final String F_LOGIC_DELETE = "f_logic_delete";
-
-    @Override
-    protected Serializable pkVal() {
-        return this.id;
-    }
 
 }

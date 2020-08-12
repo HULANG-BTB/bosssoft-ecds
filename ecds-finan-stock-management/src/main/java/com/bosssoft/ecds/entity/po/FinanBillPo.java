@@ -29,7 +29,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @TableName("fab_finan_bill")
 @ApiModel(value="FinanBillPO对象", description="")
-public class FinanBillPO extends Model<FinanBillPO> {
+public class FinanBillPo extends Model<FinanBillPo> {
 
 
     @ApiModelProperty(value = "财政票据表_主键")

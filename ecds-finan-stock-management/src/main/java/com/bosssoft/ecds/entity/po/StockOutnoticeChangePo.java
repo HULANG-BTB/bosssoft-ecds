@@ -28,7 +28,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @TableName("fbe_stock_outnotice_change")
 @ApiModel(value="StockOutnoticeChangePO对象", description="")
-public class StockOutnoticeChangePO extends Model<StockOutnoticeChangePO> {
+public class StockOutnoticeChangePo extends Model<StockOutnoticeChangePo> {
 
 
     @ApiModelProperty(value = "主键")
