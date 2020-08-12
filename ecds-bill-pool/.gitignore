@@ -1,5 +1,6 @@
 HELP.md
 .gitignore
+.git
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
