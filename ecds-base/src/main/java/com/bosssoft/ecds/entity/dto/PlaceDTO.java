@@ -7,50 +7,40 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 /**
  * @author 吴志鸿
- * @date 2020/8/10
+ * @date 2020/8/11
  * @description
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@ApiModel(value="ItemStdDTO对象", description="")
-public class ItemStdDTO {
+@ApiModel(value="PlaceDTO对象", description="")
+public class PlaceDTO {
     @ApiModelProperty(value = "主键")
     private Long id;
 
-    @ApiModelProperty(value = "标准编码")
-    private String itemstdCode;
+    @ApiModelProperty(value = "区划ID")
+    private String rgnId;
 
-    @ApiModelProperty(value = "标准名称")
-    private String itemstdName;
+    @ApiModelProperty(value = "开票点编码")
+    private String placeId;
+
+    @ApiModelProperty(value = "开票点名称")
+    private String placeName;
+
+    @ApiModelProperty(value = "上级单位编码")
+    private String agenId;
 
     @ApiModelProperty(value = "助记码")
-    private String mnem;
+    private String mmen;
 
-    @ApiModelProperty(value = "项目编码")
-    private String itemCode;
-
-    @ApiModelProperty(value = "标准上限")
-    private BigDecimal maxCharge;
-
-    @ApiModelProperty(value = "标准下限")
-    private BigDecimal minCharge;
-
-    @ApiModelProperty(value = "计量单位")
-    private String units;
+    @ApiModelProperty(value = "级次")
+    private Integer level;
 
     @ApiModelProperty(value = "是否启用")
     private Boolean isenable;
-
-    @ApiModelProperty(value = "标准生效日期")
-    private Date itemstdEffdate;
-
-    @ApiModelProperty(value = "标准失效日期")
-    private Date itemstdExpdate;
 
     @ApiModelProperty(value = "经办人")
     private String operator;

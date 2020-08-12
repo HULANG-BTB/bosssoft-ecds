@@ -8,7 +8,9 @@ import com.bosssoft.ecds.entity.vo.ItemVO;
 import com.bosssoft.ecds.entity.vo.PageVO;
 import com.bosssoft.ecds.service.ItemService;
 import com.bosssoft.ecds.utils.MyBeanUtil;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +28,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/item")
+@Api(value = "项目管理接口")
 public class ItemController {
 
     @Autowired

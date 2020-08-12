@@ -176,6 +176,10 @@ public class AgenPO extends Model<AgenPO> {
     @TableField("f_note")
     private String note;
 
+    @ApiModelProperty(value = "部门名称")
+    @TableField("f_dept_name")
+    private String deptName;
+
 
     public static final String F_ID = "f_id";
 
@@ -248,6 +252,8 @@ public class AgenPO extends Model<AgenPO> {
     public static final String F_VERSION = "f_version";
 
     public static final String F_NOTE = "f_note";
+
+    public static final String F_DEPT_NAME = "f_dept_name";
 
     @Override
     protected Serializable pkVal() {
