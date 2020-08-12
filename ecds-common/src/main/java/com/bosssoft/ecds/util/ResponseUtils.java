@@ -10,7 +10,6 @@ package com.bosssoft.ecds.util;
 import cn.hutool.json.JSONUtil;
 import lombok.Data;
 
-
 /**
  * 统一响应结果 工具类
  *
@@ -479,7 +478,7 @@ public class ResponseUtils {
     /**
      *  响应体
      */
-    public static class ResponseBody {
+    public static class ResponseBody{
 
         /**
          * 状态码

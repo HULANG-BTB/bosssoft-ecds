@@ -40,6 +40,7 @@ public class SmsDto {
     /**
      * 发送时间
      */
+    @JsonSerialize(using=ToStringSerializer.class)
     private Date sentDate;
 
     /**

@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.ToString;
 
 import java.io.File;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -14,17 +13,8 @@ import java.util.List;
 @Data
 @ToString
 
-public class MailVo{
+public class SendMailVo {
 
-    /**
-     * 邮件id
-     */
-    private Long id;
-
-    /**
-     * 邮件发送人
-     */
-    private String mailFrom;
 
     /**
      * 邮件接收人，若有多个收件人，使用 , 分割
@@ -41,21 +31,6 @@ public class MailVo{
      */
     private String content;
 
-    /**
-     * 发送时间
-     */
-    private Date sentDate;
-
-    /**
-     * 状态
-     * true为发送成功，false为发送失败
-     */
-    private Boolean isSent;
-
-    /**
-     * 报错信息
-     */
-    private String error;
 
     /**
      * 邮件附件
