@@ -13,6 +13,7 @@ import com.bosssoft.ecds.entity.vo.PermissionVO;
 import com.bosssoft.ecds.entity.vo.RoleVO;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,7 +40,7 @@ public class RoleController {
      */
     @PostMapping("save")
     @ApiOperation(value = "添加角色")
-    public QueryResponseResult<RoleVO> save(@RequestBody RoleVO roleVO) {
+    public QueryResponseResult<RoleVO> save(@RequestBody @Validated RoleVO roleVO) {
         // 转换为DTO
         RoleDTO roleDTO = MyBeanUtil.copyProperties(roleVO, RoleDTO.class);
         List<PermissionVO> permissionVOList = roleVO.getPermissions();
@@ -64,7 +65,7 @@ public class RoleController {
      */
     @PutMapping("update")
     @ApiOperation(value = "更新角色信息")
-    public QueryResponseResult<Boolean> update(@RequestBody RoleVO roleVO) {
+    public QueryResponseResult<Boolean> update(@RequestBody @Validated RoleVO roleVO) {
         // 转换为DTO
 
         RoleDTO roleDTO = MyBeanUtil.copyProperties(roleVO, RoleDTO.class);

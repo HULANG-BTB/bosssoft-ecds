@@ -15,6 +15,7 @@ import com.bosssoft.ecds.entity.vo.UserVO;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -45,7 +46,7 @@ public class UserController {
      */
     @PostMapping("save")
     @ApiOperation(value = "添加用户")
-    public QueryResponseResult<UserVO> save(@RequestBody UserVO userVO) {
+    public QueryResponseResult<UserVO> save(@RequestBody @Validated UserVO userVO) {
         // 转换为DTO
         UserDTO userDTO = MyBeanUtil.copyProperties(userVO, UserDTO.class);
         List<RoleVO> roleVOList = userVO.getRoles();
@@ -68,7 +69,7 @@ public class UserController {
      */
     @PutMapping("update")
     @ApiOperation(value = "更新用户")
-    public QueryResponseResult<Boolean> update(@RequestBody UserVO userVO) {
+    public QueryResponseResult<Boolean> update(@RequestBody @Validated UserVO userVO) {
         UserDTO userDTO = MyBeanUtil.copyProperties(userVO, UserDTO.class);
         Boolean result = userService.update(userDTO);
         return new QueryResponseResult<>(CommonCode.SUCCESS, result);
@@ -123,7 +124,7 @@ public class UserController {
 
     @PutMapping("resetPassword")
     @ApiOperation(value = "重置密码")
-    public QueryResponseResult<Boolean> resetPassword(@RequestBody UserVO userVO) {
+    public QueryResponseResult<Boolean> resetPassword(@RequestBody @Validated UserVO userVO) {
         UserDTO userDTO = MyBeanUtil.copyProperties(userVO, UserDTO.class);
         Boolean resetResult = userService.resetPassword(userDTO);
         return new QueryResponseResult<>(CommonCode.SUCCESS, resetResult);

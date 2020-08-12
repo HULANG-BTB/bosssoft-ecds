@@ -7,7 +7,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import java.io.Serializable;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -39,12 +40,16 @@ public class PageVO extends Model<PageVO> {
      * 每页显示条数，默认 10
      */
     @ApiModelProperty(value = "分页限制", example = "10")
+    @NotNull(message = "分页大小不能为空.")
+    @Min(value = 1L, message = "分页大小.")
     private long limit;
 
     /**
      * 当前页
      */
     @ApiModelProperty(value = "当前页码", example = "1")
+    @NotNull(message = "当前页不能为空.")
+    @Min(value = 1L, message = "页码范围错误.")
     private long page;
 
     /**

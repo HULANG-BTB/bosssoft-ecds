@@ -15,7 +15,8 @@ import java.util.function.Supplier;
  * @ClassName BeanUtil
  * @Author AloneH
  * @Date 2020/7/31 22:07
- * @Description TODO
+ * @Description
+ * 复制Bean
  **/
 public class MyBeanUtil {
 

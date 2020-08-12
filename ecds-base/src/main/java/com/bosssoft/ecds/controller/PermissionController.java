@@ -10,13 +10,11 @@ import com.bosssoft.ecds.entity.vo.PermissionVO;
 import com.bosssoft.ecds.service.impl.PermissionServiceImpl;
 import com.bosssoft.ecds.utils.MyBeanUtil;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 
@@ -30,7 +28,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("permission")
-@Api(description = "权限管理接口")
+@Api(value = "权限管理接口")
 @Slf4j
 public class PermissionController {
 
@@ -45,7 +43,7 @@ public class PermissionController {
      */
     @PostMapping("save")
     @ApiOperation(value = "添加权限", notes = "返回添加的权限实体信息")
-    public QueryResponseResult<PermissionVO> save(@RequestBody PermissionVO permissionVO) {
+    public QueryResponseResult<PermissionVO> save(@RequestBody @Validated PermissionVO permissionVO) {
         PermissionDTO permissionDTO = new PermissionDTO();
         MyBeanUtil.copyProperties(permissionVO, permissionDTO);
         permissionDTO = permissionService.save(permissionDTO);
@@ -61,7 +59,7 @@ public class PermissionController {
      */
     @PutMapping("update")
     @ApiOperation(value = "更新权限信息")
-    public QueryResponseResult<Boolean> update(@RequestBody PermissionVO permissionVO) {
+    public QueryResponseResult<Boolean> update(@RequestBody @Validated PermissionVO permissionVO) {
         PermissionDTO permissionDTO = new PermissionDTO();
         MyBeanUtil.copyProperties(permissionVO, permissionDTO);
         Boolean result = permissionService.update(permissionDTO);
