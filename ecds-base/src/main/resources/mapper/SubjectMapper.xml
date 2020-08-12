@@ -6,13 +6,13 @@
     <resultMap id="BaseResultMap" type="com.bosssoft.ecds.entity.po.SubjectPO">
         <id column="f_id" property="id" />
         <result column="f_year" property="year" />
-        <result column="f_sub_code" property="subCode" />
-        <result column="f_sub_name" property="subName" />
+        <result column="f_sub_code" property="code" />
+        <result column="f_sub_name" property="name" />
         <result column="f_level" property="level" />
-        <result column="f_is_leaf" property="isLeaf" />
+        <result column="f_is_leaf" property="leaf" />
         <result column="f_parent_id" property="parentId" />
-        <result column="f_is_enable" property="isEnable" />
-        <result column="f_note" property="note" />
+        <result column="f_is_enable" property="enable" />
+        <result column="f_note" property="remark" />
         <result column="f_create_time" property="createTime" />
         <result column="f_update_time" property="updateTime" />
         <result column="f_operator_id" property="operatorId" />

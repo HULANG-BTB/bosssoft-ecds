@@ -33,7 +33,7 @@ public class SubjectPO extends Model<SubjectPO> {
 
 
     @ApiModelProperty(value = "科目id")
-    @TableId(value = "f_id", type = IdType.AUTO)
+    @TableId(value = "f_id", type=IdType.ASSIGN_ID)
     private Long id;
 
     @ApiModelProperty(value = "年度")
@@ -42,11 +42,11 @@ public class SubjectPO extends Model<SubjectPO> {
 
     @ApiModelProperty(value = "科目编码")
     @TableField("f_sub_code")
-    private String subCode;
+    private String code;
 
     @ApiModelProperty(value = "科目名称")
     @TableField("f_sub_name")
-    private String subName;
+    private String name;
 
     @ApiModelProperty(value = "层级")
     @TableField("f_level")
@@ -54,7 +54,7 @@ public class SubjectPO extends Model<SubjectPO> {
 
     @ApiModelProperty(value = "是否底级")
     @TableField("f_is_leaf")
-    private Boolean isLeaf;
+    private Boolean leaf;
 
     @ApiModelProperty(value = "父级ID")
     @TableField("f_parent_id")
@@ -62,11 +62,11 @@ public class SubjectPO extends Model<SubjectPO> {
 
     @ApiModelProperty(value = "是否启用")
     @TableField("f_is_enable")
-    private Boolean isEnable;
+    private Boolean enable;
 
     @ApiModelProperty(value = "备注")
     @TableField("f_note")
-    private String note;
+    private String remark;
 
     @ApiModelProperty(value = "创建时间")
     @TableField(value = "f_create_time", fill = FieldFill.INSERT)
