@@ -1,8 +1,8 @@
 package com.bosssoft.ecds.service;
 
 import com.bosssoft.ecds.entity.dto.PageDTO;
-import com.bosssoft.ecds.entity.dto.UabCrtDTO;
-import com.bosssoft.ecds.entity.po.UabCrtPO;
+import com.bosssoft.ecds.entity.dto.CrtDTO;
+import com.bosssoft.ecds.entity.po.CrtPO;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.List;
  * @author vihenne
  * @since 2020-08-10
  */
-public interface UabCrtService extends IService<UabCrtPO> {
+public interface CrtService extends IService<CrtPO> {
 
     /**
      *
@@ -26,7 +26,7 @@ public interface UabCrtService extends IService<UabCrtPO> {
      * @author: YuHangChen
      * @time: 09/08/2020 上午10:17
      */
-    public UabCrtDTO save(UabCrtDTO uabCrtDTO);
+    public CrtDTO save(CrtDTO uabCrtDTO);
 
     /**
      *
@@ -37,7 +37,7 @@ public interface UabCrtService extends IService<UabCrtPO> {
      * @author: YuHangChen
      * @time: 09/08/2020 上午10:17
      */
-    public boolean remove(UabCrtDTO uabCrtDTO);
+    public boolean remove(CrtDTO uabCrtDTO);
 
     /**
      *
@@ -48,7 +48,7 @@ public interface UabCrtService extends IService<UabCrtPO> {
      * @author: YuHangChen
      * @time: 09/08/2020 上午10:17
      */
-    public boolean update(UabCrtDTO uabCrtDTO);
+    public boolean update(CrtDTO uabCrtDTO);
 
     /**
      *
@@ -59,7 +59,7 @@ public interface UabCrtService extends IService<UabCrtPO> {
      * @author: YuHangChen
      * @time: 09/08/2020 上午10:17
      */
-    public UabCrtDTO getByCrtCode(UabCrtDTO uabCrtDTO);
+    public CrtDTO getByCrtCode(CrtDTO uabCrtDTO);
 
     /**
      *
@@ -70,7 +70,7 @@ public interface UabCrtService extends IService<UabCrtPO> {
      * @author: YuHangChen
      * @time: 09/08/2020 上午10:17
      */
-    public List<UabCrtDTO> getByAgenCode(UabCrtDTO uabCrtDTO);
+    public List<CrtDTO> getByAgenCode(CrtDTO uabCrtDTO);
 
     /**
      *
@@ -80,7 +80,7 @@ public interface UabCrtService extends IService<UabCrtPO> {
      * @author: YuHangChen
      * @time: 09/08/2020 上午10:17
      */
-    public List<UabCrtDTO> listAll();
+    public List<CrtDTO> listAll();
 
     /**
      * 分页读取领购证
@@ -96,6 +96,6 @@ public interface UabCrtService extends IService<UabCrtPO> {
      * @param uabCrtDTODTOList
      * @return
      */
-    public Boolean removeBatch(List<UabCrtDTO> uabCrtDTODTOList);
+    public Boolean removeBatch(List<CrtDTO> uabCrtDTODTOList);
 
 }

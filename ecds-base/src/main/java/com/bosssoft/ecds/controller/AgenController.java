@@ -1,13 +1,15 @@
 package com.bosssoft.ecds.controller;
 
 
-import com.bosssoft.ecds.entity.dto.FabAgenDTO;
+import com.bosssoft.ecds.entity.dto.AgenDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
-import com.bosssoft.ecds.entity.vo.FabAgenVO;
+import com.bosssoft.ecds.entity.vo.AgenVO;
 import com.bosssoft.ecds.entity.vo.PageVO;
-import com.bosssoft.ecds.service.FabAgenService;
+import com.bosssoft.ecds.service.AgenService;
 import com.bosssoft.ecds.utils.MyBeanUtil;
 import com.bosssoft.ecds.utils.ResponseUtils;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -24,11 +26,12 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@RequestMapping("/fabAgen")
-public class FabAgenController {
+@Api(value = "单位管理接口")
+@RequestMapping("/agen")
+public class AgenController {
 
     @Autowired
-    FabAgenService fabAgenService;
+    AgenService fabAgenService;
 
     /**
      *
@@ -39,9 +42,10 @@ public class FabAgenController {
      * @author: YuHangChen
      * @time: 09/08/2020 上午10:17
      */
+    @ApiOperation(value = "新增单位")
     @PostMapping("/save")
-    public String save(@RequestBody FabAgenVO fabAgenVO){
-        FabAgenDTO fabAgenDTO = new FabAgenDTO();
+    public String save(@RequestBody AgenVO fabAgenVO){
+        AgenDTO fabAgenDTO = new AgenDTO();
         MyBeanUtil.copyProperties(fabAgenVO,fabAgenDTO);
         fabAgenDTO = fabAgenService.save(fabAgenDTO);
         MyBeanUtil.copyProperties(fabAgenDTO,fabAgenVO);
@@ -57,9 +61,10 @@ public class FabAgenController {
      * @author: YuHangChen
      * @time: 09/08/2020 上午10:17
      */
+    @ApiOperation(value = "按单位编码删除单位")
     @PostMapping("/remove")
-    public String remove(@RequestBody FabAgenVO fabAgenVO){
-        FabAgenDTO fabAgenDTO = new FabAgenDTO();
+    public String remove(@RequestBody AgenVO fabAgenVO){
+        AgenDTO fabAgenDTO = new AgenDTO();
         MyBeanUtil.copyProperties(fabAgenVO,fabAgenDTO);
         Boolean result = fabAgenService.remove(fabAgenDTO);
         MyBeanUtil.copyProperties(fabAgenDTO,fabAgenVO);
@@ -75,9 +80,10 @@ public class FabAgenController {
      * @author: YuHangChen
      * @time: 09/08/2020 上午10:17
      */
+    @ApiOperation(value = "用于修改单位信息")
     @PostMapping("/update")
-    public String update(@RequestBody FabAgenVO fabAgenVO){
-        FabAgenDTO fabAgenDTO = new FabAgenDTO();
+    public String update(@RequestBody AgenVO fabAgenVO){
+        AgenDTO fabAgenDTO = new AgenDTO();
         MyBeanUtil.copyProperties(fabAgenVO,fabAgenDTO);
         Boolean result = fabAgenService.update(fabAgenDTO);
         MyBeanUtil.copyProperties(fabAgenDTO,fabAgenVO);
@@ -93,9 +99,10 @@ public class FabAgenController {
      * @author: YuHangChen
      * @time: 09/08/2020 上午10:17
      */
+    @ApiOperation(value = "根据单位编码查询单位")
     @PostMapping("/getByAgenCode")
-    public String getByAgenCode(@RequestBody FabAgenVO fabAgenVO){
-        FabAgenDTO fabAgenDTO = new FabAgenDTO();
+    public String getByAgenCode(@RequestBody AgenVO fabAgenVO){
+        AgenDTO fabAgenDTO = new AgenDTO();
         MyBeanUtil.copyProperties(fabAgenVO,fabAgenDTO);
         fabAgenDTO = fabAgenService.getByAgenCode(fabAgenDTO);
         MyBeanUtil.copyProperties(fabAgenDTO,fabAgenVO);
@@ -111,9 +118,10 @@ public class FabAgenController {
      * @author: YuHangChen
      * @time: 09/08/2020 上午10:17
      */
+    @ApiOperation(value = "根据单位名查询单位")
     @PostMapping("/getByAgenName")
-    public String getByAgenName(@RequestBody FabAgenVO fabAgenVO){
-        FabAgenDTO fabAgenDTO = new FabAgenDTO();
+    public String getByAgenName(@RequestBody AgenVO fabAgenVO){
+        AgenDTO fabAgenDTO = new AgenDTO();
         MyBeanUtil.copyProperties(fabAgenVO,fabAgenDTO);
         fabAgenDTO = fabAgenService.getByAgenName(fabAgenDTO);
         MyBeanUtil.copyProperties(fabAgenDTO,fabAgenVO);
@@ -128,26 +136,23 @@ public class FabAgenController {
      * @author: YuHangChen
      * @time: 09/08/2020 上午10:17
      */
+    @ApiOperation(value = "用于查看单位列表")
     @GetMapping("/listAll")
     public String listAll(){
-        List<FabAgenDTO> fabAgenDTOList = fabAgenService.listAll();
-        List<FabAgenVO> fabAgenVOList = MyBeanUtil.copyListProperties(fabAgenDTOList, FabAgenVO.class);
+        List<AgenDTO> fabAgenDTOList = fabAgenService.listAll();
+        List<AgenVO> fabAgenVOList = MyBeanUtil.copyListProperties(fabAgenDTOList, AgenVO.class);
         return ResponseUtils.getResponse(fabAgenVOList,ResponseUtils.ResultType.OK);
     }
 
     /**
      * 通过分页查询
      *
-     * @param page
-     * @param limit
+     * @param pageVO
      * @return
      */
-    @GetMapping("listByPage")
-    public String listByPage(@RequestParam("page") Long page, @RequestParam("limit") Long limit, @RequestParam("keyword") String keyword) {
-        PageVO pageVO = new PageVO();
-        pageVO.setLimit(limit);
-        pageVO.setPage(page);
-        pageVO.setKeyword(keyword);
+    @ApiOperation(value = "通过分页查询")
+    @PostMapping("listByPage")
+    public String listByPage(@RequestBody PageVO pageVO) {
         PageDTO pageDTO = MyBeanUtil.copyProperties(pageVO, PageDTO.class);
         pageDTO = fabAgenService.listByPage(pageDTO);
 
@@ -161,9 +166,10 @@ public class FabAgenController {
      * @param fabAgenVOList
      * @return
      */
+    @ApiOperation(value = "批量删除单位")
     @PostMapping("removeBatch")
-    public String removeBatch(@RequestBody List<FabAgenVO> fabAgenVOList) {
-        List<FabAgenDTO> fabAgenDTOList = MyBeanUtil.copyListProperties(fabAgenVOList, FabAgenDTO.class);
+    public String removeBatch(@RequestBody List<AgenVO> fabAgenVOList) {
+        List<AgenDTO> fabAgenDTOList = MyBeanUtil.copyListProperties(fabAgenVOList, AgenDTO.class);
         Boolean result = fabAgenService.removeBatch(fabAgenDTOList);
         return ResponseUtils.getResponse(result, ResponseUtils.ResultType.OK);
     }
@@ -177,12 +183,13 @@ public class FabAgenController {
      * @author: YuHangChen
      * @time: 09/08/2020 上午10:17
      */
+    @ApiOperation(value = "根据部门编码查询单位")
     @PostMapping("/getByDeptCode")
-    public String getByDeptCode(@RequestBody FabAgenVO fabAgenVO){
-        FabAgenDTO fabAgenDTO = new FabAgenDTO();
+    public String getByDeptCode(@RequestBody AgenVO fabAgenVO){
+        AgenDTO fabAgenDTO = new AgenDTO();
         MyBeanUtil.copyProperties(fabAgenVO,fabAgenDTO);
-        List<FabAgenDTO> fabAgenDTOList = fabAgenService.getByDeptCode(fabAgenDTO);
-        List<FabAgenVO> fabAgenVOList= MyBeanUtil.copyListProperties(fabAgenDTOList,FabAgenVO.class);
+        List<AgenDTO> fabAgenDTOList = fabAgenService.getByDeptCode(fabAgenDTO);
+        List<AgenVO> fabAgenVOList= MyBeanUtil.copyListProperties(fabAgenDTOList, AgenVO.class);
         return ResponseUtils.getResponse(fabAgenVOList,ResponseUtils.ResultType.OK);
     }
 }

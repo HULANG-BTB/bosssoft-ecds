@@ -1,4 +1,4 @@
-package com.bosssoft.ecds.entity.dto;
+package com.bosssoft.ecds.entity.vo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -11,10 +11,11 @@ import java.util.Date;
  * @Author asus
  * @create 10/8/2020 上午9:07
  */
+
 @Data
 @EqualsAndHashCode(callSuper = false)
-@ApiModel(value="UabCrtDTO对象", description="")
-public class UabCrtDTO {
+@ApiModel(value="UabCrtVO对象", description="")
+public class CrtVO {
 
     @ApiModelProperty(value = "主键")
     private Long id;

@@ -1,7 +1,7 @@
 package com.bosssoft.ecds.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.bosssoft.ecds.entity.po.FabAgenPO;
+import com.bosssoft.ecds.entity.po.AgenPO;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -13,6 +13,6 @@ import org.springframework.stereotype.Repository;
  * @since 2020-08-09
  */
 @Repository
-public interface FabAgenDao extends BaseMapper<FabAgenPO> {
+public interface AgenDao extends BaseMapper<AgenPO> {
 
 }

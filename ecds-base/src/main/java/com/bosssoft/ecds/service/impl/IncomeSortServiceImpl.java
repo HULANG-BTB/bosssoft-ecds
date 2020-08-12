@@ -8,6 +8,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bosssoft.ecds.common.response.CommonCode;
 import com.bosssoft.ecds.common.response.QueryResponseResult;
 import com.bosssoft.ecds.common.response.QueryResult;
+import com.bosssoft.ecds.constant.IncomeSortConstant;
+import com.bosssoft.ecds.constant.PageConstant;
 import com.bosssoft.ecds.dao.IncomeSortDao;
 import com.bosssoft.ecds.entity.dto.IncomeSortDTO;
 import com.bosssoft.ecds.entity.po.IncomeSortPO;
@@ -58,11 +60,11 @@ public class IncomeSortServiceImpl implements IncomeSortService {
     }
 
     private <T> Page<T> getPage(Integer page, Integer size, Page<T> pageInfo) {
-        if (page < 0) {
-            page = 0;
+        if (page < PageConstant.DEFAULT_PAGE_NO) {
+            page = PageConstant.DEFAULT_PAGE_NO;
         }
-        if (size < 10) {
-            size = 10;
+        if (size < PageConstant.DEFAULT_PAGE_SIZE) {
+            size = PageConstant.DEFAULT_PAGE_SIZE;
         }
         pageInfo = new Page<>(page, size);
         return pageInfo;
@@ -76,11 +78,18 @@ public class IncomeSortServiceImpl implements IncomeSortService {
      */
     private QueryWrapper wrapIncomeSortVO(FuzzyQueryIncomeSortVO fuzzyQueryIncomeSortVO) {
         QueryWrapper<Object> queryWrapper = new QueryWrapper<>();
-        if (!org.springframework.util.StringUtils.isEmpty(fuzzyQueryIncomeSortVO.getName())) {
-            queryWrapper.like("f_name", fuzzyQueryIncomeSortVO.getName());
-        }
-        if (!org.springframework.util.StringUtils.isEmpty(fuzzyQueryIncomeSortVO.getCode())) {
-            queryWrapper.like("f_code", fuzzyQueryIncomeSortVO.getCode());
+        //只能查询没有删除的信息
+        queryWrapper.eq("f_logic_delete",IncomeSortConstant.LOGC_DELETE_NUM);
+        if (fuzzyQueryIncomeSortVO.getId()!=null){
+            queryWrapper.eq("f_parent_id", fuzzyQueryIncomeSortVO.getId())
+            .or().eq("f_id",fuzzyQueryIncomeSortVO.getId());
+        }else{
+            if (!org.springframework.util.StringUtils.isEmpty(fuzzyQueryIncomeSortVO.getName())) {
+                queryWrapper.like("f_name", fuzzyQueryIncomeSortVO.getName());
+            }
+            if (!org.springframework.util.StringUtils.isEmpty(fuzzyQueryIncomeSortVO.getCode())) {
+                queryWrapper.like("f_code", fuzzyQueryIncomeSortVO.getCode());
+            }
         }
         return queryWrapper;
     }
@@ -90,7 +99,7 @@ public class IncomeSortServiceImpl implements IncomeSortService {
 
     public QueryResponseResult getAll() {
         List<IncomeSortDTO> incomeSortDTOS = incomeSortDao.getAll();
-        List<IncomeSortDTO> incomeSortTree = buildIncomeSortDTOTree(incomeSortDTOS, 0L);
+        List<IncomeSortDTO> incomeSortTree = buildIncomeSortDTOTree(incomeSortDTOS, IncomeSortConstant.INIT_ALL_NUM);
         QueryResult<IncomeSortDTO> queryResult = new QueryResult<>();
         queryResult.setList(incomeSortTree);
         queryResult.setTotal(incomeSortTree.size());
@@ -103,8 +112,8 @@ public class IncomeSortServiceImpl implements IncomeSortService {
         if (fuzzyQueryIncomeSortVO == null) {
             fuzzyQueryIncomeSortVO = new FuzzyQueryIncomeSortVO();
         }
-        Integer page = fuzzyQueryIncomeSortVO.getPage();
-        Integer size = fuzzyQueryIncomeSortVO.getSize();
+        Integer page = fuzzyQueryIncomeSortVO.getPageNum();
+        Integer size = fuzzyQueryIncomeSortVO.getPageSize();
         Page<IncomeSortPO> pageTemp = new Page<>();
         Page<IncomeSortPO> pageInfo = getPage(page, size, pageTemp);
         QueryWrapper queryWrapper = wrapIncomeSortVO(fuzzyQueryIncomeSortVO);
@@ -118,13 +127,14 @@ public class IncomeSortServiceImpl implements IncomeSortService {
 
     @Override
     public QueryResponseResult pageQueryById(PageIncomeSortVO pageIncomeSortVO) {
-        Integer page = pageIncomeSortVO.getPage();
-        Integer size = pageIncomeSortVO.getSize();
+        Integer page = pageIncomeSortVO.getPageNum();
+        Integer size = pageIncomeSortVO.getPageSize();
         Page<IncomeSortPO> pageTemp = new Page<>();
         Page<IncomeSortPO> pageInfo = getPage(page, size, pageTemp);
         QueryWrapper<IncomeSortPO> queryWrapper = new QueryWrapper<>();
         if(pageIncomeSortVO.getId()!=null){
-            queryWrapper.eq("f_id", pageIncomeSortVO.getId());
+            queryWrapper.eq("f_logic_delete",IncomeSortConstant.LOGC_DELETE_NUM);
+            queryWrapper.eq("f_parent_id", pageIncomeSortVO.getId());
         }
         IPage<IncomeSortPO> iPage = incomeSortDao.selectPage(pageInfo, queryWrapper);
         QueryResult<IncomeSortPO> queryResult = new QueryResult<>();
@@ -136,6 +146,7 @@ public class IncomeSortServiceImpl implements IncomeSortService {
     @Override
     public Boolean checkByName(String name) {
         QueryWrapper<IncomeSortPO> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("f_logic_delete",IncomeSortConstant.LOGC_DELETE_NUM);
         queryWrapper.eq("f_name", name);
         if (incomeSortDao.selectOne(queryWrapper) != null) {
 //            throw new MyIncomeSortException(InComeResultCode.INCOME_NAME_EXISTS);
@@ -145,13 +156,14 @@ public class IncomeSortServiceImpl implements IncomeSortService {
 
     @Override
     public Boolean checkByCode(String code, Long parentId) {
-
         QueryWrapper<IncomeSortPO> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("f_logic_delete",IncomeSortConstant.LOGC_DELETE_NUM);
         queryWrapper.eq("f_code", code);
         if (incomeSortDao.selectOne(queryWrapper) != null) {
 //            throw new MyIncomeSortException(InComeResultCode.INCOME_CODE_EXISTS);
         }
-        if (parentId.equals(0L)) {
+
+        if (parentId.equals(IncomeSortConstant.INIT_ALL_NUM)) {
             if (code.length() == 1) {
                 return true;
             }else {
@@ -187,7 +199,11 @@ public class IncomeSortServiceImpl implements IncomeSortService {
     @Transactional(rollbackFor = Exception.class)
     public Boolean add(AddIncomeSortVO addIncomeSortVO) {
         checkByName(addIncomeSortVO.getName());
-        checkByCode(addIncomeSortVO.getCode(), addIncomeSortVO.getParentId());
+        Long parentId=addIncomeSortVO.getParentId();
+        if (parentId==null){
+            parentId=IncomeSortConstant.INIT_ALL_NUM;
+        }
+        checkByCode(addIncomeSortVO.getCode(),parentId);
         IncomeSortPO incomeSort = new IncomeSortPO();
         //ID
         incomeSort.setId(SnowflakeIdWorker.generateId());
@@ -195,10 +211,10 @@ public class IncomeSortServiceImpl implements IncomeSortService {
         incomeSort.setCode(addIncomeSortVO.getCode());
         //名称
         incomeSort.setName(addIncomeSortVO.getName());
-        Long parentId = addIncomeSortVO.getParentId();
+
         Boolean leaf = true;
-        Integer level = new Integer(1);
-        if (parentId.equals(0L)) {
+        Integer level = IncomeSortConstant.LEVEL_NUM;
+        if (parentId.equals(IncomeSortConstant.INIT_ALL_NUM)) {
             leaf = false;
         } else {
             level = incomeSortDao.getLevel(parentId) + 1;
@@ -217,7 +233,8 @@ public class IncomeSortServiceImpl implements IncomeSortService {
         //更新时间
         incomeSort.setUpdateTime(date);
         //版本号
-        incomeSort.setVersion(0);
+        incomeSort.setVersion(IncomeSortConstant.VERSION_NUM);
+        incomeSort.setLogicDelete(false);
         incomeSortDao.insert(incomeSort);
         return true;
     }

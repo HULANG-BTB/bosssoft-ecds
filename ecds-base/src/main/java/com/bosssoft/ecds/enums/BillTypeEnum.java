@@ -18,7 +18,8 @@ public enum BillTypeEnum implements ResultCode {
     BILL_CODE_ILLEGAL(false, 20004, "子票据种类编码要以父类编码为前缀"),
     BILL_TYPE_CHILD_EXIST(false, 20005, "此票据分类下仍用票据种类"),
     DELETE_BILL_TYPE_FAIL(false, 20006, "删除票据分类失败"),
-    BILL_TYPE_ILLEGAL(false, 20006, "只能票据分类做为上级"),
+    BILL_TYPE_ILLEGAL(false, 20007, "只能票据分类做为上级"),
+    DATE_ILLEGAL(false, 20008, "失效日期必须在生效日期之后"),
     ;
 
     //操作是否成功

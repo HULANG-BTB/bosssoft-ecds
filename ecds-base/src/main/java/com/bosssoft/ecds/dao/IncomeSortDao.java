@@ -29,7 +29,7 @@ public interface IncomeSortDao extends BaseMapper<IncomeSortPO> {
      */
     @Select("SELECT f_id,f_code,f_name,f_is_leaf,f_level,f_parent_id\n" +
             "FROM fab_income_sort\n" +
-            "WHERE f_parent_id=0")
+            "WHERE f_logic_delete=0 and f_parent_id=0")
     @Results(id = "incomeTree", value = {
             @Result(property = "id", column = "f_id"),
             @Result(property = "code", column = "f_code"),
@@ -50,7 +50,7 @@ public interface IncomeSortDao extends BaseMapper<IncomeSortPO> {
      */
     @Select("SELECT f_id,f_code,f_name,f_is_leaf,f_level,f_parent_id\n" +
             "FROM fab_income_sort\n" +
-            "WHERE f_parent_id=#{parentId}")
+            "WHERE f_logic_delete=0 and f_parent_id=#{parentId}")
     @Results(id = "income", value = {
             @Result(property = "id", column = "f_id"),
             @Result(property = "code", column = "f_code"),
@@ -69,8 +69,8 @@ public interface IncomeSortDao extends BaseMapper<IncomeSortPO> {
      */
     @Select("SELECT f_id,f_code,f_name,f_is_leaf,f_level,f_parent_id\n" +
             "FROM fab_income_sort\n" +
-            "WHERE f_parent_id=#{id}\n" +
-            "limit ")
+            "WHERE f_logic_delete=0 and f_parent_id=#{id}\n"
+            )
     List<IncomeSortDTO> getById(@Param("id") String id);
 
     /**
@@ -79,7 +79,8 @@ public interface IncomeSortDao extends BaseMapper<IncomeSortPO> {
      * @return
      */
     @Select("select f_id as id,f_code as code,f_name as name,f_is_leaf as leaf,f_level as level,f_parent_id as parentId\n" +
-            "FROM fab_income_sort\n")
+            "FROM fab_income_sort\n"+
+            "where f_logic_delete=0")
     List<IncomeSortDTO> getAll();
 
     /**
@@ -89,7 +90,7 @@ public interface IncomeSortDao extends BaseMapper<IncomeSortPO> {
      */
     @Select("SELECT f_id AS id,f_code AS CODE,f_name AS NAME\n" +
             "FROM fab_income_sort\n" +
-            "WHERE f_is_leaf=0")
+            "WHERE f_logic_delete=0 and f_is_leaf=0")
     List<IncomeSortDTO> getByLeaf();
 
     /**
@@ -99,7 +100,7 @@ public interface IncomeSortDao extends BaseMapper<IncomeSortPO> {
      * @return
      */
     @Select("SELECT f_level FROM fab_income_sort \n" +
-            "WHERE f_id=#{id}")
+            "WHERE f_logic_delete=0 and f_id=#{id}")
     Integer getLevel(Long id);
 
     /**
@@ -109,7 +110,7 @@ public interface IncomeSortDao extends BaseMapper<IncomeSortPO> {
      * @return
      */
     @Select("SELECT f_code FROM fab_income_sort \n" +
-            "WHERE f_id=#{id}")
+            "WHERE f_logic_delete=0 and f_id=#{id}")
     String getCode(Long id);
 
     /**
@@ -118,7 +119,7 @@ public interface IncomeSortDao extends BaseMapper<IncomeSortPO> {
      */
     @Select("SELECT f_id AS id,f_code AS CODE,f_name AS NAME\n" +
             "FROM fab_income_sort\n" +
-            "WHERE f_level=1")
+            "WHERE f_logic_delete=0 and f_level=1")
     List<IncomeSortDTO> getFirst();
 
 }

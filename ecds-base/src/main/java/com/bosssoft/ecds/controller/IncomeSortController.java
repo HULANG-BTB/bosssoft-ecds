@@ -49,8 +49,8 @@ public class IncomeSortController {
     }
     @ApiOperation(value = "分页查询收入类别信息", notes = "通过id查询显示子级收入类别")
     @PostMapping("/pageQueryById")
-    public Object pageQueryById(@RequestBody @Validated PageIncomeSortVO pageIncomeSortVO) {
-        QueryResponseResult incomeSortDTOS = incomeSortService.pageQueryById(pageIncomeSortVO);
+    public Object pageQueryById(@RequestBody @Validated FuzzyQueryIncomeSortVO fuzzyQueryIncomeSortVO) {
+        QueryResponseResult incomeSortDTOS = incomeSortService.pageQueryByName(fuzzyQueryIncomeSortVO);
         return incomeSortDTOS;
     }
     @ApiOperation(value = "更新收入类别信息", notes = "可以修改收入名称、是否底级、备注信息等")
