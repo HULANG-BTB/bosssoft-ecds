@@ -93,7 +93,7 @@ public class PlaceController {
     /**
      * 批量删除
      *
-     * @param itemVOList
+     * @param placeVOList
      * @return
      */
     @ApiOperation(value = "批量删除")
@@ -110,7 +110,7 @@ public class PlaceController {
      * @return
      */
     @ApiOperation(value = "分页查询")
-    @PostMapping("/listbypage")
+    @PostMapping("/listByPage")
     public QueryResponseResult<PageVO> listByPage(@RequestBody PageVO pageVO) {
         PageDTO<PlaceDTO> pageDTO = MyBeanUtil.myCopyProperties(pageVO, PageDTO.class);
         return placeService.listByPage(pageDTO);

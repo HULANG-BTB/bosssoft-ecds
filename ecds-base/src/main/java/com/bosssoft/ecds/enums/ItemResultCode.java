@@ -10,7 +10,8 @@ import com.bosssoft.ecds.common.response.ResultCode;
 public enum  ItemResultCode implements ResultCode {
 
     ITEM_NOT_EXISTS(false,5000,"项目不存在"),
-    ITEM_STD_NOT_EXISTS(false,5001,"项目标准不存在");
+    ITEM_STD_NOT_EXISTS(false,5001,"项目标准不存在"),
+    AGEN_BILL_NOT_EXISTS(false,5002,"删除失败，没有此条记录");
 
     //操作是否成功
     boolean success;
