@@ -12,6 +12,7 @@ import com.bosssoft.ecds.utils.MyBeanUtil;
 import com.bosssoft.ecds.entity.vo.PageVO;
 import com.bosssoft.ecds.entity.vo.RoleVO;
 import com.bosssoft.ecds.entity.vo.UserVO;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -43,6 +44,7 @@ public class UserController {
      * @return
      */
     @PostMapping("save")
+    @ApiOperation(value = "添加用户")
     public QueryResponseResult<UserVO> save(@RequestBody UserVO userVO) {
         // 转换为DTO
         UserDTO userDTO = MyBeanUtil.copyProperties(userVO, UserDTO.class);
@@ -65,6 +67,7 @@ public class UserController {
      * @return
      */
     @PutMapping("update")
+    @ApiOperation(value = "更新用户")
     public QueryResponseResult<Boolean> update(@RequestBody UserVO userVO) {
         UserDTO userDTO = MyBeanUtil.copyProperties(userVO, UserDTO.class);
         Boolean result = userService.update(userDTO);
@@ -78,6 +81,7 @@ public class UserController {
      * @return
      */
     @GetMapping("listByPage")
+    @ApiOperation(value = "分页查询列表")
     public QueryResponseResult<PageVO> listByPage(@RequestParam("page") Long page, @RequestParam("limit") Long limit, @RequestParam("keyword") String keyword) {
         PageVO pageVO = new PageVO();
         pageVO.setLimit(limit);
@@ -95,6 +99,7 @@ public class UserController {
      * @return
      */
     @DeleteMapping("remove/{id}")
+    @ApiOperation(value = "删除用户")
     public QueryResponseResult<Boolean> remove(@PathVariable("id") Long id) {
         UserVO userVO = new UserVO();
         userVO.setId(id);
@@ -109,6 +114,7 @@ public class UserController {
      * @return
      */
     @DeleteMapping("removeBatch")
+    @ApiOperation(value = "批量删除")
     public QueryResponseResult<Boolean> removeBatch(@RequestBody List<UserVO> userVOList) {
         List<UserDTO> userDTOList = MyBeanUtil.copyListProperties(userVOList, UserDTO::new);
         Boolean result = userService.removeBatch(userDTOList);
@@ -116,6 +122,7 @@ public class UserController {
     }
 
     @PutMapping("resetPassword")
+    @ApiOperation(value = "重置密码")
     public QueryResponseResult<Boolean> resetPassword(@RequestBody UserVO userVO) {
         UserDTO userDTO = MyBeanUtil.copyProperties(userVO, UserDTO.class);
         Boolean resetResult = userService.resetPassword(userDTO);

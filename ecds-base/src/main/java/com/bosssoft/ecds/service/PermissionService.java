@@ -10,7 +10,7 @@ import java.util.List;
  * @InterfaceName PermissionService
  * @Author AloneH
  * @Date 2020/7/29 20:53
- * @Description TODO
+ * @Description 权限模块 Service
  **/
 public interface PermissionService extends IService<PermissionPO> {
 

@@ -11,6 +11,7 @@ import com.bosssoft.ecds.utils.MyBeanUtil;
 import com.bosssoft.ecds.entity.vo.PageVO;
 import com.bosssoft.ecds.entity.vo.PermissionVO;
 import com.bosssoft.ecds.entity.vo.RoleVO;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,6 +38,7 @@ public class RoleController {
      * @return
      */
     @PostMapping("save")
+    @ApiOperation(value = "添加角色")
     public QueryResponseResult<RoleVO> save(@RequestBody RoleVO roleVO) {
         // 转换为DTO
         RoleDTO roleDTO = MyBeanUtil.copyProperties(roleVO, RoleDTO.class);
@@ -61,6 +63,7 @@ public class RoleController {
      * @return
      */
     @PutMapping("update")
+    @ApiOperation(value = "更新角色信息")
     public QueryResponseResult<Boolean> update(@RequestBody RoleVO roleVO) {
         // 转换为DTO
 
@@ -79,6 +82,7 @@ public class RoleController {
      * @return
      */
     @GetMapping("list")
+    @ApiOperation(value = "查询角色列表")
     public QueryResponseResult<List<RoleVO>> listAll() {
         // 执行业务逻辑
         List<RoleDTO> roleDTOList = roleService.listAll();
@@ -92,6 +96,7 @@ public class RoleController {
      * @return
      */
     @GetMapping("listByUserId")
+    @ApiOperation(value = "通过用户ID查角色列表")
     public QueryResponseResult<List<RoleVO>> listByUserId(@RequestParam("id") Long id) {
         // 执行业务逻辑
         List<RoleDTO> roleDTOList = roleService.listByUserId(id);
@@ -107,6 +112,7 @@ public class RoleController {
      * @return
      */
     @GetMapping("listByPage")
+    @ApiOperation(value = "分页查询列表")
     public QueryResponseResult<PageVO> listByPage(@RequestParam("page") Long page, @RequestParam("limit") Long limit, @RequestParam("keyword") String keyword) {
         PageVO pageVO = new PageVO();
         pageVO.setLimit(limit);
@@ -125,6 +131,7 @@ public class RoleController {
      * @return
      */
     @DeleteMapping("remove/{id}")
+    @ApiOperation(value = "删除单个角色")
     public QueryResponseResult<Boolean> remove(@PathVariable("id") Long id) {
         RoleVO roleVO = new RoleVO();
         roleVO.setId(id);
@@ -140,6 +147,7 @@ public class RoleController {
      * @return
      */
     @DeleteMapping("removeBatch")
+    @ApiOperation(value = "批量删除角色")
     public QueryResponseResult<Boolean> removeBatch(@RequestBody List<RoleVO> roleVOList) {
         List<RoleDTO> roleDTOList = MyBeanUtil.copyListProperties(roleVOList, RoleDTO.class);
         Boolean result = roleService.removeBatch(roleDTOList);

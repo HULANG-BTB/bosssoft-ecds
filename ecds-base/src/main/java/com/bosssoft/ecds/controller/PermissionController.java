@@ -5,20 +5,24 @@ import com.bosssoft.ecds.common.response.CommonCode;
 import com.bosssoft.ecds.common.response.QueryResponseResult;
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.dto.PermissionDTO;
-import com.bosssoft.ecds.service.impl.PermissionServiceImpl;
-import com.bosssoft.ecds.utils.MyBeanUtil;
 import com.bosssoft.ecds.entity.vo.PageVO;
 import com.bosssoft.ecds.entity.vo.PermissionVO;
+import com.bosssoft.ecds.service.impl.PermissionServiceImpl;
+import com.bosssoft.ecds.utils.MyBeanUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  *
  * @author AloneH
@@ -26,6 +30,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("permission")
+@Api(description = "权限管理接口")
 @Slf4j
 public class PermissionController {
 
@@ -38,8 +43,8 @@ public class PermissionController {
      * @param permissionVO
      * @return
      */
-    @ApiOperation(value = "添加权限")
     @PostMapping("save")
+    @ApiOperation(value = "添加权限", notes = "返回添加的权限实体信息")
     public QueryResponseResult<PermissionVO> save(@RequestBody PermissionVO permissionVO) {
         PermissionDTO permissionDTO = new PermissionDTO();
         MyBeanUtil.copyProperties(permissionVO, permissionDTO);
@@ -55,6 +60,7 @@ public class PermissionController {
      * @return
      */
     @PutMapping("update")
+    @ApiOperation(value = "更新权限信息")
     public QueryResponseResult<Boolean> update(@RequestBody PermissionVO permissionVO) {
         PermissionDTO permissionDTO = new PermissionDTO();
         MyBeanUtil.copyProperties(permissionVO, permissionDTO);
@@ -69,6 +75,7 @@ public class PermissionController {
      * @return
      */
     @DeleteMapping("remove/{id}")
+    @ApiOperation(value = "删除权限")
     public QueryResponseResult<Boolean> remove(@PathVariable("id") Long id) {
         PermissionVO permissionVO = new PermissionVO();
         permissionVO.setId(id);
@@ -86,6 +93,7 @@ public class PermissionController {
      * @return
      */
     @GetMapping("listByPage")
+    @ApiOperation(value = "分页查询列表")
     public QueryResponseResult<PageVO> listByPage(@RequestParam("page") Long page, @RequestParam("limit") Long limit, @RequestParam("keyword") String keyword) {
         PageVO pageVO = new PageVO();
         pageVO.setLimit(limit);
@@ -105,6 +113,7 @@ public class PermissionController {
      * @return
      */
     @GetMapping("getByRid/{id}")
+    @ApiOperation(value = "通过角色ID查询权限列表")
     public QueryResponseResult<List<PermissionVO>> getByRid(@PathVariable("id") Long id) {
         PermissionVO permissionVO = new PermissionVO();
         permissionVO.setId(id);
@@ -122,6 +131,7 @@ public class PermissionController {
      * @return
      */
     @GetMapping("list")
+    @ApiOperation(value = "查询所有列表")
     public QueryResponseResult<List<PermissionVO>> listAll() {
         List<PermissionDTO> permissionDTOList = permissionService.listAll();
         List<PermissionVO> permissionVOList = MyBeanUtil.copyListProperties(permissionDTOList, PermissionVO.class);
@@ -132,6 +142,7 @@ public class PermissionController {
      * 读取权限树列表
      */
     @GetMapping("listByTree")
+    @ApiOperation(value = "查询权限树")
     public QueryResponseResult<List<PermissionVO>> getTreeList() {
         List<PermissionDTO> treeList = permissionService.listByTree();
         List<PermissionVO> permissionVOList = MyBeanUtil.copyListProperties(treeList, PermissionVO::new);
@@ -145,6 +156,7 @@ public class PermissionController {
      * @return
      */
     @DeleteMapping("removeBatch")
+    @ApiOperation(value = "批量删除")
     public QueryResponseResult<Boolean> removeBatch(@RequestBody List<PermissionVO> permissionVOList) {
         List<PermissionDTO> permissionDTOList = MyBeanUtil.copyListProperties(permissionVOList, PermissionDTO.class);
         Boolean result = permissionService.removeBatch(permissionDTOList);
