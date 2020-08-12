@@ -1,10 +1,20 @@
 package com.bosssoft.ecds.entity.po;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
 import java.util.Date;
 
+@Data
+@TableName("une_cbill")
 public class UneCbill {
 
-    private int fId;
+    /**
+     * 开票主表
+     */
+    @TableId(value = "f_id")
+    private long fId;
 
     private String fRgnCode;
 
@@ -30,7 +40,7 @@ public class UneCbill {
 
     private String fTypeCode;
 
-    private String fBillid;
+    private String fBillId;
 
     private String fBillBatchCode;
 
@@ -52,7 +62,7 @@ public class UneCbill {
 
     private String fOperator;
 
-    private int signId;
+    private long fSignId;
 
     private String fPayCode;
 
