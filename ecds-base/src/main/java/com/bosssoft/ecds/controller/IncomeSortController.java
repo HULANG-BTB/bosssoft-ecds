@@ -6,7 +6,6 @@ import com.bosssoft.ecds.common.response.QueryResponseResult;
 import com.bosssoft.ecds.common.response.ResponseResult;
 import com.bosssoft.ecds.entity.vo.incomesortvo.AddIncomeSortVO;
 import com.bosssoft.ecds.entity.vo.incomesortvo.FuzzyQueryIncomeSortVO;
-import com.bosssoft.ecds.entity.vo.incomesortvo.PageIncomeSortVO;
 import com.bosssoft.ecds.entity.vo.incomesortvo.UpdateIncomeSortVO;
 import com.bosssoft.ecds.service.IncomeSortService;
 import io.swagger.annotations.Api;
@@ -47,12 +46,14 @@ public class IncomeSortController {
         QueryResponseResult incomeSortDTOS = incomeSortService.pageQueryByName(fuzzyQueryIncomeSortVO);
         return incomeSortDTOS;
     }
+
     @ApiOperation(value = "分页查询收入类别信息", notes = "通过id查询显示子级收入类别")
     @PostMapping("/pageQueryById")
     public Object pageQueryById(@RequestBody @Validated FuzzyQueryIncomeSortVO fuzzyQueryIncomeSortVO) {
         QueryResponseResult incomeSortDTOS = incomeSortService.pageQueryByName(fuzzyQueryIncomeSortVO);
         return incomeSortDTOS;
     }
+
     @ApiOperation(value = "更新收入类别信息", notes = "可以修改收入名称、是否底级、备注信息等")
     @PostMapping("/update")
     public Object update(@RequestBody @Validated UpdateIncomeSortVO updateIncomeSortVO) {
@@ -69,7 +70,7 @@ public class IncomeSortController {
 
     @ApiOperation(value = "查询第一级的收入类别")
     @PostMapping("/getFirst")
-    public Object getFirst(){
+    public Object getFirst() {
         return incomeSortService.getFirstIncomeSort();
     }
 

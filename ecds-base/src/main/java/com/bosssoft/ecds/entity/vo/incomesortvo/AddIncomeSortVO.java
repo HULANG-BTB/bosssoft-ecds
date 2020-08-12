@@ -24,7 +24,6 @@ public class AddIncomeSortVO implements Serializable {
     /**
      * 收入类别自身id
      */
-    @NotNull(message = IncomeSortConstant.INCOME_SORT_ID_NOT_NULL)
     @JsonSerialize(using = ToStringSerializer.class)
     private Long parentId;
     /**
