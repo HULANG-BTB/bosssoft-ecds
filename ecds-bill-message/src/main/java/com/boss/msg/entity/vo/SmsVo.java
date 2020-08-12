@@ -9,7 +9,7 @@ import java.util.Date;
  * @author zhangxiaohui
  */
 @Data
-public class SmsVo implements Serializable {
+public class SmsVo{
     /**
      * 短信id
      */
@@ -26,7 +26,8 @@ public class SmsVo implements Serializable {
     private String smsTo;
 
     /**
-     * 邮件内容
+     * 短信
+     * 内容
      */
     private String content;
 

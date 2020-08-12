@@ -1,9 +1,6 @@
 package com.boss.msg.entity.po;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -16,8 +13,8 @@ import lombok.ToString;
  */
 @Data
 @ToString
+@TableName(value = "fbe_stock_mail")
 
-@TableName(value = "f_mail")
 public class MailPo implements Serializable {
     /**
      * 邮件id
@@ -67,6 +64,31 @@ public class MailPo implements Serializable {
     @TableField(value = "f_mail_error")
     private String error;
 
+    /**
+     * 创建时间
+     */
+    @TableField(value = "f_create_time",fill = FieldFill.INSERT)
+    private Date createTime;
+
+    /**
+     * 更新时间
+     */
+    @TableField(value = "f_update_time",fill = FieldFill.INSERT_UPDATE)
+    private Date updateTime;
+
+    /**
+     * 经办人id
+     */
+    @TableField(value = "f_oper_id",fill = FieldFill.INSERT_UPDATE)
+    private Integer operatorId;
+
+    /**
+     * 经办人
+     */
+
+    @TableField(value = "f_operator",fill = FieldFill.INSERT_UPDATE)
+    private String operator;
+
     public static final String COL_F_MAIL_ID = "f_mail_id";
 
     public static final String COL_F_MAIL_FROM = "f_mail_from";
@@ -82,4 +104,12 @@ public class MailPo implements Serializable {
     public static final String COL_F_MAIL_STATUS = "f_mail_is_sent";
 
     public static final String COL_F_MAIL_ERROR = "f_mail_error";
+
+    public static final String COL_F_CREATE_TIME = "f_create_time";
+
+    public static final String COL_F_UPDATE_TIME = "f_update_time";
+
+    public static final String COL_F_OPERATOR_ID = "f_oper_id";
+
+    public static final String COL_F_OPERATOR = "f_operator";
 }

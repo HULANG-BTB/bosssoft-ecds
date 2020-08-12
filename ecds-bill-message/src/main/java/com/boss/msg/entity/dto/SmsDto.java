@@ -1,6 +1,7 @@
 package com.boss.msg.entity.dto;
 
-import com.boss.msg.entity.PageRequest;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
 import java.util.Date;
@@ -9,11 +10,17 @@ import java.util.Date;
  * @author zhangxiaohui
  */
 @Data
-public class SmsDto extends PageRequest {
+public class SmsDto {
     /**
      * 短信id
      */
+    @JsonSerialize(using=ToStringSerializer.class)
     private Long id;
+
+    /**
+     * 校验码
+     */
+    private String verifyCode;
 
     /**
      * 短信发送人
@@ -40,10 +47,7 @@ public class SmsDto extends PageRequest {
      */
     private Boolean isSent;
 
-    /**
-     * 校验码
-     */
-    private String verifyCode;
+
 
     /**
      * 报错信息

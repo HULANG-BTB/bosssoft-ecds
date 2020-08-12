@@ -19,22 +19,24 @@ spring:
             class: javax.net.ssl.SSLSocketFactory
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/fbe_bill_message?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&useSSL=true
+    url: jdbc:mysql://localhost:3306/nontax?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&useSSL=true
     username: root
-    password: root
+    password: ENC(j+rzzxe9suhLXYfPm0qnlA==)
   redis:
     port: 6379
     password: ENC(ZEBATsM7M0zPjNxHdtR12A==)
     host: 192.168.100.100
     database: 0
-
-
-
   freemarker:
     cache: false # 缓存配置 开发阶段应该配置为false 因为经常会改
     suffix: .html # 模版后缀名 默认为ftl
     charset: UTF-8 # 文件编码
     template-loader-path: classpath:/templates/  # 存放模板的文件夹，以resource文件夹为相对路径
+  jackson:
+    generator:
+      write_numbers_as_strings: true
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
 jasypt:
   encryptor:
     # 配置进服务器的环境变量 ${JASYPT_ENCRYPTOR_PASSWORD}

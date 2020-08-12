@@ -1,7 +1,8 @@
 package com.boss.msg.entity.vo;
 
-import com.boss.msg.entity.PageRequest;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 import lombok.ToString;
 
@@ -16,7 +17,7 @@ import java.util.List;
 @Data
 @ToString
 
-public class MailVo extends PageRequest implements Serializable {
+public class MailVo{
 
     /**
      * 邮件id

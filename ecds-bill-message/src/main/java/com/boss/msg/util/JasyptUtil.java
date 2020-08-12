@@ -18,7 +18,7 @@ public class JasyptUtil {
         config.setAlgorithm("PBEWithMD5AndDES");
         config.setPassword("123456");
         encryptor.setConfig(config);
-        String plaintext="123456";
+        String plaintext="root";
         //加密
         String ciphertext=encryptor.encrypt(plaintext);
         log.info(plaintext + " : " + ciphertext);

@@ -1,7 +1,8 @@
 package com.boss.msg.entity.dto;
 
-import com.boss.msg.entity.PageRequest;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 import lombok.ToString;
 
@@ -14,11 +15,12 @@ import java.util.List;
  */
 @Data
 @ToString
-public class MailDto extends PageRequest {
+public class MailDto {
 
     /**
      * 邮件id
      */
+    @JsonSerialize(using=ToStringSerializer.class)
     private Long id;
 
     /**

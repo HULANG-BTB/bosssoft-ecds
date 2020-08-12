@@ -1,108 +1,135 @@
 package com.boss.msg.service.impl;
 
-import com.alibaba.fastjson.JSON;
-import com.aliyuncs.IAcsClient;
-import com.aliyuncs.dysmsapi.model.v20170525.SendSmsRequest;
-import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
-import com.aliyuncs.exceptions.ClientException;
-import com.boss.msg.constant.SmsConstants;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.boss.msg.entity.dto.SmsDto;
-import com.boss.msg.entity.dto.VerifyCode;
+import com.boss.msg.entity.po.SmsPo;
+import com.boss.msg.mapper.SmsMapper;
 import com.boss.msg.service.SmsService;
-import com.boss.msg.util.SmsUtil;
-import com.boss.msg.util.SnowflakeUtil;
-import com.boss.msg.util.VerifyCodeUtil;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
+import com.boss.msg.util.DozerUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
-
 
 /**
  * @author zhangxiaohui
+ * @create 2020/8/12 10:31
  */
-@Slf4j
 @Service
-public class SmsServiceImpl implements SmsService {
-    /**
-     * 签名ID
-     */
-    @Value("${sms.accessKeyID}")
-    private String accessKeyId;
-    /**
-     * 签名密钥
-     */
-    @Value("${sms.accessKeySecret}")
-    private String accessKeySecret;
+public class SmsServiceImpl extends ServiceImpl<SmsMapper, SmsPo> implements SmsService {
 
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
 
+
     /**
-     * 开票短信通知
-     * 生成6位校验码，校验码由数字和小写字母组成
-     * 以 用户首字母小写 + "_" + 校验码为Key，票据信息的Json格式作为Value，存入redis
-     * 每一个请求结束后，不论成功与否，均存入数据库中
-     *
-     * @return 开票成功与否
+     * 用户通过电话号码及校验码查询票据信息
+     * 先从redis中查找，若找不到则从mysql中查找
+     * 返回从mysql数据库中的查找结果
+     * 若不为空，则存入redis中，设置5分钟超时时间
+     * @param tel        11位电话号码
+     * @param verifyCode 6位校验码
+     * @return 结果的json对象
      */
     @Override
-    public boolean sendSms(SmsDto smsDto) throws ClientException {
-        smsDto.setId(SnowflakeUtil.genId());
-        smsDto.setSentDate(new Date());
-        //设置超时时间-可自行调整
-        System.setProperty("sun.net.client.defaultConnectTimeout", "10000");
-        System.setProperty("sun.net.client.defaultReadTimeout", "10000");
-
-        IAcsClient acsClient = SmsUtil.getSmsClient(accessKeyId, accessKeySecret);
-        // 生成6位的校验码，由数字和小写字母组成
-        String verifyCode = VerifyCodeUtil.generateVerifyCode(6, null).toLowerCase();
-        smsDto.setVerifyCode(verifyCode);
-        VerifyCode code = new VerifyCode(verifyCode);
-        SendSmsRequest request = SmsUtil.getSmsRequest(
-                smsDto.getSmsTo(),
-                "ABC商城",
-                "SMS_199220359", code);
-
-        //请求失败这里会抛ClientException异常
-        SendSmsResponse sendSmsResponse = acsClient.getAcsResponse(request);
-        log.info(sendSmsResponse.toString());
-        if (sendSmsResponse.getCode() != null && SmsConstants.RES_SUCCESS_STATUS.equals(sendSmsResponse.getCode())) {
-            // 请求发送成功
-            log.info(sendSmsResponse.getCode());
-            save(smsDto, true);
-            return true;
+    public String getBillByKey(String tel, String verifyCode) {
+        // 先从redis中查询记录
+        String key = "sms_" + tel + "_" + verifyCode;
+        String content = (String) redisTemplate.opsForValue().get(key);
+        if (StringUtils.isNotBlank(content)) {
+            // redis中非空，从redis找到了content
+            return content;
         }
-        // 请求发送失败
-        String error = "ResponseCode:" + sendSmsResponse.getCode() +
-                ",ResponseMessage:" + sendSmsResponse.getMessage() +
-                ",ResponseRequestId:" + sendSmsResponse.getRequestId();
-        smsDto.setError(error);
-        save(smsDto, false);
-        return false;
+
+        // redis 中找不到，则从mysql数据库中找
+        QueryWrapper<SmsPo> query = new QueryWrapper<>();
+        query.eq("f_sms_to", tel)
+                .eq("f_sms_verify_code", verifyCode)
+                .eq("f_sms_is_sent", 1);
+        SmsPo smsPo = baseMapper.selectOne(query);
+        if (smsPo != null) {
+            // mysql中查到了该记录，缓存进redis,设置超时时间5分钟
+            redisTemplate.opsForValue().set(key, smsPo.getContent(), 5, TimeUnit.MINUTES);
+            return smsPo.getContent();
+        }
+        return null;
+
     }
 
-    public void save(SmsDto smsDto, boolean status) {
-        String value = JSON.toJSONString(smsDto);
-        StringBuilder key;
-        // 存入数据库
-        // 存入数据库中的key格式为 status_tel_verifyCode
-        if (status) {
-            // 发送成功的key前缀为SUCCESS
-            smsDto.setIsSent(true);
-            key = new StringBuilder("SUCCESS");
-        } else {
-            // 发送成功的key前缀为FAIL
-            smsDto.setIsSent(false);
-            key = new StringBuilder("FAIL");
-        }
-        key.append("_").append(smsDto.getSmsTo()).append("_").append(smsDto.getVerifyCode());
-        redisTemplate.opsForValue().set(key.toString(), value, 12 * 60 * 60L, TimeUnit.SECONDS);
+    /**
+     * 根据短信查询对象分页查找匹配记录
+     * @param smsDto 查询对象
+     * @param page 当前页面
+     * @param limit 当前页面大小
+     * @return 匹配的发信记录
+     */
+    @Override
+    public List<SmsDto> listPage(SmsDto smsDto, Long page, Long limit) {
+        Page<SmsPo> pageQuery = new Page<>(page, limit);
+        QueryWrapper<SmsPo> query = getQuery(smsDto);
+        Page<SmsPo> smsPoPage = baseMapper.selectPage(pageQuery, query);
+        List<SmsPo> smsPo = smsPoPage.getRecords();
+        return DozerUtils.mapList(smsPo, SmsDto.class);
+    }
 
+    /**
+     * 获取匹配的发信记录数
+     * @param smsDto 查询对象
+     * @return 发信记录数
+     */
+    @Override
+    public Long getTotal(SmsDto smsDto) {
+        QueryWrapper<SmsPo> query = getQuery(smsDto);
+        return baseMapper.selectCount(query).longValue();
+    }
+
+    /**
+     * 修改发信状态
+     * @param smsDto 短信信息
+     * @return 修改成功与否
+     */
+    @Override
+    public boolean updateStatus(SmsDto smsDto) {
+        SmsPo dbSms = baseMapper.selectById(smsDto.getId());
+        // 短信发送成功的不需要修改
+        boolean isSent = dbSms.getIsSent();
+        if (isSent) {
+            return false;
+        }
+        // 修改短信发送失败的记录
+        String error = dbSms.getError();
+        String msg = "人工发件,操作人：test";
+        if (StringUtils.isNotBlank(error)) {
+            msg = msg + "历史记录：" + error;
+        }
+        dbSms.setIsSent(true);
+        dbSms.setError(msg);
+        dbSms.setSentDate(new Date());
+        return baseMapper.updateById(dbSms) > 0;
+    }
+
+    /**
+     * 获取queryWrapper
+     * @param smsDto 查询对象
+     * @return QueryWrapper
+     */
+    public QueryWrapper<SmsPo> getQuery(SmsDto smsDto) {
+        QueryWrapper<SmsPo> query = new QueryWrapper<>();
+        if (smsDto.getId() != null) {
+            query.eq("f_sms_id", smsDto.getId());
+        }
+        if (StringUtils.isNotBlank(smsDto.getSmsTo())) {
+            query.eq("f_sms_to", smsDto.getSmsTo());
+        }
+        if (smsDto.getIsSent() != null) {
+            query.eq("f_sms_is_sent", smsDto.getIsSent());
+        }
+        return query;
     }
 }

@@ -43,6 +43,10 @@ public class SendMailServiceImpl implements SendMailService {
 
     private static final String SPLIT_SYMBOL = ",";
 
+    /**
+     * 异步发送邮件实现
+     * @param mailDto 发送邮件所需信息
+     */
     @Async
     @Override
     public Future<MailDto> sendMail(MailDto mailDto) {
@@ -117,7 +121,7 @@ public class SendMailServiceImpl implements SendMailService {
     private void saveMail(MailDto mailDto) {
         // 将邮件保存到数据库..
         MailPo mail = DozerUtils.map(mailDto, MailPo.class);
-        mailMapper.insert(mail);
+        int insert = mailMapper.insert(mail);
     }
 
     /**

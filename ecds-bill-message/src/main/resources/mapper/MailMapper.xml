@@ -3,7 +3,7 @@
 <mapper namespace="com.boss.msg.mapper.MailMapper">
   <resultMap id="BaseResultMap" type="com.boss.msg.entity.po.MailPo">
     <!--@mbg.generated-->
-    <!--@Table f_mail-->
+    <!--@Table fbe_stock_mail-->
     <id column="f_mail_id" jdbcType="BIGINT" property="id" />
     <result column="f_mail_from" jdbcType="VARCHAR" property="mailFrom" />
     <result column="f_mail_to" jdbcType="VARCHAR" property="mailTo" />
@@ -12,10 +12,14 @@
     <result column="f_mail_sentdate" jdbcType="TIMESTAMP" property="sentDate" />
     <result column="f_mail_is_sent" jdbcType="BOOLEAN" property="isSent" />
     <result column="f_mail_error" jdbcType="LONGVARCHAR" property="error" />
+    <result column="f_create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="f_update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="f_oper_id" jdbcType="INTEGER" property="operatorId" />
+    <result column="f_operator" jdbcType="VARCHAR" property="operator" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    f_mail_id, f_mail_from, f_mail_to, f_mail_subject, f_mail_content, f_mail_sentdate, 
-    f_mail_is_sent, f_mail_error
+    f_mail_id, f_mail_from, f_mail_to, f_mail_subject, f_mail_content, f_mail_sentDate,
+    f_mail_is_sent, f_mail_error, f_create_time, f_update_time, f_oper_id, f_operator
   </sql>
 </mapper>
