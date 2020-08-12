@@ -478,7 +478,7 @@ public class ResponseUtils {
     /**
      *  响应体
      */
-    public static class ResponseBody{
+    public static class ResponseBody {
 
         /**
          * 状态码
