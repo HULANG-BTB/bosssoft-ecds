@@ -1,4 +1,4 @@
-package com.bosssoft.ecds.util;
+package com.boss.msg.util;
 
 /**
  * @ClassName ResponseUitls
@@ -7,10 +7,12 @@ package com.bosssoft.ecds.util;
  * @Description  统一响应类
  **/
 
-import cn.hutool.json.JSONUtil;
+import com.alibaba.fastjson.JSON;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import lombok.Data;
 
-import java.io.Serializable;
 
 
 /**
@@ -216,7 +218,7 @@ public class ResponseUtils {
          * {@code 406 Not Acceptable}.
          * @see <a href="https://tools.ietf.org/html/rfc7231#section-6.5.6">HTTP/1.1: Semantics and Content, section 6.5.6</a>
          */
-        NOT_ACCEPTABLE(406, "Not Acceptable"),
+            NOT_ACCEPTABLE(406, "Not Acceptable"),
 
         /**
          * {@code 407 Proxy Authentication Required}.
@@ -481,7 +483,7 @@ public class ResponseUtils {
     /**
      *  响应体
      */
-    public static class ResponseBody implements Serializable {
+    public static class ResponseBody {
 
         /**
          * 状态码
@@ -510,7 +512,7 @@ public class ResponseUtils {
         outputParam.setData(content);
         outputParam.setStatus(code.getCode());
         outputParam.setMsg(code.getMsg());
-        return JSONUtil.toJsonStr(outputParam);
+        return JSON.toJSONString(outputParam);
     }
 
     /**
@@ -523,7 +525,7 @@ public class ResponseUtils {
         outputParam.setData(new Object());
         outputParam.setStatus(code.getCode());
         outputParam.setMsg(code.getMsg());
-        return JSONUtil.toJsonStr(outputParam);
+        return JSON.toJSONString(outputParam);
     }
 
     /**
@@ -538,7 +540,14 @@ public class ResponseUtils {
         outputParam.setData(content);
         outputParam.setStatus(code);
         outputParam.setMsg(msg);
-        return JSONUtil.toJsonStr(outputParam);
+
+        ObjectWriter writer = new ObjectMapper().writerWithDefaultPrettyPrinter();
+        try {
+            return writer.writeValueAsString(outputParam);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return "";
+        }
     }
 
     /**
@@ -552,7 +561,7 @@ public class ResponseUtils {
         outputParam.setData(new Object());
         outputParam.setStatus(code);
         outputParam.setMsg(msg);
-        return JSONUtil.toJsonStr(outputParam);
+        return JSON.toJSONString(outputParam);
     }
 
 }

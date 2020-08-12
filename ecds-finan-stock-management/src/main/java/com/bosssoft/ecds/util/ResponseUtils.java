@@ -10,8 +10,6 @@ package com.bosssoft.ecds.util;
 import cn.hutool.json.JSONUtil;
 import lombok.Data;
 
-import java.io.Serializable;
-
 
 /**
  * 统一响应结果 工具类
@@ -481,7 +479,7 @@ public class ResponseUtils {
     /**
      *  响应体
      */
-    public static class ResponseBody implements Serializable {
+    public static class ResponseBody {
 
         /**
          * 状态码
