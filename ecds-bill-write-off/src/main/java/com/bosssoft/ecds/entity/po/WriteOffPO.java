@@ -7,9 +7,6 @@ import lombok.Data;
 
 import java.util.Date;
 
-/**
- * @author wlx hjr
- */
 @Data
 @TableName("fbe_writeoff")
 @ApiModel(value="WriteOffPO对象")

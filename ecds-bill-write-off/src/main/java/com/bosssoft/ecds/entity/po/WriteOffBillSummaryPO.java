@@ -8,9 +8,6 @@ import lombok.Data;
 import java.math.BigDecimal;
 import java.util.Date;
 
-/**
- * @author wlx hjr
- */
 @Data
 @TableName("fbe_writeoff_billsummary")
 @ApiModel(value="WriteOffBillsummaryPO对象")

@@ -7,9 +7,6 @@ import lombok.Data;
 
 import java.util.Date;
 
-/**
- * @author wlx hjr
- */
 @Data
 @TableName("fab_monitor_record")
 @ApiModel(value="MonitorRecordPO对象")

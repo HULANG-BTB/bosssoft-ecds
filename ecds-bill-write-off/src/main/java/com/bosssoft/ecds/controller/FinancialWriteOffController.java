@@ -7,8 +7,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * @author hujierong
- * @date 2020-8-12
+ * description: 财务段的核销服务
  */
 @RestController
 public class FinancialWriteOffController {
@@ -19,6 +18,6 @@ public class FinancialWriteOffController {
     @ResponseBody
     @GetMapping("/get")
     public String get(){
-        return String.valueOf(financialWriteOffService.get());
+        return "";
     }
 }
