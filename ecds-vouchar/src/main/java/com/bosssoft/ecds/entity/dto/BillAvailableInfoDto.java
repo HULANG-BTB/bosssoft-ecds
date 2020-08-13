@@ -10,6 +10,9 @@ import java.io.Serializable;
 @ApiModel(value = "BillAvailableInfoDto", description = "可用票据信息传输类")
 public class BillAvailableInfoDto implements Serializable {
 
+    @ApiModelProperty("公司编码")
+    private String agenCode;
+
     @ApiModelProperty(value = "票据代码")
     private String billCode;
 

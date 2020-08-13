@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2020-08-13
  */
 @RestController
-@RequestMapping("/bill-available-archive-po")
-public class BillAvailableArchiveController {
+@RequestMapping("/agen-bill-po")
+public class AgenBillController {
 
 }
 
