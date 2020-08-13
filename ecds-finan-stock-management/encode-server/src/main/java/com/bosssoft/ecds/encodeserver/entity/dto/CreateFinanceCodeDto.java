@@ -58,7 +58,7 @@ public class CreateFinanceCodeDto {
      */
     private Timestamp fUpdateTime;
 
-    public String getFinanceCode() {
+    public String financeCode() {
         return fRegiId + fSortId + fTypeId + fAnnualId;
     }
 }

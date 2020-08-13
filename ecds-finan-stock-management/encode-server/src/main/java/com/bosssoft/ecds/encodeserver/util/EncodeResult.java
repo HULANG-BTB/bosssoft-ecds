@@ -1,6 +1,4 @@
-package com.bosssoft.ecds.encodeserver.entity.vo;
-
-import com.bosssoft.ecds.encodeserver.util.ResponseUtils;
+package com.bosssoft.ecds.encodeserver.util;
 
 /**
  * @Author 黄杰峰

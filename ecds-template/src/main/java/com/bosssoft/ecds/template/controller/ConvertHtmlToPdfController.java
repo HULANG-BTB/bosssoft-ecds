@@ -45,10 +45,10 @@ public class ConvertHtmlToPdfController {
 
     @Autowired
     private SetTemplateService setTemplateService;
-    
+
     @Autowired
     private CreatePdfService createPdfService;
-    
+
     @RequestMapping("/test")
     @ResponseBody
     public void testCreatePdf(){
@@ -87,12 +87,26 @@ public class ConvertHtmlToPdfController {
         return null;
     }
 
-
-    @PostMapping(value = "/createPdf2")
+    /*@PostMapping(value = "/createPdf2")
     @ResponseBody
     public Object createPdf(@RequestBody NontaxBillDTO billDTO){
         Map<String,Object> data = new HashMap<>();
         data.put("billDTO",billDTO);
+        Configuration cfg = configurationService.getConfiguration();
+        String outData = setTemplateService.getOutData(data, cfg, htmlName);
+        createPdfService.createPdf(outData, pdfDest, fontType);
+        return billDTO;
+    }*/
+
+    @PostMapping(value = "/createPdf3")
+    @ResponseBody
+    public Object createPdf(@RequestBody NontaxBillDTO billDTO){
+        Map<String,Object> data = new HashMap<>();
+        data.put("billDTO",billDTO);
+        /** 以票据代码作为freemarker模板名称 */
+        htmlName = billDTO.getBillCode() + ".ftl";
+        /** 以票据代码和票号作为生成的票据pdf文件名称 */
+        pdfDest = pdfDest + billDTO.getBillCode() + billDTO.getSerialCode() + ".pdf";
         Configuration cfg = configurationService.getConfiguration();
         String outData = setTemplateService.getOutData(data, cfg, htmlName);
         createPdfService.createPdf(outData, pdfDest, fontType);
