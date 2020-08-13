@@ -112,6 +112,25 @@ public class CrtController {
     /**
      *
      *
+     * @description: 根据领购证id查询领购证。
+     * @param {UabCrtVO} uabCrtVO
+     * @return: {String}
+     * @author: YuHangChen
+     * @time: 09/08/2020 上午10:17
+     */
+    @PostMapping("/getById")
+    @ApiOperation(value = "根据领购证id查询领购证")
+    public String getById(@RequestBody CrtVO uabCrtVO){
+        CrtDTO uabCrtDTO = new CrtDTO();
+        MyBeanUtil.copyProperties(uabCrtVO,uabCrtDTO);
+        uabCrtDTO = uabCrtService.getById(uabCrtDTO);
+        MyBeanUtil.copyProperties(uabCrtDTO,uabCrtVO);
+        return ResponseUtils.getResponse(uabCrtVO,ResponseUtils.ResultType.OK);
+    }
+
+    /**
+     *
+     *
      * @description: 根据单位编码查询领购证。
      * @param {UabCrtVO} uabCrtVO
      * @return: {String}

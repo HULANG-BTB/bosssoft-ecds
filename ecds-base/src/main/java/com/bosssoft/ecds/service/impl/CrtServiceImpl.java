@@ -96,6 +96,23 @@ public class CrtServiceImpl extends ServiceImpl<CrtDao, CrtPO> implements CrtSer
     /**
      *
      *
+     * @description: 根据id查询领购证。
+     * @param {UabCrtDTO} uabCrtDTO
+     * @return: {UabCrtDTO}
+     * @author: YuHangChen
+     * @time: 09/08/2020 上午10:17
+     */
+    @Override
+    public CrtDTO getById(CrtDTO uabCrtDTO) {
+        CrtPO uabCrtPO = new CrtPO();
+        MyBeanUtil.copyProperties(uabCrtDTO, uabCrtPO);
+        CrtPO uabCrtPO1 = super.getById(uabCrtPO.getId());
+        return MyBeanUtil.copyProperties(uabCrtPO1, CrtDTO.class);
+    }
+
+    /**
+     *
+     *
      * @description: 根据单位编码查询领购证。
      * @param {UabCrtDTO} uabCrtDTO
      * @return: {List<UabCrtDTO>}
