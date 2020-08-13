@@ -1,6 +1,5 @@
 package com.bosssoft.ecds.dto;
 
-import com.bosssoft.ecds.domain.Bill;
 import com.bosssoft.ecds.domain.StringType;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
@@ -8,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
 import java.security.cert.X509Certificate;
 
 /**
@@ -21,13 +22,13 @@ import java.security.cert.X509Certificate;
 @NoArgsConstructor
 @Builder
 @Api("签名后票据传输dto，包含票据信息，签名和数字证书")
-public class SignedBillDto {
+public class SignedDataDto implements Serializable {
 
     /**
      * 数据信息
      */
     @ApiModelProperty("数据信息")
-    private Bill bill;
+    private String data;
 
     /**
      * 单位签名
@@ -37,9 +38,11 @@ public class SignedBillDto {
 
     /**
      * 单位数字证书
+     *      X509Certificate 空参构造函数为 protect，通过工厂建造
+     *      无法直接转换，所以先转为字符串
      */
     @ApiModelProperty("单位数字证书")
-    private X509Certificate unitCrtCert;
+    private String unitCrtCert;
 
     /**
      * 财政签名
@@ -51,7 +54,7 @@ public class SignedBillDto {
      * 财政数字证书
      */
     @ApiModelProperty("财政数字证书")
-    private X509Certificate finaCrtCert;
+    private String finaCrtCert;
 
     /**
      * 编码类型

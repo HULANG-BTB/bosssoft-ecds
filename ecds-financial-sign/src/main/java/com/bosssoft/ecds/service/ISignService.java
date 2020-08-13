@@ -24,7 +24,7 @@ public interface ISignService {
      * @param data 需要签名的数据文件
      * @return 签名信息
      */
-    public SignedDataDto sign(String data) throws Exception;
+    public SignedDataDto sign(SignedDataDto signedData) throws Exception;
 
     /**
      * 确认签名

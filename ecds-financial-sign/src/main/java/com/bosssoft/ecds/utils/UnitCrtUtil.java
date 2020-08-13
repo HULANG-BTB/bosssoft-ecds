@@ -61,7 +61,7 @@ public class UnitCrtUtil {
     }
 
     /**
-     * 返回 CA 证书
+     * 返回公钥证书
      * @return
      */
     public static X509Certificate getCert(){

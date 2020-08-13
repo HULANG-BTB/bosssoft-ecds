@@ -12,13 +12,11 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-import java.util.ArrayList;
-
 /**
  * @author LiDaShan
  * @Version 1.0
- * @Date 2020/8/12
- * @Content: Swagger配置类
+ * @Date 2020/8/13
+ * @Content:
  */
 @Configuration
 @EnableSwagger2

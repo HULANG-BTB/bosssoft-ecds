@@ -1,11 +1,11 @@
 package com.bosssoft.ecds.service.impl;
 
-import cn.hutool.json.JSON;
 import cn.hutool.json.JSONUtil;
-import com.bosssoft.ecds.domain.*;
+import com.bosssoft.ecds.domain.AlgorithmType;
+import com.bosssoft.ecds.domain.StringType;
 import com.bosssoft.ecds.dto.SignedDataDto;
-import com.bosssoft.ecds.service.ISignService;
 import com.bosssoft.ecds.utils.*;
+import com.bosssoft.ecds.service.ISignService;
 import org.apache.commons.codec.DecoderException;
 import org.springframework.stereotype.Service;
 import sun.security.x509.X509CertImpl;
@@ -16,7 +16,6 @@ import java.security.cert.X509Certificate;
 
 /**
  * @author LiDaShan
- * @Version 1.0
  * @Date 2020/8/11
  * @Content:
  */
@@ -24,9 +23,9 @@ import java.security.cert.X509Certificate;
 public class SignServiceImpl implements ISignService {
 
     @Override
-    public SignedDataDto sign(String data) throws Exception {
+    public SignedDataDto sign(SignedDataDto signedData) throws Exception{
         // 使用 SHA256 摘要算法生成摘要，并对摘要使用 BASE64 编码
-        String summary = SummaryUtil.getSummary(data, AlgorithmType.SHA256, StringType.BASE64);
+        String summary = SummaryUtil.getSummary(signedData.getData(), AlgorithmType.SHA256, StringType.BASE64);
         // 从 keyStore 中读取私钥
         KeyStore keyStore = UnitP12Utill.getKeyStore();
         String keyPassword = UnitP12Utill.getKeyPassword();
@@ -35,17 +34,19 @@ public class SignServiceImpl implements ISignService {
         X509Certificate x509Cert = (X509Certificate) UnitP12Utill.getCertificate();
         // 判断算法类型，
         if(!AlgorithmType.SHA256.getsignatureAlgorithmType().equals(x509Cert.getSigAlgName())){
-            throw new Exception("此算法类型不支持");
+            throw new NoSuchAlgorithmException("此算法不支持");
         }
         // 使用私钥，采用SHA256算法加密摘要,获取签名
         String signValue = SignUtil.signData(summary, privateKey, AlgorithmType.SHA256, StringType.BASE64);
-        // 获取公钥证书 crtCert已BASE64编码的字符串
+        // 获取公钥证书 crtCert已的字符串
         String crtCertStr = UnitCrtUtil.getCertStr();
         // 开始封装 SignedDocument, 并返回，使用建造者模式
         return SignedDataDto.builder()
-                .data(data)
-                .unitSignValue(signValue)
-                .unitCrtCert(crtCertStr)
+                .data(signedData.getData())
+                .unitSignValue(signedData.getUnitCrtCert())
+                .unitCrtCert(signedData.getUnitCrtCert())
+                .financeSignValue(signValue)
+                .finaCrtCert(crtCertStr)
                 .stringType(StringType.BASE64)
                 .build();
     }
@@ -55,18 +56,18 @@ public class SignServiceImpl implements ISignService {
             CertificateException, NoSuchAlgorithmException,
             InvalidKeyException, SignatureException, DecoderException {
         // 获取并验证单位端公钥数字证书 crtCert
-        String crtCertStr = signedData.getFinaCrtCert();
+        String crtCertStr = signedData.getUnitCrtCert();
         X509Certificate crtCert = StrToCertUtil.toCert(crtCertStr);
         verifyCrtCert(crtCert);
-        // 判断算法类型，
+        // 判断算法类型， SHA256withRSA
         if(!AlgorithmType.SHA256.getsignatureAlgorithmType().equals(crtCert.getSigAlgName())){
-            throw new NoSuchAlgorithmException("此算法类型不支持");
+            throw new NoSuchAlgorithmException("此算法不支持");
         }
         // 获取原文信息，生成摘要
         String data = signedData.getData();
         String summary = SummaryUtil.getSummary(data, AlgorithmType.SHA256, signedData.getStringType());
         // 获取财政签名
-        String financeSignValue = signedData.getFinanceSignValue();
+        String financeSignValue = signedData.getUnitSignValue();
         // 获取财政公钥
         PublicKey finaPublicKey = crtCert.getPublicKey();
         if (SignUtil.verifySign(summary, financeSignValue, finaPublicKey, AlgorithmType.SHA256, signedData.getStringType())){
