@@ -80,4 +80,7 @@ public class CrtVO {
     @ApiModelProperty(value = "备注")
     private String note;
 
+    @ApiModelProperty(value = "是否启用")
+    private Boolean isenable;
+
 }

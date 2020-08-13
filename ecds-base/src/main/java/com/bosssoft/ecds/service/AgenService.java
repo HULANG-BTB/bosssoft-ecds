@@ -102,6 +102,14 @@ public interface AgenService extends IService<AgenPO> {
     public PageDTO listByPage(PageDTO pageDTO);
 
     /**
+     * 未审核分页读取
+     *
+     * @param pageDTO
+     * @return
+     */
+    public PageDTO checkListByPage(PageDTO pageDTO);
+
+    /**
      * 批量删除单位
      *
      * @param fabAgenDTOList

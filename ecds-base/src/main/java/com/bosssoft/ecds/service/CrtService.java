@@ -91,6 +91,14 @@ public interface CrtService extends IService<CrtPO> {
     public PageDTO listByPage(PageDTO pageDTO);
 
     /**
+     * 准购证审核分页读取领购证
+     *
+     * @param pageDTO
+     * @return
+     */
+    public PageDTO checkListByPage(PageDTO pageDTO);
+
+    /**
      * 批量删除领购证
      *
      * @param uabCrtDTODTOList
@@ -98,4 +106,11 @@ public interface CrtService extends IService<CrtPO> {
      */
     public Boolean removeBatch(List<CrtDTO> uabCrtDTODTOList);
 
+    /**
+     * 批量审核领购证
+     *
+     * @param uabCrtDTODTOList
+     * @return
+     */
+    public Boolean checkBatch(List<CrtDTO> uabCrtDTODTOList);
 }
