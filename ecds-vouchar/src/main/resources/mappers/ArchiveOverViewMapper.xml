@@ -5,7 +5,7 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.bosssoft.ecds.entity.po.ArchivePO">
         <id column="f_id" property="id" />
-        <result column="f_agen_idcode" property="agenIdcode" />
+        <result column="f_agen_code" property="agenCode" />
         <result column="f_agen_name" property="agenName" />
         <result column="f_kind_name" property="kindName" />
         <result column="f_link_addr" property="linkAddr" />

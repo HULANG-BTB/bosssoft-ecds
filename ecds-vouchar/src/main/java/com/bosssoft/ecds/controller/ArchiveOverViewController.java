@@ -34,7 +34,7 @@ public class ArchiveOverViewController {
      * @param query
      * @return String
      */
-    @PostMapping("/info")
+    @PostMapping("/unit/info")
     public String queryArchiveInfo(@RequestBody ArchiveOverViewQuery query){
         ArchiveOverViewDto archiveOverViewDto = service.queryOverViewArchiveInfo(query);
         ArchiveOverViewVo vo = new ArchiveOverViewVo();
@@ -46,7 +46,7 @@ public class ArchiveOverViewController {
      * 获取所有单位的归档信息,并且展示给前台
      * @return
      */
-    @GetMapping("/allInfo")
+    @GetMapping("/fina/allInfo")
     public String queryArchiveAllInfo(){
         /**
          * 获取全部的单位信息

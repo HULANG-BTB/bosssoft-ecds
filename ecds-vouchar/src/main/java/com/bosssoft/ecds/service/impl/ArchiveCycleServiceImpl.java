@@ -1,7 +1,9 @@
 package com.bosssoft.ecds.service.impl;
 
 import com.bosssoft.ecds.service.ArchiveCycleService;
+import com.bosssoft.ecds.service.BillApplyArchiveService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -9,6 +11,10 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 public class ArchiveCycleServiceImpl implements ArchiveCycleService {
+
+    @Autowired
+    BillApplyArchiveService billApplyArchiveService;
+
     /**
      * 执行定期归档任务  每天 00:00 执行归档操作
      */

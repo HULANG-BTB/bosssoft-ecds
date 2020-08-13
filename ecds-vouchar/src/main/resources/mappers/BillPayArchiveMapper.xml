@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bosssoft.ecds.dao.BillPayArchiveDao">
+    <!--归档票据缴销记录-->
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.bosssoft.ecds.entity.po.BillPayArchivePO">
+        <id column="f_id" property="id" />
+        <result column="f_agen_code" property="agenCode" />
+        <result column="f_bill_no" property="billNo" />
+        <result column="f_author_time" property="authorTime" />
+        <result column="f_author_result" property="authorResult" />
+        <result column="f_sign_status" property="signStatus" />
+        <result column="f_is_save" property="isSave" />
+        <result column="f_create_time" property="createTime" />
+        <result column="f_update_time" property="updateTime" />
+        <result column="f_operator_id" property="operatorId" />
+        <result column="f_operator" property="operator" />
+        <result column="f_version" property="version" />
+        <result column="f_logic_delete" property="logicDelete" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        f_id, f_agen_idcode, f_bill_no, f_author_time, f_author_result, f_sign_status, f_is_save, f_create_time, f_update_time, f_operator_id, f_operator, f_version, f_logic_delete
+    </sql>
+
+</mapper>
