@@ -9,7 +9,6 @@ import com.bosssoft.ecds.entity.po.AgenBillPO;
 import com.bosssoft.ecds.entity.po.BillTypePO;
 import com.bosssoft.ecds.entity.vo.PageVO;
 
-import javax.management.Query;
 import java.util.List;
 
 /**
@@ -23,10 +22,10 @@ import java.util.List;
 public interface AgenBillService extends IService<AgenBillPO> {
 
     /**
-     * 批量插入单位票据关系数据
+     * 批量维护单位票据关系数据
      *
-     * @param agenBillDTOList
-     * @return
+     * @param agenBillDTOList 输入单位编码和票据编码
+     * @return 返回成功或者失败的code和msg
      */
     ResponseResult updateBatch(List<AgenBillDTO> agenBillDTOList);
 
@@ -34,8 +33,9 @@ public interface AgenBillService extends IService<AgenBillPO> {
      * 查询单位的可用票据，供单位端使用
      * 分页展示
      *
-     * @param pageDTO
-     * @return
+     * @param pageDTO 输入分页信息,limit、page、keyword
+     *                keyword为空时普通查询，keyword不为空时模糊查询
+     * @return limit、page、total、items
      */
     QueryResponseResult<PageVO> listByPage(PageDTO<BillTypePO> pageDTO);
 
@@ -43,7 +43,7 @@ public interface AgenBillService extends IService<AgenBillPO> {
      * 查询单位所有的可用票据，不通过分页显示
      *
      * @param agenBillDTO 输入单位编码
-     * @return
+     * @return 返回出单位所有的可用票据
      */
     QueryResponseResult<List<BillTypePO>> getBill(AgenBillDTO agenBillDTO);
 }

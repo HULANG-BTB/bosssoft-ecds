@@ -51,10 +51,11 @@ public class AgenBillController {
     }
 
     /**
+     * 查询单位的可用票据，供单位端使用
      * 分页查询
      *
      * @param pageVO 输入分页信息,limit、page、keyword
-     *               keyword为空时普通查询，keyword不为空时分页查询
+     *               keyword为空时普通查询，keyword不为空时模糊查询
      * @return limit、page、total、items
      */
     @ApiOperation(value = "分页查询", notes = "输入分页信息,limit、page、keyword，" +

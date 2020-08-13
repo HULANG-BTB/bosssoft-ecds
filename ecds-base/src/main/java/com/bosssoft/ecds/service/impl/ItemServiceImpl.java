@@ -6,7 +6,6 @@ import com.bosssoft.ecds.common.response.CommonCode;
 import com.bosssoft.ecds.common.response.QueryResponseResult;
 import com.bosssoft.ecds.common.response.ResponseResult;
 import com.bosssoft.ecds.entity.dto.ItemDTO;
-import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.po.ItemPO;
 import com.bosssoft.ecds.dao.ItemDao;
 import com.bosssoft.ecds.entity.vo.itemvo.ItemPageVO;
@@ -106,7 +105,7 @@ public class ItemServiceImpl extends ServiceImpl<ItemDao, ItemPO> implements Ite
      * @return
      */
     @Override
-    public QueryResponseResult<ItemPageVO> listByPage(ItemPageVO<ItemDTO> itemPageVO) {
+    public ResponseResult listByPage(ItemPageVO<ItemDTO> itemPageVO) {
         Page<ItemPO> itemDTOPage = new Page<>();
         // 设置分页信息
         itemDTOPage.setCurrent(itemPageVO.getPage());

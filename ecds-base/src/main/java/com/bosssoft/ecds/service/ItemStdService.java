@@ -2,7 +2,6 @@ package com.bosssoft.ecds.service;
 
 import com.bosssoft.ecds.common.response.QueryResponseResult;
 import com.bosssoft.ecds.common.response.ResponseResult;
-import com.bosssoft.ecds.entity.dto.ItemDTO;
 import com.bosssoft.ecds.entity.dto.ItemStdDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.po.ItemStdPO;
@@ -23,58 +22,59 @@ import java.util.List;
 public interface ItemStdService extends IService<ItemStdPO> {
 
     /**
-     * 插入项目标准
+     * 插入项目标准相关信息
      *
-     * @param itemStdDTO
-     * @return boolean
+     * @param itemStdDTO 输入项目标准相关信息
+     * @return 返回成功或者失败的code和msg
      */
     ResponseResult save(ItemStdDTO itemStdDTO);
 
     /**
      * 修改项目标准信息
      *
-     * @param itemStdDTO
-     * @return boolean
+     * @param itemStdDTO 修改后的项目标准信息
+     * @return 返回成功或者失败的code和msg
      */
     ResponseResult update(ItemStdDTO itemStdDTO);
 
     /**
-     * 删除项目标准信息
+     * 删除单个项目标准
      *
-     * @param itemStdDTO
-     * @return boolean
+     * @param itemStdDTO 需要删除的项目标准的id
+     * @return 返回成功或者失败的code和msg
      */
     ResponseResult delete(ItemStdDTO itemStdDTO);
 
     /**
      * 分页查询项目标准信息
      *
-     * @param pageDTO
-     * @return PageVO
+     * @param pageDTO 输入分页信息,limit、page、keyword、isenable
+     *                keyword为空时普通查询，keyword不为空时模糊查询
+     * @return limit、page、total、items
      */
     QueryResponseResult<PageVO> listByPage(PageDTO<ItemStdDTO> pageDTO);
 
     /**
      * 批量删除项目标准信息
      *
-     * @param itemStdDTOS
-     * @return boolean
+     * @param itemStdDTOS 需要删除的项目标准的idList
+     * @return 返回成功或者失败的code和msg
      */
     ResponseResult batchDelete(List<ItemStdDTO> itemStdDTOS);
 
     /**
-     * 批量审核
+     * 主要用于批量审核,修改项目标准启用状态，输入需要修改
      *
-     * @param itemStdDTOS
-     * @return
+     * @param itemStdDTOS 需要修改审核的项目idList
+     * @return 返回成功或者失败的code和msg
      */
     ResponseResult batchVerify(List<ItemStdDTO> itemStdDTOS);
 
     /**
-     * 通过项目编码 查询出标准信息
+     * 通过项目编码查询项目标准
      *
-     * @param itemStdDTO
-     * @return
+     * @param itemStdDTO 输入项目编码
+     * @return 项目标准相关信息
      */
     QueryResponseResult<ItemStdVO> getByItemCode(ItemStdDTO itemStdDTO);
 

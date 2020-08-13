@@ -99,7 +99,7 @@ public class AgenItemServiceImpl extends ServiceImpl<AgenItemDao, AgenItemPO> im
     @Override
     public ResponseResult updateBatch(List<AgenItemDTO> agenItemDTOList) {
         QueryWrapper<AgenItemPO> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq(AgenBillPO.F_AGEN_IDCODE,agenItemDTOList.get(0).getAgenIdcode());
+        queryWrapper.eq(AgenItemPO.F_AGEN_IDCODE,agenItemDTOList.get(0).getAgenIdcode());
         List<AgenItemPO> agenItemPOS = agenItemDao.selectList(queryWrapper);
         boolean remove = true;
         if (!agenItemPOS.isEmpty()) {

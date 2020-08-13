@@ -1,6 +1,5 @@
 package com.bosssoft.ecds.controller;
 
-import com.bosssoft.ecds.common.response.QueryResponseResult;
 import com.bosssoft.ecds.common.response.ResponseResult;
 import com.bosssoft.ecds.entity.dto.ItemDTO;
 import com.bosssoft.ecds.entity.vo.itemvo.ItemPageVO;
@@ -35,12 +34,12 @@ public class ItemController {
     /**
      * 插入项目相关信息
      *
-     * @param itemVO 项目相关信息
-     * @return
+     * @param itemVO 输入项目相关信息
+     * @return 返回成功或者失败的code和msg
      */
-    @ApiOperation(value = "添加项目")
+    @ApiOperation(value = "添加项目", notes = "输入项目相关信息")
     @PostMapping("/save")
-    public ResponseResult addItem(@RequestBody ItemVO itemVO) {
+    public ResponseResult save(@RequestBody ItemVO itemVO) {
         ItemDTO itemDTO = MyBeanUtil.myCopyProperties(itemVO, ItemDTO.class);
         return itemService.save(itemDTO);
     }
@@ -48,39 +47,39 @@ public class ItemController {
     /**
      * 修改项目信息
      *
-     * @param itemVO
-     * @return
+     * @param itemVO 输入修改后的项目信息
+     * @return 返回成功或者失败的code和msg
      */
-    @ApiOperation(value = "修改项目")
+    @ApiOperation(value = "修改项目", notes = "输入修改数据")
     @PostMapping("/update")
-    public ResponseResult updateItem(@RequestBody ItemVO itemVO) {
+    public ResponseResult update(@RequestBody ItemVO itemVO) {
         ItemDTO itemDTO = MyBeanUtil.myCopyProperties(itemVO, ItemDTO.class);
         return itemService.update(itemDTO);
     }
 
     /**
-     * 主要用于批量审核,修改项目启用状态，输入需要修改
+     * 主要用于批量审核,修改项目启用状态
      *
-     * @param itemVOList 需要修改审核的项目id
-     * @return
+     * @param itemVOList 输入需要修改审核的项目idList
+     * @return 返回成功或者失败的code和msg
      */
-    @ApiOperation(value = "批量审核")
+    @ApiOperation(value = "批量审核", notes = "输入需要修改审核的项目idList")
     @PostMapping("/batchVerify")
-    public ResponseResult updateBatchVerifyItem(@RequestBody List<ItemVO> itemVOList) {
+    public ResponseResult batchVerify(@RequestBody List<ItemVO> itemVOList) {
         List<ItemDTO> itemDTOS = MyBeanUtil.copyListProperties(itemVOList, ItemDTO::new);
         return itemService.batchVerify(itemDTOS);
     }
 
     /**
-     * 删除项目
+     * 删除单个项目
      *
-     * @param itemVO
-     * @return
+     * @param itemVO 输入需要删除项目的id
+     * @return 返回成功或者失败的code和msg
      */
-    @ApiOperation(value = "删除项目")
+    @ApiOperation(value = "删除项目", notes = "输入需要删除项目的id")
     @ApiImplicitParam(name = "id", value = "项目id", dataType = "Long")
     @PostMapping("/delete")
-    public ResponseResult deleteItem(@RequestBody ItemVO itemVO) {
+    public ResponseResult delete(@RequestBody ItemVO itemVO) {
         ItemDTO itemDTO = MyBeanUtil.myCopyProperties(itemVO, ItemDTO.class);
         return itemService.delete(itemDTO);
     }
@@ -88,10 +87,10 @@ public class ItemController {
     /**
      * 批量删除
      *
-     * @param itemVOList
-     * @return
+     * @param itemVOList 输入需要删除的项目idList
+     * @return 返回成功或者失败的code和msg
      */
-    @ApiOperation(value = "批量删除")
+    @ApiOperation(value = "批量删除", notes = "输入需要删除的项目idList")
     @PostMapping("/batchDelete")
     public ResponseResult batchDelete(@RequestBody List<ItemVO> itemVOList) {
         List<ItemDTO> itemDTOS = MyBeanUtil.copyListProperties(itemVOList, ItemDTO::new);
@@ -101,20 +100,22 @@ public class ItemController {
     /**
      * 分页查询
      *
-     * @param itemPageVO
-     * @return
+     * @param itemPageVO 输入分页信息,limit、page、keyword、isenable
+     *                   keyword为空时普通查询，keyword不为空时模糊查询
+     *                   isenable为0时查询出未审核的项目，为1时查询出审核的项目
+     * @return limit、page、total、items
      */
-    @ApiOperation(value = "分页查询")
+    @ApiOperation(value = "分页查询", notes = "输入分页信息,limit、page、keyword，" +
+            "keyword为空时普通查询，keyword不为空时模糊查询")
     @PostMapping("/listByPage")
-    public QueryResponseResult<ItemPageVO> listByPage(@RequestBody ItemPageVO<ItemDTO> itemPageVO) {
+    public ResponseResult listByPage(@RequestBody ItemPageVO<ItemDTO> itemPageVO) {
         return itemService.listByPage(itemPageVO);
     }
 
     /**
-     * 分页查询
+     * 查询所有项目信息
      *
-     * @param
-     * @return
+     * @return 项目信息集合
      */
     @ApiOperation(value = "查询所有项目信息，不分页展示")
     @GetMapping("/getItemAll")

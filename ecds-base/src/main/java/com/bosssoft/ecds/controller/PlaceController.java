@@ -10,7 +10,6 @@ import com.bosssoft.ecds.entity.vo.PlaceVO;
 import com.bosssoft.ecds.service.PlaceService;
 import com.bosssoft.ecds.utils.MyBeanUtil;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,7 +22,7 @@ import java.util.List;
 
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  *
  * @author wzh
@@ -38,65 +37,64 @@ public class PlaceController {
     private PlaceService placeService;
 
     /**
-     * 插入项目相关信息
+     * 插入单位开票点相关信息
      *
-     * @param placeVO 项目相关信息
-     * @return
+     * @param placeVO 单位开票点相关信息
+     * @return 返回成功或者失败的code和msg
      */
-    @ApiOperation(value = "添加项目")
+    @ApiOperation(value = "添加开票点", notes = "单位开票点相关信息")
     @PostMapping("/save")
-    public ResponseResult addItem(@RequestBody PlaceVO placeVO) {
+    public ResponseResult save(@RequestBody PlaceVO placeVO) {
         PlaceDTO placeDTO = MyBeanUtil.myCopyProperties(placeVO, PlaceDTO.class);
         return placeService.save(placeDTO);
     }
 
     /**
-     * 修改项目信息
+     * 修改开票点信息
      *
-     * @param placeVO
-     * @return
+     * @param placeVO 修改后的开票点信息
+     * @return 返回成功或者失败的code和msg
      */
-    @ApiOperation(value = "修改项目")
+    @ApiOperation(value = "修改开票点")
     @PostMapping("/update")
-    public ResponseResult updateItem(@RequestBody PlaceVO placeVO) {
+    public ResponseResult update(@RequestBody PlaceVO placeVO) {
         PlaceDTO placeDTO = MyBeanUtil.myCopyProperties(placeVO, PlaceDTO.class);
         return placeService.update(placeDTO);
     }
 
     /**
-     * 主要用于批量审核,修改项目启用状态，输入需要修改
+     * 主要用于批量审核,修改开票点启用状态，输入需要修改
      *
-     * @param placeVOList 需要修改审核的项目id
-     * @return
+     * @param placeVOList 需要修改审核的开票点id
+     * @return 返回成功或者失败的code和msg
      */
     @ApiOperation(value = "批量审核")
     @PostMapping("/batchVerify")
-    public ResponseResult updateBatchVerifyItem(@RequestBody List<PlaceVO> placeVOList) {
+    public ResponseResult batchVerify(@RequestBody List<PlaceVO> placeVOList) {
         List<PlaceDTO> placeDTOS = MyBeanUtil.copyListProperties(placeVOList, PlaceDTO::new);
         return placeService.batchVerify(placeDTOS);
     }
 
     /**
-     * 删除项目
+     * 删除单个开票点
      *
-     * @param placeVO
-     * @return
+     * @param placeVO 需要删除的开票点id
+     * @return 返回成功或者失败的code和msg
      */
-    @ApiOperation(value = "删除项目")
-    @ApiImplicitParam(name = "id", value = "项目id", dataType = "Long")
+    @ApiOperation(value = "删除单个开票点", notes = "需要删除的开票点id")
     @PostMapping("/delete")
-    public ResponseResult deleteItem(@RequestBody PlaceVO placeVO) {
+    public ResponseResult delete(@RequestBody PlaceVO placeVO) {
         PlaceDTO placeDTO = MyBeanUtil.myCopyProperties(placeVO, PlaceDTO.class);
         return placeService.delete(placeDTO);
     }
 
     /**
-     * 批量删除
+     * 批量删除开票点
      *
-     * @param placeVOList
-     * @return
+     * @param placeVOList 需要删除的开票点idList
+     * @return 返回成功或者失败的code和msg
      */
-    @ApiOperation(value = "批量删除")
+    @ApiOperation(value = "批量删除", notes = "需要删除的开票点idList")
     @PostMapping("/batchDelete")
     public ResponseResult batchDelete(@RequestBody List<PlaceVO> placeVOList) {
         List<PlaceDTO> placeDTOS = MyBeanUtil.copyListProperties(placeVOList, PlaceDTO::new);
@@ -106,8 +104,9 @@ public class PlaceController {
     /**
      * 分页查询
      *
-     * @param pageVO
-     * @return
+     * @param pageVO 输入分页信息,limit、page、keyword、isenable
+     *               keyword为空时普通查询，keyword不为空时模糊查询
+     * @return limit、page、total、items
      */
     @ApiOperation(value = "分页查询")
     @PostMapping("/listByPage")

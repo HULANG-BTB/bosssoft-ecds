@@ -36,7 +36,7 @@ public class AgenItemController {
     private AgenItemService agenItemService;
 
     /**
-     * 批量插入单位可用项目相关信息
+     * 批量维护单位可用项目相关信息
      *
      * @param agenItemVOList 输入单位编码和项目编码
      * @return 返回成功或者失败的code和msg
@@ -56,7 +56,7 @@ public class AgenItemController {
      */
     @ApiOperation(value = "查询单位所有可用项目", notes = "输入单位编码")
     @PostMapping("/getItemAll")
-    public QueryResponseResult<List<ItemVO>> getBill(@RequestBody AgenItemVO agenItemVO) {
+    public QueryResponseResult<List<ItemVO>> getItem(@RequestBody AgenItemVO agenItemVO) {
         AgenItemDTO agenItemDTO = MyBeanUtil.myCopyProperties(agenItemVO, AgenItemDTO.class);
         return agenItemService.getItemAll(agenItemDTO);
     }
@@ -65,7 +65,7 @@ public class AgenItemController {
      * 分页查询
      *
      * @param pageVO 输入分页信息,limit、page、keyword
-     *               keyword为空时普通查询，keyword不为空时分页查询
+     *               keyword为空时普通查询，keyword不为空时模糊查询
      * @return limit、page、total、items
      */
     @ApiOperation(value = "分页查询", notes = "输入分页信息,limit、page、keyword，" +

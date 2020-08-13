@@ -3,12 +3,10 @@ package com.bosssoft.ecds.controller;
 
 import com.bosssoft.ecds.common.response.QueryResponseResult;
 import com.bosssoft.ecds.common.response.ResponseResult;
-import com.bosssoft.ecds.entity.dto.ItemDTO;
 import com.bosssoft.ecds.entity.dto.ItemStdDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.vo.ItemStdVO;
 import com.bosssoft.ecds.entity.vo.PageVO;
-import com.bosssoft.ecds.entity.vo.itemvo.ItemVO;
 import com.bosssoft.ecds.service.ItemStdService;
 import com.bosssoft.ecds.utils.MyBeanUtil;
 import io.swagger.annotations.Api;
@@ -39,41 +37,41 @@ public class ItemStdController {
     private ItemStdService itemStdService;
 
     /**
-     * 插入项目相关信息
+     * 插入项目标准相关信息
      *
-     * @param itemStdVO
-     * @return
+     * @param itemStdVO 输入项目标准相关信息
+     * @return 返回成功或者失败的code和msg
      */
-    @ApiOperation(value = "添加项目标准")
+    @ApiOperation(value = "添加项目标准", notes = "输入项目标准相关信息")
     @PostMapping("/save")
-    public ResponseResult addItem(@RequestBody ItemStdVO itemStdVO) {
+    public ResponseResult save(@RequestBody ItemStdVO itemStdVO) {
         ItemStdDTO itemStdDTO = MyBeanUtil.myCopyProperties(itemStdVO, ItemStdDTO.class);
         return itemStdService.save(itemStdDTO);
     }
 
     /**
-     * 修改项目信息
+     * 修改项目标注信息
      *
-     * @param itemStdVO
-     * @return
+     * @param itemStdVO 修改后的项目标准信息
+     * @return 返回成功或者失败的code和msg
      */
-    @ApiOperation(value = "修改项目标准")
+    @ApiOperation(value = "修改项目标准", notes = "修改后的项目标准信息")
     @PostMapping("/update")
-    public ResponseResult updateItem(@RequestBody ItemStdVO itemStdVO) {
+    public ResponseResult update(@RequestBody ItemStdVO itemStdVO) {
         ItemStdDTO itemStdDTO = MyBeanUtil.myCopyProperties(itemStdVO, ItemStdDTO.class);
         return itemStdService.update(itemStdDTO);
     }
 
     /**
-     * 删除项目
+     * 删除单个项目标准
      *
-     * @param itemStdVO
-     * @return
+     * @param itemStdVO 需要删除的项目标准的id
+     * @return 返回成功或者失败的code和msg
      */
-    @ApiOperation(value = "删除项目标准")
+    @ApiOperation(value = "删除项目标准", notes = "需要删除的项目标准的id")
     @ApiImplicitParam(name = "id", value = "项目id", dataType = "Long")
     @PostMapping("/delete")
-    public ResponseResult deleteItem(@RequestBody ItemStdVO itemStdVO) {
+    public ResponseResult delete(@RequestBody ItemStdVO itemStdVO) {
         ItemStdDTO itemStdDTO = MyBeanUtil.myCopyProperties(itemStdVO, ItemStdDTO.class);
         return itemStdService.delete(itemStdDTO);
     }
@@ -81,10 +79,10 @@ public class ItemStdController {
     /**
      * 批量删除
      *
-     * @param itemVOList
-     * @return
+     * @param itemVOList 需要删除的项目标准的idList
+     * @return 返回成功或者失败的code和msg
      */
-    @ApiOperation(value = "批量删除项目标准")
+    @ApiOperation(value = "批量删除项目标准", notes = "需要删除的项目标准的idList")
     @PostMapping("/batchDelete")
     public ResponseResult batchDelete(@RequestBody List<ItemStdVO> itemVOList) {
         List<ItemStdDTO> itemStdDTOList = MyBeanUtil.copyListProperties(itemVOList, ItemStdDTO::new);
@@ -94,12 +92,12 @@ public class ItemStdController {
     /**
      * 主要用于批量审核,修改项目标准启用状态，输入需要修改
      *
-     * @param itemStdVOList 需要修改审核的项目id
-     * @return
+     * @param itemStdVOList 需要修改审核的项目idList
+     * @return 返回成功或者失败的code和msg
      */
-    @ApiOperation(value = "批量审核")
+    @ApiOperation(value = "批量审核", notes = "需要修改审核的项目idList")
     @PostMapping("/batchVerify")
-    public ResponseResult updateBatchVerifyItem(@RequestBody List<ItemStdVO> itemStdVOList) {
+    public ResponseResult batchVerify(@RequestBody List<ItemStdVO> itemStdVOList) {
         List<ItemStdDTO> itemStdDTOList = MyBeanUtil.copyListProperties(itemStdVOList, ItemStdDTO::new);
         return itemStdService.batchVerify(itemStdDTOList);
     }
@@ -107,10 +105,12 @@ public class ItemStdController {
     /**
      * 分页查询
      *
-     * @param pageVO
-     * @return
+     * @param pageVO 输入分页信息,limit、page、keyword、isenable
+     *               keyword为空时普通查询，keyword不为空时模糊查询
+     * @return limit、page、total、items
      */
-    @ApiOperation(value = "分页查询项目标准")
+    @ApiOperation(value = "分页查询项目标准", notes = "输入分页信息,limit、page、keyword，" +
+            "keyword为空时普通查询，keyword不为空时模糊查询")
     @PostMapping("/listByPage")
     public QueryResponseResult<PageVO> listByPage(@RequestBody PageVO pageVO) {
         PageDTO<ItemStdDTO> pageDTO = MyBeanUtil.myCopyProperties(pageVO, PageDTO.class);
@@ -120,12 +120,12 @@ public class ItemStdController {
     /**
      * 通过项目编码查询项目标准
      *
-     * @param itemStdVO
-     * @return
+     * @param itemStdVO 输入项目编码
+     * @return 项目标准相关信息
      */
-    @ApiOperation(value = "通过项目编码查询项目标准")
+    @ApiOperation(value = "通过项目编码查询项目标准", notes = "输入项目编码")
     @PostMapping("/getItemStd")
-    public QueryResponseResult<ItemStdVO> listByPage(@RequestBody ItemStdVO itemStdVO) {
+    public QueryResponseResult<ItemStdVO> getItemStd(@RequestBody ItemStdVO itemStdVO) {
         ItemStdDTO itemStdDTO = MyBeanUtil.copyProperties(itemStdVO, ItemStdDTO.class);
         return itemStdService.getByItemCode(itemStdDTO);
     }
