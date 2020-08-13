@@ -2,6 +2,7 @@ package com.bosssoft.ecds.template.controller;
 
 import com.bosssoft.ecds.template.dto.NontaxBillDTO;
 import com.bosssoft.ecds.template.service.IImageService;
+import com.bosssoft.ecds.template.util.ResponseBody;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +60,7 @@ public class ImageController {
      */
     @ApiOperation("根据传入的票据信息生成图片，返回图片的地址。图片储存在本地")
     @PostMapping("/getAddress")
-    public String getImage(@RequestBody NontaxBillDTO billDTO, HttpServletRequest request) {
+    public ResponseBody getImage(@RequestBody NontaxBillDTO billDTO, HttpServletRequest request) {
 
         // 裁剪得到根目录地址，例如：http://localhost:8080
         int l = request.getRequestURI().length();
@@ -67,7 +68,7 @@ public class ImageController {
         host.delete(host.length() - l, host.length());
 
         String file = imageService.getImage(billDTO);
-        return host + "/image/" + file;
+        return ResponseBody.ok(host + "/image/" + file);
     }
 
     /**
@@ -79,8 +80,8 @@ public class ImageController {
      */
     @ApiOperation("根据传入的信息生成图片，返回图片的阿里云OSS地址")
     @PostMapping("/getRemoteAddress")
-    public String getRemoteAddress(@RequestBody NontaxBillDTO billDTO) {
-        return imageService.getRemoteImage(billDTO);
+    public ResponseBody getRemoteAddress(@RequestBody NontaxBillDTO billDTO) {
+        return ResponseBody.ok(imageService.getRemoteImage(billDTO));
     }
 
     /**

@@ -7,6 +7,8 @@ import org.xhtmlrenderer.pdf.ITextFontResolver;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * 将freemarker模板文件转成pdf文件
@@ -21,6 +23,18 @@ public class CreatePdfServiceImpl implements CreatePdfService {
      */
     @Override
     public void createPdf(String outData, String pdfDest, String fontType) {
+        try (FileOutputStream outputStream = new FileOutputStream(pdfDest)) {
+
+            createPdf(outData, fontType, outputStream);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public void createPdf(String outData, String fontType, OutputStream outputStream) {
         ITextRenderer renderer = new ITextRenderer();
         /**
          * 解决中文不显示
@@ -37,7 +51,7 @@ public class CreatePdfServiceImpl implements CreatePdfService {
             /**
              * 根据设定的路径生成对应名字的pdf文件
              */
-            renderer.createPDF(new FileOutputStream(pdfDest));
+            renderer.createPDF(outputStream);
         } catch (Exception e) {
             e.printStackTrace();
         }

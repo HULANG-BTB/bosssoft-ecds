@@ -8,15 +8,18 @@ import com.bosssoft.ecds.template.service.SetTemplateService;
 import freemarker.template.Configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Controller
+@RequestMapping("/pdf")
 public class ConvertHtmlToPdfController {
 
     /**
@@ -94,5 +97,19 @@ public class ConvertHtmlToPdfController {
         String outData = setTemplateService.getOutData(data, cfg, htmlName);
         createPdfService.createPdf(outData, pdfDest, fontType);
         return billDTO;
+    }
+
+    @PostMapping(value = "/generate", produces = MediaType.APPLICATION_PDF_VALUE)
+    @ResponseBody
+    public byte[] genPdf(@RequestBody NontaxBillDTO billDTO) {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        Map<String,Object> data = new HashMap<>();
+        data.put("billDTO",billDTO);
+        Configuration cfg = configurationService.getConfiguration();
+        String outData = setTemplateService.getOutData(data, cfg, htmlName);
+        createPdfService.createPdf(outData, fontType, output);
+
+        byte[] bytes = output.toByteArray();
+        return bytes;
     }
 }
