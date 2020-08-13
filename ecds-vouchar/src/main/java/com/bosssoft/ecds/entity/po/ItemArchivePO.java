@@ -10,7 +10,6 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -24,8 +23,8 @@ import java.util.Date;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("fbr_item_voucher")
-@ApiModel(value="ItemVoucherPO对象", description="归档可用")
+@TableName("fbr_item_available_archive")
+@ApiModel(value = "ItemVoucherPO对象", description = "归档可用")
 public class ItemArchivePO extends Model<ItemArchivePO> {
 
 
@@ -37,17 +36,13 @@ public class ItemArchivePO extends Model<ItemArchivePO> {
     @TableField("f_agen_code")
     private String agenCode;
 
-    @ApiModelProperty(value = "科目名称")
-    @TableField("f_sub_name")
-    private String subName;
+    @ApiModelProperty(value = "项目名称")
+    @TableField("f_item_code")
+    private String itemCode;
 
     @ApiModelProperty(value = "项目名称")
     @TableField("f_item_name")
     private String itemName;
-
-    @ApiModelProperty(value = "收费费用")
-    @TableField("f_charge")
-    private BigDecimal charge;
 
     @ApiModelProperty(value = "归档状态")
     @TableField("f_is_save")

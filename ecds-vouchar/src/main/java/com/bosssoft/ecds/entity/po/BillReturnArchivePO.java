@@ -23,10 +23,9 @@ import java.util.Date;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("fbr_bill_return")
-@ApiModel(value="BillReturnPO对象", description="归档退票")
+@TableName("fbr_bill_return_archive")
+@ApiModel(value = "BillReturnPO对象", description = "归档退票")
 public class BillReturnArchivePO extends Model<BillReturnArchivePO> {
-
 
     @ApiModelProperty(value = "主键")
     @TableId(value = "f_id", type = IdType.AUTO)

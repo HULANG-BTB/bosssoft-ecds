@@ -23,8 +23,8 @@ import java.util.Date;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("fbr_bill_destruction")
-@ApiModel(value="BillDestructionPO对象", description="归档票据销毁")
+@TableName("fbr_bill_destruction_archive")
+@ApiModel(value = "BillDestructionPO对象", description = "归档票据销毁")
 public class BillDestructionArchivePO extends Model<BillDestructionArchivePO> {
 
 

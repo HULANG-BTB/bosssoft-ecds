@@ -29,21 +29,24 @@ public class CodeBuilder {
 /**
          * "ubr_crt_info",
          * "ubr_bill_out_voucher"
-         * "fbr_stock_return_voucher",
-         * "fbr_stock_deptinvalid_voucher"
-         * "fbr_voucher",
-         * "fbr_item_voucher",
-         * "fbr_monitor_record_voucher",
-         * "fbr_writeoff_voucher",
-         * "fnr_bill_pay_voucher",
-         * "fab_bill"
-         * "fab_item"
-         *  "fab_agen"
-         */
+ * "fbr_stock_return_voucher",
+ * "fbr_stock_deptinvalid_voucher"
+ * "fbr_voucher",
+ * "fbr_item_voucher",
+ * "fbr_monitor_record_voucher",
+ * "fbr_writeoff_voucher",
+ * "fnr_bill_pay_voucher",
+ * "fab_bill"
+ * "fab_item"
+ *  "fab_agen"
+ *  "fab_agen_bill"
+ *   "fbr_bill_available_archive"
+ *  "fbe_writeoff_billsummary"
+ */
 
         // 数据库表名
         String[] tableList = {
-                "fab_agen"
+                "fbe_writeoff_billsummary"
         };
 
         // 作者
@@ -53,7 +56,7 @@ public class CodeBuilder {
         // 逻辑删除字段
         String deleted = "f_logic_delete";
         // 数据库表前缀
-        String tablePrefix = "fab";
+        String tablePrefix = "fbe";
         // 字段前缀
         String columnPrefix = "f_";
         // 包名

@@ -112,7 +112,6 @@ public class BillAvailableArchiveServiceImpl extends ServiceImpl<BillAvailableAr
     /**
      * 单位端
      */
-
     @Override
     public BillApplyDto getBillApplyInfo(String agenCode) {
         return null;
