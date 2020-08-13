@@ -1,20 +1,19 @@
 package com.bosssoft.ecds.security.entity.vo;
 
 import com.baomidou.mybatisplus.extension.activerecord.Model;
-import com.bosssoft.ecds.security.entity.po.RolePO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.util.Date;
 import java.util.List;
 
 /**
  * @ClassName UserVO
  * @Author AloneH
  * @Date 2020/8/9 19:31
- * @Description TODO
+ * @Description
+ *      UserVO
  **/
 @Data
 @Accessors(chain = true)

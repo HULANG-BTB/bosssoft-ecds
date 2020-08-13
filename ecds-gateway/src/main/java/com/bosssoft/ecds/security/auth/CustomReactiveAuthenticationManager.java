@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.ReactiveUserDetailsPasswordService;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
@@ -47,7 +46,7 @@ public class CustomReactiveAuthenticationManager implements ReactiveAuthenticati
     public Mono<Authentication> authenticate(Authentication authentication) {
         final String username = authentication.getName();
         final String presentedPassword = (String) authentication.getCredentials();
-        Mono<Authentication> invalidCredentials = this.userDetailsService.findByUsername(username)
+        return this.userDetailsService.findByUsername(username)
                 .publishOn(this.scheduler)
                 .filter(u -> this.passwordEncoder.matches(presentedPassword, u.getPassword()))
                 .switchIfEmpty(Mono.defer(() -> Mono.error(new BadCredentialsException("Invalid Credentials"))))
@@ -61,7 +60,6 @@ public class CustomReactiveAuthenticationManager implements ReactiveAuthenticati
                     return Mono.just(u);
                 })
                 .map(u -> new UsernamePasswordAuthenticationToken(u, presentedPassword, u.getAuthorities()));
-        return invalidCredentials;
     }
 
     public void setPasswordEncoder(PasswordEncoder passwordEncoder) {

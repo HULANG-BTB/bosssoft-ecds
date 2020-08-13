@@ -152,6 +152,33 @@ public class CrtServiceImpl extends ServiceImpl<CrtDao, CrtPO> implements CrtSer
     }
 
     /**
+     * 准购证审核分页读取领购证
+     *
+     * @param pageDTO
+     * @return
+     */
+    @Override
+    public PageDTO checkListByPage(PageDTO pageDTO) {
+        Page<CrtPO> uabCrtPOPage = new Page<>();
+        // 设置分页信息
+        uabCrtPOPage.setCurrent(pageDTO.getPage());
+        uabCrtPOPage.setSize(pageDTO.getLimit());
+        // 读取分页数据
+        QueryWrapper<CrtPO> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(CrtPO.F_ISENABLE, false);
+        queryWrapper.and(wrapper -> wrapper.like(CrtPO.F_CRT_NAME, pageDTO.getKeyword()).or().like(CrtPO.F_AGEN_CODE, pageDTO.getKeyword()).or().like(CrtPO.F_CRT_CODE, pageDTO.getKeyword()));
+        queryWrapper.orderByAsc(CrtPO.F_CREATE_TIME);
+        // 读取分页数据
+        Page<CrtPO> uabCrtPOPage1 = super.page(uabCrtPOPage, queryWrapper);
+        List<CrtPO> records = uabCrtPOPage1.getRecords();
+        // 转换数据
+        List<CrtDTO> userDTOList = MyBeanUtil.copyListProperties(records, CrtDTO.class);
+        pageDTO.setTotal(uabCrtPOPage1.getTotal());
+        pageDTO.setItems(userDTOList);
+        return pageDTO;
+    }
+
+    /**
      * 批量删除领购证
      *
      * @param uabCrtDTODTOList
@@ -166,6 +193,22 @@ public class CrtServiceImpl extends ServiceImpl<CrtDao, CrtPO> implements CrtSer
             }
         }
         boolean removeResult = super.removeByIds(ids);
+        return removeResult;
+    }
+
+    /**
+     * 批量审核领购证
+     *
+     * @param uabCrtDTOList
+     * @return
+     */
+    @Override
+    public Boolean checkBatch(List<CrtDTO> uabCrtDTOList) {
+        for (CrtDTO uabCrtDTO : uabCrtDTOList) {
+            uabCrtDTO.setIsenable(true);
+        }
+        List<CrtPO> crtPOList = MyBeanUtil.copyListProperties(uabCrtDTOList,CrtPO.class);
+        boolean removeResult = super.updateBatchById(crtPOList);
         return removeResult;
     }
 }

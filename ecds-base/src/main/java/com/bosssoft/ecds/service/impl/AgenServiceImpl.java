@@ -151,6 +151,34 @@ public class AgenServiceImpl extends ServiceImpl<AgenDao, AgenPO> implements Age
     }
 
     /**
+     * 未审核单位分页读取
+     *
+     * @param pageDTO
+     * @return
+     */
+    @Override
+    public PageDTO checkListByPage(PageDTO pageDTO) {
+        Page<AgenPO> fabAgenPOPage = new Page<>();
+        // 设置分页信息
+        fabAgenPOPage.setCurrent(pageDTO.getPage());
+        fabAgenPOPage.setSize(pageDTO.getLimit());
+        // 读取分页数据
+        QueryWrapper<AgenPO> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(AgenPO.F_ISENABLE, false);
+        queryWrapper.and(wrapper -> wrapper.like(AgenPO.F_DEPT_CODE, pageDTO.getKeyword()).or().like(AgenPO.F_AGEN_CODE, pageDTO.getKeyword()).or().like(AgenPO.F_AGEN_NAME, pageDTO.getKeyword())
+                .or().like(AgenPO.F_SORT_CODE, pageDTO.getKeyword()).or().like(AgenPO.F_ISENABLE, pageDTO.getKeyword()).or().like(AgenPO.F_IND_CODE, pageDTO.getKeyword()));
+        queryWrapper.orderByAsc(AgenPO.F_CREATE_TIME);
+        // 读取分页数据
+        Page<AgenPO> fabAgenPOPage1 = super.page(fabAgenPOPage, queryWrapper);
+        List<AgenPO> records = fabAgenPOPage1.getRecords();
+        // 转换数据
+        List<AgenDTO> userDTOList = MyBeanUtil.copyListProperties(records, AgenDTO.class);
+        pageDTO.setTotal(fabAgenPOPage1.getTotal());
+        pageDTO.setItems(userDTOList);
+        return pageDTO;
+    }
+
+    /**
      * 批量删除单位
      *
      * @param fabAgenDTOList
