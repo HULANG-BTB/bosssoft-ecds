@@ -13,4 +13,13 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IncomeSortSubjectService extends IService<IncomeSortSubjectPO> {
 
+    /**
+     * 添加incomeSortSubjectPO
+     * @param incomeSortSubjectPO
+     * @return
+     */
+    public boolean add(IncomeSortSubjectPO incomeSortSubjectPO);
+
+
+
 }

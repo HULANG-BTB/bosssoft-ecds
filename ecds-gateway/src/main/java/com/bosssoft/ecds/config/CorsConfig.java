@@ -2,6 +2,8 @@ package com.bosssoft.ecds.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.stereotype.Component;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 import org.springframework.web.cors.reactive.CorsWebFilter;
@@ -18,14 +20,15 @@ import org.springframework.web.cors.reactive.CorsWebFilter;
  *                  4、配置跨域信息请求头
  **/
 
-@Configuration
+@Component
 public class CorsConfig {
     // 设置允许跨域的源
     private static String[] originsVal = new String[]{
             "127.0.0.1:8080",
             "localhost:8080",
             "localhost:9527",
-            ""
+            "localhost:9528",
+            "*"
     };
 
     /**
@@ -40,7 +43,6 @@ public class CorsConfig {
         this.addAllowedOrigins(corsConfiguration);
         corsConfiguration.addAllowedHeader("*");
         corsConfiguration.addAllowedMethod("*");
-        corsConfiguration.setAllowCredentials(true);
         source.registerCorsConfiguration("/**", corsConfiguration);
         return new CorsWebFilter(source);
     }
@@ -50,6 +52,5 @@ public class CorsConfig {
             corsConfiguration.addAllowedOrigin("http://" + origin);
             corsConfiguration.addAllowedOrigin("https://" + origin);
         }
-        corsConfiguration.addAllowedOrigin("*");
     }
 }

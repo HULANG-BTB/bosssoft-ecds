@@ -8,6 +8,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.util.Date;
@@ -41,6 +43,7 @@ public class SubjectVO extends Model<SubjectVO> {
     private String name;
 
     @NotNull(message = "层级不能为空")
+    @Min(value = 3,message = "不能添加一二级预算科目")
     @ApiModelProperty(value = "层级")
     private Integer level;
 
