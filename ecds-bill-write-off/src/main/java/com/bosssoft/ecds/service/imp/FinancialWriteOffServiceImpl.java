@@ -68,6 +68,8 @@ public class FinancialWriteOffServiceImpl implements FinancialWriteOffService {
      */
     @Override
     public Object getDetails(Object object) {
+        // 获取票据详细信息
+
         return null;
     }
 
@@ -79,6 +81,8 @@ public class FinancialWriteOffServiceImpl implements FinancialWriteOffService {
      */
     @Override
     public Object getUnitDetails(Object object) {
+        // 获取单位详细信息
+
         return null;
     }
 
@@ -90,6 +94,8 @@ public class FinancialWriteOffServiceImpl implements FinancialWriteOffService {
      */
     @Override
     public boolean setResult(Object object) {
+        // 点击审验后， 对审验结果进行保存
+
         return false;
     }
 }
