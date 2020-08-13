@@ -3,14 +3,12 @@ package com.bosssoft.ecds.controller;
 import com.bosssoft.ecds.common.response.QueryResponseResult;
 import com.bosssoft.ecds.common.response.ResponseResult;
 import com.bosssoft.ecds.entity.dto.ItemDTO;
-import com.bosssoft.ecds.entity.dto.PageDTO;
-import com.bosssoft.ecds.entity.vo.ItemVO;
-import com.bosssoft.ecds.entity.vo.PageVO;
+import com.bosssoft.ecds.entity.vo.itemvo.ItemPageVO;
+import com.bosssoft.ecds.entity.vo.itemvo.ItemVO;
 import com.bosssoft.ecds.service.ItemService;
 import com.bosssoft.ecds.utils.MyBeanUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -103,14 +101,13 @@ public class ItemController {
     /**
      * 分页查询
      *
-     * @param pageVO
+     * @param itemPageVO
      * @return
      */
     @ApiOperation(value = "分页查询")
-    @PostMapping("/listbypage")
-    public QueryResponseResult<PageVO> listByPage(@RequestBody PageVO pageVO) {
-        PageDTO<ItemDTO> pageDTO = MyBeanUtil.myCopyProperties(pageVO, PageDTO.class);
-        return itemService.listByPage(pageDTO);
+    @PostMapping("/listByPage")
+    public QueryResponseResult<ItemPageVO> listByPage(@RequestBody ItemPageVO<ItemDTO> itemPageVO) {
+        return itemService.listByPage(itemPageVO);
     }
 }
 

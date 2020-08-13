@@ -2,17 +2,19 @@ package com.bosssoft.ecds.service;
 
 import com.bosssoft.ecds.common.response.QueryResponseResult;
 import com.bosssoft.ecds.common.response.ResponseResult;
+import com.bosssoft.ecds.entity.dto.ItemDTO;
 import com.bosssoft.ecds.entity.dto.ItemStdDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.po.ItemStdPO;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.bosssoft.ecds.entity.vo.ItemStdVO;
 import com.bosssoft.ecds.entity.vo.PageVO;
 
 import java.util.List;
 
 /**
  * <p>
- *  服务类
+ * 服务类
  * </p>
  *
  * @author wzh
@@ -47,7 +49,7 @@ public interface ItemStdService extends IService<ItemStdPO> {
     /**
      * 分页查询项目标准信息
      *
-     * @param  pageDTO
+     * @param pageDTO
      * @return PageVO
      */
     QueryResponseResult<PageVO> listByPage(PageDTO<ItemStdDTO> pageDTO);
@@ -59,5 +61,21 @@ public interface ItemStdService extends IService<ItemStdPO> {
      * @return boolean
      */
     ResponseResult batchDelete(List<ItemStdDTO> itemStdDTOS);
+
+    /**
+     * 批量审核
+     *
+     * @param itemStdDTOS
+     * @return
+     */
+    ResponseResult batchVerify(List<ItemStdDTO> itemStdDTOS);
+
+    /**
+     * 通过项目编码 查询出标准信息
+     *
+     * @param itemStdDTO
+     * @return
+     */
+    QueryResponseResult<ItemStdVO> getByItemCode(ItemStdDTO itemStdDTO);
 
 }

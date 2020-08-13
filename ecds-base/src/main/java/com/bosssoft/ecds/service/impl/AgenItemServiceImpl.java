@@ -8,11 +8,14 @@ import com.bosssoft.ecds.common.response.QueryResponseResult;
 import com.bosssoft.ecds.common.response.ResponseResult;
 import com.bosssoft.ecds.dao.AgenItemDao;
 import com.bosssoft.ecds.dao.ItemDao;
+import com.bosssoft.ecds.entity.dto.AgenBillDTO;
 import com.bosssoft.ecds.entity.dto.AgenItemDTO;
 import com.bosssoft.ecds.entity.dto.ItemDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
+import com.bosssoft.ecds.entity.po.AgenBillPO;
 import com.bosssoft.ecds.entity.po.AgenItemPO;
 import com.bosssoft.ecds.entity.po.ItemPO;
+import com.bosssoft.ecds.entity.vo.itemvo.ItemVO;
 import com.bosssoft.ecds.entity.vo.PageVO;
 import com.bosssoft.ecds.enums.ItemResultCode;
 import com.bosssoft.ecds.service.AgenItemService;
@@ -37,6 +40,8 @@ public class AgenItemServiceImpl extends ServiceImpl<AgenItemDao, AgenItemPO> im
 
     @Autowired
     private ItemDao itemDao;
+    @Autowired
+    private AgenItemDao agenItemDao;
 
     /**
      * 查询单位可用项目
@@ -115,6 +120,24 @@ public class AgenItemServiceImpl extends ServiceImpl<AgenItemDao, AgenItemPO> im
         return new QueryResponseResult<>(CommonCode.SUCCESS, pageVO);
     }
 
+    @Override
+    public QueryResponseResult<List<ItemVO>> getItemAll(AgenItemDTO agenItemDTO) {
+        //构造条件查询器，通过单位编码查询单位所有可用票据
+        QueryWrapper<AgenItemPO> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(AgenItemPO.F_AGEN_IDCODE, agenItemDTO.getAgenIdcode());
+        List<AgenItemPO> agenItemPOS = agenItemDao.selectList(queryWrapper);
+        //用来存储单位所有可用票据的List
+        List<ItemPO> itemPOS = new ArrayList<>();
+        // 通过从关系表中查询出的票据编码，查询出票据的相关信息
+        for (AgenItemPO agenItemPO : agenItemPOS) {
+            QueryWrapper<ItemPO> queryItem = new QueryWrapper<>();
+            queryItem.eq("f_item_id", agenItemPO.getItemCode());
+            itemPOS.add(itemDao.selectOne(queryItem));
+        }
+        List<ItemVO> itemVOS = MyBeanUtil.copyListProperties(itemPOS, ItemVO::new);
+        return new QueryResponseResult<>(CommonCode.SUCCESS,itemVOS);
+    }
+
     /**
      * 批量删除单位可用项目
      *
@@ -135,6 +158,34 @@ public class AgenItemServiceImpl extends ServiceImpl<AgenItemDao, AgenItemPO> im
             return new ResponseResult(CommonCode.FAIL);
         }
         // 删除成功返回操作成功
+        return new ResponseResult(CommonCode.SUCCESS);
+    }
+
+    @Override
+    public ResponseResult updateBatch(List<AgenItemDTO> agenItemDTOList) {
+        QueryWrapper<AgenItemPO> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(AgenBillPO.F_AGEN_IDCODE,agenItemDTOList.get(0).getAgenIdcode());
+        List<AgenItemPO> agenItemPOS = agenItemDao.selectList(queryWrapper);
+        boolean remove = true;
+        if (!agenItemPOS.isEmpty()) {
+            // 将原来的单位可用票据关系删除
+            remove = super.remove(queryWrapper);
+        }
+        if (remove) {
+            AgenItemPO agenItemPO = new AgenItemPO();
+            // 构建新的AgenBillPO，插入关系
+            for (AgenItemDTO agenItemDTO : agenItemDTOList) {
+                agenItemPO.setAgenIdcode(agenItemDTO.getAgenIdcode());
+                agenItemPO.setItemCode(agenItemDTO.getItemCode());
+                agenItemPO.setNote(agenItemDTO.getNote());
+                boolean save = super.save(agenItemPO);
+                if (!save) {
+                    return new ResponseResult(CommonCode.FAIL);
+                }
+            }
+        } else {
+            return new ResponseResult(CommonCode.FAIL);
+        }
         return new ResponseResult(CommonCode.SUCCESS);
     }
 }

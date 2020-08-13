@@ -3,10 +3,12 @@ package com.bosssoft.ecds.controller;
 
 import com.bosssoft.ecds.common.response.QueryResponseResult;
 import com.bosssoft.ecds.common.response.ResponseResult;
+import com.bosssoft.ecds.entity.dto.ItemDTO;
 import com.bosssoft.ecds.entity.dto.ItemStdDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.vo.ItemStdVO;
 import com.bosssoft.ecds.entity.vo.PageVO;
+import com.bosssoft.ecds.entity.vo.itemvo.ItemVO;
 import com.bosssoft.ecds.service.ItemStdService;
 import com.bosssoft.ecds.utils.MyBeanUtil;
 import io.swagger.annotations.Api;
@@ -90,6 +92,19 @@ public class ItemStdController {
     }
 
     /**
+     * 主要用于批量审核,修改项目标准启用状态，输入需要修改
+     *
+     * @param itemStdVOList 需要修改审核的项目id
+     * @return
+     */
+    @ApiOperation(value = "批量审核")
+    @PostMapping("/batchVerify")
+    public ResponseResult updateBatchVerifyItem(@RequestBody List<ItemStdVO> itemStdVOList) {
+        List<ItemStdDTO> itemStdDTOList = MyBeanUtil.copyListProperties(itemStdVOList, ItemStdDTO::new);
+        return itemStdService.batchVerify(itemStdDTOList);
+    }
+
+    /**
      * 分页查询
      *
      * @param pageVO
@@ -100,6 +115,19 @@ public class ItemStdController {
     public QueryResponseResult<PageVO> listByPage(@RequestBody PageVO pageVO) {
         PageDTO<ItemStdDTO> pageDTO = MyBeanUtil.myCopyProperties(pageVO, PageDTO.class);
         return itemStdService.listByPage(pageDTO);
+    }
+
+    /**
+     * 通过项目编码查询项目标准
+     *
+     * @param itemStdVO
+     * @return
+     */
+    @ApiOperation(value = "通过项目编码查询项目标准")
+    @PostMapping("/getItemStd")
+    public QueryResponseResult<ItemStdVO> listByPage(@RequestBody ItemStdVO itemStdVO) {
+        ItemStdDTO itemStdDTO = MyBeanUtil.copyProperties(itemStdVO, ItemStdDTO.class);
+        return itemStdService.getByItemCode(itemStdDTO);
     }
 }
 

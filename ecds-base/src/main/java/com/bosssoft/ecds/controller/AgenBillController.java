@@ -22,7 +22,7 @@ import java.util.List;
 
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  *
  * @author wzh
@@ -37,12 +37,12 @@ public class AgenBillController {
     private AgenBillService agenBillService;
 
     /**
-     * 插入单位可用项目相关信息
+     * 插入单位可用票据相关信息
      *
-     * @param agenBillVO 可用项目相关信息
-     * @return
+     * @param agenBillVO 输入单位编码和项目编码
+     * @return 返回成功或者失败的code和msg
      */
-    @ApiOperation(value = "添加单位可用票据关系")
+    @ApiOperation(value = "添加单位可用票据关系", notes = "输入单位编码和项目编码")
     @PostMapping("/save")
     public ResponseResult save(@RequestBody AgenBillVO agenBillVO) {
         AgenBillDTO agenBillDTO = MyBeanUtil.myCopyProperties(agenBillVO, AgenBillDTO.class);
@@ -50,12 +50,25 @@ public class AgenBillController {
     }
 
     /**
-     * 删除项目
+     * 批量插入单位可用票据相关信息
      *
-     * @param agenBillVO
-     * @return
+     * @param agenBillVOList 输入单位编码和项目编码
+     * @return 返回成功或者失败的code和msg
      */
-    @ApiOperation(value = "删除单位可用票据关系")
+    @ApiOperation(value = "批量添加单位可用票据关系", notes = "输入单位编码和项目编码")
+    @PostMapping("/updateBatch")
+    public ResponseResult updateBatch(@RequestBody List<AgenBillVO> agenBillVOList) {
+        List<AgenBillDTO> agenBillDTOList = MyBeanUtil.copyListProperties(agenBillVOList, AgenBillDTO.class);
+        return agenBillService.updateBatch(agenBillDTOList);
+    }
+
+    /**
+     * 删除票据
+     *
+     * @param agenBillVO 输入记录id，通过id删除
+     * @return 返回成功或者失败的code和msg
+     */
+    @ApiOperation(value = "删除单位可用票据关系", notes = "输入记录id，通过id删除")
     @PostMapping("/delete")
     public ResponseResult delete(@RequestBody AgenBillVO agenBillVO) {
         AgenBillDTO agenBillDTO = MyBeanUtil.myCopyProperties(agenBillVO, AgenBillDTO.class);
@@ -65,10 +78,10 @@ public class AgenBillController {
     /**
      * 批量删除
      *
-     * @param agenBillVOList
-     * @return
+     * @param agenBillVOList 输入记录idList，通过id删除
+     * @return 返回成功或者失败的code和msg
      */
-    @ApiOperation(value = "批量删除单位可用票据关系")
+    @ApiOperation(value = "批量删除单位可用票据关系", notes = "输入记录idList，通过id删除")
     @PostMapping("/batchDelete")
     public ResponseResult batchDelete(@RequestBody List<AgenBillVO> agenBillVOList) {
         List<AgenBillDTO> agenBillDTOList = MyBeanUtil.copyListProperties(agenBillVOList, AgenBillDTO::new);
@@ -78,14 +91,30 @@ public class AgenBillController {
     /**
      * 分页查询
      *
-     * @param pageVO
-     * @return
+     * @param pageVO 输入分页信息,limit、page、keyword
+     *               keyword为空时普通查询，keyword不为空时分页查询
+     * @return limit、page、total、items
      */
-    @ApiOperation(value = "分页查询")
+    @ApiOperation(value = "分页查询", notes = "输入分页信息,limit、page、keyword，" +
+            "keyword为空时普通查询，keyword不为空时模糊查询")
     @PostMapping("/listByPage")
     public QueryResponseResult<PageVO> listByPage(@RequestBody PageVO pageVO) {
         PageDTO<BillTypePO> pageDTO = MyBeanUtil.myCopyProperties(pageVO, PageDTO.class);
         return agenBillService.listByPage(pageDTO);
+    }
+
+
+    /**
+     * 查询单位所有可用票据
+     *
+     * @param agenBillVO 输入单位编码
+     * @return 返回出单位所有的可用票据
+     */
+    @ApiOperation(value = "查询单位所有可用票据", notes = "输入单位编码")
+    @PostMapping("/getBillAll")
+    public QueryResponseResult<List<BillTypePO>> getBill(@RequestBody AgenBillVO agenBillVO) {
+        AgenBillDTO agenBillDTO = MyBeanUtil.myCopyProperties(agenBillVO, AgenBillDTO.class);
+        return agenBillService.getBill(agenBillDTO);
     }
 
 }

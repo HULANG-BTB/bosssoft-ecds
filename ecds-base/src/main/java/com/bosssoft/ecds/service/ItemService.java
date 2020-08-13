@@ -7,6 +7,8 @@ import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.po.ItemPO;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.bosssoft.ecds.entity.vo.PageVO;
+import com.bosssoft.ecds.entity.vo.itemvo.ItemPageVO;
+import com.bosssoft.ecds.entity.vo.itemvo.ItemVO;
 
 import java.util.List;
 
@@ -47,10 +49,10 @@ public interface ItemService extends IService<ItemPO> {
     /**
      * 分页查询项目信息
      *
-     * @param pageDTO
+     * @param itemPageVO
      * @return PageVO
      */
-    QueryResponseResult<PageVO> listByPage(PageDTO<ItemDTO> pageDTO);
+    QueryResponseResult<ItemPageVO> listByPage(ItemPageVO<ItemDTO> itemPageVO);
 
     /**
      * 批量删除项目信息

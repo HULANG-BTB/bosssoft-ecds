@@ -44,7 +44,7 @@ public class ItemStdVO {
     private String units;
 
     @ApiModelProperty(value = "是否启用")
-    private Boolean isenable;
+    private Integer isenable;
 
     @ApiModelProperty(value = "标准生效日期")
     private Date itemstdEffdate;

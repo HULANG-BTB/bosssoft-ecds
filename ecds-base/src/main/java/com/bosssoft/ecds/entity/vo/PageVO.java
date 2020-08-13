@@ -58,5 +58,4 @@ public class PageVO extends Model<PageVO> {
     @ApiModelProperty(value = "关键字", required = false, example = "")
     private String keyword;
 
-
 }

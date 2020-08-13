@@ -6,11 +6,13 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bosssoft.ecds.common.response.CommonCode;
 import com.bosssoft.ecds.common.response.QueryResponseResult;
 import com.bosssoft.ecds.common.response.ResponseResult;
+import com.bosssoft.ecds.entity.dto.ItemDTO;
 import com.bosssoft.ecds.entity.dto.ItemStdDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.po.ItemPO;
 import com.bosssoft.ecds.entity.po.ItemStdPO;
 import com.bosssoft.ecds.dao.ItemStdDao;
+import com.bosssoft.ecds.entity.vo.ItemStdVO;
 import com.bosssoft.ecds.entity.vo.PageVO;
 import com.bosssoft.ecds.enums.ItemResultCode;
 import com.bosssoft.ecds.service.ItemStdService;
@@ -41,8 +43,14 @@ public class ItemStdServiceImpl extends ServiceImpl<ItemStdDao, ItemStdPO> imple
      */
     @Override
     public ResponseResult save(ItemStdDTO itemStdDTO) {
+        QueryWrapper<ItemStdPO> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(ItemStdPO.F_ITEM_CODE, itemStdDTO.getItemCode());
+        ItemStdPO itemStdPO = super.getOne(queryWrapper);
+        if (itemStdPO != null){
+            return new ResponseResult(ItemResultCode.ITEM_STD_EXISTS);
+        }
         // 将dto转化为po
-        ItemStdPO itemStdPO = MyBeanUtil.myCopyProperties(itemStdDTO, ItemStdPO.class);
+        itemStdPO = MyBeanUtil.myCopyProperties(itemStdDTO, ItemStdPO.class);
         // 执行插入操作
         boolean save = super.save(itemStdPO);
         // 插入失败返回操作错误
@@ -110,9 +118,7 @@ public class ItemStdServiceImpl extends ServiceImpl<ItemStdDao, ItemStdPO> imple
         itemStdDTOPage.setSize(pageDTO.getLimit());
         // 读取分页数据
         QueryWrapper<ItemStdPO> queryWrapper = new QueryWrapper<>();
-        queryWrapper.like(ItemStdPO.F_ID, pageDTO.getKeyword())
-                .or()
-                .like(ItemStdPO.F_ITEMSTD_NAME, pageDTO.getKeyword())
+        queryWrapper.like(ItemStdPO.F_ITEMSTD_NAME, pageDTO.getKeyword())
                 .or()
                 .like(ItemStdPO.F_ISENABLE, pageDTO.getKeyword());
         queryWrapper.orderByAsc(ItemPO.F_CREATE_TIME);
@@ -148,5 +154,43 @@ public class ItemStdServiceImpl extends ServiceImpl<ItemStdDao, ItemStdPO> imple
         }
         // 删除成功返回操作成功
         return new ResponseResult(CommonCode.SUCCESS);
+    }
+
+    @Override
+    public ResponseResult batchVerify(List<ItemStdDTO> itemStdDTOS) {
+        for (ItemStdDTO itemStdDTO : itemStdDTOS) {
+            // 查询出审核成功的标准信息
+            ItemStdPO itemStdPO = super.getById(itemStdDTO.getId());
+            // 修改审核状态
+            itemStdPO.setIsenable(1);
+            // 更新
+            boolean updateById = super.updateById(itemStdPO);
+            // 修改失败返回操作失败
+            if (!updateById) {
+                return new ResponseResult(CommonCode.FAIL);
+            }
+        }
+        // 修改成功返回操作程序
+        return new ResponseResult(CommonCode.SUCCESS);
+    }
+
+    /**
+     * 通过项目编码查询项目标准
+     *
+     * @param itemStdDTO
+     * @return
+     */
+    @Override
+    public QueryResponseResult<ItemStdVO> getByItemCode(ItemStdDTO itemStdDTO) {
+        QueryWrapper<ItemStdPO> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(ItemStdPO.F_ITEM_CODE, itemStdDTO.getItemCode());
+        ItemStdPO itemStdPO = super.getOne(queryWrapper);
+        ItemStdVO itemStdVO = MyBeanUtil.copyProperties(itemStdPO, ItemStdVO.class);
+        if (itemStdVO != null) {
+            return new QueryResponseResult<>(CommonCode.SUCCESS, itemStdVO);
+        } else {
+            return new QueryResponseResult<>(ItemResultCode.ITEM_STD_NOT_EXISTS, itemStdVO);
+        }
+
     }
 }

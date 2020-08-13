@@ -3,10 +3,12 @@ package com.bosssoft.ecds.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.bosssoft.ecds.common.response.QueryResponseResult;
 import com.bosssoft.ecds.common.response.ResponseResult;
+import com.bosssoft.ecds.entity.dto.AgenBillDTO;
 import com.bosssoft.ecds.entity.dto.AgenItemDTO;
 import com.bosssoft.ecds.entity.dto.ItemDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.po.AgenItemPO;
+import com.bosssoft.ecds.entity.vo.itemvo.ItemVO;
 import com.bosssoft.ecds.entity.vo.PageVO;
 
 import java.util.List;
@@ -45,11 +47,27 @@ public interface AgenItemService extends IService<AgenItemPO> {
     QueryResponseResult<PageVO> listByPage(PageDTO<ItemDTO> pageDTO);
 
     /**
+     * 查询单位所有的可用项目，不通过分页显示
+     *
+     * @param agenItemDTO 输入单位编码
+     * @return
+     */
+    QueryResponseResult<List<ItemVO>> getItemAll(AgenItemDTO agenItemDTO);
+
+    /**
      * 批量删除单位可用票据
      *
      * @param agenItemDTOList
      * @return boolean
      */
     ResponseResult batchDelete(List<AgenItemDTO> agenItemDTOList);
+
+    /**
+     * 批量插入单位票据关系数据
+     *
+     * @param agenItemDTOList
+     * @return
+     */
+    ResponseResult updateBatch(List<AgenItemDTO> agenItemDTOList);
 
 }
