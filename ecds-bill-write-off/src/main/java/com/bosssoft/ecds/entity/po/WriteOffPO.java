@@ -1,13 +1,18 @@
 package com.bosssoft.ecds.entity.po;
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.Version;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
 
 import java.util.Date;
 
-@Data
+
 @TableName("fbe_writeoff")
 @ApiModel(value="WriteOffPO对象")
 public class WriteOffPO {
@@ -81,4 +86,139 @@ public class WriteOffPO {
     @TableField(value = "f_operator", fill = FieldFill.INSERT_UPDATE)
     private String fOperator;
 
+    public Long getfId() {
+        return fId;
+    }
+
+    public void setfId(Long fId) {
+        this.fId = fId;
+    }
+
+    public String getfRgnCode() {
+        return fRgnCode;
+    }
+
+    public void setfRgnCode(String fRgnCode) {
+        this.fRgnCode = fRgnCode;
+    }
+
+    public String getfNo() {
+        return fNo;
+    }
+
+    public void setfNo(String fNo) {
+        this.fNo = fNo;
+    }
+
+    public String getfAgenIdCode() {
+        return fAgenIdCode;
+    }
+
+    public void setfAgenIdCode(String fAgenIdCode) {
+        this.fAgenIdCode = fAgenIdCode;
+    }
+
+    public Date getfCheckDate() {
+        return fCheckDate;
+    }
+
+    public void setfCheckDate(Date fCheckDate) {
+        this.fCheckDate = fCheckDate;
+    }
+
+    public String getfAuthor() {
+        return fAuthor;
+    }
+
+    public void setfAuthor(String fAuthor) {
+        this.fAuthor = fAuthor;
+    }
+
+    public Date getfDate() {
+        return fDate;
+    }
+
+    public void setfDate(Date fDate) {
+        this.fDate = fDate;
+    }
+
+    public Short getfCheckResult() {
+        return fCheckResult;
+    }
+
+    public void setfCheckResult(Short fCheckResult) {
+        this.fCheckResult = fCheckResult;
+    }
+
+    public String getfMemo() {
+        return fMemo;
+    }
+
+    public void setfMemo(String fMemo) {
+        this.fMemo = fMemo;
+    }
+
+    public Integer getfVersion() {
+        return fVersion;
+    }
+
+    public void setfVersion(Integer fVersion) {
+        this.fVersion = fVersion;
+    }
+
+    public Date getfCreateTime() {
+        return fCreateTime;
+    }
+
+    public void setfCreateTime(Date fCreateTime) {
+        this.fCreateTime = fCreateTime;
+    }
+
+    public Date getfUpdateTime() {
+        return fUpdateTime;
+    }
+
+    public void setfUpdateTime(Date fUpdateTime) {
+        this.fUpdateTime = fUpdateTime;
+    }
+
+    public short getfChangeState() {
+        return fChangeState;
+    }
+
+    public void setfChangeState(short fChangeState) {
+        this.fChangeState = fChangeState;
+    }
+
+    public String getfApplyId() {
+        return fApplyId;
+    }
+
+    public void setfApplyId(String fApplyId) {
+        this.fApplyId = fApplyId;
+    }
+
+    public Integer getfBatchNo() {
+        return fBatchNo;
+    }
+
+    public void setfBatchNo(Integer fBatchNo) {
+        this.fBatchNo = fBatchNo;
+    }
+
+    public Long getfOperatorId() {
+        return fOperatorId;
+    }
+
+    public void setfOperatorId(Long fOperatorId) {
+        this.fOperatorId = fOperatorId;
+    }
+
+    public String getfOperator() {
+        return fOperator;
+    }
+
+    public void setfOperator(String fOperator) {
+        this.fOperator = fOperator;
+    }
 }

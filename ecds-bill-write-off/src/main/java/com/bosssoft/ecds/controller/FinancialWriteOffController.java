@@ -1,5 +1,6 @@
 package com.bosssoft.ecds.controller;
 
+import com.bosssoft.ecds.entity.vo.SearchFromVo;
 import com.bosssoft.ecds.service.FinancialWriteOffService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -76,5 +77,18 @@ public class FinancialWriteOffController {
     @PostMapping("/setResult")
     public boolean setResult(Object object) {
         return financialWriteOffService.setResult(object);
+    }
+
+    /**
+     * 实现搜索功能
+     * 后端搜索完对多条数据进行分页
+     *
+     *
+     */
+    @ResponseBody
+    @PostMapping(value = "/search")
+    public String search(@RequestBody SearchFromVo searchFromVo){
+        System.out.println(searchFromVo.getNumber());
+        return "success";
     }
 }
