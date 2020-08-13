@@ -54,8 +54,24 @@ public interface StockReturnService extends IService<StockReturnPO> {
 
     /**
      * 修改退票主表的退票原因
-     * @param stockReturnVO
+     * @param stockReturnVO 退票主表VO
      * @return
      */
     String updateStockReturnPO(StockReturnVO stockReturnVO);
+
+    /**
+     * 修改退票明细表信息
+     * @param stockReturnItemVOS 退票明细列表项
+     * @param no 业务单号
+     * @return
+     */
+    String updateStockReturnItemPO(List<StockReturnItemVO> stockReturnItemVOS,Long no);
+
+    /**
+     * 根据业务单号删除退票申请
+     * @param no
+     * @return
+     */
+    String deleteStockReturn(Long no);
+
 }

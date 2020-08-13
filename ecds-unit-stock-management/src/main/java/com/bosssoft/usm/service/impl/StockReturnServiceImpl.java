@@ -1,6 +1,7 @@
 package com.bosssoft.usm.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.conditions.update.UpdateChainWrapper;
 import com.bosssoft.usm.config.StatusCode;
 import com.bosssoft.usm.entity.po.StockReturnItemPO;
 import com.bosssoft.usm.entity.po.StockReturnPO;
@@ -17,9 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * <p>
@@ -50,7 +49,7 @@ public class StockReturnServiceImpl extends ServiceImpl<StockReturnDao, StockRet
        /* stockReturnPO.setChangeDate(new Date());
         stockReturnPO.setChangeMan("老刘");
         stockReturnPO.setChangeSitu("同意提交");*/
-        stockReturnPO.setVersion(1);
+        // stockReturnPO.setVersion(null);
         boolean status1 = save(stockReturnPO);
         List<StockReturnItemVO> stockReturnItemVOS = stockReturnVO.getStockReturnItemVOList();
         List<StockReturnItemPO> stockReturnItemPOS = new ArrayList<>();
@@ -58,7 +57,7 @@ public class StockReturnServiceImpl extends ServiceImpl<StockReturnDao, StockRet
             StockReturnItemPO stockReturnItemPO = new StockReturnItemPO();
             BeanUtils.copyProperties(stockReturnItemVO,stockReturnItemPO);
             stockReturnItemPO.setPid(stockReturnPO.getNo());
-            stockReturnItemPO.setVersion(1);
+            // stockReturnItemPO.setVersion(null);
             stockReturnItemPOS.add(stockReturnItemPO);
         }
         boolean status2 = stockReturnItemService.saveBatch(stockReturnItemPOS);
@@ -91,7 +90,7 @@ public class StockReturnServiceImpl extends ServiceImpl<StockReturnDao, StockRet
 
     /**
      * 根据业务单号来查询退票明细信息
-     * @param no
+     * @param no 业务单号
      * @return
      */
     @Override
@@ -108,8 +107,8 @@ public class StockReturnServiceImpl extends ServiceImpl<StockReturnDao, StockRet
     }
 
     /**
-     * 根据业务单号来查询d单个退票id
-     * @param no
+     * 根据业务单号来查询单个退票
+     * @param no 业务单号
      * @return
      */
     @Override
@@ -154,17 +153,66 @@ public class StockReturnServiceImpl extends ServiceImpl<StockReturnDao, StockRet
      * @return
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public String updateStockReturnPO(StockReturnVO stockReturnVO) {
         QueryWrapper<StockReturnPO> queryWrapper = new QueryWrapper<StockReturnPO>();
         StockReturnPO stockReturnPO = new StockReturnPO();
         BeanUtils.copyProperties(stockReturnVO,stockReturnPO);
         queryWrapper.eq("f_no",stockReturnPO.getNo());
-        boolean status = update(queryWrapper);
+        // stockReturnPO = getOne(queryWrapper);
+        boolean status = update(stockReturnPO,queryWrapper);
         if(status == true) {
             return StatusCode.UPDATE_SUCCESS;
         }
         return StatusCode.UPDATE_FAILED;
     }
 
+    /**
+     * 修改退票明细表信息
+     * @param stockReturnItemVOS 退票明细列表项
+     * @param no 业务单号
+     * @return
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public String updateStockReturnItemPO(List<StockReturnItemVO> stockReturnItemVOS,Long no) {
+        List<StockReturnItemPO> stockReturnItemPOList = new ArrayList<>();
+        for(StockReturnItemVO stockReturnItemVO : stockReturnItemVOS) {
+            StockReturnItemPO stockReturnItemPO = new StockReturnItemPO();
+            BeanUtils.copyProperties(stockReturnItemVO,stockReturnItemPO);
+            //stockReturnItemPO.setPid(no);
+            QueryWrapper<StockReturnItemPO> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("f_no",stockReturnItemPO.getNo());
+            queryWrapper.eq("f_pid",no);
+            boolean status = stockReturnItemService.saveOrUpdate(stockReturnItemPO, queryWrapper);
+            if(status == false) {
+                return StatusCode.UPDATE_FAILED;
+            }
+        }
+
+        return StatusCode.UPDATE_SUCCESS;
+    }
+
+
+    /**
+     * 根据业务单号删除退票信息
+     * @param no
+     * @return
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public String deleteStockReturn(Long no) {
+        QueryWrapper<StockReturnPO> queryWrapper = new QueryWrapper<>();
+        QueryWrapper<StockReturnItemPO> queryWrapperItem = new QueryWrapper<>();
+        queryWrapper.eq("f_no",no);
+        queryWrapperItem.eq("f_pid",no);
+        boolean status2 = stockReturnItemService.remove(queryWrapperItem);
+        boolean status1 = remove(queryWrapper);
+        if(status1 == true && status2 == true) {
+            return StatusCode.DELETE_SUCCESS;
+        }
+        return StatusCode.DELETE_FAILED;
+
+    }
 
 }

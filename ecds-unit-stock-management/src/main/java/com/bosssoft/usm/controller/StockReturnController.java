@@ -5,11 +5,13 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bosssoft.usm.config.StatusCode;
+import com.bosssoft.usm.entity.po.StockReturnItemPO;
 import com.bosssoft.usm.entity.po.StockReturnPO;
 import com.bosssoft.usm.entity.vo.DateVO;
 import com.bosssoft.usm.entity.vo.PageVO;
 import com.bosssoft.usm.entity.vo.StockReturnItemVO;
 import com.bosssoft.usm.entity.vo.StockReturnVO;
+import com.bosssoft.usm.service.StockReturnItemService;
 import com.bosssoft.usm.service.StockReturnService;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.extern.slf4j.Slf4j;
@@ -38,6 +40,9 @@ public class StockReturnController {
 
     @Autowired
     StockReturnService stockReturnService;
+
+    @Autowired
+    StockReturnItemService stockReturnItemService;
 
     /**
      * 根据id查询主表记录
@@ -258,14 +263,78 @@ public class StockReturnController {
      * @return
      */
     @GetMapping("/getListStockReturnByDate")
-    public List<StockReturnVO> getStockReturnListByDate(@RequestBody  DateVO dateVO){
+    public List<StockReturnVO> getStockReturnListByDate(@RequestBody  DateVO dateVO) {
         log.info("时间："+dateVO.getStartTime().toString());
         return stockReturnService.stockReturnVOlistByDate(dateVO);
     }
 
+    /**
+     * 根据No修改退票主信息
+     * @param stockReturnVO 退票信息VO
+     * @return
+     */
     @PutMapping("/updateByNo")
-    public String updateByNo(@RequestBody StockReturnVO stockReturnVO){
-        return null;
+    public String updateByNo(@RequestBody StockReturnVO stockReturnVO) {
+        return stockReturnService.updateStockReturnPO(stockReturnVO);
+    }
+
+    /**
+     * 修改退票明细信息
+     * @param stockReturnItemVOList 退票明细VO集合
+     * @return
+     */
+    @PutMapping("/updateItemByNo")
+    public String updateItemByNo(@RequestBody List<StockReturnItemVO> stockReturnItemVOList, Long no) {
+        return stockReturnService.updateStockReturnItemPO(stockReturnItemVOList, no);
+    }
+
+    /**
+     * 删除退票申请
+     * @param no 业务单号
+     * @return
+     */
+    @DeleteMapping("/deleteByNo")
+    public String deleteByNo(Long no) {
+        return stockReturnService.deleteStockReturn(no);
+    }
+
+    /**
+     * 删除退票明细
+     * @param no
+     * @return
+     */
+    @DeleteMapping("/deleteItemByNo")
+    public String deleteItemByNo(Long no) {
+        QueryWrapper<StockReturnItemPO> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("f_pid",no);
+        boolean status = stockReturnItemService.remove(queryWrapper);
+        if(status == true){
+            return StatusCode.DELETE_SUCCESS;
+        } else {
+            return StatusCode.DELETE_FAILED;
+        }
+    }
+
+    /**
+     * 确定是否提交 0未提交，1已经提交
+     * @param no 业务单号
+     * @return
+     */
+    @GetMapping("/getSubmitStatus")
+    public Integer getSubmitStatus(Long no) {
+       StockReturnPO stockReturnPO = stockReturnService.getOne(new QueryWrapper<StockReturnPO>().eq("f_no",no));
+       return stockReturnPO.getSubmitStatus();
+    }
+
+    /**
+     * 查询审核状态 0未审核，1已审核通过，2审核未通过，3无需审核
+     * @param no 业务单号
+     * @return
+     */
+    @PostMapping("/getCheckStatus")
+    public Integer saveInfo(Long no) {
+        StockReturnPO stockReturnPO = stockReturnService.getOne(new QueryWrapper<StockReturnPO>().eq("f_no",no));
+        return stockReturnPO.getChangeState();
     }
 }
 

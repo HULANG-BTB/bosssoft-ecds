@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/ecds.iml" filepath="$PROJECT_DIR$/ecds.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ecds-base/ecds-base.iml" filepath="$PROJECT_DIR$/ecds-base/ecds-base.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ecds-bill-accounting/ecds-bill-accounting.iml" filepath="$PROJECT_DIR$/ecds-bill-accounting/ecds-bill-accounting.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ecds-bill-destory/ecds-bill-destory.iml" filepath="$PROJECT_DIR$/ecds-bill-destory/ecds-bill-destory.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ecds-bill-invocing/ecds-bill-invocing.iml" filepath="$PROJECT_DIR$/ecds-bill-invocing/ecds-bill-invocing.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ecds-bill-message/ecds-bill-message.iml" filepath="$PROJECT_DIR$/ecds-bill-message/ecds-bill-message.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ecds-bill-pool/ecds-bill-pool.iml" filepath="$PROJECT_DIR$/ecds-bill-pool/ecds-bill-pool.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ecds-bill-write-off/ecds-bill-write-off.iml" filepath="$PROJECT_DIR$/ecds-bill-write-off/ecds-bill-write-off.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ecds-common/ecds-common.iml" filepath="$PROJECT_DIR$/ecds-common/ecds-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ecds-finan-stock-management/ecds-finan-stock-management.iml" filepath="$PROJECT_DIR$/ecds-finan-stock-management/ecds-finan-stock-management.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ecds-financial-pay/ecds-financial-pay.iml" filepath="$PROJECT_DIR$/ecds-financial-pay/ecds-financial-pay.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ecds-financial-sign/ecds-financial-sign.iml" filepath="$PROJECT_DIR$/ecds-financial-sign/ecds-financial-sign.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ecds-gateway/ecds-gateway.iml" filepath="$PROJECT_DIR$/ecds-gateway/ecds-gateway.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ecds-report-analysis/ecds-report-analysis.iml" filepath="$PROJECT_DIR$/ecds-report-analysis/ecds-report-analysis.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ecds-template/ecds-template.iml" filepath="$PROJECT_DIR$/ecds-template/ecds-template.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ecds-unit-sign/ecds-unit-sign.iml" filepath="$PROJECT_DIR$/ecds-unit-sign/ecds-unit-sign.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ecds-unit-stock-management/ecds-unit-stock-management.iml" filepath="$PROJECT_DIR$/ecds-unit-stock-management/ecds-unit-stock-management.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ecds-verify/ecds-verify.iml" filepath="$PROJECT_DIR$/ecds-verify/ecds-verify.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ecds-vouchar/ecds-vouchar.iml" filepath="$PROJECT_DIR$/ecds-vouchar/ecds-vouchar.iml" />
+    </modules>
+  </component>
+</project>
