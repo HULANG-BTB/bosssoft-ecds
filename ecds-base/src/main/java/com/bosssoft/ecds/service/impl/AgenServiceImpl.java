@@ -169,6 +169,22 @@ public class AgenServiceImpl extends ServiceImpl<AgenDao, AgenPO> implements Age
     }
 
     /**
+     * 批量审核单位
+     *
+     * @param fabAgenDTOList
+     * @return
+     */
+    @Override
+    public Boolean checkBatch(List<AgenDTO> fabAgenDTOList) {
+        for (AgenDTO fabAgenDTO : fabAgenDTOList) {
+            fabAgenDTO.setIsenable(true);
+        }
+        List<AgenPO> agenPOList = MyBeanUtil.copyListProperties(fabAgenDTOList, AgenPO.class);
+        boolean removeResult = super.updateBatchById(agenPOList);
+        return removeResult;
+    }
+
+    /**
      *
      *
      * @description: 根据部门编码查询单位。

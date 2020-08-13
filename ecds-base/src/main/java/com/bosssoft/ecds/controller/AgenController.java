@@ -175,6 +175,20 @@ public class AgenController {
     }
 
     /**
+     * 批量审核单位
+     *
+     * @param fabAgenVOList
+     * @return
+     */
+    @ApiOperation(value = "批量审核单位")
+    @PostMapping("checkBatch")
+    public String checkBatch(@RequestBody List<AgenVO> fabAgenVOList) {
+        List<AgenDTO> fabAgenDTOList = MyBeanUtil.copyListProperties(fabAgenVOList, AgenDTO.class);
+        Boolean result = fabAgenService.checkBatch(fabAgenDTOList);
+        return ResponseUtils.getResponse(result, ResponseUtils.ResultType.OK);
+    }
+
+    /**
      *
      *
      * @description: 根据部门编码查询单位。

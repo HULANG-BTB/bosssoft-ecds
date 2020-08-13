@@ -102,11 +102,18 @@ public interface AgenService extends IService<AgenPO> {
     public PageDTO listByPage(PageDTO pageDTO);
 
     /**
-     * 批量删除角色
+     * 批量删除单位
      *
      * @param fabAgenDTOList
      * @return
      */
     public Boolean removeBatch(List<AgenDTO> fabAgenDTOList);
 
+    /**
+     * 批量审核单位
+     *
+     * @param fabAgenDTOList
+     * @return
+     */
+    public Boolean checkBatch(List<AgenDTO> fabAgenDTOList);
 }
