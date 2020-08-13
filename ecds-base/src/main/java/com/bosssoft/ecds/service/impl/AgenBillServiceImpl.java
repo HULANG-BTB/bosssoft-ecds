@@ -13,14 +13,12 @@ import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.po.AgenBillPO;
 import com.bosssoft.ecds.entity.po.BillTypePO;
 import com.bosssoft.ecds.entity.vo.PageVO;
-import com.bosssoft.ecds.enums.ItemResultCode;
 import com.bosssoft.ecds.service.AgenBillService;
 import com.bosssoft.ecds.utils.MyBeanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -39,26 +37,6 @@ public class AgenBillServiceImpl extends ServiceImpl<AgenBillDao, AgenBillPO> im
 
     @Autowired
     private AgenBillDao agenBillDao;
-
-    /**
-     * 添加单位票据关系
-     *
-     * @param agenBillDTO
-     * @return
-     */
-    @Override
-    public ResponseResult save(AgenBillDTO agenBillDTO) {
-        // 将dto转化为po
-        AgenBillPO agenBillPO = MyBeanUtil.myCopyProperties(agenBillDTO, AgenBillPO.class);
-        // 执行插入操作
-        boolean save = super.save(agenBillPO);
-        // 插入失败返回操作错误
-        if (!save) {
-            return new ResponseResult(CommonCode.FAIL);
-        }
-        // 插入成功
-        return new ResponseResult(CommonCode.SUCCESS);
-    }
 
     /**
      * 维护单位可用票据关系
@@ -91,28 +69,6 @@ public class AgenBillServiceImpl extends ServiceImpl<AgenBillDao, AgenBillPO> im
         } else {
             return new ResponseResult(CommonCode.FAIL);
         }
-        return new ResponseResult(CommonCode.SUCCESS);
-    }
-
-    /**
-     * 删除单位票据关系
-     *
-     * @param agenBillDTO
-     * @return
-     */
-    @Override
-    public ResponseResult delete(AgenBillDTO agenBillDTO) {
-        // 判断传入id是否存在
-        if (agenBillDTO.getId() == null) {
-            return new ResponseResult(ItemResultCode.AGEN_BILL_NOT_EXISTS);
-        }
-        // 执行删除操作
-        boolean remove = super.removeById(agenBillDTO.getId());
-        // 删除失败返回操作错误
-        if (!remove) {
-            return new ResponseResult(CommonCode.FAIL);
-        }
-        // 删除成功
         return new ResponseResult(CommonCode.SUCCESS);
     }
 
@@ -171,28 +127,5 @@ public class AgenBillServiceImpl extends ServiceImpl<AgenBillDao, AgenBillPO> im
             billTypePOS.add(billTypeDao.selectOne(queryBillType));
         }
         return new QueryResponseResult<>(CommonCode.SUCCESS, billTypePOS);
-    }
-
-    /**
-     * 批量删除单位可用票据
-     *
-     * @param agenBillDTOList
-     * @return
-     */
-    @Override
-    public ResponseResult batchDelete(List<AgenBillDTO> agenBillDTOList) {
-        // 构建批量删除的idList
-        ArrayList<Long> idList = new ArrayList<>();
-        for (Iterator<AgenBillDTO> iterator = agenBillDTOList.iterator(); iterator.hasNext(); ) {
-            idList.add(iterator.next().getId());
-        }
-        // 执行批量删除
-        boolean removeByIds = super.removeByIds(idList);
-        // 删除失败返回操作失败
-        if (!removeByIds) {
-            return new ResponseResult(CommonCode.FAIL);
-        }
-        // 删除成功返回操作成功
-        return new ResponseResult(CommonCode.SUCCESS);
     }
 }

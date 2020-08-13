@@ -109,5 +109,17 @@ public class ItemController {
     public QueryResponseResult<ItemPageVO> listByPage(@RequestBody ItemPageVO<ItemDTO> itemPageVO) {
         return itemService.listByPage(itemPageVO);
     }
+
+    /**
+     * 分页查询
+     *
+     * @param
+     * @return
+     */
+    @ApiOperation(value = "查询所有项目信息，不分页展示")
+    @GetMapping("/getItemAll")
+    public ResponseResult getItemAll() {
+        return itemService.getItemAll();
+    }
 }
 

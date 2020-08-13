@@ -10,10 +10,12 @@ import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.po.ItemPO;
 import com.bosssoft.ecds.dao.ItemDao;
 import com.bosssoft.ecds.entity.vo.itemvo.ItemPageVO;
+import com.bosssoft.ecds.entity.vo.itemvo.ItemVO;
 import com.bosssoft.ecds.enums.ItemResultCode;
 import com.bosssoft.ecds.service.ItemService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bosssoft.ecds.utils.MyBeanUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -30,6 +32,9 @@ import java.util.List;
  */
 @Service
 public class ItemServiceImpl extends ServiceImpl<ItemDao, ItemPO> implements ItemService {
+
+    @Autowired
+    private ItemDao itemDao;
 
     /**
      * 插入项目，输入项目信息
@@ -171,5 +176,15 @@ public class ItemServiceImpl extends ServiceImpl<ItemDao, ItemPO> implements Ite
         }
         // 修改成功返回操作程序
         return new ResponseResult(CommonCode.SUCCESS);
+    }
+
+    @Override
+    public ResponseResult getItemAll() {
+        List<ItemPO> itemPOS = itemDao.selectList(null);
+        if (!itemPOS.isEmpty()){
+            List<ItemVO> itemVOS = MyBeanUtil.copyListProperties(itemPOS, ItemVO::new);
+            return new QueryResponseResult<>(CommonCode.SUCCESS,itemVOS);
+        }
+        return new ResponseResult(CommonCode.FAIL);
     }
 }

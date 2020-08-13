@@ -44,48 +44,6 @@ public class AgenItemServiceImpl extends ServiceImpl<AgenItemDao, AgenItemPO> im
     private AgenItemDao agenItemDao;
 
     /**
-     * 查询单位可用项目
-     *
-     * @param agenItemDTO
-     * @return
-     */
-    @Override
-    public ResponseResult save(AgenItemDTO agenItemDTO) {
-        // 将dto转化为po
-        AgenItemPO agenItemPO = MyBeanUtil.myCopyProperties(agenItemDTO, AgenItemPO.class);
-        // 执行插入操作
-        boolean save = super.save(agenItemPO);
-        // 插入失败返回操作错误
-        if (!save) {
-            return new ResponseResult(CommonCode.FAIL);
-        }
-        // 插入成功
-        return new ResponseResult(CommonCode.SUCCESS);
-    }
-
-    /**
-     * 删除单位可用项目
-     *
-     * @param agenItemDTO
-     * @return
-     */
-    @Override
-    public ResponseResult delete(AgenItemDTO agenItemDTO) {
-        // 判断传入id是否存在
-        if (agenItemDTO.getId() == null) {
-            return new ResponseResult(ItemResultCode.AGEN_BILL_NOT_EXISTS);
-        }
-        // 执行删除操作
-        boolean remove = super.removeById(agenItemDTO.getId());
-        // 删除失败返回操作错误
-        if (!remove) {
-            return new ResponseResult(CommonCode.FAIL);
-        }
-        // 删除成功
-        return new ResponseResult(CommonCode.SUCCESS);
-    }
-
-    /**
      * 分页查询单位可用项目
      *
      * @param pageDTO
@@ -136,29 +94,6 @@ public class AgenItemServiceImpl extends ServiceImpl<AgenItemDao, AgenItemPO> im
         }
         List<ItemVO> itemVOS = MyBeanUtil.copyListProperties(itemPOS, ItemVO::new);
         return new QueryResponseResult<>(CommonCode.SUCCESS,itemVOS);
-    }
-
-    /**
-     * 批量删除单位可用项目
-     *
-     * @param agenBillDTOList
-     * @return
-     */
-    @Override
-    public ResponseResult batchDelete(List<AgenItemDTO> agenBillDTOList) {
-        // 构建批量删除的idList
-        ArrayList<Long> idList = new ArrayList<>();
-        for (Iterator<AgenItemDTO> iterator = agenBillDTOList.iterator(); iterator.hasNext(); ) {
-            idList.add(iterator.next().getId());
-        }
-        // 执行批量删除
-        boolean removeByIds = super.removeByIds(idList);
-        // 删除失败返回操作失败
-        if (!removeByIds) {
-            return new ResponseResult(CommonCode.FAIL);
-        }
-        // 删除成功返回操作成功
-        return new ResponseResult(CommonCode.SUCCESS);
     }
 
     @Override

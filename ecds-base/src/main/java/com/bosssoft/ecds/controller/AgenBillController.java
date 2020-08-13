@@ -36,56 +36,18 @@ public class AgenBillController {
     @Autowired
     private AgenBillService agenBillService;
 
-    /**
-     * 插入单位可用票据相关信息
-     *
-     * @param agenBillVO 输入单位编码和项目编码
-     * @return 返回成功或者失败的code和msg
-     */
-    @ApiOperation(value = "添加单位可用票据关系", notes = "输入单位编码和项目编码")
-    @PostMapping("/save")
-    public ResponseResult save(@RequestBody AgenBillVO agenBillVO) {
-        AgenBillDTO agenBillDTO = MyBeanUtil.myCopyProperties(agenBillVO, AgenBillDTO.class);
-        return agenBillService.save(agenBillDTO);
-    }
 
     /**
      * 批量插入单位可用票据相关信息
      *
-     * @param agenBillVOList 输入单位编码和项目编码
+     * @param agenBillVOList 输入单位编码和票据编码
      * @return 返回成功或者失败的code和msg
      */
-    @ApiOperation(value = "批量添加单位可用票据关系", notes = "输入单位编码和项目编码")
+    @ApiOperation(value = "批量添加单位可用票据关系", notes = "输入单位编码和票据编码")
     @PostMapping("/updateBatch")
     public ResponseResult updateBatch(@RequestBody List<AgenBillVO> agenBillVOList) {
         List<AgenBillDTO> agenBillDTOList = MyBeanUtil.copyListProperties(agenBillVOList, AgenBillDTO.class);
         return agenBillService.updateBatch(agenBillDTOList);
-    }
-
-    /**
-     * 删除票据
-     *
-     * @param agenBillVO 输入记录id，通过id删除
-     * @return 返回成功或者失败的code和msg
-     */
-    @ApiOperation(value = "删除单位可用票据关系", notes = "输入记录id，通过id删除")
-    @PostMapping("/delete")
-    public ResponseResult delete(@RequestBody AgenBillVO agenBillVO) {
-        AgenBillDTO agenBillDTO = MyBeanUtil.myCopyProperties(agenBillVO, AgenBillDTO.class);
-        return agenBillService.delete(agenBillDTO);
-    }
-
-    /**
-     * 批量删除
-     *
-     * @param agenBillVOList 输入记录idList，通过id删除
-     * @return 返回成功或者失败的code和msg
-     */
-    @ApiOperation(value = "批量删除单位可用票据关系", notes = "输入记录idList，通过id删除")
-    @PostMapping("/batchDelete")
-    public ResponseResult batchDelete(@RequestBody List<AgenBillVO> agenBillVOList) {
-        List<AgenBillDTO> agenBillDTOList = MyBeanUtil.copyListProperties(agenBillVOList, AgenBillDTO::new);
-        return agenBillService.batchDelete(agenBillDTOList);
     }
 
     /**
@@ -103,7 +65,6 @@ public class AgenBillController {
         return agenBillService.listByPage(pageDTO);
     }
 
-
     /**
      * 查询单位所有可用票据
      *
@@ -116,6 +77,5 @@ public class AgenBillController {
         AgenBillDTO agenBillDTO = MyBeanUtil.myCopyProperties(agenBillVO, AgenBillDTO.class);
         return agenBillService.getBill(agenBillDTO);
     }
-
 }
 

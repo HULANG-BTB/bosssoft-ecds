@@ -22,21 +22,6 @@ import java.util.List;
  * @since 2020-08-12
  */
 public interface AgenItemService extends IService<AgenItemPO> {
-    /**
-     * 插入单位项目关系数据
-     *
-     * @param agenItemDTO
-     * @return
-     */
-    ResponseResult save(AgenItemDTO agenItemDTO);
-
-    /**
-     * 删除单位票据关系数据
-     *
-     * @param agenItemDTO
-     * @return
-     */
-    ResponseResult delete(AgenItemDTO agenItemDTO);
 
     /**
      * 分页查询单位的可用票据
@@ -54,16 +39,9 @@ public interface AgenItemService extends IService<AgenItemPO> {
      */
     QueryResponseResult<List<ItemVO>> getItemAll(AgenItemDTO agenItemDTO);
 
-    /**
-     * 批量删除单位可用票据
-     *
-     * @param agenItemDTOList
-     * @return boolean
-     */
-    ResponseResult batchDelete(List<AgenItemDTO> agenItemDTOList);
 
     /**
-     * 批量插入单位票据关系数据
+     * 批量维护单位项目关系数据
      *
      * @param agenItemDTOList
      * @return

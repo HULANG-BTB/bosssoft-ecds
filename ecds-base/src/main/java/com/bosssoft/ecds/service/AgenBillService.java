@@ -23,28 +23,12 @@ import java.util.List;
 public interface AgenBillService extends IService<AgenBillPO> {
 
     /**
-     * 插入单位票据关系数据
-     *
-     * @param agenBillDTO
-     * @return
-     */
-    ResponseResult save(AgenBillDTO agenBillDTO);
-
-    /**
      * 批量插入单位票据关系数据
      *
      * @param agenBillDTOList
      * @return
      */
     ResponseResult updateBatch(List<AgenBillDTO> agenBillDTOList);
-
-    /**
-     * 删除单位票据关系数据
-     *
-     * @param agenBillDTO
-     * @return
-     */
-    ResponseResult delete(AgenBillDTO agenBillDTO);
 
     /**
      * 查询单位的可用票据，供单位端使用
@@ -62,13 +46,4 @@ public interface AgenBillService extends IService<AgenBillPO> {
      * @return
      */
     QueryResponseResult<List<BillTypePO>> getBill(AgenBillDTO agenBillDTO);
-
-    /**
-     * 批量删除单位可用票据
-     *
-     * @param agenBillDTOList
-     * @return boolean
-     */
-    ResponseResult batchDelete(List<AgenBillDTO> agenBillDTOList);
-
 }

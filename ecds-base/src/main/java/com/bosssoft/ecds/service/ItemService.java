@@ -70,4 +70,12 @@ public interface ItemService extends IService<ItemPO> {
      */
     ResponseResult batchVerify(List<ItemDTO> itemDTOS);
 
+    /**
+     * 查询所有项目信息
+     *
+     * @param
+     * @return
+     */
+    ResponseResult getItemAll();
+
 }
