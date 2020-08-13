@@ -3,16 +3,21 @@ package com.bosssoft.ecds.service.impl;
 import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.bosssoft.ecds.entity.dto.AgenDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.dto.CrtDTO;
 import com.bosssoft.ecds.entity.po.CrtPO;
 import com.bosssoft.ecds.dao.CrtDao;
+import com.bosssoft.ecds.service.AgenService;
 import com.bosssoft.ecds.service.CrtService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bosssoft.ecds.utils.MyBeanUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.xml.crypto.Data;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -27,6 +32,8 @@ import java.util.List;
 @DS("slave")
 public class CrtServiceImpl extends ServiceImpl<CrtDao, CrtPO> implements CrtService {
 
+    @Autowired
+    private AgenService agenService;
     /**
      *
      *
@@ -40,6 +47,26 @@ public class CrtServiceImpl extends ServiceImpl<CrtDao, CrtPO> implements CrtSer
     public CrtDTO save(CrtDTO uabCrtDTO) {
         CrtPO uabCrtPO = new CrtPO();
         MyBeanUtil.copyProperties(uabCrtDTO, uabCrtPO);
+        //查询单位相关其他字段
+        AgenDTO agenDTO = new AgenDTO();
+        agenDTO.setAgenName(uabCrtPO.getAgenName());
+        agenDTO = agenService.getByAgenName(agenDTO);
+        uabCrtPO.setAddress(agenDTO.getAddr());
+        uabCrtPO.setFinmgr(agenDTO.getFinMgr());
+        uabCrtPO.setVersion(0);
+        uabCrtPO.setAgenCode(agenDTO.getAgenCode());
+        uabCrtPO.setLinkman(agenDTO.getLinkMan());
+        uabCrtPO.setLinkmanTel(agenDTO.getLinkTel());
+        uabCrtPO.setOperator(agenDTO.getOperator());
+        uabCrtPO.setOperatorId(agenDTO.getOperatorId());
+        //获取准购证ID
+        uabCrtPO.setCrtCode("112233");
+        //获取时间
+        Date data = new Date();
+        uabCrtPO.setCreateTime(data);
+        uabCrtPO.setUpdateTime(data);
+        uabCrtPO.setIssuedate(data);
+        //保存准购证
         super.save(uabCrtPO);
         return uabCrtDTO;
     }
