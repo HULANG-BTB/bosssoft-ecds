@@ -5,6 +5,7 @@ import com.bosssoft.ecds.encodeserver.entity.dto.NumSegDto;
 import com.bosssoft.ecds.encodeserver.entity.dto.GetFinanceNumDto;
 import com.bosssoft.ecds.encodeserver.util.EncodeResult;
 import com.bosssoft.ecds.encodeserver.service.GetCodeService;
+import com.bosssoft.ecds.encodeserver.util.ResponseUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,6 +36,16 @@ public class CodeController {
             return EncodeResult.getEncodeResult(200, "赋码成功", batchCode);
         } else {
             return EncodeResult.getEncodeResult(500, "财政代码未创建，请创建后再赋码");
+        }
+    }
+
+    @PostMapping("/test")
+    public String test(@RequestBody GetFinanceNumDto getFinanceNumDto) {
+        NumSegDto batchCode = getCodeService.getBatchCode(getFinanceNumDto);
+        if (batchCode != null) {
+            return ResponseUtils.getResponse(200, "赋码成功", batchCode);
+        } else {
+            return ResponseUtils.getResponse(500, "财政代码未创建，请创建后再赋码");
         }
     }
 

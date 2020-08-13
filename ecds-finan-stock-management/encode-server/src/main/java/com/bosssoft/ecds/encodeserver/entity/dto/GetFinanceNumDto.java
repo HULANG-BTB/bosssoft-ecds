@@ -46,7 +46,7 @@ public class GetFinanceNumDto implements Serializable {
      * 获取8位财政编码
      * @return
      */
-    public String getFinanceCode() {
+    public String financeCode() {
         return fRegiId + fSortId + fTypeId + fAnnualId;
     }
 }

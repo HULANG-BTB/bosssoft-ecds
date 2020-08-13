@@ -60,7 +60,7 @@ public class GetCodeServiceImpl implements GetCodeService {
      */
     @Override
     public NumSegDto getBatchCode(GetFinanceNumDto getFinanceNumDto) {
-        String financeCode = getFinanceNumDto.getFinanceCode();
+        String financeCode = getFinanceNumDto.financeCode();
         NumSegDto financeCodeSeg = null;
 
         // 获取可重入锁
@@ -119,7 +119,7 @@ public class GetCodeServiceImpl implements GetCodeService {
      */
     public NumSegDto getCodeFromRedis(GetFinanceNumDto getFinanceNumDto) {
         NumSegDto numSegDto = new NumSegDto();
-        RMap<Object, Object> map = redissonClient.getMap("code" + getFinanceNumDto.getFinanceCode(), StringCodec.INSTANCE);
+        RMap<Object, Object> map = redissonClient.getMap("code" + getFinanceNumDto.financeCode(), StringCodec.INSTANCE);
 
         // 构建更新MySQL的对象
         GetFinanceNumDto getFinanceNumFromSqlDto = new GetFinanceNumDto();
@@ -153,7 +153,7 @@ public class GetCodeServiceImpl implements GetCodeService {
      */
     public void createNewHashInRedis(GetFinanceNumDto getFinanceNumDto) throws NullPointerException{
         // 新建redis记录
-        RMap<Object, Object> map = redissonClient.getMap("code" + getFinanceNumDto.getFinanceCode(), StringCodec.INSTANCE);
+        RMap<Object, Object> map = redissonClient.getMap("code" + getFinanceNumDto.financeCode(), StringCodec.INSTANCE);
 
         GetFinanceNumDto getFinanceNumDtoFromSql = new GetFinanceNumDto();
         BeanUtil.copyProperties(getFinanceNumDto, getFinanceNumDtoFromSql);
