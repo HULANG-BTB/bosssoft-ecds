@@ -27,7 +27,6 @@ import java.util.Date;
 @ApiModel(value = "ItemVoucherPO对象", description = "归档可用")
 public class ItemArchivePO extends Model<ItemArchivePO> {
 
-
     @ApiModelProperty(value = "主键")
     @TableId(value = "f_id", type = IdType.AUTO)
     private Long id;
@@ -44,9 +43,9 @@ public class ItemArchivePO extends Model<ItemArchivePO> {
     @TableField("f_item_name")
     private String itemName;
 
-    @ApiModelProperty(value = "归档状态")
-    @TableField("f_is_save")
-    private Boolean isSave;
+    @ApiModelProperty(value = "项目助记码")
+    @TableField("f_mnen")
+    private String mnen;
 
     @ApiModelProperty(value = "创建时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")

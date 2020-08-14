@@ -1,7 +1,7 @@
 package com.bosssoft.ecds.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.bosssoft.ecds.entity.po.ItemPO;
+import com.bosssoft.ecds.entity.po.AgenItemPO;
 
 /**
  * <p>
@@ -11,6 +11,6 @@ import com.bosssoft.ecds.entity.po.ItemPO;
  * @author liuke
  * @since 2020-08-13
  */
-public interface ItemService extends IService<ItemPO> {
+public interface AgenItemService extends IService<AgenItemPO> {
 
 }

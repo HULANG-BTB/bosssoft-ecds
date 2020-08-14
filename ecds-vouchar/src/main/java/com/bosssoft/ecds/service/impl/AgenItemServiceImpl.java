@@ -1,9 +1,9 @@
 package com.bosssoft.ecds.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.bosssoft.ecds.dao.ItemDao;
-import com.bosssoft.ecds.entity.po.ItemPO;
-import com.bosssoft.ecds.service.ItemService;
+import com.bosssoft.ecds.dao.AgenItemDao;
+import com.bosssoft.ecds.entity.po.AgenItemPO;
+import com.bosssoft.ecds.service.AgenItemService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -15,6 +15,6 @@ import org.springframework.stereotype.Service;
  * @since 2020-08-13
  */
 @Service
-public class ItemServiceImpl extends ServiceImpl<ItemDao, ItemPO> implements ItemService {
+public class AgenItemServiceImpl extends ServiceImpl<AgenItemDao, AgenItemPO> implements AgenItemService {
 
 }

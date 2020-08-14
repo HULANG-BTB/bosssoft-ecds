@@ -27,8 +27,8 @@ public class CodeBuilder {
         AutoGenerator autoGenerator = new AutoGenerator();
 
 /**
-         * "ubr_crt_info",
-         * "ubr_bill_out_voucher"
+ * "ubr_crt_info",
+ * "ubr_bill_out_voucher"
  * "fbr_stock_return_voucher",
  * "fbr_stock_deptinvalid_voucher"
  * "fbr_voucher",
@@ -38,15 +38,18 @@ public class CodeBuilder {
  * "fnr_bill_pay_voucher",
  * "fab_bill"
  * "fab_item"
- *  "fab_agen"
- *  "fab_agen_bill"
- *   "fbr_bill_available_archive"
- *  "fbe_writeoff_billsummary"
+ * "fab_agen"
+ * "fab_agen_bill"
+ * "fbr_bill_available_archive"
+ * "fbe_writeoff_billsummary"
+ * "fab_item"
+ * "fab_agen_item"
  */
 
         // 数据库表名
         String[] tableList = {
-                "fbe_writeoff_billsummary"
+                "fab_item",
+                "fab_agen_item"
         };
 
         // 作者
@@ -56,7 +59,7 @@ public class CodeBuilder {
         // 逻辑删除字段
         String deleted = "f_logic_delete";
         // 数据库表前缀
-        String tablePrefix = "fbe";
+        String tablePrefix = "fab";
         // 字段前缀
         String columnPrefix = "f_";
         // 包名
