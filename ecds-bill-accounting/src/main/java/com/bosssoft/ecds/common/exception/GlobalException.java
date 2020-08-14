@@ -1,13 +1,10 @@
 package com.bosssoft.ecds.common.exception;
 
 import com.bosssoft.ecds.common.response.CommonCode;
-import com.bosssoft.ecds.common.response.QueryResponseResult;
 import com.bosssoft.ecds.common.response.ResponseResult;
 import com.bosssoft.ecds.common.response.ResultCode;
 import com.google.common.collect.ImmutableMap;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -15,13 +12,20 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+/**
+ * @ClassName GlobalException
+ * @Description 全局异常管理策略
+ * @Auther UoweMe
+ * @Date 2020/8/12 11:31
+ * @Version 1.0
+ */
 @ControllerAdvice
 @Slf4j
-public class ExceptionCatch {
+public class GlobalException {
 
     private ImmutableMap<Class<? extends Throwable>, ResultCode> EXCEPTIONS;
 
-    public static ImmutableMap.Builder<Class<? extends Throwable>,ResultCode> builder = ImmutableMap.builder();
+    public static ImmutableMap.Builder<Class<? extends Throwable>, ResultCode> builder = ImmutableMap.builder();
 
     /**
      * 处理未知异常
@@ -71,9 +75,9 @@ public class ExceptionCatch {
 
     static{
         //处理非法参数异常
-        builder.put(org.springframework.http.converter.HttpMessageNotReadableException.class, CommonCode.INVLIDATE);
+        builder.put(org.springframework.http.converter.HttpMessageNotReadableException.class, CommonCode.INVALIDATE);
         //处理请求方法异常
-        builder.put(HttpRequestMethodNotSupportedException.class,CommonCode.METHOD_NOT_SUPPORTED);
+        builder.put(HttpRequestMethodNotSupportedException.class, CommonCode.METHOD_NOT_SUPPORTED);
         //除了CustomException以外的异常类型及对应的错误代码在这里定义,，如果不定义则统一返回固定的错误信息
     }
 
