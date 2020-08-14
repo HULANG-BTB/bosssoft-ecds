@@ -39,16 +39,6 @@ public class CodeController {
         }
     }
 
-    @PostMapping("/test")
-    public String test(@RequestBody GetFinanceNumDto getFinanceNumDto) {
-        NumSegDto batchCode = getCodeService.getBatchCode(getFinanceNumDto);
-        if (batchCode != null) {
-            return ResponseUtils.getResponse(200, "赋码成功", batchCode);
-        } else {
-            return ResponseUtils.getResponse(500, "财政代码未创建，请创建后再赋码");
-        }
-    }
-
     /**
      * 财政对未使用的票据代码申请赋码操作时，需要先进行创建(?)
      *  需识别当前代码是否已经创建，避免重复创建
