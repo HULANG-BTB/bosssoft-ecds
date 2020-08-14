@@ -13,7 +13,7 @@ import java.util.function.Supplier;
 
 /**
  * @ClassName MyBeanUtil
- * @Description 重写实体拷贝类，满足批量要求
+ * @Description 重写实体拷贝类，满足批量复制要求
  * @Auther UoweMe
  * @Date 2020/8/12 11:22
  * @Version 1.0

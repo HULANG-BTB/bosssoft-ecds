@@ -4,16 +4,16 @@ import com.bosssoft.ecds.common.response.ResultCode;
 
 /**
  * @ClassName CbillAccountingCode
- * @Description 入账凭证数据异常码
+ * @Description 自定义的入账凭证数据异常码
  * @Auther UoweMe
  * @Date 2020/8/12 11:39
  * @Version 1.0
  */
-public class VoucherCode implements ResultCode {
+public enum VoucherCode implements ResultCode {
 
     //自定义错误类型及返回码
 
-
+    ;
     boolean success;
 
     int code;

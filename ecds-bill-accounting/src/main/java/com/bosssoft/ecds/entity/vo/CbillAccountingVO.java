@@ -1,6 +1,5 @@
 package com.bosssoft.ecds.entity.vo;
 
-import com.baomidou.mybatisplus.annotation.Version;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -24,9 +23,6 @@ import java.util.Date;
 @NoArgsConstructor
 @ApiModel(value="CbillAccountingVO对象", description="入账基础数据")
 public class CbillAccountingVO {
-
-    @ApiModelProperty(value = "主键")
-    private Long id;
 
     @ApiModelProperty(value = "单位代码")
     private String agenIdcode;
@@ -65,10 +61,6 @@ public class CbillAccountingVO {
     @ApiModelProperty(value = "入账凭证号")
     private long accountId;
 
-    @ApiModelProperty(value = "版本号")
-    @Version
-    private Integer version;
-
     @ApiModelProperty(value = "创建时间")
     @JsonFormat(pattern = "yyyy-MM-dd  HH:mm:ss",timezone = "GMT+8",locale="zh")
     private Date createTime;
@@ -76,9 +68,6 @@ public class CbillAccountingVO {
     @ApiModelProperty(value = "更新时间")
     @JsonFormat(pattern = "yyyy-MM-dd  HH:mm:ss",timezone = "GMT+8",locale="zh")
     private Date updateTime;
-
-    @ApiModelProperty(value = "删除状态(1.已经删除 0.未删除)")
-    private Boolean logicDelete;
 
     @ApiModelProperty(value = "应缴金额")
     private BigDecimal waitAccount;
