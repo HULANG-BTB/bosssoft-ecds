@@ -1,5 +1,6 @@
 package com.bosssoft.ecds.entity.po;
 
+import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
@@ -131,7 +132,7 @@ public class CbillAccountingPO extends Model<CbillAccountingPO> {
 
     public static final String F_ID = "f_id";
 
-    public static final String F_AGEN_ID = "f_agen_id";
+    public static final String F_AGEN_IDCODE = "f_agen_idcode";
 
     public static final String F_AGEN_NAME = "f_agen_name";
 

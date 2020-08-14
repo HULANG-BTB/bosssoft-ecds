@@ -1,15 +1,20 @@
 package com.bosssoft.ecds.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.bosssoft.ecds.common.response.QueryResponseResult;
+import com.bosssoft.ecds.common.response.ResponseResult;
 import com.bosssoft.ecds.dao.VoucherDao;
 import com.bosssoft.ecds.entity.dto.VoucherDTO;
 import com.bosssoft.ecds.entity.po.VoucherPO;
+import com.bosssoft.ecds.entity.vo.VoucherVO;
 import com.bosssoft.ecds.service.VoucherService;
 import com.bosssoft.ecds.utils.MyBeanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static com.bosssoft.ecds.enums.CbillAccountingCode.SUCCESS;
 
 /**
  * <p>
@@ -39,9 +44,11 @@ public class VoucherServiceImpl extends ServiceImpl<VoucherDao, VoucherPO> imple
      * @return 空
      */
     @Override
-    public List<VoucherDTO> listAll() {
+    public ResponseResult listAll() {
         List<VoucherPO> list = super.list();
-        return MyBeanUtil.copyListProperties(list,VoucherDTO.class);
+        List<VoucherDTO> voucherDTOList = MyBeanUtil.copyListProperties(list, VoucherDTO.class);
+        List<VoucherVO> voucherVOList = MyBeanUtil.copyListProperties(voucherDTOList, VoucherVO.class);
+        return new QueryResponseResult(SUCCESS,voucherVOList);
     }
 
     /**
@@ -51,10 +58,10 @@ public class VoucherServiceImpl extends ServiceImpl<VoucherDao, VoucherPO> imple
      * @return VoucherDTO
      */
     @Override
-    public VoucherDTO getByAccountId(VoucherDTO voucherDTO) {
+    public ResponseResult getByAccountId(VoucherDTO voucherDTO) {
         VoucherPO voucherPO = super.getById(voucherDTO.getAccountId());
-        MyBeanUtil.copyProperties(voucherPO,voucherDTO);
-        return voucherDTO;
+        VoucherVO voucherVO = MyBeanUtil.copyProperties(voucherPO, VoucherVO.class);
+        return new QueryResponseResult(SUCCESS,voucherVO);
     }
 
 }

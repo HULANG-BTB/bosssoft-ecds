@@ -1,5 +1,6 @@
 package com.bosssoft.ecds.entity.dto;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.Version;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
@@ -78,6 +79,7 @@ public class CbillAccountingDTO {
     private Date updateTime;
 
     @ApiModelProperty(value = "删除状态(1.已经删除 0.未删除)")
+    @TableField(select = false)
     private Boolean logicDelete;
 
     @ApiModelProperty(value = "应缴金额")

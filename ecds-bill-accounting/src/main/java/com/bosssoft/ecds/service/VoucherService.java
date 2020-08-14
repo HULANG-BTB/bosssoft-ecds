@@ -1,10 +1,9 @@
 package com.bosssoft.ecds.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.bosssoft.ecds.common.response.ResponseResult;
 import com.bosssoft.ecds.entity.dto.VoucherDTO;
 import com.bosssoft.ecds.entity.po.VoucherPO;
-
-import java.util.List;
 
 /**
  * <p>
@@ -28,13 +27,13 @@ public interface VoucherService extends IService<VoucherPO> {
      *
      * @return List<VoucherDTO>
      */
-    List<VoucherDTO> listAll();
+    ResponseResult listAll();
 
     /**
      * 通过入账凭证号获取电子凭证
      *
      * @return VoucherDTO
      */
-    VoucherDTO getByAccountId(VoucherDTO voucherDTO);
+    ResponseResult getByAccountId(VoucherDTO voucherDTO);
 
 }

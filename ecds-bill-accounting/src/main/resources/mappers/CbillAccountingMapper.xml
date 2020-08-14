@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bosssoft.ecds.dao.CbillAccountingDao">
-
-    <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.bosssoft.ecds.entity.po.CbillAccountingPO">
+    <!-- DTO查询映射结果 -->
+    <resultMap id="DTOResultMap" type="com.bosssoft.ecds.entity.dto.CbillAccountingDTO">
         <id column="f_id" property="id" />
         <result column="f_agen_idcode" property="agenIdcode" />
         <result column="f_agen_name" property="agenName" />
@@ -29,33 +28,34 @@
         <result column="f_node" property="node" />
     </resultMap>
 
-    <!-- 通用查询结果列 -->
-    <sql id="Base_Column_List">
+    <!--DTO查询结果列-->
+    <sql id="DTO_Column_List">
         f_id, f_agen_idcode, f_agen_name, f_agen_type, f_place_id, f_agen_time, f_type, f_bill_batch_id, f_bill_serial_id, f_bill_no, f_time, f_account, f_account_id, f_version, f_create_time, f_update_time, f_logic_delete, f_wait_account, f_account_type, f_account_status, f_operator, f_operator_id, f_payer_tel, f_node
     </sql>
 
-    <!--查询部分-->
-    <select id="selectBySerialId" resultMap="BaseResultMap">
+    <select id="selectBySerialId" resultMap="DTOResultMap">
         select f_id, f_agen_idcode, f_agen_name, f_place_id, f_agen_time,
-               f_type, f_bill_batch_id, f_bill_serial_id, f_bill_no, f_time, f_account,
-               f_account_id, f_version,f_create_time, f_update_time, f_logic_delete,
-               f_wait_account, f_account_type, f_account_status, f_operator, f_operator_id,f_payer_tel,f_node
-        from fne_cbill_accounting where f_bill_serial_id = #{billSerialId}
+        f_type, f_bill_batch_id, f_bill_serial_id, f_bill_no, f_time, f_account,
+        f_account_id, f_version,f_create_time, f_update_time, f_logic_delete,
+        f_wait_account, f_account_type, f_account_status, f_operator, f_operator_id,f_payer_tel,f_node
+        from fne_cbill_accounting where f_bill_serial_id = #{billSerialId} and f_logic_delete=0 limit 1
     </select>
 
-    <select id="selectByBillId" resultMap="BaseResultMap">
-        select f_id, f_agen_idcode, f_agen_name,f_place_id, f_agen_time,
-               f_type, f_bill_batch_id, f_bill_serial_id, f_bill_no, f_time, f_account,
-               f_account_id, f_version,f_create_time, f_update_time, f_logic_delete,
-               f_wait_account, f_account_type, f_account_status, f_operator, f_operator_id,f_payer_tel,f_node
-        from fne_cbill_accounting where f_bill_no = #{billNo}
-    </select>
-    <select id="selectByAgenIdcode" resultMap="BaseResultMap">
+    <select id="selectByBillId" resultMap="DTOResultMap">
         select f_id, f_agen_idcode, f_agen_name, f_place_id, f_agen_time,
-               f_type, f_bill_batch_id, f_bill_serial_id, f_bill_no, f_time, f_account,
-               f_account_id, f_version,f_create_time, f_update_time, f_logic_delete,
-               f_wait_account, f_account_type, f_account_status, f_operator, f_operator_id,f_payer_tel,f_node
-        from fne_cbill_accounting where f_agen_idcode = #{agenId}
+        f_type, f_bill_batch_id, f_bill_serial_id, f_bill_no, f_time, f_account,
+        f_account_id, f_version,f_create_time, f_update_time, f_logic_delete,
+        f_wait_account, f_account_type, f_account_status, f_operator, f_operator_id,f_payer_tel,f_node
+        from fne_cbill_accounting where f_bill_no = #{billNo} and f_logic_delete=0 limit 1
     </select>
+
+    <select id="selectByAgenIdcode" resultMap="DTOResultMap">
+        select f_id, f_agen_idcode, f_agen_name, f_place_id, f_agen_time,
+        f_type, f_bill_batch_id, f_bill_serial_id, f_bill_no, f_time, f_account,
+        f_account_id, f_version,f_create_time, f_update_time, f_logic_delete,
+        f_wait_account, f_account_type, f_account_status, f_operator, f_operator_id,f_payer_tel,f_node
+        from fne_cbill_accounting where f_agen_idcode = #{agenIdcode} and f_logic_delete = 0
+    </select>
+
 
 </mapper>
