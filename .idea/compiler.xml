@@ -2,24 +2,25 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="ecds-finan-stock-management" />
         <module name="ecds-bill-write-off" />
-        <module name="ecds-bill-pool" />
         <module name="ecds-template" />
         <module name="ecds-financial-sign" />
         <module name="ecds-bill-destory" />
         <module name="ecds-bill-message" />
-        <module name="ecds-finan-stock-management" />
+        <module name="ecds-bill-pool" />
         <module name="ecds-verify" />
         <module name="ecds-unit-stock-management" />
         <module name="ecds-unit-sign" />
-        <module name="ecds-gateway" />
+        <module name="ecds-common" />
         <module name="ecds-bill-accounting" />
         <module name="ecds-vouchar" />
-        <module name="ecds-common" />
+        <module name="ecds-gateway" />
         <module name="ecds-base" />
         <module name="ecds-report-analysis" />
         <module name="ecds-financial-pay" />

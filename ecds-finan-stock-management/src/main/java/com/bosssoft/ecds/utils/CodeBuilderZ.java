@@ -72,7 +72,7 @@ public class CodeBuilderZ {
         // 全局配置
         GlobalConfig globalConfig = new GlobalConfig();
         String path = System.getProperty("user.dir");
-        globalConfig.setOutputDir(path + "/src/main/java");
+        globalConfig.setOutputDir(path + "/ecds-finan-stock-management/src/main/java");
         globalConfig.setAuthor(author);
         globalConfig.setOpen(false);
         globalConfig.setServiceName("%sService");
