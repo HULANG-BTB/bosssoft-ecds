@@ -4,25 +4,24 @@
     <!--归档审验记录-->
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.bosssoft.ecds.entity.po.BillCheckArchivePO">
-        <id column="f_id" property="id" />
-        <result column="f_agen_code" property="agenCode" />
-        <result column="f_bill_no" property="billNo" />
-        <result column="f_sign_name" property="signName" />
-        <result column="f_sign_time" property="signTime" />
-        <result column="f_sign_status" property="signStatus" />
-        <result column="f_sta_reason" property="staReason" />
-        <result column="f_is_save" property="isSave" />
-        <result column="f_create_time" property="createTime" />
-        <result column="f_update_time" property="updateTime" />
-        <result column="f_operator_id" property="operatorId" />
-        <result column="f_operator" property="operator" />
-        <result column="f_version" property="version" />
-        <result column="f_logic_delete" property="logicDelete" />
+        <id column="f_id" property="id"/>
+        <result column="f_agen_code" property="agenCode"/>
+        <result column="f_bill_code" property="billCode"/>
+        <result column="f_bill_name" property="billName"/>
+        <result column="f_sign_name" property="signName"/>
+        <result column="f_sign_time" property="signTime"/>
+        <result column="f_sign_status" property="signStatus"/>
+        <result column="f_create_time" property="createTime"/>
+        <result column="f_update_time" property="updateTime"/>
+        <result column="f_operator_id" property="operatorId"/>
+        <result column="f_operator" property="operator"/>
+        <result column="f_version" property="version"/>
+        <result column="f_logic_delete" property="logicDelete"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        f_id, f_agen_code, f_bill_no, f_sign_name, f_sign_time, f_sign_status, f_sta_reason, f_is_save, f_create_time, f_update_time, f_operator_id, f_operator, f_version, f_logic_delete
+        f_id, f_agen_code, f_bill_code, f_bill_name, f_sign_name, f_sign_time, f_sign_status, f_create_time, f_update_time, f_operator_id, f_operator, f_version, f_logic_delete
     </sql>
 
 </mapper>
