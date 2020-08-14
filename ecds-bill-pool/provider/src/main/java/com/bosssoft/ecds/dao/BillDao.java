@@ -6,9 +6,11 @@ import java.util.List;
 
 public interface BillDao {
 
-    int insertBill(List<BillPo> list);
+    int insertBill(String table, List<BillPo> list);
 
-    int retrieveNumber();
+    int retrieveNumber(String table);
+
+    List<String> retrieveRegionCode();
 
     List retrieveList(int number);
 

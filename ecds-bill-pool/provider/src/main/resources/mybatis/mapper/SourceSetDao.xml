@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bosssoft.ecds.dao.SourceSetDao">
+
+    <resultMap id="sourceSetMap" type="sourceSetPo">
+        <id column="f_id" property="id"/>
+        <result column="f_pool_id" property="sourceID"/>
+        <result column="f_push_num" property="pushNumber"/>
+        <result column="f_min_stock" property="minNumber"/>
+        <result column="f_alter_code" property="alterCode"/>
+        <result column="f_operator" property="operator"/>
+        <result column="f_operator_id" property="operatorID"/>
+    </resultMap>
+
+    <update id="updateMin" parameterType="sourceSetPo">
+        update uaa_set_ticketcenter set f_min_stock = #{minNumber}, f_alter_code = #{alterCode},
+        f_operator = #{operator}, f_operator_id = #{operatorID}
+        where f_rgn_code = #{regionCode}
+    </update>
+
+    <update id="updatePushNumber" parameterType="sourceSetPo">
+        update uaa_set_ticketcenter set f_push_num = #{pushNumber}, f_alter_code = #{alterCode},
+        f_operator = #{operator}, f_operator_id = #{operatorID}
+        where f_rgn_code = #{regionCode}
+    </update>
+
+    <resultMap id="sourceMessageMap" type="sourceMessagePo">
+        <result column="f_rgn_code" property="regionCode"/>
+        <result column="f_pool" property="table"/>
+        <result column="f_min_stock" property="threshold"/>
+    </resultMap>
+
+    <select id="retrieveSourceMessageList" resultMap="sourceMessageMap">
+        select u.f_rgn_code, u.f_min_stock, b.f_pool from uaa_set_ticketcenter u left join bill_pool b
+        on u.f_pool_id = b.f_pool_id
+    </select>
+
+    <select id="retrieveSourceMessageByCode" resultMap="sourceMessageMap">
+        select u.f_rgn_code, u.f_min_stock, b.f_pool from uaa_set_ticketcenter u left join bill_pool b
+        on u.f_pool_id = b.f_pool_id where u.f_rgn_code = #{regionCode}
+    </select>
+</mapper>

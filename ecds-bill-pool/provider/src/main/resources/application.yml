@@ -43,7 +43,7 @@ spring:
     password: fnvwcrwczbpqegfc
 
 server:
-  port: 8088
+  port: 8083
 mybatis:
   mapper-locations: classpath:mybatis/mapper/*.xml
   type-aliases-package: com.bosssoft.ecds.entity

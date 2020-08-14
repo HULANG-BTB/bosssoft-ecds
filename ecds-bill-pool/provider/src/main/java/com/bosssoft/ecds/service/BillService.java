@@ -10,5 +10,5 @@ public interface BillService {
 
     int createBill(List<BillDto> list);
 
-    int retrieveNumber();
+    int retrieveNumber(String table);
 }

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.bosssoft.ecds.dao.BillDao">
     <insert id="insertBill">
-        insert into fbb_billpool (f_rgn_code, f_type, f_sort, f_batch, f_bill_code, f_operator, f_operator_id)
+        insert into ${table} (f_rgn_code, f_type, f_sort, f_batch, f_bill_code, f_operator, f_operator_id)
         values
         <foreach collection="list" item="item" index="index" separator=",">
             (#{item.regionCode}, #{item.type}, #{item.sort}, #{item.batch}, #{item.billCode}, #{item.operator},
@@ -24,7 +24,7 @@
     </resultMap>
 
     <select id="retrieveNumber" resultType="int">
-        select count(*) from fbb_billpool
+        select count(*) from ${table}
     </select>
 
     <select id="retrieveList" resultMap="billResultMap" parameterType="int">
@@ -37,4 +37,8 @@
             #{item}
         </foreach>
     </delete>
+
+    <select id="retrieveRegionCode" resultType="String">
+        select f_rgn_code from uaa_set_ticketcenter
+    </select>
 </mapper>
