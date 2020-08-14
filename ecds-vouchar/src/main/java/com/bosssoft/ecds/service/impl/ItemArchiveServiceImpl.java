@@ -88,9 +88,7 @@ public class ItemArchiveServiceImpl extends ServiceImpl<ItemArchiveDao, ItemArch
                 }
         );
         itemArchivePOS.forEach(
-                item -> {
-                    itemArchiveDao.insert(item);
-                }
+                item -> itemArchiveDao.insert(item)
         );
     }
 
