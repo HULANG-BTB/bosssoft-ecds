@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -45,6 +46,14 @@ public class WriteOffApplyPO {
     @TableField("f_date")
     private Date fDate;
 
+    @ApiModelProperty(value = "合计份数")
+    @TableField("f_number")
+    private int fNumber;
+
+    @ApiModelProperty(value = "总金额")
+    @TableField("f_total_amt")
+    private BigDecimal fTotalAmt;
+
     @ApiModelProperty(value = "备注")
     @TableField("f_memo")
     private String fMemo;
@@ -57,7 +66,7 @@ public class WriteOffApplyPO {
     @TableField("f_check_result")
     private Boolean fCheckResult;
 
-    @ApiModelProperty(value = "是否上报：0 未上报 1 已上报")
+    @ApiModelProperty(value = "是否上报：1 未上报 2 已上报")
     @TableField("f_is_upload")
     private Boolean fIsUpload;
 
