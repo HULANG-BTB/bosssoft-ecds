@@ -4,21 +4,21 @@ import com.bosssoft.ecds.entity.po.WriteOffPO;
 
 import java.util.List;
 
-/**
- * @author hujierong
- * @date 2020-8-12
- */
 public interface FinancialWriteOffService {
 
-    // 增
-    void save();
+    // 获取单位端传来的核销申请
+    List<Object> receive(Object object);
 
-    // 删
-    void delete();
+    // 将核销申请退回单位端
+    boolean sendBack(List<Object> list);
 
-    // 改
-    void update();
+    // 获取核销申请的详情
+    Object getDetails(Object object);
 
-    // 查
-    List<WriteOffPO> get();
+    // 获取单位电子档案
+    Object getUnitDetails(Object object);
+
+    // 存入审验结果
+    boolean setResult(Object object);
+
 }

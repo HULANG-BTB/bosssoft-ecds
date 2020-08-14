@@ -6,8 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * @author hujierong
- * @date 2020-8-12
+ * description: 单位段的核销服务
  */
 @RestController
 @RequestMapping("/unit")

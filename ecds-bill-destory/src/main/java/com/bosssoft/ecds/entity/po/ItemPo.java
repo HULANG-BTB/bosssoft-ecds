@@ -26,62 +26,62 @@ public class ItemPo implements Serializable {
     /**
      * 主键
      */
-    private Long id;
+    private Long fId;
 
     /**
      * 父节点ID
      */
-    private String pid;
+    private String fPid;
 
     /**
      * 序号
      */
-    private Integer sortNo;
+    private Integer fSortNo;
 
     /**
      * 版本号
      */
-    private Integer version;
+    private Integer fVersion;
 
     /**
      * 创建时间
      */
-    private LocalDateTime createTime;
+    private LocalDateTime fCreateTime;
 
     /**
      * 修改时间
      */
-    private LocalDateTime updateTime;
+    private LocalDateTime fUpdateTime;
 
     /**
      * 票据代码
      */
-    private String billBatchCode;
+    private String fBillBatchCode;
 
     /**
      * 起始号
      */
-    private String billNo1;
+    private String fBillNo1;
 
     /**
      * 终止号
      */
-    private String billNo2;
+    private String fBillNo2;
 
     /**
      * 数量
      */
-    private Integer number;
+    private Integer fNumber;
 
     /**
      * 仓库ID
      */
-    private String warehouseId;
+    private String fWarehouseId;
 
     /**
      * 仓库名
      */
-    private String warehouseName;
+    private String fWarehouseName;
 
 
 }
