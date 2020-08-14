@@ -4,8 +4,12 @@ package com.boss.msg.entity.vo;
 import lombok.Data;
 import lombok.ToString;
 
+import java.util.Date;
+import java.util.List;
+
 /**
  * @author zhangxiaohui
+ * 邮件查询对象
  */
 @Data
 @ToString
@@ -27,6 +31,12 @@ public class MailQueryVo {
      * true为发送成功，false为发送失败
      */
     private Boolean isSent;
+
+    /**
+     * 日期
+     */
+    private List<Date> period;
+
 
     /**
      * 每页记录数

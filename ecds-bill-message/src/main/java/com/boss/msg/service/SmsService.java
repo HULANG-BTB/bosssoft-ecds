@@ -1,9 +1,9 @@
 package com.boss.msg.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.boss.msg.entity.dto.MailDto;
 import com.boss.msg.entity.dto.SmsDto;
 import com.boss.msg.entity.po.SmsPo;
+import com.boss.msg.entity.vo.SmsQueryVo;
 
 import java.util.List;
 
@@ -23,19 +23,19 @@ public interface SmsService extends IService<SmsPo> {
 
     /**
      * 分页查询
-     * @param smsDto 查询对象
+     * @param smsQuery 查询对象
      * @param page 当前页面
      * @param limit 当前页面大小
      * @return 查询到匹配的结果集
      */
-    List<SmsDto> listPage(SmsDto smsDto, Long page, Long limit);
+    List<SmsDto> listPage(SmsQueryVo smsQuery, Long page, Long limit);
 
     /**
      * 获取数据库中匹配的总记录数
-     * @param smsDto 查询对象
+     * @param smsQuery 查询对象
      * @return 总记录数
      */
-    Long getTotal(SmsDto smsDto);
+    Long getTotal(SmsQueryVo smsQuery);
 
     /**
      * 更新发件状态

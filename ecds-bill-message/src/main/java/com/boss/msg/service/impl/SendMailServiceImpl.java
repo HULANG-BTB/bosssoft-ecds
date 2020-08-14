@@ -122,7 +122,7 @@ public class SendMailServiceImpl implements SendMailService {
     private void saveMail(MailDto mailDto) {
         // 将邮件保存到数据库..
         MailPo mail = DozerUtils.map(mailDto, MailPo.class);
-        int insert = mailMapper.insert(mail);
+        mailMapper.insert(mail);
     }
 
     /**

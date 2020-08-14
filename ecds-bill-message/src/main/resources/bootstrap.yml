@@ -32,11 +32,6 @@ spring:
     suffix: .html # 模版后缀名 默认为ftl
     charset: UTF-8 # 文件编码
     template-loader-path: classpath:/templates/  # 存放模板的文件夹，以resource文件夹为相对路径
-  jackson:
-    generator:
-      write_numbers_as_strings: true
-    date-format: yyyy-MM-dd HH:mm:ss
-    time-zone: GMT+8
 jasypt:
   encryptor:
     # 配置进服务器的环境变量 ${JASYPT_ENCRYPTOR_PASSWORD}

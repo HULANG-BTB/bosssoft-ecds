@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.boss.msg.entity.dto.MailDto;
 import com.boss.msg.entity.po.MailPo;
+import com.boss.msg.entity.vo.MailQueryVo;
 import com.boss.msg.mapper.MailMapper;
 import com.boss.msg.service.MailService;
 import com.boss.msg.util.DozerUtils;
@@ -17,6 +18,7 @@ import java.util.List;
 
 /**
  * @author zhangxiaohui
+ * todo 根据日期区间查询，前端统计图表
  */
 @Service
 @Slf4j
@@ -24,17 +26,17 @@ public class MailServiceImpl extends ServiceImpl<MailMapper, MailPo> implements 
 
 
     @Override
-    public List<MailDto> listPage(MailDto mailDto, Long page, Long limit) {
+    public List<MailDto> listPage(MailQueryVo mailQuery, Long page, Long limit) {
         Page<MailPo> pageQuery = new Page<>(page, limit);
-        QueryWrapper<MailPo> query = getQuery(mailDto);
+        QueryWrapper<MailPo> query = getQuery(mailQuery);
         Page<MailPo> mailPoPage = baseMapper.selectPage(pageQuery, query);
         List<MailPo> mailPo = mailPoPage.getRecords();
         return DozerUtils.mapList(mailPo, MailDto.class);
     }
 
     @Override
-    public Long getTotal(MailDto mailDto) {
-        QueryWrapper<MailPo> query = getQuery(mailDto);
+    public Long getTotal(MailQueryVo mailQuery) {
+        QueryWrapper<MailPo> query = getQuery(mailQuery);
         return baseMapper.selectCount(query).longValue();
     }
 
@@ -44,14 +46,14 @@ public class MailServiceImpl extends ServiceImpl<MailMapper, MailPo> implements 
 
         // 已发件的不需要修改
         boolean isSent = dbMail.getIsSent();
-        if (isSent){
+        if (isSent) {
             return false;
         }
 
         // 修改邮件的发件错误信息
         String error = dbMail.getError();
         StringBuilder msg = new StringBuilder("人工发件,操作人：test");
-        if (StringUtils.isNotBlank(error)){
+        if (StringUtils.isNotBlank(error)) {
             msg.append("历史记录：").append(error);
         }
         dbMail.setIsSent(true);
@@ -63,20 +65,33 @@ public class MailServiceImpl extends ServiceImpl<MailMapper, MailPo> implements 
 
     /**
      * 获取queryWrapper
-     * @param mailDto 查询对象
+     *
+     * @param mailQuery 查询对象
      * @return QueryWrapper
      */
-    public QueryWrapper<MailPo> getQuery(MailDto mailDto) {
+    public QueryWrapper<MailPo> getQuery(MailQueryVo mailQuery) {
         QueryWrapper<MailPo> query = new QueryWrapper<>();
-        if (mailDto.getId() != null ) {
-            query.eq("f_mail_id", mailDto.getId());
+        if (mailQuery.getId() != null) {
+            query.eq("f_mail_id", mailQuery.getId());
         }
-        if (StringUtils.isNotBlank(mailDto.getMailTo())) {
-            query.eq("f_mail_to", mailDto.getMailTo());
+        if (StringUtils.isNotBlank(mailQuery.getMailTo())) {
+            // 发件人使用模糊查询
+            query.like("f_mail_to", mailQuery.getMailTo());
         }
-        if (mailDto.getIsSent() != null) {
-            query.eq("f_mail_is_sent", mailDto.getIsSent());
+        if (mailQuery.getIsSent() != null) {
+            query.eq("f_mail_is_sent", mailQuery.getIsSent());
         }
+
+
+        if (mailQuery.getPeriod() != null) {
+            Date startDate = mailQuery.getPeriod().get(0);
+            Date endDate = mailQuery.getPeriod().get(1);
+            if (startDate != null && endDate != null && endDate.compareTo(startDate) > 0) {
+                query.le("f_mail_sentDate", endDate).ge("f_mail_sentDate", startDate);
+            }
+        }
+
+
         return query;
     }
 }

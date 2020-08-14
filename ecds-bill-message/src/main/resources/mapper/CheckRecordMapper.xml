@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.boss.msg.mapper.CheckRecordMapper">
+  <resultMap id="BaseResultMap" type="com.boss.msg.entity.po.CheckRecordPo">
+    <!--@mbg.generated-->
+    <!--@Table fbe_check_record-->
+    <id column="f_id" jdbcType="BIGINT" property="fId" />
+    <result column="f_check_id" jdbcType="BIGINT" property="fCheckId" />
+    <result column="f_version" jdbcType="INTEGER" property="fVersion" />
+    <result column="f_check_type" jdbcType="VARCHAR" property="fCheckType" />
+    <result column="f_create_time" jdbcType="TIMESTAMP" property="fCreateTime" />
+    <result column="f_operator" jdbcType="VARCHAR" property="fOperator" />
+    <result column="f_bill_code" jdbcType="VARCHAR" property="fBillCode" />
+    <result column="f_result" jdbcType="INTEGER" property="fResult" />
+    <result column="f_logic_delete" jdbcType="BOOLEAN" property="fLogicDelete" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    f_id, f_check_id, f_version, f_check_type, f_create_time, f_operator, f_bill_code, 
+    f_result, f_logic_delete
+  </sql>
+</mapper>

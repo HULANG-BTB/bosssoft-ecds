@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.*;
 
 import java.io.Serializable;
 import java.util.Date;
+
 import lombok.Data;
 import lombok.ToString;
 
@@ -67,27 +68,33 @@ public class MailPo implements Serializable {
     /**
      * 创建时间
      */
-    @TableField(value = "f_create_time",fill = FieldFill.INSERT)
+    @TableField(value = "f_create_time", fill = FieldFill.INSERT)
     private Date createTime;
 
     /**
      * 更新时间
      */
-    @TableField(value = "f_update_time",fill = FieldFill.INSERT_UPDATE)
+    @TableField(value = "f_update_time", fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
 
     /**
      * 经办人id
      */
-    @TableField(value = "f_oper_id",fill = FieldFill.INSERT_UPDATE)
+    @TableField(value = "f_oper_id", fill = FieldFill.INSERT_UPDATE)
     private Integer operatorId;
 
     /**
      * 经办人
      */
 
-    @TableField(value = "f_operator",fill = FieldFill.INSERT_UPDATE)
+    @TableField(value = "f_operator", fill = FieldFill.INSERT_UPDATE)
     private String operator;
+    /**
+     * 乐观锁
+     */
+    @Version
+    @TableField(value = "f_version",fill = FieldFill.INSERT)
+    private Integer version;
 
     public static final String COL_F_MAIL_ID = "f_mail_id";
 
@@ -112,4 +119,6 @@ public class MailPo implements Serializable {
     public static final String COL_F_OPERATOR_ID = "f_oper_id";
 
     public static final String COL_F_OPERATOR = "f_operator";
+
+    public static final String COL_F_VERSION = "f_version";
 }

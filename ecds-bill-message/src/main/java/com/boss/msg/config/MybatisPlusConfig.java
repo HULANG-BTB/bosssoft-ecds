@@ -18,6 +18,7 @@ import java.util.Date;
 public class MybatisPlusConfig {
     @Resource
     private HttpServletRequest httpServletRequest;
+
     /**
      * 注册字段自动填充
      */
@@ -37,8 +38,9 @@ public class MybatisPlusConfig {
                 String authNickname = "test";
                 this.setFieldValByName("createTime", new Date(), metaObject);
                 this.setFieldValByName("updateTime", new Date(), metaObject);
-                    this.setFieldValByName("operatorId", authId, metaObject);
+                this.setFieldValByName("operatorId", authId, metaObject);
                 this.setFieldValByName("operator", authNickname, metaObject);
+                this.setFieldValByName("version", 0, metaObject);
 
             }
 

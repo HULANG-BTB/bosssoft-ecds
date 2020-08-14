@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.boss.msg.entity.dto.SmsDto;
 import com.boss.msg.entity.po.SmsPo;
+import com.boss.msg.entity.vo.SmsQueryVo;
 import com.boss.msg.mapper.SmsMapper;
 import com.boss.msg.service.SmsService;
 import com.boss.msg.util.DozerUtils;
@@ -64,15 +65,15 @@ public class SmsServiceImpl extends ServiceImpl<SmsMapper, SmsPo> implements Sms
 
     /**
      * 根据短信查询对象分页查找匹配记录
-     * @param smsDto 查询对象
+     * @param smsQuery 查询对象
      * @param page 当前页面
      * @param limit 当前页面大小
      * @return 匹配的发信记录
      */
     @Override
-    public List<SmsDto> listPage(SmsDto smsDto, Long page, Long limit) {
+    public List<SmsDto> listPage(SmsQueryVo smsQuery, Long page, Long limit) {
         Page<SmsPo> pageQuery = new Page<>(page, limit);
-        QueryWrapper<SmsPo> query = getQuery(smsDto);
+        QueryWrapper<SmsPo> query = getQuery(smsQuery);
         Page<SmsPo> smsPoPage = baseMapper.selectPage(pageQuery, query);
         List<SmsPo> smsPo = smsPoPage.getRecords();
         return DozerUtils.mapList(smsPo, SmsDto.class);
@@ -80,12 +81,12 @@ public class SmsServiceImpl extends ServiceImpl<SmsMapper, SmsPo> implements Sms
 
     /**
      * 获取匹配的发信记录数
-     * @param smsDto 查询对象
+     * @param smsQuery 查询对象
      * @return 发信记录数
      */
     @Override
-    public Long getTotal(SmsDto smsDto) {
-        QueryWrapper<SmsPo> query = getQuery(smsDto);
+    public Long getTotal(SmsQueryVo smsQuery) {
+        QueryWrapper<SmsPo> query = getQuery(smsQuery);
         return baseMapper.selectCount(query).longValue();
     }
 
@@ -116,19 +117,24 @@ public class SmsServiceImpl extends ServiceImpl<SmsMapper, SmsPo> implements Sms
 
     /**
      * 获取queryWrapper
-     * @param smsDto 查询对象
+     * @param smsQuery 查询对象
      * @return QueryWrapper
      */
-    public QueryWrapper<SmsPo> getQuery(SmsDto smsDto) {
+    public QueryWrapper<SmsPo> getQuery(SmsQueryVo smsQuery) {
         QueryWrapper<SmsPo> query = new QueryWrapper<>();
-        if (smsDto.getId() != null) {
-            query.eq("f_sms_id", smsDto.getId());
+        if (smsQuery.getId() != null) {
+            query.eq("f_sms_id", smsQuery.getId());
         }
-        if (StringUtils.isNotBlank(smsDto.getSmsTo())) {
-            query.eq("f_sms_to", smsDto.getSmsTo());
+        if (StringUtils.isNotBlank(smsQuery.getSmsTo())) {
+            query.eq("f_sms_to", smsQuery.getSmsTo());
         }
-        if (smsDto.getIsSent() != null) {
-            query.eq("f_sms_is_sent", smsDto.getIsSent());
+        if (smsQuery.getIsSent() != null) {
+            query.eq("f_sms_is_sent", smsQuery.getIsSent());
+        }
+        Date startDate = smsQuery.getPeriod().get(0);
+        Date endDate = smsQuery.getPeriod().get(1);
+        if (startDate != null && endDate != null && endDate.compareTo(startDate) > 0) {
+            query.le("f_sms_sentDate", endDate).ge("f_sms_sentDate", startDate);
         }
         return query;
     }

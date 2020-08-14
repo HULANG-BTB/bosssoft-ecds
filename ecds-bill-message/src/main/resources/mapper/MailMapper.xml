@@ -16,10 +16,11 @@
     <result column="f_update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="f_oper_id" jdbcType="INTEGER" property="operatorId" />
     <result column="f_operator" jdbcType="VARCHAR" property="operator" />
+    <result column="f_version" jdbcType="BIGINT" property="version" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
     f_mail_id, f_mail_from, f_mail_to, f_mail_subject, f_mail_content, f_mail_sentDate,
-    f_mail_is_sent, f_mail_error, f_create_time, f_update_time, f_oper_id, f_operator
+    f_mail_is_sent, f_mail_error, f_create_time, f_update_time, f_oper_id, f_operator,f_version
   </sql>
 </mapper>

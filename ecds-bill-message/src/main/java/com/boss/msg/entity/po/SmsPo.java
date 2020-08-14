@@ -87,6 +87,13 @@ public class SmsPo {
     @TableField(value = "f_operator",fill = FieldFill.INSERT_UPDATE)
     private String operator;
 
+    /**
+     * 乐观锁
+     */
+    @Version
+    @TableField(value = "f_version",fill = FieldFill.INSERT)
+    private Integer version;
+
     public static final String COL_F_SMS_ID = "f_sms_id";
 
     public static final String COL_F_SMS_FROM = "f_sms_from";
@@ -108,4 +115,7 @@ public class SmsPo {
     public static final String COL_F_OPER_ID = "f_oper_id";
 
     public static final String COL_F_OPERATOR = "f_operator";
+
+    public static final String COL_F_VERSION = "f_version";
+
 }
