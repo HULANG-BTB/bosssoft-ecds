@@ -90,7 +90,7 @@ public class ImageService implements IImageService {
         String path = "output/" + fileName;
         File dir = new File("output");
         if (!dir.exists() && !dir.isDirectory()) {
-            dir.mkdir();
+            dir.mkdirs();
         }
         File file = new File(path);
 
