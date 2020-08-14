@@ -47,12 +47,12 @@ public class ItemArchiveServiceImpl extends ServiceImpl<ItemArchiveDao, ItemArch
     @Override
     public void finaItemAvailableArchive() {
         List<ItemAvailableDto> res = new ArrayList<>();
-        /**
+        /*
          * 获取所有单位的可用项目信息
          */
         List<AgenItemPO> list = agenItemService.list();
 
-        /**
+        /*
          * 信息处理  数据字段不一致，不能利用hutool工具类
          */
         list.forEach(
@@ -73,22 +73,20 @@ public class ItemArchiveServiceImpl extends ServiceImpl<ItemArchiveDao, ItemArch
             res.set(i, tempDto);
         }
 
-        /**
+        /*
          * 批量插入 可用项目归档
          * 如果直接使用po  利用hutool复制值会出现时间的覆盖
          */
-        List<ItemArchivePO> itemArchivePOS = new ArrayList<>();
         res.forEach(
                 item -> {
                     ItemArchivePO po = new ItemArchivePO();
                     BeanUtil.copyProperties(item, po);
                     po.setVersion(1);
                     po.setLogicDelete(false);
-                    itemArchivePOS.add(po);
+
+                    /* 插入数据*/
+                    itemArchiveDao.insert(po);
                 }
-        );
-        itemArchivePOS.forEach(
-                item -> itemArchiveDao.insert(item)
         );
     }
 

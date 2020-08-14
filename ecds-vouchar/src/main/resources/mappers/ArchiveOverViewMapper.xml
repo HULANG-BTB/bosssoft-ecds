@@ -12,7 +12,7 @@
         <result column="f_apply_number" property="applyNumber" />
         <result column="f_use_number" property="useNumber" />
         <result column="f_author_number" property="authorNumber" />
-        <result column="f_unauthor_number" property="unauthorNumber" />
+        <result column="f_unauthor_number" property="unAuthorNumber"/>
         <result column="f_warn_number" property="warnNumber" />
         <result column="f_return_number" property="returnNumber" />
         <result column="f_destory_number" property="destoryNumber" />
@@ -26,7 +26,8 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        f_id, f_agen_idcode, f_agen_name, f_kind_name, f_link_addr, f_apply_number, f_use_number, f_author_number, f_unauthor_number, f_warn_number, f_return_number, f_destory_number, f_create_time, f_update_time, f_operator_id, f_operator, f_version, f_logic_delete
+        f_id, f_agen_idcode, f_agen_name, f_kind_name, f_link_addr, f_apply_number, f_use_number, f_author_number, f_unAuthor_number, f_warn_number, f_return_number, f_destory_number, f_create_time, f_update_time, f_operator_id, f_operator, f_version, f_logic_delete
     </sql>
+    <select id="queryOverViewArchiveInfo" resultType="com.bosssoft.ecds.entity.dto.ArchiveOverViewDto"></select>
 
 </mapper>

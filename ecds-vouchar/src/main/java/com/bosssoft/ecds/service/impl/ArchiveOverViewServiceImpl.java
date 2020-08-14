@@ -3,15 +3,15 @@ package com.bosssoft.ecds.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.bosssoft.ecds.dao.ArchiveOverViewDao;
 import com.bosssoft.ecds.entity.dto.AgenDto;
 import com.bosssoft.ecds.entity.dto.ArchiveOverViewDto;
 import com.bosssoft.ecds.entity.po.AgenPO;
 import com.bosssoft.ecds.entity.po.ArchivePO;
-import com.bosssoft.ecds.dao.ArchiveOverViewDao;
 import com.bosssoft.ecds.entity.query.ArchiveOverViewQuery;
 import com.bosssoft.ecds.service.AgenService;
 import com.bosssoft.ecds.service.ArchiveOverViewService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,12 +38,12 @@ public class ArchiveOverViewServiceImpl extends ServiceImpl<ArchiveOverViewDao, 
     @Override
     public ArchiveOverViewDto queryOverViewArchiveInfo(ArchiveOverViewQuery query) {
         ArchiveOverViewDto dto = new ArchiveOverViewDto();
-        /**
+        /*
          * 获取单位的详细信息
          */
         AgenDto agenDto = agenService.queryAgenInfo(query);
         BeanUtil.copyProperties(agenDto, dto);
-        /**
+        /*
          * 补充归档票据的票据信息
          */
         QueryWrapper<ArchivePO> qw = new QueryWrapper<>();
@@ -58,12 +58,13 @@ public class ArchiveOverViewServiceImpl extends ServiceImpl<ArchiveOverViewDao, 
     @Override
     public List<ArchiveOverViewDto> queryOverViewArchiveAllInfo() {
         List<ArchiveOverViewDto> res = new ArrayList<>();
-        /**
+        /*
          * 查询出所有公司的公司编码
          */
+
         List<ArchivePO> archivePOS = archiveDao.selectList(null);
 
-        /**
+        /*
          * 转换参数类型
          */
         if (archivePOS.isEmpty()) {
@@ -75,7 +76,7 @@ public class ArchiveOverViewServiceImpl extends ServiceImpl<ArchiveOverViewDao, 
             BeanUtil.copyProperties(po,dto);
             res.add(dto);
         }
-        /**
+        /*
          * 查询出所有公司的信息,并且转换参数类型
          */
         for (int i = 0; i < res.size(); i++) {

@@ -98,7 +98,7 @@ public class BillCheckArchiveServiceImpl extends ServiceImpl<BillCheckArchiveDao
         /*
          * 更新信息
          */
-        //this.updateOverViewArchiveInfos();
+        this.updateOverViewArchiveInfos();
     }
 
     /**
