@@ -64,6 +64,17 @@ public interface CrtService extends IService<CrtPO> {
     /**
      *
      *
+     * @description: 根据id查询领购证。
+     * @param {UabCrtDTO} uabCrtDTO
+     * @return: {UabCrtDTO}
+     * @author: YuHangChen
+     * @time: 09/08/2020 上午10:17
+     */
+    public CrtDTO getById(CrtDTO uabCrtDTO);
+
+    /**
+     *
+     *
      * @description: 根据单位编码查询领购证。
      * @param {UabCrtDTO} uabCrtDTO
      * @return: {UabCrtDTO}

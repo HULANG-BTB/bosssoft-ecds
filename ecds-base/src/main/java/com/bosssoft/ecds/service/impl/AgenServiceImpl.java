@@ -1,11 +1,13 @@
 package com.bosssoft.ecds.service.impl;
 
+import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bosssoft.ecds.entity.dto.AgenDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.po.AgenPO;
 import com.bosssoft.ecds.dao.AgenDao;
+import com.bosssoft.ecds.entity.po.CrtPO;
 import com.bosssoft.ecds.service.AgenService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bosssoft.ecds.utils.MyBeanUtil;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -23,6 +26,7 @@ import java.util.List;
  * @since 2020-08-09
  */
 @Service
+@DS("master")
 public class AgenServiceImpl extends ServiceImpl<AgenDao, AgenPO> implements AgenService {
 
     /**
@@ -104,8 +108,10 @@ public class AgenServiceImpl extends ServiceImpl<AgenDao, AgenPO> implements Age
     public AgenDTO getByAgenName(AgenDTO fabAgenDTO) {
         AgenPO fabAgenPO = new AgenPO();
         MyBeanUtil.copyProperties(fabAgenDTO, fabAgenPO);
-        AgenPO fabAgenPO1 = super.getOne(new QueryWrapper<AgenPO>(fabAgenPO));
-        return MyBeanUtil.copyProperties(fabAgenPO1, AgenDTO.class);
+        QueryWrapper<AgenPO> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(AgenPO.F_AGEN_NAME, fabAgenPO.getAgenName());
+        fabAgenPO = super.getOne(queryWrapper);
+        return MyBeanUtil.copyProperties(fabAgenPO, AgenDTO.class);
     }
 
     /**
