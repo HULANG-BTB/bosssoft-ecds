@@ -44,7 +44,7 @@ public class FinancialDataSourceConfig {
 
     @Primary
     @Bean("financialSqlSessionTemplate")
-    public SqlSessionTemplate psiSqlSessionTemplate() throws Exception {
+    public SqlSessionTemplate financialSqlSessionTemplate() throws Exception {
         // 使用上面配置的Factory
         SqlSessionTemplate template = new SqlSessionTemplate(financialSqlSessionFactory());
         return template;

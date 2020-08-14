@@ -40,7 +40,7 @@ public class UnitDataSourceConfig {
     }
 
     @Bean("unitSqlSessionTemplate")
-    public SqlSessionTemplate b2bSqlSessionTemplate() throws Exception {
+    public SqlSessionTemplate unitSqlSessionTemplate() throws Exception {
         // 使用上面配置的Factory
         SqlSessionTemplate template = new SqlSessionTemplate(unitSqlSessionFactory());
         return template;
