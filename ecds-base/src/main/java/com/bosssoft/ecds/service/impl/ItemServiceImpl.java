@@ -5,9 +5,13 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bosssoft.ecds.common.response.CommonCode;
 import com.bosssoft.ecds.common.response.QueryResponseResult;
 import com.bosssoft.ecds.common.response.ResponseResult;
+import com.bosssoft.ecds.dao.AgenItemDao;
+import com.bosssoft.ecds.dao.ItemStdDao;
 import com.bosssoft.ecds.entity.dto.ItemDTO;
+import com.bosssoft.ecds.entity.po.AgenItemPO;
 import com.bosssoft.ecds.entity.po.ItemPO;
 import com.bosssoft.ecds.dao.ItemDao;
+import com.bosssoft.ecds.entity.po.ItemStdPO;
 import com.bosssoft.ecds.entity.vo.itemvo.ItemPageVO;
 import com.bosssoft.ecds.entity.vo.itemvo.ItemVO;
 import com.bosssoft.ecds.enums.ItemResultCode;
@@ -34,6 +38,10 @@ public class ItemServiceImpl extends ServiceImpl<ItemDao, ItemPO> implements Ite
 
     @Autowired
     private ItemDao itemDao;
+    @Autowired
+    private AgenItemDao agenItemDao;
+    @Autowired
+    private ItemStdDao itemStdDao;
 
     /**
      * 插入项目，输入项目信息
@@ -84,11 +92,28 @@ public class ItemServiceImpl extends ServiceImpl<ItemDao, ItemPO> implements Ite
     @Override
     public ResponseResult delete(ItemDTO itemDTO) {
         // 判断传入id是否存在
-        if (itemDTO.getId() == null) {
+        ItemPO itemPO = itemDao.selectById(itemDTO.getId());
+        if (itemPO == null) {
             return new ResponseResult(ItemResultCode.ITEM_NOT_EXISTS);
         }
+        // 构造条件查询，通过项目编码，查询是否存在项目标准
+        QueryWrapper<ItemStdPO> itemStdWrapper = new QueryWrapper<>();
+        itemStdWrapper.eq(ItemStdPO.F_ITEM_CODE, itemPO.getItemId());
+        ItemStdPO itemStdPO = itemStdDao.selectOne(itemStdWrapper);
+        if (itemStdPO != null) {
+            // 如果项目标准存在，则删除项目标准
+            itemStdDao.deleteById(itemStdPO);
+        }
+        // 构造条件查询器，通过项目编码，查询是否存在项目单位关系
+        QueryWrapper<AgenItemPO> agenItemWrapper = new QueryWrapper<>();
+        agenItemWrapper.eq(AgenItemPO.F_ITEM_CODE, itemPO.getItemId());
+        List<AgenItemPO> agenItemPOS = agenItemDao.selectList(agenItemWrapper);
+        if (!agenItemPOS.isEmpty()) {
+            // 如果项目标准存在，则删除项目标准
+            agenItemDao.delete(agenItemWrapper);
+        }
         // 执行删除操作
-        boolean remove = super.removeById(itemDTO.getId());
+        boolean remove = super.removeById(itemPO);
         // 删除失败返回操作错误
         if (!remove) {
             return new ResponseResult(CommonCode.FAIL);
@@ -180,9 +205,9 @@ public class ItemServiceImpl extends ServiceImpl<ItemDao, ItemPO> implements Ite
     @Override
     public ResponseResult getItemAll() {
         List<ItemPO> itemPOS = itemDao.selectList(null);
-        if (!itemPOS.isEmpty()){
+        if (!itemPOS.isEmpty()) {
             List<ItemVO> itemVOS = MyBeanUtil.copyListProperties(itemPOS, ItemVO::new);
-            return new QueryResponseResult<>(CommonCode.SUCCESS,itemVOS);
+            return new QueryResponseResult<>(CommonCode.SUCCESS, itemVOS);
         }
         return new ResponseResult(CommonCode.FAIL);
     }

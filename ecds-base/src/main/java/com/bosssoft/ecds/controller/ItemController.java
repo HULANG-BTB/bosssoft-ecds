@@ -77,7 +77,6 @@ public class ItemController {
      * @return 返回成功或者失败的code和msg
      */
     @ApiOperation(value = "删除项目", notes = "输入需要删除项目的id")
-    @ApiImplicitParam(name = "id", value = "项目id", dataType = "Long")
     @PostMapping("/delete")
     public ResponseResult delete(@RequestBody ItemVO itemVO) {
         ItemDTO itemDTO = MyBeanUtil.myCopyProperties(itemVO, ItemDTO.class);
