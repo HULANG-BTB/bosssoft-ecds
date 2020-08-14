@@ -14,24 +14,21 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * @author wlx hjr
+ * @author hjr
  */
 @Data
-@TableName("fbe_writeoff_billitem")
-@ApiModel(value="WriteOffBillitemPO对象")
-public class WriteOffBillItemPO {
+@TableName("ube_writeoff_apply_item")
+@ApiModel(value="WriteoffApplyItemPO对象")
+public class WriteOffApplyItemPO {
+
 
     @ApiModelProperty(value = "主键")
     @TableId(value = "f_id", type = IdType.AUTO)
     private Long fId;
 
-    @ApiModelProperty(value = "审验单ID")
+    @ApiModelProperty(value = "对应主表的业务单号")
     @TableField("f_pid")
     private String fPid;
-
-    @ApiModelProperty(value = "审验顺序 （序号）")
-    @TableField("f_sort_no")
-    private Integer fSortNo;
 
     @ApiModelProperty(value = "票据编码")
     @TableField("f_bill_code")
@@ -49,25 +46,21 @@ public class WriteOffBillItemPO {
     @TableField("f_batch_code")
     private String fBatchCode;
 
-    @ApiModelProperty(value = "数量")
-    @TableField("f_number")
-    private Integer fNumber;
+    @ApiModelProperty(value = "票据种类")
+    @TableField("f_type")
+    private String fType;
 
-    @ApiModelProperty(value = "票据起始号")
-    @TableField("f_bill_no1")
-    private String fBillNo1;
+    @ApiModelProperty(value = "开票日期")
+    @TableField("f_date")
+    private Date fDate;
 
-    @ApiModelProperty(value = "票据结束号")
-    @TableField("f_bill_no2")
-    private String fBillNo2;
+    @ApiModelProperty(value = "票据状态 1 正常 2作废")
+    @TableField("f_state")
+    private Boolean fState;
 
     @ApiModelProperty(value = "票面金额")
     @TableField("f_amt")
     private BigDecimal fAmt;
-
-    @ApiModelProperty(value = "开票份数")
-    @TableField("f_invnum")
-    private Integer fInvNum;
 
     @ApiModelProperty(value = "版本号")
     @TableField("f_version")

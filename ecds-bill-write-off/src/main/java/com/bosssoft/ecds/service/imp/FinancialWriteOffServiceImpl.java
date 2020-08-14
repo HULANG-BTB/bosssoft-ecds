@@ -1,7 +1,6 @@
 package com.bosssoft.ecds.service.imp;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.bosssoft.ecds.dao.WriteOffMapper;
+import com.bosssoft.ecds.dao.financial.WriteOffMapper;
 import com.bosssoft.ecds.entity.po.WriteOffPO;
 import com.bosssoft.ecds.service.FinancialWriteOffService;
 import org.springframework.beans.factory.annotation.Autowired;

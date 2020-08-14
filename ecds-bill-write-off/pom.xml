@@ -16,6 +16,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+        <!--公共模块-->
+        <dependency>
+            <groupId>com.bosssoft</groupId>
+            <artifactId>ecds-common</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
         <!--nacos-->
 <!--        <dependency>-->
 <!--            <groupId>com.alibaba.cloud</groupId>-->
@@ -31,6 +37,12 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>${mysql.version}</version>
             <scope>runtime</scope>
+        </dependency>
+        <!-- druid-->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+            <version>${druid.version}</version>
         </dependency>
         <!--mybatis-->
         <dependency>
