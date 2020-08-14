@@ -9,6 +9,7 @@ import com.bosssoft.ecds.utils.UpdateSourceMessageUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Service
 public class SourceSetServiceImp implements SourceSetService {
@@ -33,5 +34,11 @@ public class SourceSetServiceImp implements SourceSetService {
         int result = sourceSetDao.updatePushNumber(sourceSetPo);
         utils.update(sourceSetDto.getRegionCode());
         return result;
+    }
+
+    @Override
+    public List<SourceSetDto> retrieveSetList() {
+        List<SourceSetDto> list = BeanUtils.convertList(sourceSetDao.retrieveSetList(), SourceSetDto.class);
+        return list;
     }
 }

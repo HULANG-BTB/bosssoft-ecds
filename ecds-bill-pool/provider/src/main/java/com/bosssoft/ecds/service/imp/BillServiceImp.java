@@ -101,7 +101,6 @@ public class BillServiceImp implements BillService {
         try {
             isLock = redLock.tryLock(100L, 10L, TimeUnit.SECONDS);
 
-            System.out.println(table);
             if (isLock) {
                 createNumber = billDao.insertBill(table, billPoList);
 

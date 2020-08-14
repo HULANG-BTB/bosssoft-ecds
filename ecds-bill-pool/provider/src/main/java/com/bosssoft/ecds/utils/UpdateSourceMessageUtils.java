@@ -51,6 +51,7 @@ public class UpdateSourceMessageUtils {
 
             if (isLock) {
                 for (int i = 0; i < list.size(); i++) {
+                    redisTemplate.delete(list.get(i).getRegionCode());
                     Map map = new HashMap();
                     map.put("table", list.get(i).getTable());
                     map.put("threshold", list.get(i).getThreshold());
@@ -79,6 +80,7 @@ public class UpdateSourceMessageUtils {
                 Map map = new HashMap();
                 map.put("table", sourceMessagePo.getTable());
                 map.put("threshold", sourceMessagePo.getThreshold());
+                redisTemplate.delete(sourceMessagePo.getRegionCode());
                 redisTemplate.opsForHash().putAll(sourceMessagePo.getRegionCode(), map);
             }
         } catch (Exception e) {

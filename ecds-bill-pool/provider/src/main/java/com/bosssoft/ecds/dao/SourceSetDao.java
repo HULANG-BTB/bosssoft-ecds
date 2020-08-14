@@ -15,5 +15,6 @@ public interface SourceSetDao {
 
     SourceMessagePo retrieveSourceMessageByCode(String regionCode);
 
-    List retrieveRegionCode();
+    List retrieveSetList();
+
 }
