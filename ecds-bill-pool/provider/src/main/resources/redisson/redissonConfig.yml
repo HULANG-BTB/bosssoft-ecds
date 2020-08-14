@@ -12,9 +12,9 @@ clusterServersConfig:
   loadBalancer: !<org.redisson.connection.balancer.RoundRobinLoadBalancer> {}
   subscriptionConnectionMinimumIdleSize: 1
   subscriptionConnectionPoolSize: 50
-  slaveConnectionMinimumIdleSize: 24
+  slaveConnectionMinimumIdleSize: 8
   slaveConnectionPoolSize: 64
-  masterConnectionMinimumIdleSize: 24
+  masterConnectionMinimumIdleSize: 8
   masterConnectionPoolSize: 64
   readMode: "SLAVE"
   subscriptionMode: "SLAVE"

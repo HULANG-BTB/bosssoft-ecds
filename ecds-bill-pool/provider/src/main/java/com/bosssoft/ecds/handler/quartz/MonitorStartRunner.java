@@ -1,4 +1,4 @@
-package com.bosssoft.ecds.handler.quartz.sourcemonitor;
+package com.bosssoft.ecds.handler.quartz;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;

@@ -21,8 +21,8 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class BillServiceImp implements BillService {
 
-    private static final String LOCK_KEY = "lock_key";
-    private static final Integer THRESHOLD = 3000;
+    private final String LOCK_KEY = "lock_key";
+    private final Integer THRESHOLD = 3000;
 
     @Resource
     BillDao billDao;
@@ -68,11 +68,7 @@ public class BillServiceImp implements BillService {
 
                 deleteNumber = billDao.deleteList(deleteList);
 
-                remainderBill = retrieveNumber();
-
-                if (remainderBill <= THRESHOLD) {
-                    fanoutRabbitUtils.sendBillWarn();
-                }
+                remainderBill = billDao.retrieveNumber("fbb_billpool");
 
                 redisTemplate.opsForValue().set("remainderBill", remainderBill);
             }
@@ -93,8 +89,10 @@ public class BillServiceImp implements BillService {
         int createNumber = 0;
         int remainderBill;
         boolean isLock;
+        String table;
         List<BillPo> billPoList;
 
+        table = (String) redisTemplate.opsForHash().get(list.get(0).getRegionCode(), "table");
         billPoList = BeanUtils.convertList(list, BillPo.class);
 
         RLock lock = redissonClient.getLock(LOCK_KEY);
@@ -104,9 +102,9 @@ public class BillServiceImp implements BillService {
             isLock = redLock.tryLock(100L, 10L, TimeUnit.SECONDS);
 
             if (isLock) {
-                createNumber = billDao.insertBill(billPoList);
+                createNumber = billDao.insertBill(table, billPoList);
 
-                remainderBill = retrieveNumber();
+                remainderBill = billDao.retrieveNumber(table);
 
                 redisTemplate.opsForValue().set("remainderBill", remainderBill);
             }
@@ -120,7 +118,7 @@ public class BillServiceImp implements BillService {
     }
 
     @Override
-    public int retrieveNumber() {
+    public int retrieveNumber(String table) {
 
         boolean isLock;
         int remainderBill = -1;
@@ -132,7 +130,7 @@ public class BillServiceImp implements BillService {
             isLock = redLock.tryLock(100L, 10L, TimeUnit.SECONDS);
 
             if (isLock) {
-                remainderBill = billDao.retrieveNumber();
+                remainderBill = billDao.retrieveNumber(table);
             }
         } catch (Exception e) {
             e.printStackTrace();
