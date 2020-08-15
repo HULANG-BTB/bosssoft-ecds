@@ -5,11 +5,13 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bosssoft.ecds.dao.StockInDao;
 import com.bosssoft.ecds.entity.constant.StockInChangeConstant;
 import com.bosssoft.ecds.entity.dto.*;
+import com.bosssoft.ecds.entity.po.FinanBillPo;
 import com.bosssoft.ecds.entity.po.StockInChangePO;
 import com.bosssoft.ecds.entity.po.StockInItemPO;
 import com.bosssoft.ecds.entity.po.StockInPO;
 import com.bosssoft.ecds.entity.vo.CurrentBillNumberVO;
 import com.bosssoft.ecds.entity.vo.StockInForChangeVO;
+import com.bosssoft.ecds.service.FinanBillService;
 import com.bosssoft.ecds.service.StockInChangeService;
 import com.bosssoft.ecds.service.StockInItemService;
 import com.bosssoft.ecds.service.StockInService;
@@ -23,7 +25,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -43,6 +44,13 @@ public class StockInServiceImpl extends ServiceImpl<StockInDao, StockInPO> imple
     
     @Autowired
     private StockInItemService stockInItemService;
+    
+    /**
+     * 批量操作默认大小
+     */
+    private static final int BATCH_SIZE = 10000;
+    @Autowired
+    private FinanBillService finanBillService;
     
     /**
      * 获取当前业务号
@@ -220,58 +228,166 @@ public class StockInServiceImpl extends ServiceImpl<StockInDao, StockInPO> imple
      * @return 操作结果
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public boolean store(StoreDTO storeDTO) {
-        // TODO
-        Long[][] longArray = convert2LongArray(storeDTO.getNo());
-        
-        return false;
-    }
-    
-    /**
-     * 转化为Long数组
-     *
-     * @param pid
-     * @return
-     */
-    public Long[][] convert2LongArray(Long pid) {
+        // 1.写入票据
         StockInItemPO stockInItemPO = new StockInItemPO();
-        stockInItemPO.setPid(pid);
+        stockInItemPO.setPid(storeDTO.getNo());
+        StockInPO stockInPO = getById(storeDTO.getNo());
+        Long wareHouseId = stockInPO.getWarehouseId();
         List<StockInItemPO> stockInItemPOS = stockInItemService.list(new QueryWrapper<>(stockInItemPO));
-        List<Long[]> longPairs = new ArrayList<>();
-        stockInItemPOS.forEach(stockInItemPO1 -> {
-            Long[] longPair = new Long[2];
-            longPair[0] = Long.parseLong(stockInItemPO1.getBillNo1());
-            longPair[1] = Long.parseLong(stockInItemPO1.getBillNo2());
-            longPairs.add(longPair);
+        log.info(stockInItemPOS.toString());
+        stockInItemPOS.forEach(item -> {
+            Long start = Long.parseLong(item.getBillNo1());
+            Long end = Long.parseLong(item.getBillNo2());
+            Long length = end - start + 1;
+            if (length <= BATCH_SIZE) {
+                String billCode = item.getBillCode();
+                String billName = item.getBillName();
+                List<FinanBillPo> financeBillPoList = new ArrayList<>((int) (end - start + 1));
+                for (; start <= end; start++) {
+                    FinanBillPo finanBillPo = initFinanceBillPo(item, start, wareHouseId);
+                    log.info("=====================" + finanBillPo.toString());
+                    financeBillPoList.add(finanBillPo);
+                }
+                boolean success = finanBillService.saveBatch(financeBillPoList, financeBillPoList.size());
+                if (!success) {
+                    throw new RuntimeException();
+                }
+            }
         });
-        Long[][] result = new Long[longPairs.size()][2];
-        return longPairs.toArray(result);
+        
+        stockInPO.setStatus(StockInChangeConstant.STORED);
+        
+        // 2.修改入库单为已入库状态
+        return updateById(stockInPO);
     }
     
-    
     /**
-     * 合并票据区间
+     * 检查票据段是否可用
      *
-     * @param intervals
-     * @return
+     * @param checkStoreDTO 传入的DTO
+     * @return 票据段是否可用
      */
-    public Long[][] merge(Long[][] intervals) {
-        // 先按照区间起始位置排序
-        Arrays.sort(intervals, (v1, v2) -> (int) (v1[0] - v2[0]));
-        // 遍历区间
-        Long[][] res = new Long[intervals.length][2];
-        int idx = -1;
-        for (Long[] interval : intervals) {
-            // 如果结果数组是空的，或者当前区间的起始位置 > 结果数组中最后区间的终止位置，
-            // 则不合并，直接将当前区间加入结果数组。
-            if (idx == -1 || interval[0] > res[idx][1]) {
-                res[++idx] = interval;
-            } else {
-                // 反之将当前区间合并至结果数组的最后区间
-                res[idx][1] = Math.max(res[idx][1], interval[1]);
+    @Override
+    public boolean checkStore(CheckStoreDTO checkStoreDTO) {
+        log.info(checkStoreDTO.toString());
+        
+        List<LongPair> longPairs = getLongPairs(checkStoreDTO.getBillCode());
+        
+        log.info(longPairs.toString());
+        
+        if (longPairs.size() == 0) {
+            return true;
+        }
+        
+        Long start = checkStoreDTO.getStart();
+        Long end = checkStoreDTO.getEnd();
+        
+        log.info(start.toString() + "+++++++++++" + end.toString());
+        
+        // 判断传入的端点是否在已使用的票据段内
+        for (LongPair pair : longPairs) {
+            if (pair.contain(start) || pair.contain(end)) {
+                return false;
             }
         }
-        return Arrays.copyOf(res, idx + 1);
+        
+        return true;
+    }
+    
+    /**
+     * 生成已使用票据段列表
+     *
+     * @param stockInItemCode
+     * @return
+     */
+    private List<LongPair> getLongPairs(String stockInItemCode) {
+        List<LongPair> pairs = new ArrayList<>();
+        
+        StockInItemPO stockInItemPO = new StockInItemPO();
+        stockInItemPO.setBillCode(stockInItemCode);
+        List<StockInItemPO> list = stockInItemService.list(new QueryWrapper<>(stockInItemPO));
+        
+        if (list != null) {
+            list.forEach(item -> {
+                Long start = Long.parseLong(item.getBillNo1());
+                Long end = Long.parseLong(item.getBillNo2());
+                pairs.add(new LongPair(start, end));
+            });
+        }
+        
+        return pairs;
+    }
+    
+    /**
+     * 构建票据
+     *
+     * @param item        入库明细
+     * @param start       当前票据编码
+     * @param wareHouseId 仓库id
+     * @return 初始化的票据对象
+     */
+    private FinanBillPo initFinanceBillPo(StockInItemPO item, Long start, Long wareHouseId) {
+        FinanBillPo finanBillPo = new FinanBillPo();
+        String billCode = item.getBillCode();
+        String billName = item.getBillName();
+        
+        // 格式化票据号，生成十位的票据号码
+        String billId = String.format("%010d", start);
+        
+        // 生成完整票据号
+        finanBillPo.setBillCode(billCode + billId);
+        finanBillPo.setBillPrecode(billCode);
+        finanBillPo.setBillId(billId);
+        finanBillPo.setBillName(billName);
+        finanBillPo.setWarehouseId(wareHouseId);
+        finanBillPo.setOperId(1L);
+        finanBillPo.setOpeDate(new Date());
+        finanBillPo.setEffDate(new Date());
+        finanBillPo.setExpDate(new Date());
+        return finanBillPo;
+    }
+    
+    /**
+     * 票据段辅助类
+     *
+     * @author cheng
+     * @Date 2020/8/13 16:26
+     */
+    private class LongPair {
+        /**
+         * 起始号
+         */
+        Long start;
+        
+        /**
+         * 终止号
+         */
+        Long end;
+        
+        LongPair() {
+        }
+        
+        LongPair(Long start, Long end) {
+            this.start = start;
+            this.end = end;
+        }
+        
+        /**
+         * 是否包含传入的票据号
+         *
+         * @param num 传入的票据号
+         * @return 是否包含
+         */
+        boolean contain(Long num) {
+            return (num >= start) && (num <= end);
+        }
+        
+        @Override
+        public String toString() {
+            return "LongPair[start: " + start + ", end: " + end + "]";
+        }
     }
     
     /**
