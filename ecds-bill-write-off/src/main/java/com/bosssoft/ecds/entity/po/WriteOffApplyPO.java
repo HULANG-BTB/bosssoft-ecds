@@ -60,15 +60,15 @@ public class WriteOffApplyPO {
 
     @ApiModelProperty(value = "状态： 1 未审验 2 已审验")
     @TableField("f_change_state")
-    private Boolean fChangeState;
+    private Integer fChangeState;
 
     @ApiModelProperty(value = "审验结果：1 良好 2 合格 3 问题 4 整改通过")
     @TableField("f_check_result")
-    private Boolean fCheckResult;
+    private Integer fCheckResult;
 
     @ApiModelProperty(value = "是否上报：1 未上报 2 已上报")
     @TableField("f_is_upload")
-    private Boolean fIsUpload;
+    private Integer fIsUpload;
 
     @ApiModelProperty(value = "版本号")
     @TableField("f_version")
