@@ -2,7 +2,7 @@ package com.bosssoft.ecds.template.service.impl;
 
 import com.bosssoft.ecds.template.dto.BillItemDTO;
 import com.bosssoft.ecds.template.dto.NontaxBillDTO;
-import com.bosssoft.ecds.template.service.IImageService;
+import com.bosssoft.ecds.template.service.ImageService;
 import com.bosssoft.ecds.template.util.AliyunOSSUtil;
 import com.bosssoft.ecds.template.util.TextValue;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +23,7 @@ import java.util.Map;
 
 @Service
 @Slf4j
-public class ImageService implements IImageService {
+public class ImageServiceImpl implements ImageService {
 
     @Autowired
     AliyunOSSUtil ossUtil;

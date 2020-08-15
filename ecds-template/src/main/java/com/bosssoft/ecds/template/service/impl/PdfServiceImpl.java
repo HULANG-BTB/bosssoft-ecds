@@ -2,25 +2,32 @@ package com.bosssoft.ecds.template.service.impl;
 
 import com.bosssoft.ecds.template.dto.NontaxBillDTO;
 import com.bosssoft.ecds.template.service.PdfService;
+import com.bosssoft.ecds.template.util.AliyunOSSUtil;
+import com.bosssoft.ecds.template.util.ResponseBody;
 import com.itextpdf.text.pdf.BaseFont;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileCopyUtils;
 import org.xhtmlrenderer.pdf.ITextFontResolver;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
+import java.io.*;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @Service
 public class PdfServiceImpl implements PdfService {
 
+    /**
+     * iTextPDF 需要的字体文件
+     */
     @Value("${fontType}")
     private String fontType;
 
@@ -29,6 +36,9 @@ public class PdfServiceImpl implements PdfService {
      */
     @Value("${pdfDest}")
     private String defaultPdfDest;
+
+    @Autowired
+    AliyunOSSUtil ossUtil;
 
     /**
      * 设置freemarker配置信息
@@ -86,33 +96,21 @@ public class PdfServiceImpl implements PdfService {
 
     /**
      * 生成pdf文件
-     * @param data 传输的数据
-     * @param htmlName ftl模板路径
+     * @param htmlData html文本
      * @param pdfDest 生成pdf文件的路径
      */
     @Override
-    public void createPdf(Map<String, Object> data, String htmlName, String pdfDest) {
-        String outData = getOutData(data, htmlName);
-        ITextRenderer renderer = new ITextRenderer();
-        /**
-         * 解决中文不显示
-         * 需要使用simsun.ttc(新宋体),而simsunb.ttf(宋体)无法解决中文不显示问题
-         */
-        ITextFontResolver fontResolver = renderer.getFontResolver();
-        try {
-            fontResolver.addFont(fontType, BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
-            /**
-             * 解析html并生成pdf
-             */
-            renderer.setDocumentFromString(outData);
-            renderer.layout();
-            /**
-             * 根据设定的路径生成对应名字的pdf文件
-             */
-            renderer.createPDF(new FileOutputStream(pdfDest));
-        } catch (Exception e) {
+    public File createPdf(String htmlData, String pdfDest) {
+        File file = new File(pdfDest);
+        log.info(file.getParent());
+        try (FileOutputStream outputStream = new FileOutputStream(file)) {
+
+            createPdf(htmlData, outputStream);
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
+        return file;
     }
 
     /**
@@ -125,7 +123,43 @@ public class PdfServiceImpl implements PdfService {
         data.put("billDTO",billDTO);
         String htmlName = getHtmlName(billDTO.getBillCode());
         String pdfDest = defaultPdfDest + getPdfDest(billDTO.getBillCode(), billDTO.getSerialCode());
-        createPdf(data, htmlName, pdfDest);
+        String outData = getOutData(data, htmlName);
+        createPdf(outData, pdfDest);
+    }
+
+    @Override
+    public byte[] getBytesFromFile(String filename) {
+        String filePath = defaultPdfDest + filename + ".pdf";
+        File file = new File(filePath);
+        byte[] bytes = new byte[0];
+        if (file.exists()) {
+            try {
+                bytes = FileCopyUtils.copyToByteArray(file);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return bytes;
+    }
+
+    @Override
+    public String getRemoteAddress(NontaxBillDTO billDTO, boolean isForce) {
+        String pdfFileName = getPdfDest(billDTO.getBillCode(), billDTO.getSerialCode());
+        String path = "boss-bill/" + pdfFileName;
+
+        if (!ossUtil.isExist(path) || isForce) {
+            log.info("{}文件不存在，生成。", pdfFileName);
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            createPdf(billDTO, outputStream);
+            byte[] pdfBytes = outputStream.toByteArray();
+
+            // 文件上传
+            ossUtil.upload(path, new ByteArrayInputStream(pdfBytes));
+        }
+
+        URL url = ossUtil.temporaryUrl(path, 5 * 60 * 1000);
+
+        return url.toString();
     }
 
     /**
@@ -145,5 +179,37 @@ public class PdfServiceImpl implements PdfService {
      */
     private String getPdfDest(String code, String serial){
         return code + serial + ".pdf";
+    }
+
+    private void createPdf(String outData, OutputStream outputStream) {
+        ITextRenderer renderer = new ITextRenderer();
+        /**
+         * 解决中文不显示
+         * 需要使用simsun.ttc(新宋体),而simsunb.ttf(宋体)无法解决中文不显示问题
+         */
+        ITextFontResolver fontResolver = renderer.getFontResolver();
+        try {
+            fontResolver.addFont(this.fontType, BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+            /**
+             * 解析html并生成pdf
+             */
+            renderer.setDocumentFromString(outData);
+            renderer.layout();
+            /**
+             * 根据设定的路径生成对应名字的pdf文件
+             */
+            renderer.createPDF(outputStream);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void createPdf(NontaxBillDTO billDTO, OutputStream outputStream) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("billDTO",billDTO);
+        String htmlName = getHtmlName(billDTO.getBillCode());
+//        String pdfDest = defaultPdfDest + getPdfDest(billDTO.getBillCode(), billDTO.getSerialCode());
+        String outData = getOutData(data, htmlName);
+        createPdf(outData, outputStream);
     }
 }

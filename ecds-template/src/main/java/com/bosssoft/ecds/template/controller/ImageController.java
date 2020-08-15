@@ -1,7 +1,7 @@
 package com.bosssoft.ecds.template.controller;
 
 import com.bosssoft.ecds.template.dto.NontaxBillDTO;
-import com.bosssoft.ecds.template.service.IImageService;
+import com.bosssoft.ecds.template.service.ImageService;
 import com.bosssoft.ecds.template.util.ResponseBody;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +22,7 @@ import java.io.IOException;
 public class ImageController {
 
     @Autowired
-    IImageService imageService;
+    ImageService imageService;
 
     /**
      * 返回一个图片样板 PNG

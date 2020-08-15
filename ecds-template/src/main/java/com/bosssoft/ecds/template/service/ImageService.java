@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
  * @author 郭钰鸣
  */
 @Service
-public interface IImageService {
+public interface ImageService {
     /**
      * 根据票据信息实时生成图片
      * @param billDTO 非税票据DTO
