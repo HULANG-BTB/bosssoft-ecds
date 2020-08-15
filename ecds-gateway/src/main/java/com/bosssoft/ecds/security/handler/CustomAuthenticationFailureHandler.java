@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 
 /**
  * @ClassName CustomAuthenticationFailureHandler
@@ -45,11 +45,7 @@ public class CustomAuthenticationFailureHandler implements ServerAuthenticationF
         // 生成响应内容
         String res = ResponseUtils.getResponse(exception.getMessage(), ResponseUtils.ResultType.FORBIDDEN);
         DataBuffer bodyDataBuffer = null;
-        try {
-            bodyDataBuffer = response.bufferFactory().wrap(res.getBytes("utf-8"));
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+        bodyDataBuffer = response.bufferFactory().wrap(res.getBytes(StandardCharsets.UTF_8));
         // 写入内容 返回
         return response.writeWith(Mono.just(bodyDataBuffer));
     }

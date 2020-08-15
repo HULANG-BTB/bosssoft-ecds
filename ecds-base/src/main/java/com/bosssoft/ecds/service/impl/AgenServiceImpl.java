@@ -1,11 +1,13 @@
 package com.bosssoft.ecds.service.impl;
 
+import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bosssoft.ecds.entity.dto.AgenDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.po.AgenPO;
 import com.bosssoft.ecds.dao.AgenDao;
+import com.bosssoft.ecds.entity.po.CrtPO;
 import com.bosssoft.ecds.service.AgenService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bosssoft.ecds.utils.MyBeanUtil;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -23,6 +26,7 @@ import java.util.List;
  * @since 2020-08-09
  */
 @Service
+@DS("master")
 public class AgenServiceImpl extends ServiceImpl<AgenDao, AgenPO> implements AgenService {
 
     /**
@@ -104,8 +108,10 @@ public class AgenServiceImpl extends ServiceImpl<AgenDao, AgenPO> implements Age
     public AgenDTO getByAgenName(AgenDTO fabAgenDTO) {
         AgenPO fabAgenPO = new AgenPO();
         MyBeanUtil.copyProperties(fabAgenDTO, fabAgenPO);
-        AgenPO fabAgenPO1 = super.getOne(new QueryWrapper<AgenPO>(fabAgenPO));
-        return MyBeanUtil.copyProperties(fabAgenPO1, AgenDTO.class);
+        QueryWrapper<AgenPO> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(AgenPO.F_AGEN_NAME, fabAgenPO.getAgenName());
+        fabAgenPO = super.getOne(queryWrapper);
+        return MyBeanUtil.copyProperties(fabAgenPO, AgenDTO.class);
     }
 
     /**
@@ -151,6 +157,34 @@ public class AgenServiceImpl extends ServiceImpl<AgenDao, AgenPO> implements Age
     }
 
     /**
+     * 未审核单位分页读取
+     *
+     * @param pageDTO
+     * @return
+     */
+    @Override
+    public PageDTO checkListByPage(PageDTO pageDTO) {
+        Page<AgenPO> fabAgenPOPage = new Page<>();
+        // 设置分页信息
+        fabAgenPOPage.setCurrent(pageDTO.getPage());
+        fabAgenPOPage.setSize(pageDTO.getLimit());
+        // 读取分页数据
+        QueryWrapper<AgenPO> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(AgenPO.F_ISENABLE, false);
+        queryWrapper.and(wrapper -> wrapper.like(AgenPO.F_DEPT_CODE, pageDTO.getKeyword()).or().like(AgenPO.F_AGEN_CODE, pageDTO.getKeyword()).or().like(AgenPO.F_AGEN_NAME, pageDTO.getKeyword())
+                .or().like(AgenPO.F_SORT_CODE, pageDTO.getKeyword()).or().like(AgenPO.F_ISENABLE, pageDTO.getKeyword()).or().like(AgenPO.F_IND_CODE, pageDTO.getKeyword()));
+        queryWrapper.orderByAsc(AgenPO.F_CREATE_TIME);
+        // 读取分页数据
+        Page<AgenPO> fabAgenPOPage1 = super.page(fabAgenPOPage, queryWrapper);
+        List<AgenPO> records = fabAgenPOPage1.getRecords();
+        // 转换数据
+        List<AgenDTO> userDTOList = MyBeanUtil.copyListProperties(records, AgenDTO.class);
+        pageDTO.setTotal(fabAgenPOPage1.getTotal());
+        pageDTO.setItems(userDTOList);
+        return pageDTO;
+    }
+
+    /**
      * 批量删除单位
      *
      * @param fabAgenDTOList
@@ -165,6 +199,22 @@ public class AgenServiceImpl extends ServiceImpl<AgenDao, AgenPO> implements Age
             }
         }
         boolean removeResult = super.removeByIds(ids);
+        return removeResult;
+    }
+
+    /**
+     * 批量审核单位
+     *
+     * @param fabAgenDTOList
+     * @return
+     */
+    @Override
+    public Boolean checkBatch(List<AgenDTO> fabAgenDTOList) {
+        for (AgenDTO fabAgenDTO : fabAgenDTOList) {
+            fabAgenDTO.setIsenable(true);
+        }
+        List<AgenPO> agenPOList = MyBeanUtil.copyListProperties(fabAgenDTOList, AgenPO.class);
+        boolean removeResult = super.updateBatchById(agenPOList);
         return removeResult;
     }
 

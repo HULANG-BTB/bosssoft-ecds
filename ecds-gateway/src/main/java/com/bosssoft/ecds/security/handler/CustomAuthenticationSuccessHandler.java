@@ -22,6 +22,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 /**
@@ -56,6 +57,8 @@ public class CustomAuthenticationSuccessHandler extends WebFilterChainServerAuth
         HttpHeaders httpHeaders = response.getHeaders();
         httpHeaders.add("Content-Type", "application/json; charset=UTF-8");
         httpHeaders.add("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
+        // Todo 上线删除本行
+        httpHeaders.setAccessControlAllowOrigin("http://localhost:9528");
         // 设置body
         byte[] dataBytes = {};
         try {
@@ -81,7 +84,7 @@ public class CustomAuthenticationSuccessHandler extends WebFilterChainServerAuth
             userDetails.setPassword(null);
             String token = JwtUtils.generateTokenExpireInMinutes(userDetails, rsa.getPrivateKey(), 60 * 24 * 30);
             userVO.setToken(token);
-            dataBytes = ResponseUtils.getResponse(userVO, ResponseUtils.ResultType.OK).getBytes("utf-8");
+            dataBytes = ResponseUtils.getResponse(userVO, ResponseUtils.ResultType.OK).getBytes(StandardCharsets.UTF_8);
         } catch (Exception ex) {
             ex.printStackTrace();
             dataBytes = ResponseUtils.getResponse(ex.getMessage(), ResponseUtils.ResultType.UNAUTHORIZED).getBytes();
