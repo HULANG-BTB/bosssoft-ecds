@@ -6,9 +6,9 @@ import com.bosssoft.ecds.encodeserver.entity.dto.GetFinanceNumDto;
 import com.bosssoft.ecds.encodeserver.util.EncodeResult;
 import com.bosssoft.ecds.encodeserver.service.GetCodeService;
 import com.bosssoft.ecds.encodeserver.util.ResponseUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @Author 黄杰峰
@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
  * @Description 获取财政票据号码控制器
  */
 @RestController
+@CrossOrigin
+@RequestMapping("/encode")
 public class CodeController {
 
     private final GetCodeService getCodeService;
@@ -30,7 +32,10 @@ public class CodeController {
      * @return
      */
     @PostMapping("/getBatchCode")
-    public EncodeResult getBatchCode(@RequestBody GetFinanceNumDto getFinanceNumDto) {
+    @ApiOperation("批量获取票据号码")
+    public EncodeResult getBatchCode(
+            @RequestBody @ApiParam("获取财政号码Dto，包含区划编码、分类编码、种类编码、年度编码和取号数量")
+                    GetFinanceNumDto getFinanceNumDto) {
         NumSegDto batchCode = getCodeService.getBatchCode(getFinanceNumDto);
         if (batchCode != null) {
             return EncodeResult.getEncodeResult(200, "赋码成功", batchCode);
@@ -46,7 +51,10 @@ public class CodeController {
      * @return
      */
     @PostMapping("/createCode")
-    public EncodeResult createCode(@RequestBody CreateFinanceCodeDto createFinanceCodeDto) {
+    @ApiOperation("创建新的票据代码")
+    public EncodeResult createCode(
+            @RequestBody @ApiParam("创建财政编码Dto，包含区划编码、分类编码、种类编码、年度编码、创建人姓名和创建人Id")
+                    CreateFinanceCodeDto createFinanceCodeDto) {
         boolean createdFlag = getCodeService.createNewCode(createFinanceCodeDto);
         if (createdFlag) {
             return EncodeResult.getEncodeResult(200, "财政代码创建成功");

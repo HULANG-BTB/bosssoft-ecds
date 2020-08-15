@@ -25,7 +25,7 @@ public class SwaggerConfig {
                 .apis(RequestHandlerSelectors.basePackage("com.bosssoft.ecds"))
                 .paths(PathSelectors.any())
                 .build().apiInfo(new ApiInfoBuilder()
-                        .description("Swagger2")
+                        .description("赋码操作")
                         .build());
     }
 }
