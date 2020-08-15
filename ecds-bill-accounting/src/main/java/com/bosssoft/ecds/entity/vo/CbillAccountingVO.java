@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.Past;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -33,6 +34,7 @@ public class CbillAccountingVO {
     @ApiModelProperty(value = "开票点id")
     private String placeId;
 
+    @Past(message = "开票时间必须为过去的时间")
     @ApiModelProperty(value = "开票时间")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -50,6 +52,7 @@ public class CbillAccountingVO {
     @ApiModelProperty(value = "票据号码")
     private String billNo;
 
+    @Past(message = "入账时间必须为过去的时间")
     @ApiModelProperty(value = "入账时间")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
