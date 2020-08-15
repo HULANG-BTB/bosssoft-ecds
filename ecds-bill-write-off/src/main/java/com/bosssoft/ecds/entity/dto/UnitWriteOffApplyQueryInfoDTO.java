@@ -11,14 +11,24 @@ import java.util.Date;
 @Data
 public class UnitWriteOffApplyQueryInfoDTO {
     /**
+     * 单位识别码
+     */
+    private String agenIdCode;
+
+    /**
      * 业务单号
      */
     private String no;
 
     /**
-     * 日期范围
+     * 开始日期
      */
-    private Date[] rangeDate;
+    private Date startDate;
+
+    /**
+     * 结束日期
+     */
+    private Date endDate;
 
     /**
      * 页码

@@ -44,10 +44,15 @@ public class WriteOffApplyDTO {
     /**
      * 状态： 1 未审验 2 已审验
      */
-    private Boolean fChangeState;
+    private Integer fChangeState;
 
     /**
      * 审验结果：1 良好 2 合格 3 问题 4 整改通过
      */
-    private Boolean fCheckResult;
+    private Integer fCheckResult;
+
+    /**
+     * 是否上报：1 未上报 2 已上报
+     */
+    private Integer fIsUpload;
 }
