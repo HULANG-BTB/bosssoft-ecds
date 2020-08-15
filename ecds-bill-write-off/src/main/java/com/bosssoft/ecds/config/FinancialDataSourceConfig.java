@@ -2,6 +2,8 @@ package com.bosssoft.ecds.config;
 
 import com.baomidou.mybatisplus.core.MybatisConfiguration;
 import com.baomidou.mybatisplus.core.MybatisXMLLanguageDriver;
+import com.baomidou.mybatisplus.extension.plugins.OptimisticLockerInterceptor;
+import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.type.JdbcType;
@@ -36,6 +38,8 @@ public class FinancialDataSourceConfig {
         MybatisConfiguration configuration = new MybatisConfiguration();
         configuration.setDefaultScriptingLanguage(MybatisXMLLanguageDriver.class);
         configuration.setJdbcTypeForNull(JdbcType.NULL);
+        configuration.addInterceptor(new PaginationInterceptor());
+        configuration.addInterceptor(new OptimisticLockerInterceptor());
         factoryBean.setConfiguration(configuration);
 
         return factoryBean.getObject();
@@ -44,7 +48,7 @@ public class FinancialDataSourceConfig {
 
     @Primary
     @Bean("financialSqlSessionTemplate")
-    public SqlSessionTemplate psiSqlSessionTemplate() throws Exception {
+    public SqlSessionTemplate financialSqlSessionTemplate() throws Exception {
         // 使用上面配置的Factory
         SqlSessionTemplate template = new SqlSessionTemplate(financialSqlSessionFactory());
         return template;

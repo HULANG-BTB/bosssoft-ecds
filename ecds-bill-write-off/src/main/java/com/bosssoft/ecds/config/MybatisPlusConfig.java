@@ -65,25 +65,4 @@ public class MybatisPlusConfig {
             }
         };
     }
-
-    /**
-     * 乐观锁插件
-     *
-     * @return
-     */
-    @Bean
-    public OptimisticLockerInterceptor getOptimisticLockerInterceptor() {
-        return new OptimisticLockerInterceptor();
-    }
-
-    /**
-     * 分页插件
-     *
-     * @return
-     */
-    @Bean
-    public PaginationInterceptor paginationInterceptor() {
-        return new PaginationInterceptor();
-    }
-
 }

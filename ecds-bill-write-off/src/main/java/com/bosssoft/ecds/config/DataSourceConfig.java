@@ -40,7 +40,7 @@ public class DataSourceConfig {
 
     @Bean(name = UNIT_DATASOURCE_BEAN_NAME)
     @ConfigurationProperties(prefix = UNIT_DATASOURCE_PREFIX)
-    public DruidDataSource b2b() {
+    public DruidDataSource unit() {
         return new DruidDataSource();
     }
 }
