@@ -1,6 +1,6 @@
 spring:
   application:
-    name: msg
+    name: boss-ecds-bill-message
   cloud:
     nacos:
       discovery:

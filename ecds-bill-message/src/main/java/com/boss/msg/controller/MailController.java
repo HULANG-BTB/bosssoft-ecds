@@ -34,7 +34,7 @@ public class MailController {
     private MailService mailService;
 
     @PostMapping("/send")
-    public boolean sendMail(@RequestBody SendMailVo mailVo) throws ExecutionException, InterruptedException {
+    public String sendMail(@RequestBody SendMailVo mailVo) throws ExecutionException, InterruptedException {
         mailVo.setSubject("电子票据开票通知");
         BillVo billVo = new BillVo(new Date(), "电子票据", "12345678", "1234567890", "a1b2c3", "测试单位", "zhangsan", new BigDecimal(500));
         mailVo.setContent(JSON.toJSONString(billVo));
@@ -42,7 +42,11 @@ public class MailController {
         ArrayList<File> files = Lists.newArrayList(file);
         mailVo.setFiles(files);*/
         MailDto mailDto = DozerUtils.map(mailVo, MailDto.class);
-        return sendMailService.sendMail(mailDto).get().getIsSent();
+        Boolean isSent = sendMailService.sendMail(mailDto).get().getIsSent();
+
+        return ResponseUtils.getResponse(
+                ResponseUtils.ResultType.OK.getCode(),
+                ResponseUtils.ResultType.OK.getMsg(),isSent);
     }
 
     /**
@@ -67,9 +71,11 @@ public class MailController {
                 ResponseUtils.ResultType.OK.getMsg(),
                 pageResult);
     }
+
     /**
      * 邮件更新功能
      * 实现未发件的邮件状态更新为已发件
+     *
      * @param mailVo 分页查询对象
      */
     @PutMapping("/updateStatus")
@@ -78,7 +84,7 @@ public class MailController {
         // 修改isSent
         boolean b = mailService.updateStatus(mailDto);
 
-        if (b){
+        if (b) {
             return ResponseUtils.getResponse(
                     ResponseUtils.ResultType.OK.getCode(),
                     ResponseUtils.ResultType.OK.getMsg(),

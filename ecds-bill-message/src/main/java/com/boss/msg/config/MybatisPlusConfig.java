@@ -41,6 +41,7 @@ public class MybatisPlusConfig {
                 this.setFieldValByName("operatorId", authId, metaObject);
                 this.setFieldValByName("operator", authNickname, metaObject);
                 this.setFieldValByName("version", 0, metaObject);
+                this.setFieldValByName("logicDelete", 0, metaObject);
 
             }
 
