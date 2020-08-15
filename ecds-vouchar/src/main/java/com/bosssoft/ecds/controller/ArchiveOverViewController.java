@@ -1,7 +1,7 @@
 package com.bosssoft.ecds.controller;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.bosssoft.ecds.entity.dto.ArchiveOverViewDto;
+import com.bosssoft.ecds.entity.dto.ArchiveOverViewDTO;
 import com.bosssoft.ecds.entity.query.ArchiveOverViewQuery;
 import com.bosssoft.ecds.entity.vo.ArchiveOverViewVo;
 import com.bosssoft.ecds.service.ArchiveOverViewService;
@@ -36,7 +36,7 @@ public class ArchiveOverViewController {
      */
     @PostMapping("/unit/info")
     public String queryArchiveInfo(@RequestBody ArchiveOverViewQuery query){
-        ArchiveOverViewDto archiveOverViewDto = service.queryOverViewArchiveInfo(query);
+        ArchiveOverViewDTO archiveOverViewDto = service.queryOverViewArchiveInfo(query);
         ArchiveOverViewVo vo = new ArchiveOverViewVo();
         BeanUtil.copyProperties(archiveOverViewDto,vo);
         return ResponseUtils.getResponse(vo,ResponseUtils.ResultType.OK);
@@ -51,14 +51,14 @@ public class ArchiveOverViewController {
         /**
          * 获取全部的单位信息
          */
-        List<ArchiveOverViewDto> archiveOverViewDtos = service.queryOverViewArchiveAllInfo();
+        List<ArchiveOverViewDTO> archiveOverViewDTOS = service.queryOverViewArchiveAllInfo();
         List<ArchiveOverViewVo> voList = new ArrayList<>();
 
         /**
          * 类型转换
          */
         ArchiveOverViewVo vo = null;
-        for (ArchiveOverViewDto dto:archiveOverViewDtos) {
+        for (ArchiveOverViewDTO dto : archiveOverViewDTOS) {
             vo = new ArchiveOverViewVo();
             BeanUtil.copyProperties(dto, vo);
             voList.add(vo);

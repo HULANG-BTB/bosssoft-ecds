@@ -1,6 +1,5 @@
 package com.bosssoft.ecds.entity.dto;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -8,9 +7,15 @@ import lombok.Data;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * @author liuke
+ */
 @Data
 @ApiModel(value = "ArchiveOverViewDto", description = "归档总览信息dto")
-public class ArchiveOverViewDto implements Serializable {
+public class ArchiveOverViewDTO implements Serializable {
+
+    @ApiModelProperty(value = "主键")
+    private Long id;
 
     @ApiModelProperty("公司编码")
     private String agenCode;

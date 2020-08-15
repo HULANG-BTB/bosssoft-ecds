@@ -11,6 +11,7 @@ import com.bosssoft.ecds.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -117,14 +118,39 @@ public class BillCheckArchiveServiceImpl extends ServiceImpl<BillCheckArchiveDao
         /*
          * 信息整理  更新
          */
-        Map<String, CBillAccountingDTO> cMap = new HashMap<>();
+        Map<String, CBillAccountingDTO> cMap = new HashMap<>(16);
 
         /*
          * 各个公司的票据不同阶段的数量
          */
         list.forEach(
                 item -> {
-                    if (!cMap.containsKey(item.getAgenIdcode())) {
+                    /*
+                     * map  数据操作简化  优化时间复杂度
+                     * 根据规则实现自增
+                     */
+                    cMap.computeIfAbsent(item.getAgenIdcode(),
+                            k -> {
+                                CBillAccountingDTO dto = new CBillAccountingDTO();
+                                dto.setAgenIdcode(item.getAgenIdcode());
+                                dto.setBillUsedNumber(0L);
+                                dto.setBillCheckedNumber(0L);
+                                dto.setBillUncheckNumber(0L);
+                                return dto;
+                            });
+                    cMap.computeIfPresent(
+                            item.getAgenIdcode(),
+                            (k, v) -> {
+                                v.setBillUsedNumber(v.getBillUsedNumber() + 1);
+                                if (Boolean.TRUE.equals(item.getAccountStatus())) {
+                                    v.setBillCheckedNumber(v.getBillCheckedNumber() + 1);
+                                } else {
+                                    v.setBillUncheckNumber(v.getBillUncheckNumber() + 1);
+                                }
+                                return v;
+                            }
+                    );
+                    /*if (!cMap.containsKey(item.getAgenIdcode())) {
                         CBillAccountingDTO dto = new CBillAccountingDTO();
                         dto.setAgenIdcode(item.getAgenIdcode());
                         dto.setBillUsedNumber(1L);
@@ -137,10 +163,7 @@ public class BillCheckArchiveServiceImpl extends ServiceImpl<BillCheckArchiveDao
                         }
                         cMap.put(item.getAgenIdcode(), dto);
                     } else {
-                        /*
-                         * map  数据操作简化  优化时间复杂度
-                         * 根据规则实现自增
-                         */
+
                         cMap.computeIfPresent(
                                 item.getAgenIdcode(),
                                 (k, v) -> {
@@ -153,18 +176,16 @@ public class BillCheckArchiveServiceImpl extends ServiceImpl<BillCheckArchiveDao
                                     return v;
                                 }
                         );
-                    }
+                    }*/
                 }
         );
 
         /**
          * 汇总 所有公司不同阶段的票据数量
-         */
-        /*
          * 读取各公司原来的信息
          */
         List<ArchivePO> infos = archiveOverViewService.list();
-        log.info("infos old : " + infos);
+        Assert.notEmpty(infos, "归档对象不为空");
         infos.forEach(
                 item -> {
                     /*

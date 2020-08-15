@@ -4,7 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bosssoft.ecds.dao.BillAvailableArchiveDao;
-import com.bosssoft.ecds.entity.dto.BillApplyDto;
+import com.bosssoft.ecds.entity.dto.BillApplyDTO;
 import com.bosssoft.ecds.entity.dto.BillAvailableInfoDto;
 import com.bosssoft.ecds.entity.po.AgenBillPO;
 import com.bosssoft.ecds.entity.po.BillAvailableArchivePO;
@@ -47,7 +47,7 @@ public class BillAvailableArchiveServiceImpl extends ServiceImpl<BillAvailableAr
      */
 
     @Override
-    public List<BillApplyDto> getBillApplyInfos() {
+    public List<BillApplyDTO> getBillApplyInfos() {
         return null;
     }
 
@@ -114,7 +114,7 @@ public class BillAvailableArchiveServiceImpl extends ServiceImpl<BillAvailableAr
      * 单位端
      */
     @Override
-    public BillApplyDto getBillApplyInfo(String agenCode) {
+    public BillApplyDTO getBillApplyInfo(String agenCode) {
         return null;
     }
 

@@ -1,7 +1,7 @@
 package com.bosssoft.ecds.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.bosssoft.ecds.entity.dto.BillApplyDto;
+import com.bosssoft.ecds.entity.dto.BillApplyDTO;
 import com.bosssoft.ecds.entity.po.BillApplyArchivePO;
 
 import java.util.List;
@@ -16,18 +16,12 @@ import java.util.List;
  * @since 2020-08-11
  */
 public interface BillApplyArchiveDao extends BaseMapper<BillApplyArchivePO> {
-    /**
-     *  根据单位编码查询申请数量  （已归档状态下）
-     *
-     * @param agenIdCode
-     * @return 票据申请数量
-     */
-    Long queryBillApplyNumber(String agenIdCode);
 
     /**
-     * 查询单位申领票据的详细信息
-     * @param agenIdCode
-     * @return
+     * 查询所有公司的申领信息
+     *
+     * @return List<BillApplyDTO>
      */
-    List<BillApplyDto> queryBillApply(String agenIdCode);
+    List<BillApplyDTO> queryBillApplyAll();
+
 }

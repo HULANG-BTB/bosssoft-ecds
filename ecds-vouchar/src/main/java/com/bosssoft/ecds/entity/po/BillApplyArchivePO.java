@@ -23,8 +23,8 @@ import java.util.Date;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("ubr_bill_apply_archive")
-@ApiModel(value="BillApplyArchivePO对象", description="归档领用")
+@TableName("fbr_bill_apply_archive")
+@ApiModel(value = "BillApplyArchivePO对象", description = "归档领用")
 public class BillApplyArchivePO extends Model<BillApplyArchivePO> {
 
     @ApiModelProperty(value = "主键")
@@ -35,45 +35,29 @@ public class BillApplyArchivePO extends Model<BillApplyArchivePO> {
     @TableField("f_agen_code")
     private String agenCode;
 
-    @ApiModelProperty(value = "申请人姓名")
-    @TableField("f_apply_user")
-    private String applyUser;
-
     @ApiModelProperty(value = "申请时间")
     @TableField("f_apply_time")
     private Date applyTime;
-
-    @ApiModelProperty(value = "票据批次id")
-    @TableField("f_batch_id")
-    private String batchId;
 
     @ApiModelProperty(value = "票据代码")
     @TableField("f_bill_code")
     private String billCode;
 
-    @ApiModelProperty(value = "票据起始票号")
-    @TableField("f_bill_no1")
-    private String billNo1;
+    @ApiModelProperty("票据名称")
+    @TableField("f_bill_name")
+    private String billName;
 
-    @ApiModelProperty(value = "票据结束票号")
-    @TableField("f_bill_no2")
-    private String billNo2;
+    @ApiModelProperty(value = "申请批次数量")
+    @TableField("f_batch_num")
+    private int batchNum;
 
-    @ApiModelProperty(value = "领用仓库id")
-    @TableField("f_warehouse_id")
-    private Long warehouseId;
+    @ApiModelProperty("联系人")
+    @TableField("f_link_man")
+    private String linkMan;
 
-    @ApiModelProperty(value = "票据领用数量")
-    @TableField("f_number")
-    private Long number;
-
-    @ApiModelProperty(value = "票据使用数量")
-    @TableField("f_use_number")
-    private Long useNumber;
-
-    @ApiModelProperty(value = "归档状态")
-    @TableField("f_is_save")
-    private Boolean isSave;
+    @ApiModelProperty("联系人电话")
+    @TableField("f_link_tel")
+    private String linkTel;
 
     @ApiModelProperty(value = "创建时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
@@ -102,43 +86,6 @@ public class BillApplyArchivePO extends Model<BillApplyArchivePO> {
     @TableField("f_logic_delete")
     @TableLogic
     private Boolean logicDelete;
-
-
-    public static final String F_ID = "f_id";
-
-    public static final String F_AGEN_IDCODE = "f_agen_idcode";
-
-    public static final String F_APPLY_USER = "f_apply_user";
-
-    public static final String F_APPLY_TIME = "f_apply_time";
-
-    public static final String F_BATCH_ID = "f_batch_id";
-
-    public static final String F_BILL_CODE = "f_bill_code";
-
-    public static final String F_BILL_NO1 = "f_bill_no1";
-
-    public static final String F_BILL_NO2 = "f_bill_no2";
-
-    public static final String F_WAREHOUSE_ID = "f_warehouse_id";
-
-    public static final String F_NUMBER = "f_number";
-
-    public static final String F_USE_NUMBER = "f_use_number";
-
-    public static final String F_IS_SAVE = "f_is_save";
-
-    public static final String F_CREATE_TIME = "f_create_time";
-
-    public static final String F_UPDATE_TIME = "f_update_time";
-
-    public static final String F_OPERATOR_ID = "f_operator_id";
-
-    public static final String F_OPERATOR = "f_operator";
-
-    public static final String F_VERSION = "f_version";
-
-    public static final String F_LOGIC_DELETE = "f_logic_delete";
 
     @Override
     protected Serializable pkVal() {

@@ -1,5 +1,6 @@
 package com.bosssoft.ecds;
 
+import com.bosssoft.ecds.service.BillApplyArchiveService;
 import com.bosssoft.ecds.service.BillAvailableArchiveService;
 import com.bosssoft.ecds.service.ItemArchiveService;
 import com.bosssoft.ecds.service.impl.BillCheckArchiveServiceImpl;
@@ -16,6 +17,8 @@ public class MyTest {
     ItemArchiveService itemArchiveService;
     @Autowired
     BillCheckArchiveServiceImpl billCheckArchiveService;
+    @Autowired
+    BillApplyArchiveService billApplyArchiveService;
 
     @Test
     public void testBillAvailable() {
@@ -30,5 +33,10 @@ public class MyTest {
     @Test
     public void testBillCheckArchiveService() {
         billCheckArchiveService.finaBillCheckArchive();
+    }
+
+    @Test
+    public void testBillApplyService() {
+        billApplyArchiveService.finaBillApplyArchive();
     }
 }
