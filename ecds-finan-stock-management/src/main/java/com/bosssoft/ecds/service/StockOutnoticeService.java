@@ -1,7 +1,11 @@
 package com.bosssoft.ecds.service;
 
+import com.bosssoft.ecds.entity.dto.StockOutDto;
+import com.bosssoft.ecds.entity.dto.StockOutItemDto;
 import com.bosssoft.ecds.entity.po.StockOutnoticePo;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.bosssoft.ecds.entity.vo.StockOutItemVo;
+import com.bosssoft.ecds.entity.vo.StockOutVo;
 
 import java.util.List;
 
@@ -16,11 +20,11 @@ import java.util.List;
 public interface StockOutnoticeService extends IService<StockOutnoticePo> {
 
     /**
-     * 获取最新的业务单号
-     *
-     * @return 新业务单号
+     * 新增一个空数据
+     * 返回主键id
+     * @return id
      */
-    Long getNewBussNo();
+    Long addNewBuss(String author);
 
     /**
      * 根据审核状态获取出库请求信息
@@ -33,6 +37,24 @@ public interface StockOutnoticeService extends IService<StockOutnoticePo> {
      * @param changeState 审核状态
      * @return 出库请求list
      */
-    List<StockOutnoticePo> queryByChangeState(Integer changeState);
+    List<StockOutDto> queryByChangeState(Integer changeState, Long page, Long limit);
+
+    /**
+     * 根据审核状态获得数量
+     *
+     * @param changeState 审核状态
+     * @return 记录数量
+     */
+    Long getCount(Integer changeState);
+
+    /**
+     * 检测判断出库请求中的数据是否合规
+     *
+     * @param outDto 出库Dto
+     * @param outItemDtos 出库明细Dto的list
+     *
+     * @return 合规true，违规false
+     */
+    Boolean checkSave(StockOutDto outDto, List<StockOutItemDto> outItemDtos);
 
 }

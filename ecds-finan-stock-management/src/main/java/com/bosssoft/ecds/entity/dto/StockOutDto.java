@@ -1,8 +1,7 @@
-package com.bosssoft.ecds.entity.vo;
+package com.bosssoft.ecds.entity.dto;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.bosssoft.ecds.entity.vo.StockOutItemVo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -10,10 +9,11 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
- *
+ * 
  * </p>
  *
  * @author misheep
@@ -22,11 +22,14 @@ import java.util.Date;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@ApiModel(value = "StockOutVo对象", description = "")
-public class StockOutVo extends Model<StockOutVo> {
+@ApiModel(value="StockOutDto对象", description="")
+public class StockOutDto extends Model<StockOutDto> {
 
     @ApiModelProperty(value = "主键")
     private Long id;
+
+    @ApiModelProperty(value = "业务单号")
+    private Long no;
 
     @ApiModelProperty(value = "区划编码")
     private String rgnCode;
@@ -48,11 +51,5 @@ public class StockOutVo extends Model<StockOutVo> {
 
     @ApiModelProperty(value = "摘要")
     private String abstact;
-
-    /**
-     * altercode:变更状态，1新增　2修改   3 删除
-     * 用于出库变动表记录
-     */
-    private Integer altercode;
 
 }
