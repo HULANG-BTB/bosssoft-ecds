@@ -1,50 +1,52 @@
 package com.bosssoft.ecds.entity.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class SearchFromVo {
 
     // 业务单号
-    private long number;
+    private String number;
 
     // 起始日期
-    private Date date1;
+    private String date1;
 
     // 结束日期
-    private Date date2;
+    private String date2;
 
     // 状态
-    private short state;
+    private String state;
 
-    public long getNumber() {
+    public String getNumber() {
         return number;
     }
 
-    public void setNumber(long number) {
+    public void setNumber(String number) {
         this.number = number;
     }
 
-    public Date getDate1() {
+    public String getDate1() {
         return date1;
     }
 
-    public void setDate1(Date date1) {
+    public void setDate1(String date1) {
         this.date1 = date1;
     }
 
-    public Date getDate2() {
+    public String getDate2() {
         return date2;
     }
 
-    public void setDate2(Date date2) {
+    public void setDate2(String date2) {
         this.date2 = date2;
     }
 
-    public short getState() {
+    public String getState() {
         return state;
     }
 
-    public void setState(short state) {
+    public void setState(String state) {
         this.state = state;
     }
 }

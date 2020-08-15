@@ -12,6 +12,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/financial")
+@CrossOrigin
 public class FinancialWriteOffController {
 
     @Autowired
@@ -25,7 +26,7 @@ public class FinancialWriteOffController {
      * @return java.util.List
      */
     @ResponseBody
-    @PostMapping("/receive")
+    @RequestMapping(value = "/receive", method = RequestMethod.POST)
     public List<Object> receive(Object object) {
         return financialWriteOffService.receive(object);
     }
@@ -38,7 +39,7 @@ public class FinancialWriteOffController {
      * @return
      */
     @ResponseBody
-    @PostMapping("/sendBack")
+    @RequestMapping(value = "/sendBack", method = RequestMethod.POST)
     public boolean sendBack(List<Object> list) {
         return financialWriteOffService.sendBack(list);
     }
@@ -50,7 +51,7 @@ public class FinancialWriteOffController {
      * @return java.lang.Object
      */
     @ResponseBody
-    @PostMapping("/getDetails")
+    @RequestMapping(value = "/getDetails", method = RequestMethod.POST)
     public Object getDetails(Object object) {
         return financialWriteOffService.getDetails(object);
     }
@@ -62,7 +63,7 @@ public class FinancialWriteOffController {
      * @return java.lang.Object
      */
     @ResponseBody
-    @PostMapping("/getUnitDetails")
+    @RequestMapping(value = "/getUnitDetails", method = RequestMethod.POST)
     public Object getUnitDetails(Object object) {
         return financialWriteOffService.getUnitDetails(object);
     }
@@ -74,7 +75,7 @@ public class FinancialWriteOffController {
      * @return java.lang.Object
      */
     @ResponseBody
-    @PostMapping("/setResult")
+    @RequestMapping(value = "/setResult", method = RequestMethod.POST)
     public boolean setResult(Object object) {
         return financialWriteOffService.setResult(object);
     }
@@ -87,7 +88,7 @@ public class FinancialWriteOffController {
      * @return java.lang.String
      */
     @ResponseBody
-    @PostMapping(value = "/search")
+    @RequestMapping(value = "/search", method = RequestMethod.POST)
     public String search(@RequestBody SearchFromVo searchFromVo){
         System.out.println(searchFromVo.getNumber());
         return "success";
