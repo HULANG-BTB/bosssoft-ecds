@@ -53,7 +53,7 @@ public class PageVO<T> {
     /**
      * 关键字
      */
-    @ApiModelProperty(value = "关键字", required = false, example = "")
+    @ApiModelProperty(value = "关键字", example = "")
     private String keyword;
 
 }

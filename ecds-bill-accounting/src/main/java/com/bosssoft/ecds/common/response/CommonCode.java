@@ -12,10 +12,10 @@ public enum CommonCode implements ResultCode {
     //操作成功时返回的状态码
     SUCCESS(true,1000,"操作成功！"),
     //操作失败时返回的状态码
-    FAIL(false,1001,"操作失败！"),
+    FAIL(false,999,"操作失败！"),
     //参数输入有误时返回的状态码
-    INVALIDATE(false,1002,"非法参数！"),
-    METHOD_NOT_SUPPORTED(false,1003, "请求方法不受支持"),
+    INVALIDATE(false,998,"非法参数！"),
+    METHOD_NOT_SUPPORTED(false,997, "请求方法不受支持"),
 
     SERVER_ERROR(false,9999,"抱歉，系统繁忙，请稍后重试！"),
     ;

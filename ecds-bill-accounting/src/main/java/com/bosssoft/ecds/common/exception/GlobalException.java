@@ -58,7 +58,7 @@ public class GlobalException {
         log.error("参数验证错误", e);
         // 从异常对象中拿到ObjectError对象
         ObjectError objectError = e.getBindingResult().getAllErrors().get(0);
-        return new ResponseResult(false,1004, objectError.getDefaultMessage());
+        return new ResponseResult(false,996, objectError.getDefaultMessage());
     }
 
     /**

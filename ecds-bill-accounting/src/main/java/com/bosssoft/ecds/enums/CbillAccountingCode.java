@@ -24,12 +24,12 @@ public enum  CbillAccountingCode implements ResultCode {
     ACCOUNT_TIME_ILLEGAL(false,1008,"入账时间不合理"),
     BILL_NO_NOT_EXIST(false, 1009, "票据号码不存在"),
     BILL_NO_REPEAT(false, 1010, "票据号码冲突"),
-    TIME_ILLEGAL(false, 1012, "开票时间不合理"),
-    WAIT_ACCOUNT_ILLEGAL(false,1013,"待缴金额异常"),
-    BILL_SERIAL_ID_REPEAT(false,1014,"票据校验码冲突"),
-    FINISHED(true,1015,"待缴金额已入账"),
-    UNFINISHED(false,1016,"待缴金额暂未入账"),
-    VOUCHER_FAIL(false,1017,"生成凭证失败")
+    TIME_ILLEGAL(false, 1011, "开票时间不合理"),
+    BILL_SERIAL_ID_REPEAT(false,1012,"票据校验码冲突"),
+    FINISHED(true,1013,"待缴金额已入账"),
+    UNFINISHED(false,1014,"待缴金额暂未入账"),
+    VOUCHER_FAIL(false,1015,"生成凭证失败"),
+    AGEN_IDCODE_NOT_EXIST(false,1016,"不存在该单位代码")
             ;
 
     boolean success;

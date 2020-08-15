@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -23,6 +24,8 @@ import java.util.Date;
 @NoArgsConstructor
 @ApiModel(value="VoucherVO对象", description="入账凭证")
 public class VoucherVO {
+
+    @NotNull(message = "入账凭证号不能为空")
     @ApiModelProperty(value = "入账凭证号")
     private Long accountId;
 

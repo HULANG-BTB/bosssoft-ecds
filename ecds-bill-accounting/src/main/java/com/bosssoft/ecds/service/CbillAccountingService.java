@@ -1,11 +1,14 @@
 package com.bosssoft.ecds.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.bosssoft.ecds.common.response.QueryResponseResult;
 import com.bosssoft.ecds.common.response.ResponseResult;
-import com.bosssoft.ecds.entity.dto.*;
+import com.bosssoft.ecds.entity.dto.AccBaseInfoDTO;
+import com.bosssoft.ecds.entity.dto.AccBillDTO;
+import com.bosssoft.ecds.entity.dto.AccIntoInfoDTO;
+import com.bosssoft.ecds.entity.dto.CbillAccountingDTO;
 import com.bosssoft.ecds.entity.po.CbillAccountingPO;
-import com.bosssoft.ecds.entity.vo.PageVO;
+
+import java.util.List;
 
 /**
  * <p>
@@ -16,47 +19,20 @@ import com.bosssoft.ecds.entity.vo.PageVO;
  * @since 2020-08-10
  */
 public interface CbillAccountingService extends IService<CbillAccountingPO> {
-    /**
-     * 查询入账单据列表
-     *
-     * @return 入账数据
-     */
-    ResponseResult listAll();
-
-    /**
-     * 分页查询
-     *
-     * @return
-     */
-    QueryResponseResult<PageVO> listByPage(PageDTO<CbillAccountingPO> pageDTO);
-
-    /**
-     * 根据校验码查询入账单据
-     *
-     * @return 入账数据
-     */
-    ResponseResult selectBySerialId(CbillAccountingDTO cbillAccountingDTO);
-
-    /**
-     * 通过票据号码查询入账信息
-     *
-     * @return 入账数据
-     */
-    ResponseResult selectByBillId(CbillAccountingDTO cbillAccountingDTO);
-
-    /**
-     * 通过单位代码查询入账信息
-     *
-     * @return 入账数据
-     */
-    ResponseResult selectByAgenIdcode(CbillAccountingDTO cbillAccountingDTO);
 
     /**
      * 开票阶段插入基础信息
      *
      * @return
      */
-    ResponseResult insertAccBaseInfo(AccBaseInfoDTO accBaseInfoDto);
+    ResponseResult insert(AccBaseInfoDTO accBaseInfoDto);
+
+    /**
+     * 开票阶段批量插入基础信息
+     *
+     * @return
+     */
+    ResponseResult insertBatch(List<AccBaseInfoDTO> accBaseInfoDTOList);
 
     /**
      * 缴费阶段查询应缴金额
@@ -85,5 +61,33 @@ public interface CbillAccountingService extends IService<CbillAccountingPO> {
      * @return
      */
     ResponseResult insertBillInfo(AccBillDTO accBillDto);
+
+    /**
+     * 删除入账信息
+     *
+     * @return
+     */
+    ResponseResult delete(CbillAccountingDTO cbillAccountingDTO);
+
+    /**
+     * 批量删除入账信息
+     *
+     * @return
+     */
+    ResponseResult batchDelete(List<CbillAccountingDTO> cbillAccountingDTOList);
+
+    /**
+     * 批量查询入账状态信息
+     *
+     * @return
+     */
+    ResponseResult selectAllStatus(List<AccBaseInfoDTO> accBaseInfoDTOList);
+
+    /**
+     * 批量查询代缴金额信息
+     *
+     * @return
+     */
+    ResponseResult selectAllAccount(List<CbillAccountingDTO> accountingDTOList);
 
 }
