@@ -14,4 +14,8 @@ import com.bosssoft.ecds.entity.po.BillWarnArchivePO;
  */
 public interface BillWarnArchiveService extends IService<BillWarnArchivePO> {
 
+    /**
+     * 预警电子票据归档信息
+     */
+    void finaBillWarnArchive();
 }

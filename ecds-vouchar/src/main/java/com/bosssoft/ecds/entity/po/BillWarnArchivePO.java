@@ -23,10 +23,9 @@ import java.util.Date;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("fbr_monitor_record_voucher")
-@ApiModel(value="MonitorRecordVoucherPO对象", description="归档预警")
+@TableName("fbr_bill_warn_archive")
+@ApiModel(value = "MonitorRecordVoucherPO对象", description = "归档预警")
 public class BillWarnArchivePO extends Model<BillWarnArchivePO> {
-
 
     @ApiModelProperty(value = "主键")
     @TableId(value = "f_id", type = IdType.AUTO)
@@ -44,21 +43,21 @@ public class BillWarnArchivePO extends Model<BillWarnArchivePO> {
     @TableField("f_mnt_cont")
     private String mntCont;
 
-    @ApiModelProperty(value = "预警票号编码")
-    @TableField("f_bill_code")
-    private String billCode;
-
-    @ApiModelProperty(value = "预警票号")
-    @TableField("f_bill_no")
-    private String billNo;
-
     @ApiModelProperty(value = "监控事项(规则)")
     @TableField("f_evt_name")
     private String evtName;
 
-    @ApiModelProperty(value = "归档状态")
-    @TableField("f_is_save")
-    private Boolean isSave;
+    @ApiModelProperty(value = "处理状态")
+    @TableField("f_is_hndl")
+    private String isHndl;
+
+    @ApiModelProperty(value = "处理人")
+    @TableField("f_hndl_name")
+    private String hndlName;
+
+    @ApiModelProperty(value = "处理时间")
+    @TableField("f_hndl_time")
+    private Date hndlTime;
 
     @ApiModelProperty(value = "创建时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
@@ -87,35 +86,6 @@ public class BillWarnArchivePO extends Model<BillWarnArchivePO> {
     @TableField("f_logic_delete")
     @TableLogic
     private Boolean logicDelete;
-
-
-    public static final String F_ID = "f_id";
-
-    public static final String F_AGEN_IDCODE = "f_agen_idcode";
-
-    public static final String F_MNT_TIME = "f_mnt_time";
-
-    public static final String F_MNT_CONT = "f_mnt_cont";
-
-    public static final String F_BILL_CODE = "f_bill_code";
-
-    public static final String F_BILL_NO = "f_bill_no";
-
-    public static final String F_EVT_NAME = "f_evt_name";
-
-    public static final String F_IS_SAVE = "f_is_save";
-
-    public static final String F_CREATE_TIME = "f_create_time";
-
-    public static final String F_UPDATE_TIME = "f_update_time";
-
-    public static final String F_OPERATOR_ID = "f_operator_id";
-
-    public static final String F_OPERATOR = "f_operator";
-
-    public static final String F_VERSION = "f_version";
-
-    public static final String F_LOGIC_DELETE = "f_logic_delete";
 
     @Override
     protected Serializable pkVal() {

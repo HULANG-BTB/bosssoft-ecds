@@ -1,7 +1,7 @@
 package com.bosssoft.ecds.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.bosssoft.ecds.entity.dto.BillWarnDto;
+import com.bosssoft.ecds.entity.dto.BillWarnDTO;
 import com.bosssoft.ecds.entity.po.BillWarnArchivePO;
 
 import java.util.List;
@@ -17,9 +17,9 @@ import java.util.List;
  */
 public interface BillWarnArchiveDao extends BaseMapper<BillWarnArchivePO> {
     /**
-     *  根据单位代码查询票据的预警信息
-      * @param agenIdCode
-     *  @return List<BillWarnDto>
+     * 查询一天时间内票据的预警信息
+     *
+     * @return List<BillWarnDto>
      */
-    List<BillWarnDto> queryBillWarnInfo(String agenIdCode);
+    List<BillWarnDTO> queryBillWarnInfos();
 }
