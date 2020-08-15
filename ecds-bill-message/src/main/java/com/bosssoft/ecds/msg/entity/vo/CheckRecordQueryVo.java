@@ -1,5 +1,6 @@
-package com.bosssoft.ecds.msg.entity.vo;
+package com.boss.msg.entity.vo;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
