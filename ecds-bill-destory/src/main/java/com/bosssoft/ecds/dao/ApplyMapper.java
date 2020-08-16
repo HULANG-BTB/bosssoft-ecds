@@ -1,7 +1,8 @@
 package com.bosssoft.ecds.dao;
 
-import com.bosssoft.ecds.entity.po.ItemPo;
+import com.bosssoft.ecds.entity.po.ApplyPo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
  * <p>
@@ -11,6 +12,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author qiuheng
  * @since 2020-08-12
  */
-public interface ItemDao extends BaseMapper<ItemPo> {
+@Mapper
+public interface ApplyMapper extends BaseMapper<ApplyPo> {
 
 }
