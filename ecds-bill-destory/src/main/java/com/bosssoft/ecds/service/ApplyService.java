@@ -1,5 +1,6 @@
 package com.bosssoft.ecds.service;
 
+import com.bosssoft.ecds.entity.dto.ApplyDto;
 import com.bosssoft.ecds.entity.po.ApplyPo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -16,4 +17,7 @@ import java.util.List;
 public interface ApplyService extends IService<ApplyPo> {
     ApplyPo selectById(Long id);
 
+    boolean insertApplyInfo(ApplyDto applyDto);
+
+    List<ApplyPo> getApplyList();
 }

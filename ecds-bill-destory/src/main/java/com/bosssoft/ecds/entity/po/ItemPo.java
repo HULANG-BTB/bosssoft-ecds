@@ -1,5 +1,7 @@
 package com.bosssoft.ecds.entity.po;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.time.LocalDateTime;
 import java.io.Serializable;
@@ -15,23 +17,22 @@ import lombok.experimental.Accessors;
  * @author qiuheng
  * @since 2020-08-12
  */
-@Data
+
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @TableName("ube_destroy_apply_item")
-public class ItemPo implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class ItemPo{
 
     /**
      * 主键
      */
+    @TableId(value = "f_id")
     private Long fId;
 
     /**
      * 父节点ID
      */
-    private String fPid;
+    private Long fPid;
 
     /**
      * 序号
@@ -83,5 +84,99 @@ public class ItemPo implements Serializable {
      */
     private String fWarehouseName;
 
+    public Long getfId() {
+        return fId;
+    }
 
+    public void setfId(Long fId) {
+        this.fId = fId;
+    }
+
+    public Long getfPid() {
+        return fPid;
+    }
+
+    public void setfPid(Long fPid) {
+        this.fPid = fPid;
+    }
+
+    public Integer getfSortNo() {
+        return fSortNo;
+    }
+
+    public void setfSortNo(Integer fSortNo) {
+        this.fSortNo = fSortNo;
+    }
+
+    public Integer getfVersion() {
+        return fVersion;
+    }
+
+    public void setfVersion(Integer fVersion) {
+        this.fVersion = fVersion;
+    }
+
+    public LocalDateTime getfCreateTime() {
+        return fCreateTime;
+    }
+
+    public void setfCreateTime(LocalDateTime fCreateTime) {
+        this.fCreateTime = fCreateTime;
+    }
+
+    public LocalDateTime getfUpdateTime() {
+        return fUpdateTime;
+    }
+
+    public void setfUpdateTime(LocalDateTime fUpdateTime) {
+        this.fUpdateTime = fUpdateTime;
+    }
+
+    public String getfBillBatchCode() {
+        return fBillBatchCode;
+    }
+
+    public void setfBillBatchCode(String fBillBatchCode) {
+        this.fBillBatchCode = fBillBatchCode;
+    }
+
+    public String getfBillNo1() {
+        return fBillNo1;
+    }
+
+    public void setfBillNo1(String fBillNo1) {
+        this.fBillNo1 = fBillNo1;
+    }
+
+    public String getfBillNo2() {
+        return fBillNo2;
+    }
+
+    public void setfBillNo2(String fBillNo2) {
+        this.fBillNo2 = fBillNo2;
+    }
+
+    public Integer getfNumber() {
+        return fNumber;
+    }
+
+    public void setfNumber(Integer fNumber) {
+        this.fNumber = fNumber;
+    }
+
+    public String getfWarehouseId() {
+        return fWarehouseId;
+    }
+
+    public void setfWarehouseId(String fWarehouseId) {
+        this.fWarehouseId = fWarehouseId;
+    }
+
+    public String getfWarehouseName() {
+        return fWarehouseName;
+    }
+
+    public void setfWarehouseName(String fWarehouseName) {
+        this.fWarehouseName = fWarehouseName;
+    }
 }
