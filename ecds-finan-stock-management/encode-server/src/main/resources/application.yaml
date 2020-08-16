@@ -47,4 +47,3 @@ mybatis-plus:
 redis:
   # 每次从关系型数据库中获取的号码数量
   getNumEveryTime: 5000
-
