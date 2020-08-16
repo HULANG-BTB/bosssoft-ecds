@@ -38,7 +38,7 @@ public class UpdateSourceMessageUtils {
         List<SourceMessagePo> list;
         list = sourceSetDao.retrieveSourceMessageList();
 
-        List<String> stringList = billDao.retrieveRegionCode();
+        List<String> stringList = billDao.retrieveBillTypeCode();
 
         redisTemplate.delete("RegionCode");
         redisTemplate.opsForList().leftPushAll("RegionCode", stringList);
@@ -51,11 +51,11 @@ public class UpdateSourceMessageUtils {
 
             if (isLock) {
                 for (int i = 0; i < list.size(); i++) {
-                    redisTemplate.delete(list.get(i).getRegionCode());
+                    redisTemplate.delete(list.get(i).getBillTypeCode());
                     Map map = new HashMap();
                     map.put("table", list.get(i).getTable());
                     map.put("threshold", list.get(i).getThreshold());
-                    redisTemplate.opsForHash().putAll(list.get(i).getRegionCode(), map);
+                    redisTemplate.opsForHash().putAll(list.get(i).getBillTypeCode(), map);
                 }
             }
         } catch (Exception e) {
@@ -65,10 +65,10 @@ public class UpdateSourceMessageUtils {
         }
     }
 
-    public void update(String regionCode) {
+    public void update(String billTypeCode) {
 
         boolean isLock;
-        SourceMessagePo sourceMessagePo = sourceSetDao.retrieveSourceMessageByCode(regionCode);
+        SourceMessagePo sourceMessagePo = sourceSetDao.retrieveSourceMessageByCode(billTypeCode);
 
         RLock lock = redissonClient.getLock(LOCK_KEY);
         RedissonRedLock redLock = new RedissonRedLock(lock);
@@ -80,8 +80,8 @@ public class UpdateSourceMessageUtils {
                 Map map = new HashMap();
                 map.put("table", sourceMessagePo.getTable());
                 map.put("threshold", sourceMessagePo.getThreshold());
-                redisTemplate.delete(sourceMessagePo.getRegionCode());
-                redisTemplate.opsForHash().putAll(sourceMessagePo.getRegionCode(), map);
+                redisTemplate.delete(sourceMessagePo.getBillTypeCode());
+                redisTemplate.opsForHash().putAll(sourceMessagePo.getBillTypeCode(), map);
             }
         } catch (Exception e) {
             e.printStackTrace();

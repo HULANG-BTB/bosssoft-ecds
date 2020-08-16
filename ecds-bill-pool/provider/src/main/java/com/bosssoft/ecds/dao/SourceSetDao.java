@@ -11,10 +11,13 @@ public interface SourceSetDao {
 
     int updatePushNumber(SourceSetPo sourceSetPo);
 
+    int updateSet(SourceSetPo sourceSetPo);
+
     List<SourceMessagePo> retrieveSourceMessageList();
 
-    SourceMessagePo retrieveSourceMessageByCode(String regionCode);
+    SourceMessagePo retrieveSourceMessageByCode(String billTypeCode);
 
-    List retrieveSetList();
+    List<SourceSetPo> retrieveSetList();
 
+    SourceSetPo retrieveSetByCode(String billTypeCode);
 }

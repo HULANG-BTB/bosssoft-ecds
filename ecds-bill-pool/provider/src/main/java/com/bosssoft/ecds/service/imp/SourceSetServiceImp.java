@@ -24,7 +24,7 @@ public class SourceSetServiceImp implements SourceSetService {
     public int updateMin(SourceSetDto sourceSetDto) {
         SourceSetPo sourceSetPo = BeanUtils.convertObject(sourceSetDto, SourceSetPo.class);
         int result = sourceSetDao.updateMin(sourceSetPo);
-        utils.update(sourceSetDto.getRegionCode());
+        utils.update(sourceSetDto.getBillTypeCode());
         return result;
     }
 
@@ -32,7 +32,15 @@ public class SourceSetServiceImp implements SourceSetService {
     public int updatePushNumber(SourceSetDto sourceSetDto) {
         SourceSetPo sourceSetPo = BeanUtils.convertObject(sourceSetDto, SourceSetPo.class);
         int result = sourceSetDao.updatePushNumber(sourceSetPo);
-        utils.update(sourceSetDto.getRegionCode());
+        utils.update(sourceSetDto.getBillTypeCode());
+        return result;
+    }
+
+    @Override
+    public int updateSet(SourceSetDto sourceSetDto) {
+        SourceSetPo sourceSetPo = BeanUtils.convertObject(sourceSetDto, SourceSetPo.class);
+        int result = sourceSetDao.updateSet(sourceSetPo);
+        utils.update(sourceSetDto.getBillTypeCode());
         return result;
     }
 
@@ -40,5 +48,11 @@ public class SourceSetServiceImp implements SourceSetService {
     public List<SourceSetDto> retrieveSetList() {
         List<SourceSetDto> list = BeanUtils.convertList(sourceSetDao.retrieveSetList(), SourceSetDto.class);
         return list;
+    }
+
+    @Override
+    public SourceSetDto retrieveSetByCode(String billTypeCode) {
+        SourceSetDto sourceSetDto = BeanUtils.convertObject(sourceSetDao.retrieveSetByCode(billTypeCode), SourceSetDto.class);
+        return sourceSetDto;
     }
 }

@@ -4,7 +4,7 @@
 
     <resultMap id="sourceSetMap" type="sourceSetPo">
         <id column="f_id" property="id"/>
-        <result column="f_rgn_code" property="regionCode"/>
+        <result column="f_bill_type" property="billTypeCode"/>
         <result column="f_pool_id" property="sourceID"/>
         <result column="f_push_num" property="pushNumber"/>
         <result column="f_min_stock" property="minNumber"/>
@@ -18,32 +18,51 @@
     <update id="updateMin" parameterType="sourceSetPo">
         update uaa_set_ticketcenter set f_min_stock = #{minNumber}, f_alter_code = #{alterCode},
         f_operator = #{operator}, f_operator_id = #{operatorID}
-        where f_rgn_code = #{regionCode}
+        where f_bill_type = #{billTypeCode}
     </update>
 
     <update id="updatePushNumber" parameterType="sourceSetPo">
         update uaa_set_ticketcenter set f_push_num = #{pushNumber}, f_alter_code = #{alterCode},
         f_operator = #{operator}, f_operator_id = #{operatorID}
-        where f_rgn_code = #{regionCode}
+        where f_bill_type = #{billTypeCode}
+    </update>
+
+    <update id="updateSet" parameterType="sourceSetPo">
+        update uaa_set_ticketcenter
+        <set>
+            <if test="pushNumber != null and pushNumber != 0">
+                f_push_num = #{pushNumber},
+            </if>
+            <if test="minNumber != null and minNumber != 0">
+                f_min_stock = #{minNumber},
+            </if>
+            f_operator = #{operator}, f_operator_id = #{operatorID}
+        </set>
+        where f_bill_type = #{billTypeCode}
     </update>
 
     <resultMap id="sourceMessageMap" type="sourceMessagePo">
-        <result column="f_rgn_code" property="regionCode"/>
+        <result column="f_bill_type" property="billTypeCode"/>
         <result column="f_pool" property="table"/>
         <result column="f_min_stock" property="threshold"/>
     </resultMap>
 
     <select id="retrieveSourceMessageList" resultMap="sourceMessageMap">
-        select u.f_rgn_code, u.f_min_stock, b.f_pool from uaa_set_ticketcenter u left join bill_pool b
+        select u.f_bill_type, u.f_min_stock, b.f_pool from uaa_set_ticketcenter u left join bill_pool b
         on u.f_pool_id = b.f_pool_id
     </select>
 
     <select id="retrieveSourceMessageByCode" resultMap="sourceMessageMap">
-        select u.f_rgn_code, u.f_min_stock, b.f_pool from uaa_set_ticketcenter u left join bill_pool b
-        on u.f_pool_id = b.f_pool_id where u.f_rgn_code = #{regionCode}
+        select u.f_bill_type, u.f_min_stock, b.f_pool from uaa_set_ticketcenter u left join bill_pool b
+        on u.f_pool_id = b.f_pool_id where u.f_bill_type = #{billTypeCode}
     </select>
 
     <select id="retrieveSetList" resultMap="sourceSetMap">
         select * from uaa_set_ticketcenter
     </select>
+
+    <select id="retrieveSetByCode" resultMap="sourceSetMap">
+        select * from uaa_set_ticketcenter where f_bill_type = #{billTypeCode}
+    </select>
+
 </mapper>

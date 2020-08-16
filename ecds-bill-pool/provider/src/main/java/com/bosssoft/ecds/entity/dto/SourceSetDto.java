@@ -2,19 +2,19 @@ package com.bosssoft.ecds.entity.dto;
 
 public class SourceSetDto {
 
-    String regionCode;
+    String billTypeCode;
     int pushNumber;
     int minNumber;
     int alterCode;
     String operator;
     int operatorID;
 
-    public String getRegionCode() {
-        return regionCode;
+    public String getBillTypeCode() {
+        return billTypeCode;
     }
 
-    public void setRegionCode(String regionCode) {
-        this.regionCode = regionCode;
+    public void setBillTypeCode(String billTypeCode) {
+        this.billTypeCode = billTypeCode;
     }
 
     public int getPushNumber() {
@@ -60,7 +60,7 @@ public class SourceSetDto {
     @Override
     public String toString() {
         return "SourceSetDto{" +
-                "regionCode='" + regionCode + '\'' +
+                "billTypeCode='" + billTypeCode + '\'' +
                 ", pushNumber=" + pushNumber +
                 ", minNumber=" + minNumber +
                 ", alterCode=" + alterCode +
