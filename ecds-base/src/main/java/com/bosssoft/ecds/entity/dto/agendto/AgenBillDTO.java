@@ -1,4 +1,4 @@
-package com.bosssoft.ecds.entity.dto;
+package com.bosssoft.ecds.entity.dto.agendto;
 
 import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.annotations.ApiModel;
@@ -15,8 +15,8 @@ import java.util.Date;
  * @description
  */
 @Data
-@ApiModel(value="AgenItemDTO对象", description="")
-public class AgenItemDTO {
+@ApiModel(value = "AgenBillDTO对象", description = "")
+public class AgenBillDTO {
 
     @ApiModelProperty(value = "主键")
     private Long id;
@@ -24,11 +24,14 @@ public class AgenItemDTO {
     @ApiModelProperty(value = "单位编码")
     private String agenIdcode;
 
-    @ApiModelProperty(value = "项目编码")
-    private String itemCode;
+    @ApiModelProperty(value = "票据编码")
+    private String typeCode;
 
     @ApiModelProperty(value = "经办人")
     private String operator;
+
+    @ApiModelProperty(value = "经办人ID")
+    private Long operatorId;
 
     @ApiModelProperty(value = "创建日期")
     private Date createTime;
@@ -38,7 +41,4 @@ public class AgenItemDTO {
 
     @ApiModelProperty(value = "备注")
     private String note;
-
-    @ApiModelProperty(value = "经办人ID")
-    private Long operatorId;
 }

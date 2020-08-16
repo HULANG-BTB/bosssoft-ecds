@@ -1,7 +1,7 @@
 package com.bosssoft.ecds.controller;
 
 
-import com.bosssoft.ecds.common.response.ResponseResult;
+import com.bosssoft.ecds.response.ResponseResult;
 import com.bosssoft.ecds.entity.dto.GroupDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.vo.PageVO;

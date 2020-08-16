@@ -1,10 +1,10 @@
 package com.bosssoft.ecds.controller;
 
 
-import com.bosssoft.ecds.common.response.QueryResponseResult;
-import com.bosssoft.ecds.common.response.ResponseResult;
+import com.bosssoft.ecds.response.QueryResponseResult;
+import com.bosssoft.ecds.response.ResponseResult;
 import com.bosssoft.ecds.entity.dto.PageDTO;
-import com.bosssoft.ecds.entity.dto.PlaceDTO;
+import com.bosssoft.ecds.entity.dto.placedto.PlaceAllDTO;
 import com.bosssoft.ecds.entity.vo.PageVO;
 import com.bosssoft.ecds.entity.vo.PlaceVO;
 import com.bosssoft.ecds.service.PlaceService;
@@ -45,7 +45,7 @@ public class PlaceController {
     @ApiOperation(value = "添加开票点", notes = "单位开票点相关信息")
     @PostMapping("/save")
     public ResponseResult save(@RequestBody PlaceVO placeVO) {
-        PlaceDTO placeDTO = MyBeanUtil.myCopyProperties(placeVO, PlaceDTO.class);
+        PlaceAllDTO placeDTO = MyBeanUtil.myCopyProperties(placeVO, PlaceAllDTO.class);
         return placeService.save(placeDTO);
     }
 
@@ -58,7 +58,7 @@ public class PlaceController {
     @ApiOperation(value = "修改开票点")
     @PostMapping("/update")
     public ResponseResult update(@RequestBody PlaceVO placeVO) {
-        PlaceDTO placeDTO = MyBeanUtil.myCopyProperties(placeVO, PlaceDTO.class);
+        PlaceAllDTO placeDTO = MyBeanUtil.myCopyProperties(placeVO, PlaceAllDTO.class);
         return placeService.update(placeDTO);
     }
 
@@ -71,7 +71,7 @@ public class PlaceController {
     @ApiOperation(value = "批量审核")
     @PostMapping("/batchVerify")
     public ResponseResult batchVerify(@RequestBody List<PlaceVO> placeVOList) {
-        List<PlaceDTO> placeDTOS = MyBeanUtil.copyListProperties(placeVOList, PlaceDTO::new);
+        List<PlaceAllDTO> placeDTOS = MyBeanUtil.copyListProperties(placeVOList, PlaceAllDTO::new);
         return placeService.batchVerify(placeDTOS);
     }
 
@@ -84,7 +84,7 @@ public class PlaceController {
     @ApiOperation(value = "删除单个开票点", notes = "需要删除的开票点id")
     @PostMapping("/delete")
     public ResponseResult delete(@RequestBody PlaceVO placeVO) {
-        PlaceDTO placeDTO = MyBeanUtil.myCopyProperties(placeVO, PlaceDTO.class);
+        PlaceAllDTO placeDTO = MyBeanUtil.myCopyProperties(placeVO, PlaceAllDTO.class);
         return placeService.delete(placeDTO);
     }
 
@@ -97,7 +97,7 @@ public class PlaceController {
     @ApiOperation(value = "批量删除", notes = "需要删除的开票点idList")
     @PostMapping("/batchDelete")
     public ResponseResult batchDelete(@RequestBody List<PlaceVO> placeVOList) {
-        List<PlaceDTO> placeDTOS = MyBeanUtil.copyListProperties(placeVOList, PlaceDTO::new);
+        List<PlaceAllDTO> placeDTOS = MyBeanUtil.copyListProperties(placeVOList, PlaceAllDTO::new);
         return placeService.batchDelete(placeDTOS);
     }
 
@@ -111,7 +111,7 @@ public class PlaceController {
     @ApiOperation(value = "分页查询")
     @PostMapping("/listByPage")
     public QueryResponseResult<PageVO> listByPage(@RequestBody PageVO pageVO) {
-        PageDTO<PlaceDTO> pageDTO = MyBeanUtil.myCopyProperties(pageVO, PageDTO.class);
+        PageDTO<PlaceAllDTO> pageDTO = MyBeanUtil.myCopyProperties(pageVO, PageDTO.class);
         return placeService.listByPage(pageDTO);
     }
 

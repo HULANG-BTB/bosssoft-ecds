@@ -1,6 +1,6 @@
 package com.bosssoft.ecds.service;
 
-import com.bosssoft.ecds.entity.dto.AgenDTO;
+import com.bosssoft.ecds.entity.dto.agendto.AgenDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.dto.agendto.AgenInfoDTO;
 import com.bosssoft.ecds.entity.po.AgenPO;
