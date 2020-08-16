@@ -28,30 +28,6 @@ import java.util.Date;
 @ApiModel(value = "CbillAccountingPO对象", description = "")
 public class CbillAccountingPO extends Model<CbillAccountingPO> {
 
-
-    public static final String F_ID = "f_id";
-    public static final String F_AGEN_IDCODE = "f_agen_idcode";
-    public static final String F_AGEN_NAME = "f_agen_name";
-    public static final String F_PLACE_ID = "f_place_id";
-    public static final String F_AGEN_TIME = "f_agen_time";
-    public static final String F_TYPE = "f_type";
-    public static final String F_BILL_BATCH_ID = "f_bill_batch_id";
-    public static final String F_BILL_SERIAL_ID = "f_bill_serial_id";
-    public static final String F_BILL_NO = "f_bill_no";
-    public static final String F_TIME = "f_time";
-    public static final String F_ACCOUNT = "f_account";
-    public static final String F_ACCOUNT_ID = "f_account_id";
-    public static final String F_VERSION = "f_version";
-    public static final String F_CREATE_TIME = "f_create_time";
-    public static final String F_UPDATE_TIME = "f_update_time";
-    public static final String F_LOGIC_DELETE = "f_logic_delete";
-    public static final String F_WAIT_ACCOUNT = "f_wait_account";
-    public static final String F_ACCOUNT_TYPE = "f_account_type";
-    public static final String F_ACCOUNT_STATUS = "f_account_status";
-    public static final String F_OPERATOR = "f_operator";
-    public static final String F_OPERATOR_ID = "f_operator_id";
-    public static final String F_PAYER_TEL = "f_payer_tel";
-    public static final String F_NODE = "f_node";
     @ApiModelProperty(value = "主键")
     @TableId(value = "f_id", type = IdType.AUTO)
     private Long id;

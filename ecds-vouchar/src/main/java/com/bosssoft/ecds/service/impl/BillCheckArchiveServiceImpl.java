@@ -1,19 +1,19 @@
 package com.bosssoft.ecds.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bosssoft.ecds.dao.BillCheckArchiveDao;
 import com.bosssoft.ecds.entity.dto.BillCheckDTO;
 import com.bosssoft.ecds.entity.dto.CBillAccountingDTO;
-import com.bosssoft.ecds.entity.po.*;
-import com.bosssoft.ecds.service.*;
+import com.bosssoft.ecds.entity.po.ArchivePO;
+import com.bosssoft.ecds.entity.po.BillCheckArchivePO;
+import com.bosssoft.ecds.entity.po.CbillAccountingPO;
+import com.bosssoft.ecds.service.ArchiveOverViewService;
+import com.bosssoft.ecds.service.BillCheckArchiveService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,12 +31,6 @@ import java.util.Map;
 public class BillCheckArchiveServiceImpl extends ServiceImpl<BillCheckArchiveDao, BillCheckArchivePO> implements BillCheckArchiveService {
 
     @Autowired
-    WriteoffService writeoffService;
-    @Autowired
-    WriteoffBillitemService writeoffBillitemService;
-    @Autowired
-    CbillAccountingService cbillAccountingService;
-    @Autowired
     ArchiveOverViewService archiveOverViewService;
     @Autowired
     BillCheckArchiveDao billCheckArchiveDao;
@@ -48,54 +42,8 @@ public class BillCheckArchiveServiceImpl extends ServiceImpl<BillCheckArchiveDao
 
     @Override
     public void finaBillCheckArchive() {
-        List<BillCheckDTO> res = new ArrayList<>();
-
-        /*
-            票据审核信息收集并且入库   一段时间内
-         */
-        LambdaQueryWrapper<WriteoffPO> wrapper = new LambdaQueryWrapper<>();
-        wrapper.apply("date_format(f_create_time, '%Y-%m-%d') = date_format(date_sub(SYSDATE(), interval 1 day), '%Y-%m-%d')");
-        List<WriteoffPO> writeoffPOS = writeoffService.list(wrapper);
-
-        /*
-            收集审验数据
-         */
-        writeoffPOS.forEach(
-                item -> {
-                    BillCheckDTO dto = new BillCheckDTO();
-                    dto.setAgenCode(item.getAgenIdCode());
-                    dto.setSignTime(item.getCheckDate());
-                    dto.setSignName(item.getAuthor());
-                    dto.setApplyId(item.getApplyId());
-                    dto.setSignStatus(item.getCheckResult());
-                    res.add(dto);
-                }
-        );
-
-        /*
-            收集审验票据数据并且归档
-         */
-        res.forEach(
-                item -> {
-                    LambdaQueryWrapper<WriteoffBillitemPO> lqw = new LambdaQueryWrapper<>();
-                    lqw.eq(WriteoffBillitemPO::getPid, item.getApplyId())
-                            .and(w -> w.apply("date_format(f_create_time, '%Y-%m-%d') = date_format(date_sub(SYSDATE(), interval 1 day), '%Y-%m-%d')"));
-                    WriteoffBillitemPO one = writeoffBillitemService.getOne(lqw);
-                    item.setBillCode(one.getBillCode());
-                    item.setBillName(one.getBillName());
-                    item.setBillNumber(one.getNumber());
-
-                    /*
-                        归档
-                     */
-                    BillCheckArchivePO po = new BillCheckArchivePO();
-                    BeanUtil.copyProperties(item, po);
-                    po.setVersion(1);
-                    po.setLogicDelete(false);
-                    billCheckArchiveDao.insert(po);
-                }
-        );
-
+        List<BillCheckArchivePO> billCheckArchivePOS = billCheckArchiveDao.collectBillCheckInfo();
+        saveBatch(billCheckArchivePOS);
         /*
          * 更新信息
          */
@@ -108,13 +56,12 @@ public class BillCheckArchiveServiceImpl extends ServiceImpl<BillCheckArchiveDao
      * @return boolean
      */
     private boolean updateOverViewArchiveInfos() {
+        log.info("updateOverViewArch start");
         /*
          * 获取各个公司一定时间内的审核信息
          */
-        LambdaQueryWrapper<CbillAccountingPO> lqw = new LambdaQueryWrapper<>();
-        lqw.apply("date_format(f_create_time, '%Y-%m-%d') = date_format(date_sub(SYSDATE(), interval 1 day), '%Y-%m-%d')");
-        List<CbillAccountingPO> list = cbillAccountingService.list(lqw);
-
+        List<CbillAccountingPO> list = billCheckArchiveDao.collectCBillAccountInfo();
+        Assert.notNull(list, "list为空！！");
         /*
          * 信息整理  更新
          */
@@ -123,6 +70,9 @@ public class BillCheckArchiveServiceImpl extends ServiceImpl<BillCheckArchiveDao
         /*
          * 各个公司的票据不同阶段的数量
          */
+        Assert.notEmpty(list, "公司的审核信息为空！");
+
+        log.info(" " + list);
         list.forEach(
                 item -> {
                     /*
@@ -150,33 +100,6 @@ public class BillCheckArchiveServiceImpl extends ServiceImpl<BillCheckArchiveDao
                                 return v;
                             }
                     );
-                    /*if (!cMap.containsKey(item.getAgenIdcode())) {
-                        CBillAccountingDTO dto = new CBillAccountingDTO();
-                        dto.setAgenIdcode(item.getAgenIdcode());
-                        dto.setBillUsedNumber(1L);
-                        if (Boolean.TRUE.equals(item.getAccountStatus())) {
-                            dto.setBillCheckedNumber(1L);
-                            dto.setBillUncheckNumber(0L);
-                        } else {
-                            dto.setBillCheckedNumber(0L);
-                            dto.setBillUncheckNumber(1L);
-                        }
-                        cMap.put(item.getAgenIdcode(), dto);
-                    } else {
-
-                        cMap.computeIfPresent(
-                                item.getAgenIdcode(),
-                                (k, v) -> {
-                                    v.setBillUsedNumber(v.getBillUsedNumber() + 1);
-                                    if (Boolean.TRUE.equals(item.getAccountStatus())) {
-                                        v.setBillCheckedNumber(v.getBillCheckedNumber() + 1);
-                                    } else {
-                                        v.setBillUncheckNumber(v.getBillUncheckNumber() + 1);
-                                    }
-                                    return v;
-                                }
-                        );
-                    }*/
                 }
         );
 
@@ -208,8 +131,6 @@ public class BillCheckArchiveServiceImpl extends ServiceImpl<BillCheckArchiveDao
                     }
                 }
         );
-        log.info("infos new : " + infos);
-
         /*
          * 批量更新
          */

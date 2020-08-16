@@ -3,7 +3,6 @@ package com.bosssoft.ecds.service.impl;
 import cn.hutool.core.lang.Assert;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bosssoft.ecds.dao.BillPayArchiveDao;
-import com.bosssoft.ecds.entity.dto.BillPayDTO;
 import com.bosssoft.ecds.entity.po.BillPayArchivePO;
 import com.bosssoft.ecds.service.BillPayArchiveService;
 import lombok.extern.slf4j.Slf4j;
@@ -34,14 +33,15 @@ public class BillPayArchiveServiceImpl extends ServiceImpl<BillPayArchiveDao, Bi
 
     @Override
     public void finaBillPayArchive() {
-        List<BillPayDTO> billPayDTOS = billPayArchiveDao.queryBillPayInfos();
-        log.info("old " + billPayDTOS);
-        Assert.notEmpty(billPayDTOS, "缴款信息暂时为空");
+        List<BillPayArchivePO> billPayArchivePOS = billPayArchiveDao.queryBillPayInfos();
+        log.info("old " + billPayArchivePOS);
+        Assert.notEmpty(billPayArchivePOS, "缴款信息暂时为空");
         /*分组*/
-        Map<String, List<BillPayDTO>> collect = billPayDTOS.stream().collect(
-                Collectors.groupingBy(BillPayDTO::getAgenCode)
+        Map<String, List<BillPayArchivePO>> collect = billPayArchivePOS.stream().collect(
+                Collectors.groupingBy(BillPayArchivePO::getAgenCode)
         );
         log.info("collect :" + collect);
+
         /*统计*/
         List<BillPayArchivePO> res = new ArrayList<>();
         collect.forEach(
@@ -64,8 +64,6 @@ public class BillPayArchiveServiceImpl extends ServiceImpl<BillPayArchiveDao, Bi
                     log.info("number " + po.getUseNumber());
                     po.setWaitAccount(accounts[0]);
                     po.setAccount(accounts[1]);
-                    po.setVersion(0);
-                    po.setLogicDelete(false);
                     res.add(po);
                 }
         );

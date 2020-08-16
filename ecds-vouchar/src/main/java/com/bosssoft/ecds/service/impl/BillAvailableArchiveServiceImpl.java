@@ -7,7 +7,6 @@ import com.bosssoft.ecds.entity.dto.BillApplyDTO;
 import com.bosssoft.ecds.entity.dto.BillAvailableInfoDTO;
 import com.bosssoft.ecds.entity.po.BillAvailableArchivePO;
 import com.bosssoft.ecds.service.BillAvailableArchiveService;
-import com.bosssoft.ecds.service.WriteoffBillsummaryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,12 +25,6 @@ import java.util.List;
 @Service
 @Slf4j
 public class BillAvailableArchiveServiceImpl extends ServiceImpl<BillAvailableArchiveDao, BillAvailableArchivePO> implements BillAvailableArchiveService {
-
-    /**
-     * 审验单服务
-     */
-    @Autowired
-    private WriteoffBillsummaryService writeoffBillsummaryService;
 
     @Autowired
     private BillAvailableArchiveDao billAvailableArchiveDao;

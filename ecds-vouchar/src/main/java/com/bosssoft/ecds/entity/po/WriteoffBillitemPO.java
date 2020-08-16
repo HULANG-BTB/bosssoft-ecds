@@ -27,24 +27,6 @@ import java.util.Date;
 @ApiModel(value = "WriteoffBillitemPO对象", description = "")
 public class WriteoffBillitemPO extends Model<WriteoffBillitemPO> {
 
-
-    public static final String F_ID = "f_id";
-    public static final String F_PID = "f_pid";
-    public static final String F_SORT_NO = "f_sort_no";
-    public static final String F_BILL_CODE = "f_bill_code";
-    public static final String F_BILL_NAME = "f_bill_name";
-    public static final String F_BILL_ID = "f_bill_id";
-    public static final String F_BATCH_CODE = "f_batch_code";
-    public static final String F_NUMBER = "f_number";
-    public static final String F_BILL_NO1 = "f_bill_no1";
-    public static final String F_BILL_NO2 = "f_bill_no2";
-    public static final String F_AMT = "f_amt";
-    public static final String F_INVNUM = "f_invnum";
-    public static final String F_VERSION = "f_version";
-    public static final String F_CREATE_TIME = "f_create_time";
-    public static final String F_UPDATE_TIME = "f_update_time";
-    public static final String F_OPERATOR_ID = "f_operator_id";
-    public static final String F_OPERATOR = "f_operator";
     @ApiModelProperty(value = "主键")
     @TableId(value = "f_id", type = IdType.AUTO)
     private Long id;

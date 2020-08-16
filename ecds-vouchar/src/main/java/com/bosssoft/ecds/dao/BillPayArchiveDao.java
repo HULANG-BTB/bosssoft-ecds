@@ -1,7 +1,6 @@
 package com.bosssoft.ecds.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.bosssoft.ecds.entity.dto.BillPayDTO;
 import com.bosssoft.ecds.entity.po.BillPayArchivePO;
 
 import java.util.List;
@@ -17,10 +16,11 @@ import java.util.List;
  */
 public interface BillPayArchiveDao extends BaseMapper<BillPayArchivePO> {
     /**
-     *  查询缴款信息
+     * 查询缴款信息
+     *
      * @return
      */
-    List<BillPayDTO> queryBillPayInfos();
+    List<BillPayArchivePO> queryBillPayInfos();
 
     /**
      *  根据单位编码查询所有让用户缴费票据的数量 （已归档状态下）

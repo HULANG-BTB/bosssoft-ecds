@@ -1,6 +1,5 @@
 package com.bosssoft.ecds.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bosssoft.ecds.dao.BillApplyArchiveDao;
 import com.bosssoft.ecds.entity.dto.ArchiveOverViewDTO;
@@ -12,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -56,7 +54,7 @@ public class BillApplyArchiveServiceImpl extends ServiceImpl<BillApplyArchiveDao
         /*
          * 获取所有单位的票据申领信息
          */
-        List<BillApplyDTO> billApplyDTOS = dao.queryBillApplyAll();
+        List<BillApplyArchivePO> billApplyArchivePOS = dao.queryBillApplyAll();
 
         /*
          * 记录每家公司申请的总票数*/
@@ -65,29 +63,21 @@ public class BillApplyArchiveServiceImpl extends ServiceImpl<BillApplyArchiveDao
         /*
          * 信息处理
          */
-        List<BillApplyArchivePO> res = new ArrayList<>();
-        Assert.notNull(billApplyDTOS, "所有单位票据申请信息为空");
-        billApplyDTOS.forEach(
+        Assert.notNull(billApplyArchivePOS, "所有单位票据申请信息为空");
+        billApplyArchivePOS.forEach(
                 item -> {
-                    BillApplyArchivePO po = new BillApplyArchivePO();
-                    BeanUtil.copyProperties(item, po);
-                    po.setVersion(0);
-                    po.setLogicDelete(false);
-
                     /*
                      * 记录票数*/
-                    counts.computeIfAbsent(po.getAgenCode(), agenCode -> 0);
-                    counts.computeIfPresent(po.getAgenCode(),
+                    counts.computeIfAbsent(item.getAgenCode(), agenCode -> 0);
+                    counts.computeIfPresent(item.getAgenCode(),
                             (agenCode, applyNumber) -> applyNumber + item.getBatchNum());
-                    res.add(po);
                 }
         );
 
         /*
          * 申领信息归档
          */
-        Assert.notNull(res, "所有单位票据申请信息的po集合为空");
-        this.saveBatch(res);
+        this.saveBatch(billApplyArchivePOS);
 
         /*
          *获取归档总览表中所有的公司

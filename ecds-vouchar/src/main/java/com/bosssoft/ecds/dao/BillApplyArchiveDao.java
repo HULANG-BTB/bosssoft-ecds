@@ -1,7 +1,6 @@
 package com.bosssoft.ecds.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.bosssoft.ecds.entity.dto.BillApplyDTO;
 import com.bosssoft.ecds.entity.po.BillApplyArchivePO;
 
 import java.util.List;
@@ -22,6 +21,6 @@ public interface BillApplyArchiveDao extends BaseMapper<BillApplyArchivePO> {
      *
      * @return List<BillApplyDTO>
      */
-    List<BillApplyDTO> queryBillApplyAll();
+    List<BillApplyArchivePO> queryBillApplyAll();
 
 }

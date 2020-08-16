@@ -1,7 +1,7 @@
 package com.bosssoft.ecds.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.bosssoft.ecds.entity.dto.ItemAvailableDto;
+import com.bosssoft.ecds.entity.dto.ItemAvailableDTO;
 import com.bosssoft.ecds.entity.po.ItemArchivePO;
 
 import java.util.List;
@@ -26,7 +26,7 @@ public interface ItemArchiveService extends IService<ItemArchivePO> {
      *
      * @return List<ItemAvailableDto>
      */
-    List<ItemAvailableDto> getItemAvailableInfos();
+    List<ItemAvailableDTO> getItemAvailableInfos();
 
     /**
      * 财政端 可用项目归档
@@ -43,10 +43,6 @@ public interface ItemArchiveService extends IService<ItemArchivePO> {
      * @param agenCode
      * @return BillApplyDto
      */
-    ItemAvailableDto getBillApplyInfo(String agenCode);
+    ItemAvailableDTO getBillApplyInfo(String agenCode);
 
-    /**
-     * 单位端票据申领情况归档
-     */
-    void unitItemAvailableArchive();
 }

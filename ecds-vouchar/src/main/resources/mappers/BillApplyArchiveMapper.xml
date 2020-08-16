@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bosssoft.ecds.dao.BillApplyArchiveDao">
     <!--归档领用信息-->
-    <select id="queryBillApplyAll" resultType="com.bosssoft.ecds.entity.dto.BillApplyDTO">
+    <select id="queryBillApplyAll" resultType="com.bosssoft.ecds.entity.po.BillApplyArchivePO">
         SELECT
             S.f_agen_id_code as agenCode,
             S.f_create_time as applyTime,

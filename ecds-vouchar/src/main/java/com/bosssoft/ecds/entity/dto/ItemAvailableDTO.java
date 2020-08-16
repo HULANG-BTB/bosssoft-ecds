@@ -11,7 +11,8 @@ import java.io.Serializable;
  */
 @Data
 @ApiModel(value = "ItemAvailableDto", description = "可用项目传输对象")
-public class ItemAvailableDto implements Serializable {
+public class ItemAvailableDTO implements Serializable {
+
     @ApiModelProperty(value = "单位编码")
     private String agenCode;
 

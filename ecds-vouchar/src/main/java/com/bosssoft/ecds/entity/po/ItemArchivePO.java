@@ -75,31 +75,6 @@ public class ItemArchivePO extends Model<ItemArchivePO> {
     @TableLogic
     private Boolean logicDelete;
 
-
-    public static final String F_ID = "f_id";
-
-    public static final String F_AGEN_IDCODE = "f_agen_idcode";
-
-    public static final String F_SUB_NAME = "f_sub_name";
-
-    public static final String F_ITEM_NAME = "f_item_name";
-
-    public static final String F_CHARGE = "f_charge";
-
-    public static final String F_IS_SAVE = "f_is_save";
-
-    public static final String F_CREATE_TIME = "f_create_time";
-
-    public static final String F_UPDATE_TIME = "f_update_time";
-
-    public static final String F_OPERATOR_ID = "f_operator_id";
-
-    public static final String F_OPERATOR = "f_operator";
-
-    public static final String F_VERSION = "f_version";
-
-    public static final String F_LOGIC_DELETE = "f_logic_delete";
-
     @Override
     protected Serializable pkVal() {
         return this.id;

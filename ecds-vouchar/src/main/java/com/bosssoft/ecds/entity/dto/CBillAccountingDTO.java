@@ -4,6 +4,9 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+/**
+ * @author liuke
+ */
 @Data
 @ApiModel(value = "CBillAccountingDTO对象", description = "")
 public class CBillAccountingDTO {

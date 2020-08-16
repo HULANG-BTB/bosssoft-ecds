@@ -2,16 +2,31 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bosssoft.ecds.dao.ItemArchiveDao">
     <!--归档可用项目-->
+    <select id="queryItemAvailableInfo" resultType="com.bosssoft.ecds.entity.po.ItemArchivePO">
+
+    </select>
+
+    <select id="collectItemAvailableInfo" resultType="com.bosssoft.ecds.entity.po.ItemArchivePO">
+        SELECT
+            A.f_agen_idcode as agenCode,
+            A.f_item_code as itemCode,
+            I.f_item_name as itemName,
+            I.f_mnen as mnen
+        FROM fab_agen_item A
+        LEFT JOIN fab_item I ON A.f_item_code = I.f_item_id
+        WHERE date_format(A.f_create_time, '%Y-%m-%d') = date_format(date_sub(SYSDATE(), interval 1 day), '%Y-%m-%d')
+    </select>
+
+
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.bosssoft.ecds.entity.po.ItemArchivePO">
-        <id column="f_id" property="id" />
-        <result column="f_agen_code" property="agenCode" />
-        <result column="f_sub_name" property="subName" />
-        <result column="f_item_name" property="itemName" />
-        <result column="f_charge" property="charge" />
-        <result column="f_is_save" property="isSave" />
-        <result column="f_create_time" property="createTime" />
-        <result column="f_update_time" property="updateTime" />
+        <id column="f_id" property="id"/>
+        <result column="f_agen_code" property="agenCode"/>
+        <result column="f_item_code" property="itemCode"/>
+        <result column="f_item_name" property="itemName"/>
+        <result column="f_mnen" property="mnen"/>
+        <result column="f_create_time" property="createTime"/>
+        <result column="f_update_time" property="updateTime"/>
         <result column="f_operator_id" property="operatorId" />
         <result column="f_operator" property="operator" />
         <result column="f_version" property="version" />
@@ -20,7 +35,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        f_id, f_agen_idcode, f_sub_name, f_item_name, f_charge, f_is_save, f_create_time, f_update_time, f_operator_id, f_operator, f_version, f_logic_delete
+        f_id, f_agen_code,f_item_code, f_item_name,f_mnen, f_create_time, f_update_time, f_operator_id, f_operator, f_version, f_logic_delete
     </sql>
 
 </mapper>
