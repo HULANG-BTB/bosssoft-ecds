@@ -2,12 +2,9 @@ package com.bosssoft.ecds.security.auth;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.crypto.asymmetric.RSA;
-import cn.hutool.json.JSONUtil;
 import com.bosssoft.ecds.security.config.RsaKeyProperties;
-import com.bosssoft.ecds.security.entity.domain.AuthRoleGrantedAuthority;
 import com.bosssoft.ecds.security.entity.domain.AuthUserDetails;
 import com.bosssoft.ecds.security.entity.domain.Payload;
-import com.bosssoft.ecds.security.entity.vo.PermissionVO;
 import com.bosssoft.ecds.security.service.impl.SecurityUserServiceImpl;
 import com.bosssoft.ecds.security.utils.JwtUtils;
 import com.bosssoft.ecds.security.utils.RedisUtils;
@@ -15,14 +12,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
-import org.springframework.security.authentication.CredentialsExpiredException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.web.server.context.ServerSecurityContextRepository;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
@@ -61,7 +56,7 @@ public class CustomServerSecurityContextRepository implements ServerSecurityCont
     }
 
     @Override
-    public Mono<SecurityContext> load(ServerWebExchange exchange) throws CredentialsExpiredException {
+    public Mono<SecurityContext> load(ServerWebExchange exchange) {
         ServerHttpRequest request = exchange.getRequest();
         String authHeader = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
         if (authHeader != null && authHeader.startsWith("Basic ")) {
@@ -90,7 +85,6 @@ public class CustomServerSecurityContextRepository implements ServerSecurityCont
 
                 Authentication auth = new UsernamePasswordAuthenticationToken(authUserDetails.getUsername(), authUserDetails.getPassword(), authUserDetails.getAuthorities());
                 return Mono.just(auth).map(SecurityContextImpl::new);
-//                return this.authenticationManager.authenticate(auth).map(SecurityContextImpl::new);
             }
             catch (Exception ex) {
                 ex.printStackTrace();

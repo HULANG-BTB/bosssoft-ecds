@@ -161,6 +161,21 @@ public class AgenController {
     }
 
     /**
+     * 未审核单位分页查询
+     *
+     * @param pageVO
+     * @return
+     */
+    @ApiOperation(value = "未审核单位分页查询")
+    @PostMapping("checkListByPage")
+    public String checkListByPage(@RequestBody PageVO pageVO) {
+        PageDTO pageDTO = MyBeanUtil.copyProperties(pageVO, PageDTO.class);
+        pageDTO = fabAgenService.checkListByPage(pageDTO);
+        pageVO = MyBeanUtil.copyProperties(pageDTO, PageVO.class);
+        return ResponseUtils.getResponse(pageVO, ResponseUtils.ResultType.OK);
+    }
+
+    /**
      * 批量删除单位
      *
      * @param fabAgenVOList
@@ -171,6 +186,20 @@ public class AgenController {
     public String removeBatch(@RequestBody List<AgenVO> fabAgenVOList) {
         List<AgenDTO> fabAgenDTOList = MyBeanUtil.copyListProperties(fabAgenVOList, AgenDTO.class);
         Boolean result = fabAgenService.removeBatch(fabAgenDTOList);
+        return ResponseUtils.getResponse(result, ResponseUtils.ResultType.OK);
+    }
+
+    /**
+     * 批量审核单位
+     *
+     * @param fabAgenVOList
+     * @return
+     */
+    @ApiOperation(value = "批量审核单位")
+    @PostMapping("checkBatch")
+    public String checkBatch(@RequestBody List<AgenVO> fabAgenVOList) {
+        List<AgenDTO> fabAgenDTOList = MyBeanUtil.copyListProperties(fabAgenVOList, AgenDTO.class);
+        Boolean result = fabAgenService.checkBatch(fabAgenDTOList);
         return ResponseUtils.getResponse(result, ResponseUtils.ResultType.OK);
     }
 

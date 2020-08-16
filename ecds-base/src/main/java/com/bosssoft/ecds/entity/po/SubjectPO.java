@@ -15,6 +15,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.springframework.beans.factory.annotation.Value;
 
 /**
  * <p>
@@ -52,7 +53,8 @@ public class SubjectPO extends Model<SubjectPO> {
     @TableField("f_level")
     private Integer level;
 
-    @ApiModelProperty(value = "是否底级")
+    @Value("false")
+    @ApiModelProperty(value = "是否底级,0否，1是")
     @TableField("f_is_leaf")
     private Boolean leaf;
 
@@ -60,7 +62,8 @@ public class SubjectPO extends Model<SubjectPO> {
     @TableField("f_parent_id")
     private Long parentId;
 
-    @ApiModelProperty(value = "是否启用")
+    @Value("true")
+    @ApiModelProperty(value = "是否启用，0否，1是")
     @TableField("f_is_enable")
     private Boolean enable;
 

@@ -1,17 +1,15 @@
 package com.bosssoft.ecds.security.config;
 
-import cn.hutool.crypto.asymmetric.RSA;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
-import java.security.PrivateKey;
-import java.security.PublicKey;
 
 /**
  * @ClassName RsaKeyProperties
  * @Author AloneH
  * @Date 2020/8/6 9:02
- * @Description TODO
+ * @Description
+ *      RSA 配置文件读取
  **/
 @Configuration
 @ConfigurationProperties("rsa.key")

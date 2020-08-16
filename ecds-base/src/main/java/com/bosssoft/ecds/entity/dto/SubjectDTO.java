@@ -6,6 +6,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.springframework.beans.factory.annotation.Value;
+
 import java.util.Date;
 import java.util.List;
 
@@ -34,35 +36,19 @@ public class SubjectDTO extends Model<SubjectDTO> {
     @ApiModelProperty(value = "层级")
     private Integer level;
 
-    @ApiModelProperty(value = "是否底级")
+    @Value("false")
+    @ApiModelProperty(value = "是否底级,0否，1是")
     private Boolean leaf;
 
     @ApiModelProperty(value = "父级ID")
     private Long parentId;
 
-    @ApiModelProperty(value = "是否启用")
+    @Value("true")
+    @ApiModelProperty(value = "是否启用，0否，1是")
     private Boolean enable;
 
     @ApiModelProperty(value = "备注")
     private String remark;
-
-    @ApiModelProperty(value = "创建时间")
-    private Date createTime;
-
-    @ApiModelProperty(value = "更新时间")
-    private Date updateTime;
-
-    @ApiModelProperty(value = "操作人id")
-    private Long operatorId;
-
-    @ApiModelProperty(value = "操作人")
-    private String operator;
-
-    @ApiModelProperty(value = "版本号")
-    private Integer version;
-
-    @ApiModelProperty(value = "逻辑删除")
-    private Boolean logicDelete;
 
     @ApiModelProperty(value = "下一级科目集合")
     private List<SubjectDTO> subjectDTOS;

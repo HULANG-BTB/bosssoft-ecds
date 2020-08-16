@@ -16,7 +16,8 @@ import java.util.List;
  * @ClassName UserPO
  * @Author AloneH
  * @Date 2020/8/9 16:47
- * @Description TODO
+ * @Description
+ *      UserPO
  **/
 @Data
 @EqualsAndHashCode(callSuper = false)

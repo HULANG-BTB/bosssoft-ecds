@@ -5,15 +5,20 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bosssoft.ecds.common.response.CommonCode;
 import com.bosssoft.ecds.common.response.QueryResponseResult;
 import com.bosssoft.ecds.common.response.ResponseResult;
+import com.bosssoft.ecds.dao.AgenItemDao;
+import com.bosssoft.ecds.dao.ItemStdDao;
 import com.bosssoft.ecds.entity.dto.ItemDTO;
-import com.bosssoft.ecds.entity.dto.PageDTO;
+import com.bosssoft.ecds.entity.po.AgenItemPO;
 import com.bosssoft.ecds.entity.po.ItemPO;
 import com.bosssoft.ecds.dao.ItemDao;
-import com.bosssoft.ecds.entity.vo.PageVO;
+import com.bosssoft.ecds.entity.po.ItemStdPO;
+import com.bosssoft.ecds.entity.vo.itemvo.ItemPageVO;
+import com.bosssoft.ecds.entity.vo.itemvo.ItemVO;
 import com.bosssoft.ecds.enums.ItemResultCode;
 import com.bosssoft.ecds.service.ItemService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bosssoft.ecds.utils.MyBeanUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -30,6 +35,13 @@ import java.util.List;
  */
 @Service
 public class ItemServiceImpl extends ServiceImpl<ItemDao, ItemPO> implements ItemService {
+
+    @Autowired
+    private ItemDao itemDao;
+    @Autowired
+    private AgenItemDao agenItemDao;
+    @Autowired
+    private ItemStdDao itemStdDao;
 
     /**
      * 插入项目，输入项目信息
@@ -80,11 +92,28 @@ public class ItemServiceImpl extends ServiceImpl<ItemDao, ItemPO> implements Ite
     @Override
     public ResponseResult delete(ItemDTO itemDTO) {
         // 判断传入id是否存在
-        if (itemDTO.getId() == null) {
+        ItemPO itemPO = itemDao.selectById(itemDTO.getId());
+        if (itemPO == null) {
             return new ResponseResult(ItemResultCode.ITEM_NOT_EXISTS);
         }
+        // 构造条件查询，通过项目编码，查询是否存在项目标准
+        QueryWrapper<ItemStdPO> itemStdWrapper = new QueryWrapper<>();
+        itemStdWrapper.eq(ItemStdPO.F_ITEM_CODE, itemPO.getItemId());
+        ItemStdPO itemStdPO = itemStdDao.selectOne(itemStdWrapper);
+        if (itemStdPO != null) {
+            // 如果项目标准存在，则删除项目标准
+            itemStdDao.deleteById(itemStdPO);
+        }
+        // 构造条件查询器，通过项目编码，查询是否存在项目单位关系
+        QueryWrapper<AgenItemPO> agenItemWrapper = new QueryWrapper<>();
+        agenItemWrapper.eq(AgenItemPO.F_ITEM_CODE, itemPO.getItemId());
+        List<AgenItemPO> agenItemPOS = agenItemDao.selectList(agenItemWrapper);
+        if (!agenItemPOS.isEmpty()) {
+            // 如果项目标准存在，则删除项目标准
+            agenItemDao.delete(agenItemWrapper);
+        }
         // 执行删除操作
-        boolean remove = super.removeById(itemDTO.getId());
+        boolean remove = super.removeById(itemPO);
         // 删除失败返回操作错误
         if (!remove) {
             return new ResponseResult(CommonCode.FAIL);
@@ -97,32 +126,32 @@ public class ItemServiceImpl extends ServiceImpl<ItemDao, ItemPO> implements Ite
      * pageDTO.getKeyword() 无数据输入时实现查询全部数据，有数据输入时进行模糊查询
      * 分页展示查询结果
      *
-     * @param pageDTO
+     * @param itemPageVO
      * @return
      */
     @Override
-    public QueryResponseResult<PageVO> listByPage(PageDTO<ItemDTO> pageDTO) {
+    public ResponseResult listByPage(ItemPageVO<ItemDTO> itemPageVO) {
         Page<ItemPO> itemDTOPage = new Page<>();
         // 设置分页信息
-        itemDTOPage.setCurrent(pageDTO.getPage());
-        itemDTOPage.setSize(pageDTO.getLimit());
+        itemDTOPage.setCurrent(itemPageVO.getPage());
+        itemDTOPage.setSize(itemPageVO.getLimit());
         // 读取分页数据
         QueryWrapper<ItemPO> queryWrapper = new QueryWrapper<>();
-        queryWrapper.like(ItemPO.F_ID, pageDTO.getKeyword())
-                .or()
-                .like(ItemPO.F_ITEM_NAME, pageDTO.getKeyword())
-                .or()
-                .like(ItemPO.F_ISENABLE, pageDTO.getKeyword());
+        if (itemPageVO.getIsenable() == null) {
+            queryWrapper.like(ItemPO.F_ITEM_NAME, itemPageVO.getKeyword());
+        } else {
+            queryWrapper.eq(ItemPO.F_ISENABLE, itemPageVO.getIsenable())
+                    .and(wrapper -> wrapper.like(ItemPO.F_ITEM_NAME, itemPageVO.getKeyword()));
+        }
         queryWrapper.orderByAsc(ItemPO.F_CREATE_TIME);
         // 读取分页数据
         Page<ItemPO> itemPOPage = super.page(itemDTOPage, queryWrapper);
         List<ItemPO> records = itemPOPage.getRecords();
         // 转换数据
         List<ItemDTO> itemPOS = MyBeanUtil.copyListProperties(records, ItemDTO::new);
-        pageDTO.setTotal(itemPOPage.getTotal());
-        pageDTO.setItems(itemPOS);
-        PageVO pageVO = MyBeanUtil.myCopyProperties(pageDTO, PageVO.class);
-        return new QueryResponseResult<>(CommonCode.SUCCESS, pageVO);
+        itemPageVO.setTotal(itemPOPage.getTotal());
+        itemPageVO.setItems(itemPOS);
+        return new QueryResponseResult<>(CommonCode.SUCCESS, itemPageVO);
     }
 
     /**
@@ -171,5 +200,15 @@ public class ItemServiceImpl extends ServiceImpl<ItemDao, ItemPO> implements Ite
         }
         // 修改成功返回操作程序
         return new ResponseResult(CommonCode.SUCCESS);
+    }
+
+    @Override
+    public ResponseResult getItemAll() {
+        List<ItemPO> itemPOS = itemDao.selectList(null);
+        if (!itemPOS.isEmpty()) {
+            List<ItemVO> itemVOS = MyBeanUtil.copyListProperties(itemPOS, ItemVO::new);
+            return new QueryResponseResult<>(CommonCode.SUCCESS, itemVOS);
+        }
+        return new ResponseResult(CommonCode.FAIL);
     }
 }
