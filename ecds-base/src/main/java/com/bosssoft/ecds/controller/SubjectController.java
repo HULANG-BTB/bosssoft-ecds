@@ -11,6 +11,7 @@ import com.bosssoft.ecds.utils.MyBeanUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,7 +37,7 @@ public class SubjectController {
         return subjectService.listPage(subjectQueryVO);
     }
 
-    @ApiOperation(value = "添加预算科目",notes = "每年的类别名称和编码唯一")
+    @ApiOperation(value = "添加预算科目",notes = "只传code,name,parentId,year四个字段")
     @PostMapping("/add")
     public ResponseResult add(@RequestBody @Validated SubjectVO subjectVO){
         SubjectDTO subjectDTO = MyBeanUtil.copyProperties(subjectVO, SubjectDTO.class);
@@ -54,6 +55,12 @@ public class SubjectController {
     @PostMapping("/delete")
     public QueryResponseResult update(Long id){
         return subjectService.delete(id);
+    }
+
+    @ApiOperation(value = "复制预算科目,需要选中左侧1级树形菜单且来源和目标年度，用户不可更改，目标年度为今年，调试请复制2019年的代管收入")
+    @PostMapping("/copy")
+    public QueryResponseResult copy(Long id){
+        return subjectService.copy(id);
     }
 }
 

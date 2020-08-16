@@ -26,6 +26,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -128,7 +129,7 @@ public class SubjectServiceImpl extends ServiceImpl<SubjectDao, SubjectPO> imple
             subjectPO.setLevel(SubjectConstant.INIT_LEVEL);
         }
 //        只能添加当年科目
-        if (!subjectPO.getYear() .equals(getCurrentYear())) {
+        if (!subjectPO.getYear().equals(getCurrentYear())) {
             return new QueryResponseResult(SubjectResultCode.INSERT_ERROR, null);
         }
         int maxLevel = getMaxLevelFromIncome();
@@ -157,10 +158,10 @@ public class SubjectServiceImpl extends ServiceImpl<SubjectDao, SubjectPO> imple
         if (incomeSortPO == null) {
             return new QueryResponseResult(SubjectResultCode.INCOMESORT_NOTEXISTS, null);
         }
-        boolean result=true;
+        boolean result = true;
         if (subjectPO.getLevel() == 1) {
             this.save(subjectPO);
-            result=incomeSortSubjectService.add(incomeSortPO.getId(), subjectPO.getId());
+            result = incomeSortSubjectService.add(incomeSortPO.getId(), subjectPO.getId());
         } else {
             QueryWrapper<IncomeSortSubjectPO> queryWrapper1 = new QueryWrapper<>();
             queryWrapper1.eq("f_income_sort_id", incomeSortPO.getParentId());
@@ -170,12 +171,12 @@ public class SubjectServiceImpl extends ServiceImpl<SubjectDao, SubjectPO> imple
                 return new QueryResponseResult(SubjectResultCode.INCOMESORT_NOTEXISTS, null);
             } else {
                 this.save(subjectPO);
-                result=incomeSortSubjectService.add(incomeSortPO.getId(), subjectPO.getId());
+                result = incomeSortSubjectService.add(incomeSortPO.getId(), subjectPO.getId());
             }
         }
-        if(result==true){
+        if (result == true) {
             return new QueryResponseResult(CommonCode.SUCCESS, null);
-        }else {
+        } else {
             return new QueryResponseResult(CommonCode.FAIL, null);
         }
     }
@@ -190,11 +191,11 @@ public class SubjectServiceImpl extends ServiceImpl<SubjectDao, SubjectPO> imple
     @Transactional(rollbackFor = Exception.class)
     public QueryResponseResult update(UpdateSubjectVO updateSubjectVO) {
         SubjectPO oldSubjectPO = baseMapper.selectById(updateSubjectVO.getId());
-        if(oldSubjectPO==null){
+        if (oldSubjectPO == null) {
             return new QueryResponseResult(SubjectResultCode.SUBJECT_NOTEXISTS, null);
         }
 //        只允许修改今年的数据
-        if(!oldSubjectPO.getYear().equals(getCurrentYear())){
+        if (!oldSubjectPO.getYear().equals(getCurrentYear())) {
             return new QueryResponseResult(SubjectResultCode.UPDATE_DATE_ERROR, null);
         }
 //        不允许修改被禁用的预算科目
@@ -202,10 +203,10 @@ public class SubjectServiceImpl extends ServiceImpl<SubjectDao, SubjectPO> imple
             return new QueryResponseResult(SubjectResultCode.ENABLE_ERROR, null);
         }
 //        不允许直接修改存在收入类别的科目的名称
-        if(!updateSubjectVO.getName().equals(oldSubjectPO.getName())&&oldSubjectPO.getLevel()<=getMaxLevelFromIncome()){
+        if (!updateSubjectVO.getName().equals(oldSubjectPO.getName()) && oldSubjectPO.getLevel() <= getMaxLevelFromIncome()) {
             return new QueryResponseResult(SubjectResultCode.UPDATE_ERROR, null);
         }
-        MyBeanUtil.copyProperties(updateSubjectVO,oldSubjectPO);
+        MyBeanUtil.copyProperties(updateSubjectVO, oldSubjectPO);
         int result = baseMapper.updateById(oldSubjectPO);
         if (result == 1) {
             return new QueryResponseResult(CommonCode.SUCCESS, null);
@@ -228,7 +229,7 @@ public class SubjectServiceImpl extends ServiceImpl<SubjectDao, SubjectPO> imple
         if (subjectPO == null) {
             return new QueryResponseResult(SubjectResultCode.SUBJECT_NOTEXISTS, null);
         }
-        if(subjectPO.getEnable()==false){
+        if (subjectPO.getEnable() == false) {
             return new QueryResponseResult(SubjectResultCode.ENABLE_ERROR, null);
         }
         deleteRec(subjectPO);
@@ -257,6 +258,50 @@ public class SubjectServiceImpl extends ServiceImpl<SubjectDao, SubjectPO> imple
     }
 
     /**
+     * 复制预算科目
+     *
+     * @param
+     * @return
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public QueryResponseResult copy(Long id) {
+        SubjectPO subjectPO = baseMapper.selectById(id);
+        if (subjectPO == null) {
+            return new QueryResponseResult(SubjectResultCode.SUBJECT_NOTEXISTS, null);
+        }
+        if (subjectPO.getLevel() != 1) {
+            return new QueryResponseResult(SubjectResultCode.COPY_ERROR, null);
+        }
+        copyRec(subjectPO, SubjectConstant.INIT_PARENT_ID);
+        return new QueryResponseResult(CommonCode.SUCCESS, null);
+
+
+    }
+
+    /**
+     * 递归复制预算科目
+     *
+     * @param
+     * @return
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public boolean copyRec(SubjectPO subjectPO, Long pid) {
+        List<SubjectPO> childrenPOS = selectByPid(subjectPO.getId());
+        subjectPO.setYear(getCurrentYear());
+        subjectPO.setId(null);
+        subjectPO.setParentId(pid);
+        SubjectDTO subjectDTO = MyBeanUtil.copyProperties(subjectPO, SubjectDTO.class);
+        add(subjectDTO);
+//        获取当前subjectPO的id
+        SubjectPO newSubjectPO = selectByYearAndCode(getCurrentYear(), subjectPO.getCode());
+        childrenPOS.forEach(childrenPO -> {
+            copyRec(childrenPO, newSubjectPO.getId());
+        });
+        return true;
+    }
+
+    /**
      * 根据pid查询子预算科目
      *
      * @param pid
@@ -266,6 +311,16 @@ public class SubjectServiceImpl extends ServiceImpl<SubjectDao, SubjectPO> imple
         QueryWrapper<SubjectPO> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("f_parent_id", pid);
         return baseMapper.selectList(queryWrapper);
+    }
+
+    /**
+     * 根据年份和编码查询科目对象
+     */
+    public SubjectPO selectByYearAndCode(String year, String code) {
+        QueryWrapper<SubjectPO> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(SubjectPO.F_YEAR,year);
+        queryWrapper.eq(SubjectPO.F_SUB_CODE,code);
+        return baseMapper.selectOne(queryWrapper);
     }
 
     /**
@@ -307,37 +362,40 @@ public class SubjectServiceImpl extends ServiceImpl<SubjectDao, SubjectPO> imple
     public int getMaxLevelFromIncome() {
         return incomeSortDao.getMaxLevelFromIncome();
     }
+
     /**
      * 返回当下年份
      */
-    public static String getCurrentYear(){
+    public static String getCurrentYear() {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy");
         return simpleDateFormat.format(new Date());
     }
+
     /**
-     * 对外接口，更新预算科目,更新成功或无须更新都返回true
+     * 对外接口，更新预算科目编码,更新成功或无须更新都返回true
      */
     @Transactional(rollbackFor = Exception.class)
-    public boolean updateFromInconme(Long incomeId,String code){
+    public boolean updateFromInconme(Long incomeId, String code) {
         IncomeSortSubjectPO incomeSortSubjectPO = incomeSortSubjectService.selectByIncomeId(incomeId);
         SubjectPO subjectPO = baseMapper.selectById(incomeSortSubjectPO.getSubjectId());
         subjectPO.setCode(code);
-        if(!subjectPO.getYear().equals(getCurrentYear())){
+        if (!subjectPO.getYear().equals(getCurrentYear())) {
             return true;
         }
-        return baseMapper.updateById(subjectPO)==1?true:false;
+        return baseMapper.updateById(subjectPO) == 1 ? true : false;
     }
+
     /**
      * 对外接口，删除预算科目,删除成功或无须删除都返回true
      */
     @Transactional(rollbackFor = Exception.class)
-    public boolean deleteFromImcome(Long incomeId){
+    public boolean deleteFromImcome(Long incomeId) {
         IncomeSortSubjectPO incomeSortSubjectPO = incomeSortSubjectService.selectByIncomeId(incomeId);
-        if(incomeSortSubjectPO==null){
+        if (incomeSortSubjectPO == null) {
             return true;
         }
         SubjectPO subjectPO = baseMapper.selectById(incomeSortSubjectPO.getSubjectId());
-        if(!subjectPO.getYear().equals(getCurrentYear())){
+        if (!subjectPO.getYear().equals(getCurrentYear())) {
             return true;
         }
         return deleteRec(subjectPO);

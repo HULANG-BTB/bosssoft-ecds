@@ -53,4 +53,11 @@ public interface SubjectService extends IService<SubjectPO> {
      */
     QueryResponseResult delete(Long id);
 
+    /**
+     * 复制预算科目
+     *
+     * @param
+     * @return
+     */
+    QueryResponseResult copy(Long id);
 }

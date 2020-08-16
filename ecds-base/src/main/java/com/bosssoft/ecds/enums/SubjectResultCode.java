@@ -16,6 +16,7 @@ public enum SubjectResultCode implements ResultCode {
     PARENT_ERROR(false,20007,"父级预算科目不存在或已被删除，请刷新重试！"),
     UPDATE_ERROR(false,20008,"该科目存在对应的收入类别，不允许直接修改名称！"),
     UPDATE_DATE_ERROR(false,20009,"只允许修改今年的数据！"),
+    COPY_ERROR(false,20010,"请在左侧菜单项中选中想要复制的一级预算科目！"),
 
     ;
 
