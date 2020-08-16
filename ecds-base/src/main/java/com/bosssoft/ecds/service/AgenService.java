@@ -2,6 +2,7 @@ package com.bosssoft.ecds.service;
 
 import com.bosssoft.ecds.entity.dto.AgenDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
+import com.bosssoft.ecds.entity.dto.PagesDTO;
 import com.bosssoft.ecds.entity.po.AgenPO;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -96,18 +97,18 @@ public interface AgenService extends IService<AgenPO> {
     /**
      * 分页读取
      *
-     * @param pageDTO
+     * @param pagesDTO
      * @return
      */
-    public PageDTO listByPage(PageDTO pageDTO);
+    public PagesDTO listByPage(PagesDTO pagesDTO);
 
     /**
      * 未审核分页读取
      *
-     * @param pageDTO
+     * @param pagesDTO
      * @return
      */
-    public PageDTO checkListByPage(PageDTO pageDTO);
+    public PagesDTO checkListByPage(PagesDTO pagesDTO);
 
     /**
      * 批量删除单位

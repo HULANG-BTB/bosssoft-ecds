@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bosssoft.ecds.entity.dto.DeptDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
+import com.bosssoft.ecds.entity.dto.PagesDTO;
+import com.bosssoft.ecds.entity.po.AgenPO;
 import com.bosssoft.ecds.entity.po.DeptPO;
 import com.bosssoft.ecds.dao.DeptDao;
 import com.bosssoft.ecds.service.DeptService;
@@ -126,27 +128,41 @@ public class DeptServiceImpl extends ServiceImpl<DeptDao, DeptPO> implements Dep
     /**
      * 分页读取
      *
-     * @param pageDTO
+     * @param pagesDTO
      * @return
      */
     @Override
-    public PageDTO listByPage(PageDTO pageDTO) {
+    public PagesDTO listByPage(PagesDTO pagesDTO) {
         Page<DeptPO> fabDeptPOPage = new Page<>();
         // 设置分页信息
-        fabDeptPOPage.setCurrent(pageDTO.getPage());
-        fabDeptPOPage.setSize(pageDTO.getLimit());
+        fabDeptPOPage.setCurrent(pagesDTO.getPage());
+        fabDeptPOPage.setSize(pagesDTO.getLimit());
         // 读取分页数据
         QueryWrapper<DeptPO> queryWrapper = new QueryWrapper<>();
-        queryWrapper.like(DeptPO.F_ISENABLE, pageDTO.getKeyword()).or().like(DeptPO.F_DEPT_CODE, pageDTO.getKeyword()).or().like(DeptPO.F_DEPT_NAME, pageDTO.getKeyword());
+        if(pagesDTO.getKeyword().get("isenable") != null){
+            String s = (String) pagesDTO.getKeyword().get("isenable");
+            if(s.equals("false")){
+                queryWrapper.eq(DeptPO.F_ISENABLE, false);
+            }
+            if(s.equals("true")){
+                queryWrapper.eq(DeptPO.F_ISENABLE, true);
+            }
+        }
+        if(pagesDTO.getKeyword().get("deptCode") != null && pagesDTO.getKeyword().get("deptCode").equals("")){
+            queryWrapper.and(wrapper -> wrapper.like(DeptPO.F_DEPT_CODE, pagesDTO.getKeyword().get("deptCode")));
+        }
+        if(pagesDTO.getKeyword().get("deptName") != null && pagesDTO.getKeyword().get("deptName").equals("")){
+            queryWrapper.and(wrapper -> wrapper.like(DeptPO.F_DEPT_NAME, pagesDTO.getKeyword().get("deptName")));
+        }
         queryWrapper.orderByAsc(DeptPO.F_CREATE_TIME);
         // 读取分页数据
         Page<DeptPO> fabDeptPOPage1 = super.page(fabDeptPOPage, queryWrapper);
         List<DeptPO> records = fabDeptPOPage1.getRecords();
         // 转换数据
         List<DeptDTO> userDTOList = MyBeanUtil.copyListProperties(records, DeptDTO.class);
-        pageDTO.setTotal(fabDeptPOPage1.getTotal());
-        pageDTO.setItems(userDTOList);
-        return pageDTO;
+        pagesDTO.setTotal(fabDeptPOPage1.getTotal());
+        pagesDTO.setItems(userDTOList);
+        return pagesDTO;
     }
 
     /**

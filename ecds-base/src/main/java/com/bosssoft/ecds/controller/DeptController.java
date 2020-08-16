@@ -3,8 +3,10 @@ package com.bosssoft.ecds.controller;
 
 import com.bosssoft.ecds.entity.dto.DeptDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
+import com.bosssoft.ecds.entity.dto.PagesDTO;
 import com.bosssoft.ecds.entity.vo.DeptVO;
 import com.bosssoft.ecds.entity.vo.PageVO;
+import com.bosssoft.ecds.entity.vo.PagesVO;
 import com.bosssoft.ecds.service.DeptService;
 import com.bosssoft.ecds.utils.MyBeanUtil;
 import com.bosssoft.ecds.utils.ResponseUtils;
@@ -147,17 +149,17 @@ public class DeptController {
     /**
      * 通过分页查询
      *
-     * @param pageVO
+     * @param pagesVO
      * @return
      */
     @ApiOperation(value = "通过分页查询")
-    @PostMapping("listByPage")
-    public String listByPage(@RequestBody PageVO pageVO) {
-        PageDTO pageDTO = MyBeanUtil.copyProperties(pageVO, PageDTO.class);
-        pageDTO = fabDeptService.listByPage(pageDTO);
+    @PostMapping("/listByPage")
+    public String listByPage(@RequestBody PagesVO pagesVO) {
+        PagesDTO pagesDTO = MyBeanUtil.copyProperties(pagesVO, PagesDTO.class);
+        pagesDTO = fabDeptService.listByPage(pagesDTO);
 
-        pageVO = MyBeanUtil.copyProperties(pageDTO, PageVO.class);
-        return ResponseUtils.getResponse(pageVO, ResponseUtils.ResultType.OK);
+        pagesVO = MyBeanUtil.copyProperties(pagesDTO, PagesVO.class);
+        return ResponseUtils.getResponse(pagesVO, ResponseUtils.ResultType.OK);
     }
 
     /**
@@ -167,7 +169,7 @@ public class DeptController {
      * @return
      */
     @ApiOperation(value = "批量删除")
-    @PostMapping("removeBatch")
+    @PostMapping("/removeBatch")
     public String removeBatch(@RequestBody List<DeptVO> fabDeptVOList) {
         List<DeptDTO> fabDeptDTOList = MyBeanUtil.copyListProperties(fabDeptVOList, DeptDTO.class);
         Boolean result = fabDeptService.removeBatch(fabDeptDTOList);

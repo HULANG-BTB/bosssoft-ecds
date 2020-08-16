@@ -3,8 +3,10 @@ package com.bosssoft.ecds.controller;
 
 import com.bosssoft.ecds.entity.dto.AgenDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
+import com.bosssoft.ecds.entity.dto.PagesDTO;
 import com.bosssoft.ecds.entity.vo.AgenVO;
 import com.bosssoft.ecds.entity.vo.PageVO;
+import com.bosssoft.ecds.entity.vo.PagesVO;
 import com.bosssoft.ecds.service.AgenService;
 import com.bosssoft.ecds.utils.MyBeanUtil;
 import com.bosssoft.ecds.utils.ResponseUtils;
@@ -147,32 +149,32 @@ public class AgenController {
     /**
      * 通过分页查询
      *
-     * @param pageVO
+     * @param pagesVO
      * @return
      */
     @ApiOperation(value = "通过分页查询")
-    @PostMapping("listByPage")
-    public String listByPage(@RequestBody PageVO pageVO) {
-        PageDTO pageDTO = MyBeanUtil.copyProperties(pageVO, PageDTO.class);
-        pageDTO = fabAgenService.listByPage(pageDTO);
+    @PostMapping("/listByPage")
+    public String listByPage(@RequestBody PagesVO pagesVO) {
+        PagesDTO pagesDTO = MyBeanUtil.copyProperties(pagesVO, PagesDTO.class);
+        pagesDTO = fabAgenService.listByPage(pagesDTO);
 
-        pageVO = MyBeanUtil.copyProperties(pageDTO, PageVO.class);
-        return ResponseUtils.getResponse(pageVO, ResponseUtils.ResultType.OK);
+        pagesVO = MyBeanUtil.copyProperties(pagesDTO, PagesVO.class);
+        return ResponseUtils.getResponse(pagesVO, ResponseUtils.ResultType.OK);
     }
 
     /**
      * 未审核单位分页查询
      *
-     * @param pageVO
+     * @param pagesVO
      * @return
      */
     @ApiOperation(value = "未审核单位分页查询")
-    @PostMapping("checkListByPage")
-    public String checkListByPage(@RequestBody PageVO pageVO) {
-        PageDTO pageDTO = MyBeanUtil.copyProperties(pageVO, PageDTO.class);
-        pageDTO = fabAgenService.checkListByPage(pageDTO);
-        pageVO = MyBeanUtil.copyProperties(pageDTO, PageVO.class);
-        return ResponseUtils.getResponse(pageVO, ResponseUtils.ResultType.OK);
+    @PostMapping("/checkListByPage")
+    public String checkListByPage(@RequestBody PagesVO pagesVO) {
+        PagesDTO pagesDTO = MyBeanUtil.copyProperties(pagesVO, PagesDTO.class);
+        pagesDTO = fabAgenService.checkListByPage(pagesDTO);
+        pagesVO = MyBeanUtil.copyProperties(pagesDTO, PagesVO.class);
+        return ResponseUtils.getResponse(pagesVO, ResponseUtils.ResultType.OK);
     }
 
     /**
@@ -182,7 +184,7 @@ public class AgenController {
      * @return
      */
     @ApiOperation(value = "批量删除单位")
-    @PostMapping("removeBatch")
+    @PostMapping("/removeBatch")
     public String removeBatch(@RequestBody List<AgenVO> fabAgenVOList) {
         List<AgenDTO> fabAgenDTOList = MyBeanUtil.copyListProperties(fabAgenVOList, AgenDTO.class);
         Boolean result = fabAgenService.removeBatch(fabAgenDTOList);

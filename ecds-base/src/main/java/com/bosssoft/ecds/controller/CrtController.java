@@ -3,8 +3,10 @@ package com.bosssoft.ecds.controller;
 
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.dto.CrtDTO;
+import com.bosssoft.ecds.entity.dto.PagesDTO;
 import com.bosssoft.ecds.entity.vo.PageVO;
 import com.bosssoft.ecds.entity.vo.CrtVO;
+import com.bosssoft.ecds.entity.vo.PagesVO;
 import com.bosssoft.ecds.service.CrtService;
 import com.bosssoft.ecds.utils.MyBeanUtil;
 import com.bosssoft.ecds.utils.ResponseUtils;
@@ -166,33 +168,33 @@ public class CrtController {
     /**
      * 通过分页查询
      *
-     * @param pageVO
+     * @param pagesVO
      * @return
      */
-    @PostMapping("listByPage")
+    @PostMapping("/listByPage")
     @ApiOperation(value = "通过分页查询")
-    public String listByPage(@RequestBody PageVO pageVO) {
-        PageDTO pageDTO = MyBeanUtil.copyProperties(pageVO, PageDTO.class);
-        pageDTO = uabCrtService.listByPage(pageDTO);
+    public String listByPage(@RequestBody PagesVO pagesVO) {
+        PagesDTO pagesDTO = MyBeanUtil.copyProperties(pagesVO, PagesDTO.class);
+        pagesDTO = uabCrtService.listByPage(pagesDTO);
 
-        pageVO = MyBeanUtil.copyProperties(pageDTO, PageVO.class);
-        return ResponseUtils.getResponse(pageVO, ResponseUtils.ResultType.OK);
+        pagesVO = MyBeanUtil.copyProperties(pagesDTO, PagesVO.class);
+        return ResponseUtils.getResponse(pagesVO, ResponseUtils.ResultType.OK);
     }
 
     /**
      * 准购证审核分页查询
      *
-     * @param pageVO
+     * @param pagesVO
      * @return
      */
     @PostMapping("/checkListByPage")
     @ApiOperation(value = "准购证审核分页查询")
-    public String checkListByPage(@RequestBody PageVO pageVO) {
-        PageDTO pageDTO = MyBeanUtil.copyProperties(pageVO, PageDTO.class);
-        pageDTO = uabCrtService.checkListByPage(pageDTO);
+    public String checkListByPage(@RequestBody PagesVO pagesVO) {
+        PagesDTO pagesDTO = MyBeanUtil.copyProperties(pagesVO, PagesDTO.class);
+        pagesDTO = uabCrtService.checkListByPage(pagesDTO);
 
-        pageVO = MyBeanUtil.copyProperties(pageDTO, PageVO.class);
-        return ResponseUtils.getResponse(pageVO, ResponseUtils.ResultType.OK);
+        pagesVO = MyBeanUtil.copyProperties(pagesDTO, PagesVO.class);
+        return ResponseUtils.getResponse(pagesVO, ResponseUtils.ResultType.OK);
     }
 
     /**
@@ -201,7 +203,7 @@ public class CrtController {
      * @param uabCrtVOList
      * @return
      */
-    @PostMapping("removeBatch")
+    @PostMapping("/removeBatch")
     @ApiOperation(value = "批量删除领购证")
     public String removeBatch(@RequestBody List<CrtVO> uabCrtVOList) {
         List<CrtDTO> uabCrtDTOList = MyBeanUtil.copyListProperties(uabCrtVOList, CrtDTO.class);
