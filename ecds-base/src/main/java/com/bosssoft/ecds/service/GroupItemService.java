@@ -22,4 +22,5 @@ public interface GroupItemService extends IService<GroupItemPO> {
     ResponseResult update(GroupItemDTO groupItemDTO);
     ResponseResult delete(GroupItemDTO groupItemDTO);
     ResponseResult listByPage(PageDTO<GroupItemVO> pageDTO);
+    ResponseResult getItemInfo(GroupItemDTO groupItemDTO);
 }

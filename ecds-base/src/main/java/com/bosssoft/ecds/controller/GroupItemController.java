@@ -70,5 +70,18 @@ public class GroupItemController {
         return groupItemService.listByPage(pageDTO);
     }
 
+    /**
+     * 通过分组编码获得项目信息
+     *
+     * @param groupItemVO 输入分组编码
+     * @return 返回成功或者失败的code和msg
+     */
+    @ApiOperation(value = "通过分组编码获得项目信息", notes = "输入分组编码")
+    @PostMapping("/getItemInfo")
+    public ResponseResult getItemInfo(@RequestBody GroupItemVO groupItemVO) {
+        GroupItemDTO groupItemDTO = MyBeanUtil.myCopyProperties(groupItemVO, GroupItemDTO.class);
+        return groupItemService.getItemInfo(groupItemDTO);
+    }
+
 }
 

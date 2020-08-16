@@ -39,6 +39,8 @@ public class GroupServiceImpl extends ServiceImpl<GroupDao, GroupPO> implements 
 
     @Autowired
     private GroupItemDao groupItemDao;
+    @Autowired
+    private GroupDao groupDao;
 
     @Override
     public ResponseResult save(GroupDTO groupDTO) {
@@ -116,5 +118,12 @@ public class GroupServiceImpl extends ServiceImpl<GroupDao, GroupPO> implements 
         pageDTO.setTotal(page.getTotal());
         PageVO pageVO = MyBeanUtil.copyProperties(pageDTO, PageVO.class);
         return new QueryResponseResult<>(CommonCode.SUCCESS, pageVO);
+    }
+
+    @Override
+    public ResponseResult getGroupName() {
+        List<GroupPO> groupPOS = groupDao.selectList(null);
+        List<GroupVO> groupVOS = MyBeanUtil.copyListProperties(groupPOS, GroupVO::new);
+        return new QueryResponseResult<>(CommonCode.SUCCESS,groupVOS);
     }
 }

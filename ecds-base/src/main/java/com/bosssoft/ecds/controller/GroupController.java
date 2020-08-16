@@ -81,5 +81,16 @@ public class GroupController {
         PageDTO<GroupVO> pageDTO = MyBeanUtil.copyProperties(pageVO, PageDTO.class);
         return groupService.listByPage(pageDTO);
     }
+
+    /**
+     * 查询所有分组信息
+     *
+     * @return limit、page、total、items
+     */
+    @ApiOperation(value = "查询所有分组信息")
+    @GetMapping("/getGroupName")
+    public ResponseResult getGroupName() {
+        return groupService.getGroupName();
+    }
 }
 
