@@ -1,17 +1,18 @@
 package com.bosssoft.ecds.entity.po;
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.Version;
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
-/**
- * @author wlx hjr
- */
-@Data
+
 @TableName("fbe_writeoff_billitem")
 @ApiModel(value="WriteOffBillitemPO对象")
 public class WriteOffBillItemPO {
@@ -84,4 +85,140 @@ public class WriteOffBillItemPO {
     @ApiModelProperty(value = "操作人")
     @TableField(value = "f_operator", fill = FieldFill.INSERT_UPDATE)
     private String fOperator;
+
+    public Long getfId() {
+        return fId;
+    }
+
+    public void setfId(Long fId) {
+        this.fId = fId;
+    }
+
+    public String getfPid() {
+        return fPid;
+    }
+
+    public void setfPid(String fPid) {
+        this.fPid = fPid;
+    }
+
+    public Integer getfSortNo() {
+        return fSortNo;
+    }
+
+    public void setfSortNo(Integer fSortNo) {
+        this.fSortNo = fSortNo;
+    }
+
+    public String getfBillCode() {
+        return fBillCode;
+    }
+
+    public void setfBillCode(String fBillCode) {
+        this.fBillCode = fBillCode;
+    }
+
+    public String getfBillName() {
+        return fBillName;
+    }
+
+    public void setfBillName(String fBillName) {
+        this.fBillName = fBillName;
+    }
+
+    public String getfBillId() {
+        return fBillId;
+    }
+
+    public void setfBillId(String fBillId) {
+        this.fBillId = fBillId;
+    }
+
+    public String getfBatchCode() {
+        return fBatchCode;
+    }
+
+    public void setfBatchCode(String fBatchCode) {
+        this.fBatchCode = fBatchCode;
+    }
+
+    public Integer getfNumber() {
+        return fNumber;
+    }
+
+    public void setfNumber(Integer fNumber) {
+        this.fNumber = fNumber;
+    }
+
+    public String getfBillNo1() {
+        return fBillNo1;
+    }
+
+    public void setfBillNo1(String fBillNo1) {
+        this.fBillNo1 = fBillNo1;
+    }
+
+    public String getfBillNo2() {
+        return fBillNo2;
+    }
+
+    public void setfBillNo2(String fBillNo2) {
+        this.fBillNo2 = fBillNo2;
+    }
+
+    public BigDecimal getfAmt() {
+        return fAmt;
+    }
+
+    public void setfAmt(BigDecimal fAmt) {
+        this.fAmt = fAmt;
+    }
+
+    public Integer getfInvNum() {
+        return fInvNum;
+    }
+
+    public void setfInvNum(Integer fInvNum) {
+        this.fInvNum = fInvNum;
+    }
+
+    public Integer getfVersion() {
+        return fVersion;
+    }
+
+    public void setfVersion(Integer fVersion) {
+        this.fVersion = fVersion;
+    }
+
+    public Date getfCreateTime() {
+        return fCreateTime;
+    }
+
+    public void setfCreateTime(Date fCreateTime) {
+        this.fCreateTime = fCreateTime;
+    }
+
+    public Date getfUpdateTime() {
+        return fUpdateTime;
+    }
+
+    public void setfUpdateTime(Date fUpdateTime) {
+        this.fUpdateTime = fUpdateTime;
+    }
+
+    public Long getfOperatorId() {
+        return fOperatorId;
+    }
+
+    public void setfOperatorId(Long fOperatorId) {
+        this.fOperatorId = fOperatorId;
+    }
+
+    public String getfOperator() {
+        return fOperator;
+    }
+
+    public void setfOperator(String fOperator) {
+        this.fOperator = fOperator;
+    }
 }
