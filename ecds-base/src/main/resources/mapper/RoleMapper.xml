@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bosssoft.ecds.dao.RoleDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.bosssoft.ecds.entity.po.RolePO">
+        <id column="f_id" property="id" />
+        <result column="f_role" property="role" />
+        <result column="f_name" property="name" />
+        <result column="f_description" property="description" />
+        <result column="f_operator" property="operator" />
+        <result column="f_operator_id" property="operatorId" />
+        <result column="f_create_time" property="createTime" />
+        <result column="f_update_time" property="updateTime" />
+        <result column="f_logic_delete" property="logicDelete" />
+        <result column="f_version" property="version" />
+        <result column="f_note" property="note" />
+    </resultMap>
+
+    <select id="selectByUid" parameterType="Long" resultMap="BaseResultMap">
+        select role.*
+        from faa_role role, faa_user_role user_role
+        where user_role.f_user_id = #{id}
+            and role.f_id = user_role.f_role_id
+            and role.f_logic_delete = 0
+            and user_role.f_logic_delete = 0
+    </select>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        f_id, f_role, f_name, f_description, f_operator, f_operator_id, f_create_time, f_update_time, f_logic_delete, f_version, f_note
+    </sql>
+
+</mapper>

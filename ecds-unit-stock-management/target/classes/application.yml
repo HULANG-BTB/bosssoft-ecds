@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    username: root
+    #    password: root
+    #    url: jdbc:mysql://localhost:3306/notax?serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8&useSSL=false
+    password: 123456
+    url: jdbc:mysql://localhost:3306/non-tax?serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8&useSSL=false
+    driver-class-name: com.mysql.cj.jdbc.Driver
+server:
+  port: 8080
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    call-setters-on-nulls: true
+    cache-enabled: false
+  global-config:
+    db-config:
+      id-type: auto
+      field-strategy: not_empty
+      #驼峰下划线转换
+      column-underline: true
+      db-type: mysql
+    refresh: false
+  mapper-locations: classpath:com/bosssoft/usm/mapper/xml/*.xml
+
