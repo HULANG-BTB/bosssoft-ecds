@@ -223,11 +223,6 @@ public class AgenServiceImpl extends ServiceImpl<AgenDao, AgenPO> implements Age
         return removeResult;
     }
 
-    @Override
-    public AgenInfoDTO getDetailByUnitName(String agenName) {
-        return agenDao.getDetailByUnitName(agenName);
-    }
-
     /**
      *
      *
@@ -243,5 +238,16 @@ public class AgenServiceImpl extends ServiceImpl<AgenDao, AgenPO> implements Age
         MyBeanUtil.copyProperties(fabAgenDTO, fabAgenPO);
         List<AgenPO> fabAgenPOList = super.list(new QueryWrapper<AgenPO>(fabAgenPO));
         return MyBeanUtil.copyListProperties(fabAgenPOList, AgenDTO.class);
+    }
+
+    /**
+     * 通过单位名称，查询单位信息,包括单位的开票点
+     *
+     * @param agenName 单位名称
+     * @return 区划id，单位识别码，单位编码，开票点id，开票点编码，开票点名称
+     */
+    @Override
+    public AgenInfoDTO getDetailByUnitName(String agenName) {
+        return agenDao.getDetailByUnitName(agenName);
     }
 }

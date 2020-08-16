@@ -73,7 +73,7 @@ public class AgenBillServiceImpl extends ServiceImpl<AgenBillDao, AgenBillPO> im
     }
 
     /**
-     * 分页查询单位项目关系
+     * 分页查询单位票据关系
      * 通过单位编码，查询出所有可用票据
      *
      * @param pageDTO

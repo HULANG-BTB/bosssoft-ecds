@@ -213,9 +213,10 @@ public class AgenController {
     /**
      * 查询单位欠缴状态
      *
-     * @param ageName
-     * @return
+     * @param ageName 单位名字
+     * @return 是否欠缴的状态
      */
+    @ApiOperation(value = "查询单位欠缴状态",notes = "单位名字")
     @PostMapping("/isArrEar")
     public ArrearDTO isArrEar(String ageName) {
         AgenDTO agenDTO = new AgenDTO();
@@ -226,14 +227,15 @@ public class AgenController {
 
 
     /**
-     * 通过单位名称，查询单位信息
+     * 通过单位名称，查询单位信息,包括单位的开票点
      *
-     * @param ageName 单位名称
+     * @param agenName 单位名称
      * @return 区划id，单位识别码，单位编码，开票点id，开票点编码，开票点名称
      */
+    @ApiOperation(value = "通过单位名称，查询单位信息",notes = "单位名字")
     @PostMapping("/getDetailByUnitName")
-    public AgenInfoDTO getDetailByUnitName(String ageName) {
-       return fabAgenService.getDetailByUnitName(ageName);
+    public AgenInfoDTO getDetailByUnitName(String agenName) {
+       return fabAgenService.getDetailByUnitName(agenName);
     }
 }
 

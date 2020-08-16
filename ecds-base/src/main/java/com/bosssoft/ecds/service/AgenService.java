@@ -127,5 +127,11 @@ public interface AgenService extends IService<AgenPO> {
      */
     public Boolean checkBatch(List<AgenDTO> fabAgenDTOList);
 
+    /**
+     * 通过单位名称，查询单位信息,包括单位的开票点
+     *
+     * @param agenName 单位名称
+     * @return 区划id，单位识别码，单位编码，开票点id，开票点编码，开票点名称
+     */
     AgenInfoDTO getDetailByUnitName(String agenName);
 }
