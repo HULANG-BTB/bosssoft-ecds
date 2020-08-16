@@ -31,7 +31,6 @@ public class SwaggerConfig {
         // 判断当前是否处于该环境
         // 通过 enable() 接收此参数判断是否要显示
         boolean b = environment.acceptsProfiles(of);
-
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 //配置是否启用Swagger，如果是false，在浏览器将无法访问
@@ -59,12 +58,12 @@ public class SwaggerConfig {
                 "v1.0",
                 // 组织链接
                 "http://terms.service.url/组织链接",
-                // 联系人信息
                 contact,
                 // 许可
                 "Authorization By : Central Network Supervision Department of the Big Tomato Empire ",
                 // 许可连接
                 "http://www.gov.cn/"
-        );
+                ,new ArrayList<>());
     }
+
 }

@@ -1,0 +1,23 @@
+server:
+  port: 9119
+spring:
+  application:
+    name: unit-sign
+  profiles:
+    active: dev
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+      config:
+        file-extension: yaml
+        server-addr: localhost:8848
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+
+
+
