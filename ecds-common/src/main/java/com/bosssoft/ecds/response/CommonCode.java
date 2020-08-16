@@ -44,8 +44,7 @@ public enum CommonCode implements ResultCode {
      * @return
      */
     public static CommonCode addEnum(String enumName, boolean success, int code, String message) {
-        CommonCode createCode = DynamicEnumUtil.addEnum(CommonCode.class, enumName, new Class[]{Boolean.class, Integer.class, String.class}, new Object[]{success, code, message});
-        return createCode;
+        return DynamicEnumUtil.addEnum(CommonCode.class, enumName, new Class[]{Boolean.class, Integer.class, String.class}, new Object[]{success, code, message});
     }
 
     @Override

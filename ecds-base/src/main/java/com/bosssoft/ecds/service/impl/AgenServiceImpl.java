@@ -5,12 +5,14 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bosssoft.ecds.entity.dto.AgenDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
+import com.bosssoft.ecds.entity.dto.agendto.AgenInfoDTO;
 import com.bosssoft.ecds.entity.po.AgenPO;
 import com.bosssoft.ecds.dao.AgenDao;
 import com.bosssoft.ecds.entity.po.CrtPO;
 import com.bosssoft.ecds.service.AgenService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bosssoft.ecds.utils.MyBeanUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -28,6 +30,9 @@ import java.util.Map;
 @Service
 @DS("master")
 public class AgenServiceImpl extends ServiceImpl<AgenDao, AgenPO> implements AgenService {
+
+    @Autowired
+    private AgenDao agenDao;
 
     /**
      *
@@ -216,6 +221,11 @@ public class AgenServiceImpl extends ServiceImpl<AgenDao, AgenPO> implements Age
         List<AgenPO> agenPOList = MyBeanUtil.copyListProperties(fabAgenDTOList, AgenPO.class);
         boolean removeResult = super.updateBatchById(agenPOList);
         return removeResult;
+    }
+
+    @Override
+    public AgenInfoDTO getDetailByUnitName(String agenName) {
+        return agenDao.getDetailByUnitName(agenName);
     }
 
     /**
