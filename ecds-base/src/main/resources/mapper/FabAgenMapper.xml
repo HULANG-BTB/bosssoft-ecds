@@ -42,6 +42,32 @@
         <result column="f_note" property="note" />
     </resultMap>
 
+    <!-- 通用查询映射结果 -->
+    <resultMap id="AgenInfoResultMap" type="com.bosssoft.ecds.entity.dto.agendto.AgenInfoDTO">
+        <result column="f_rgn_id" property="rgnId" />
+        <result column="f_agen_code" property="agenCode" />
+        <collection property="places" column="f_agen_code" javaType="java.util.List" select="getPlace"/>
+    </resultMap>
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="PlaceInfoResultMap" type="com.bosssoft.ecds.entity.dto.placedto.PlaceInfoDTO">
+        <id column="f_id" property="id" />
+        <result column="f_place_id" property="placeId" />
+        <result column="f_place_name" property="placeName" />
+    </resultMap>
+
+    <select id="getPlace" resultMap="PlaceInfoResultMap">
+        select f_id,f_place_id,f_place_name
+        from ecds_unit.uab_place
+        where f_agen_id = #{f_agen_code} and f_logic_delete = 0
+    </select>
+    
+    <select id="getDetailByUnitName" resultMap="AgenInfoResultMap">
+        select f_rgn_id,f_agen_code
+        from ecds_financial.fab_agen
+        where f_agen_name = #{agenName} and f_logic_delete = 0
+    </select>
+
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         f_id, f_rgn_id, f_agen_code, f_eff_date, f_exp_date, f_agen_name, f_mnem, f_level, f_pid_code, f_isleaf, f_org_code, f_dept_code, f_findept_id, f_ind_code, f_sort_code, f_type_code, f_isenable, f_istick_agen, f_isunpaid, f_isalarm_agen, f_addr, f_zip, f_link_man, f_link_tel, f_fin_mgr, f_fin_mgr_tel, f_province_id, f_city_id, f_county_id, f_operator, f_operator_id, f_create_time, f_update_time, f_logic_delete, f_version, f_note

@@ -2,6 +2,7 @@ package com.bosssoft.ecds.service;
 
 import com.bosssoft.ecds.entity.dto.AgenDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
+import com.bosssoft.ecds.entity.dto.agendto.AgenInfoDTO;
 import com.bosssoft.ecds.entity.po.AgenPO;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -16,6 +17,7 @@ import java.util.List;
  * @since 2020-08-09
  */
 public interface AgenService extends IService<AgenPO> {
+
 
     /**
      *
@@ -124,4 +126,6 @@ public interface AgenService extends IService<AgenPO> {
      * @return
      */
     public Boolean checkBatch(List<AgenDTO> fabAgenDTOList);
+
+    AgenInfoDTO getDetailByUnitName(String agenName);
 }
