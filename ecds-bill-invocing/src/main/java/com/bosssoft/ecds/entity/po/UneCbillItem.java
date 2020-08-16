@@ -1,9 +1,11 @@
 package com.bosssoft.ecds.entity.po;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import java.util.Date;
 
 @Data
+@TableName("une_cbill_item")
 public class UneCbillItem {
 
     private long fId;

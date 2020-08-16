@@ -1,6 +1,8 @@
 package com.bosssoft.ecds.entity.vo;
 
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
 @Data
@@ -19,12 +21,13 @@ public class UneCbillVo {
     /**
      * 创建时间
      */
+    @DateTimeFormat(pattern = "YYYY-MM-DD hh:mm:ss")
     private Date fCreateTime;
 
     /**
      * 票据金额
      */
-    private String fTotalAmt;
+    private double fTotalAmt;
 
     /**
      * 开票单位
@@ -34,5 +37,5 @@ public class UneCbillVo {
     /**
      * 开票状态
      */
-    private String fState;
+    private int fState;
 }
