@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.bosssoft.ecds.entity.dto.ArchiveOverViewDTO;
 import com.bosssoft.ecds.entity.po.ArchivePO;
 import com.bosssoft.ecds.entity.query.ArchiveOverViewQuery;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -23,7 +24,7 @@ public interface ArchiveOverViewDao extends BaseMapper<ArchivePO> {
      * @param archiveOverViewQuery
      * @return OverViewArchiveDto
      */
-    ArchiveOverViewDTO queryOverViewArchiveInfo(ArchiveOverViewQuery archiveOverViewQuery);
+    ArchiveOverViewDTO queryOverViewArchiveInfo(@Param("query") ArchiveOverViewQuery archiveOverViewQuery);
 
     /**
      * 查询所有单位的归档总览表中的信息

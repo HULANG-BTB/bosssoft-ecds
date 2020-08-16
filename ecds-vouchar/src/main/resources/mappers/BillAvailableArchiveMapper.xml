@@ -15,10 +15,13 @@
 
     <select id="collectBillAvailableInfo" resultType="com.bosssoft.ecds.entity.dto.BillAvailableInfoDTO">
         SELECT
-
-        FROM
-        WHERE
-
+            A.f_agen_idcode as agenCode,
+            A.f_type_code as billCode,
+            W.f_bill_name as billName,
+            W.f_number as number
+        FROM fab_agen_bill A
+        LEFT JOIN fbe_writeoff_billsummary W ON A.f_type_code = W.f_bill_code
+        WHERE date_format(W.f_create_time, '%Y-%m-%d') = date_format(date_sub(SYSDATE(), interval 1 day), '%Y-%m-%d')
     </select>
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.bosssoft.ecds.entity.po.BillAvailableArchivePO">

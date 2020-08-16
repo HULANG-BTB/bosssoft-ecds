@@ -43,8 +43,4 @@ public interface BillAvailableArchiveService extends IService<BillAvailableArchi
      */
     BillApplyDTO getBillApplyInfo(String agenCode);
 
-    /**
-     * 单位端票据申领情况归档
-     */
-    void unitBillApplyArchive();
 }

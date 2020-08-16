@@ -1,5 +1,6 @@
 package com.bosssoft.ecds;
 
+import com.bosssoft.ecds.entity.query.ArchiveOverViewQuery;
 import com.bosssoft.ecds.service.*;
 import com.bosssoft.ecds.service.impl.BillCheckArchiveServiceImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -58,6 +59,8 @@ public class MyTest {
 
     @Test
     public void testQuery() {
-        log.info("" + archiveOverViewService.queryOverViewArchiveAllInfo());
+        ArchiveOverViewQuery query = new ArchiveOverViewQuery();
+        query.setAgenName("软件");
+        log.info("" + archiveOverViewService.queryOverViewArchiveInfo(query));
     }
 }
