@@ -3,10 +3,11 @@ package com.bosssoft.ecds.entity.dto;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @ApiModel(value = "BillDestructionDto", description = "票据销毁dto")
-public class BillDestructionDto {
+public class BillDestructionDto implements Serializable {
     @ApiModelProperty(value = "票据代码")
     private String batchCode;
 

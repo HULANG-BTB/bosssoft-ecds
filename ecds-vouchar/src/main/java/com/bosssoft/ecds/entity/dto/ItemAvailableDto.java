@@ -4,9 +4,14 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.io.Serializable;
+
+/**
+ * @author liuke
+ */
 @Data
 @ApiModel(value = "ItemAvailableDto", description = "可用项目传输对象")
-public class ItemAvailableDto {
+public class ItemAvailableDto implements Serializable {
     @ApiModelProperty(value = "单位编码")
     private String agenCode;
 

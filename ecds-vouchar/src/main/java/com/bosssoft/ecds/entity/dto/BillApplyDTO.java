@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -11,7 +12,7 @@ import java.util.Date;
  */
 @Data
 @ApiModel(value = "BillApplyDTO", description = "票据领用信息")
-public class BillApplyDTO {
+public class BillApplyDTO implements Serializable {
 
     @ApiModelProperty(value = "单位编码")
     private String agenCode;

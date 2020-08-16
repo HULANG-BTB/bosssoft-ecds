@@ -2,26 +2,44 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bosssoft.ecds.dao.BillPayArchiveDao">
     <!--归档票据缴销记录-->
+    <select id="queryBillPayInfos" resultType="com.bosssoft.ecds.entity.dto.BillPayDTO">
+        SELECT
+            f_agen_idcode as agenCode,
+            f_agen_name as agenName,
+            f_wait_account as waitAccount,
+            f_account as account
+        FROM fne_cbill_accounting
+        WHERE date_format(f_create_time, '%Y-%m-%d') = date_format(date_sub(SYSDATE(), interval 1 day), '%Y-%m-%d')
+    </select>
+
+    <select id="queryBillUseNumber" resultType="long">
+
+    </select>
+
+    <select id="queryBillAuthNumber" resultType="long">
+
+    </select>
+
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.bosssoft.ecds.entity.po.BillPayArchivePO">
-        <id column="f_id" property="id" />
-        <result column="f_agen_code" property="agenCode" />
-        <result column="f_bill_no" property="billNo" />
-        <result column="f_author_time" property="authorTime" />
-        <result column="f_author_result" property="authorResult" />
-        <result column="f_sign_status" property="signStatus" />
-        <result column="f_is_save" property="isSave" />
-        <result column="f_create_time" property="createTime" />
-        <result column="f_update_time" property="updateTime" />
-        <result column="f_operator_id" property="operatorId" />
-        <result column="f_operator" property="operator" />
-        <result column="f_version" property="version" />
-        <result column="f_logic_delete" property="logicDelete" />
+        <id column="f_id" property="id"/>
+        <result column="f_agen_code" property="agenCode"/>
+        <result column="f_agen_name" property="agenName"/>
+        <result column="f_use_number" property="useNumber"/>
+        <result column="f_wait_account" property="waitAccount"/>
+        <result column="f_account" property="account"/>
+        <result column="f_summary_time" property="summaryTime"/>
+        <result column="f_create_time" property="createTime"/>
+        <result column="f_update_time" property="updateTime"/>
+        <result column="f_operator_id" property="operatorId"/>
+        <result column="f_operator" property="operator"/>
+        <result column="f_version" property="version"/>
+        <result column="f_logic_delete" property="logicDelete"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        f_id, f_agen_idcode, f_bill_no, f_author_time, f_author_result, f_sign_status, f_is_save, f_create_time, f_update_time, f_operator_id, f_operator, f_version, f_logic_delete
+        f_id, f_agen_code, f_agen_name, f_use_number, f_wait_account, f_account, f_summary_time, f_create_time, f_update_time, f_operator_id, f_operator, f_version, f_logic_delete
     </sql>
 
 </mapper>

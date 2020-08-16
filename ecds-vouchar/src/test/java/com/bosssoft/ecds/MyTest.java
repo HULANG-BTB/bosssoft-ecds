@@ -1,9 +1,6 @@
 package com.bosssoft.ecds;
 
-import com.bosssoft.ecds.service.BillApplyArchiveService;
-import com.bosssoft.ecds.service.BillAvailableArchiveService;
-import com.bosssoft.ecds.service.BillWarnArchiveService;
-import com.bosssoft.ecds.service.ItemArchiveService;
+import com.bosssoft.ecds.service.*;
 import com.bosssoft.ecds.service.impl.BillCheckArchiveServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +19,8 @@ public class MyTest {
     BillApplyArchiveService billApplyArchiveService;
     @Autowired
     BillWarnArchiveService billWarnArchiveService;
+    @Autowired
+    BillPayArchiveService billPayArchiveService;
 
     @Test
     public void testBillAvailable() {
@@ -46,5 +45,10 @@ public class MyTest {
     @Test
     public void testBillWarnService() {
         billWarnArchiveService.finaBillWarnArchive();
+    }
+
+    @Test
+    public void testBillPayService() {
+        billPayArchiveService.finaBillPayArchive();
     }
 }

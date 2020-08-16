@@ -10,6 +10,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -23,10 +24,9 @@ import java.util.Date;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("fnr_bill_pay_voucher")
-@ApiModel(value="BillPayVoucherPO对象", description="票据缴销")
+@TableName("fnr_bill_pay_archive")
+@ApiModel(value = "BillPayVoucherPO对象", description = "票据缴销")
 public class BillPayArchivePO extends Model<BillPayArchivePO> {
-
 
     @ApiModelProperty(value = "主键")
     @TableId(value = "f_id", type = IdType.AUTO)
@@ -36,25 +36,26 @@ public class BillPayArchivePO extends Model<BillPayArchivePO> {
     @TableField("f_agen_code")
     private String agenCode;
 
-    @ApiModelProperty(value = "预警票号")
-    @TableField("f_bill_no")
-    private String billNo;
+    @ApiModelProperty(value = "单位名称")
+    @TableField("f_agen_name")
+    private String agenName;
 
-    @ApiModelProperty(value = "财政审核时间")
-    @TableField("f_author_time")
-    private Date authorTime;
+    @ApiModelProperty(value = "票据使用数量")
+    @TableField("f_use_number")
+    private int useNumber;
 
-    @ApiModelProperty(value = "财政审核结果")
-    @TableField("f_author_result")
-    private String authorResult;
+    @ApiModelProperty(value = "应缴金额")
+    @TableField("f_wait_account")
+    private BigDecimal waitAccount;
 
-    @ApiModelProperty(value = "财政结果审验人")
-    @TableField("f_sign_status")
-    private String signStatus;
+    @ApiModelProperty(value = "实缴金额")
+    @TableField("f_account")
+    private BigDecimal account;
 
-    @ApiModelProperty(value = "归档状态")
-    @TableField("f_is_save")
-    private Boolean isSave;
+    @ApiModelProperty(value = "汇总时间")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+    @TableField(value = "f_summary_time", fill = FieldFill.INSERT)
+    private Date summaryTime;
 
     @ApiModelProperty(value = "创建时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
@@ -83,33 +84,6 @@ public class BillPayArchivePO extends Model<BillPayArchivePO> {
     @TableField("f_logic_delete")
     @TableLogic
     private Boolean logicDelete;
-
-
-    public static final String F_ID = "f_id";
-
-    public static final String F_AGEN_IDCODE = "f_agen_idcode";
-
-    public static final String F_BILL_NO = "f_bill_no";
-
-    public static final String F_AUTHOR_TIME = "f_author_time";
-
-    public static final String F_AUTHOR_RESULT = "f_author_result";
-
-    public static final String F_SIGN_STATUS = "f_sign_status";
-
-    public static final String F_IS_SAVE = "f_is_save";
-
-    public static final String F_CREATE_TIME = "f_create_time";
-
-    public static final String F_UPDATE_TIME = "f_update_time";
-
-    public static final String F_OPERATOR_ID = "f_operator_id";
-
-    public static final String F_OPERATOR = "f_operator";
-
-    public static final String F_VERSION = "f_version";
-
-    public static final String F_LOGIC_DELETE = "f_logic_delete";
 
     @Override
     protected Serializable pkVal() {
