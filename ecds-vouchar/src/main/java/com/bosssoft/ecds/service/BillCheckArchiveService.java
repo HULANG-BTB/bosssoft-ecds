@@ -44,10 +44,4 @@ public interface BillCheckArchiveService extends IService<BillCheckArchivePO> {
      */
     List<BillCheckDTO> getBillCheckInfo(String agenIdCode);
 
-    /**
-     * 单位端票据申领情况归档
-     */
-    void unitBillCheckArchive();
-
-
 }

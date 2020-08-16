@@ -221,8 +221,4 @@ public class BillCheckArchiveServiceImpl extends ServiceImpl<BillCheckArchiveDao
         return null;
     }
 
-    @Override
-    public void unitBillCheckArchive() {
-
-    }
 }
