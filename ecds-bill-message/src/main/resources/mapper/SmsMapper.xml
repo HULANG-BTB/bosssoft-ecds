@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.boss.msg.mapper.SmsMapper">
+  <resultMap id="BaseResultMap" type="com.boss.msg.entity.po.SmsPo">
+    <!--@mbg.generated-->
+    <!--@Table fbe_stock_sms-->
+    <id column="f_sms_id" jdbcType="BIGINT" property="id" />
+    <result column="f_sms_from" jdbcType="VARCHAR" property="smsFrom" />
+    <result column="f_sms_to" jdbcType="VARCHAR" property="smsTo" />
+    <result column="f_sms_content" jdbcType="LONGVARCHAR" property="content" />
+    <result column="f_sms_sentDate" jdbcType="TIMESTAMP" property="sentDate" />
+    <result column="f_sms_is_sent" jdbcType="BOOLEAN" property="isSent" />
+    <result column="f_sms_error" jdbcType="LONGVARCHAR" property="error" />
+    <result column="f_create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="f_update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="f_oper_id" jdbcType="INTEGER" property="operatorId" />
+    <result column="f_operator" jdbcType="VARCHAR" property="operator" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    f_sms_id, f_sms_from, f_sms_to, f_sms_content, f_sms_sentDate, f_sms_is_sent, f_sms_error, 
+    f_create_time, f_update_time, f_oper_id, f_operator
+  </sql>
+</mapper>
