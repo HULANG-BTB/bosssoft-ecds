@@ -1,9 +1,9 @@
 package com.bosssoft.ecds.service;
 
-import com.bosssoft.ecds.entity.dto.AgenDTO;
+import com.bosssoft.ecds.entity.dto.agendto.AgenDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
-import com.bosssoft.ecds.entity.dto.PagesDTO;
-import com.bosssoft.ecds.entity.po.AgenPO;
+import com.bosssoft.ecds.entity.dto.agendto.AgenInfoDTO;
+import com.bosssoft.ecds.entity.dto.PagesDTO;import com.bosssoft.ecds.entity.po.AgenPO;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -17,6 +17,7 @@ import java.util.List;
  * @since 2020-08-09
  */
 public interface AgenService extends IService<AgenPO> {
+
 
     /**
      *
@@ -125,4 +126,12 @@ public interface AgenService extends IService<AgenPO> {
      * @return
      */
     public Boolean checkBatch(List<AgenDTO> fabAgenDTOList);
+
+    /**
+     * 通过单位名称，查询单位信息,包括单位的开票点
+     *
+     * @param agenName 单位名称
+     * @return 区划id，单位识别码，单位编码，开票点id，开票点编码，开票点名称
+     */
+    AgenInfoDTO getDetailByUnitName(String agenName);
 }

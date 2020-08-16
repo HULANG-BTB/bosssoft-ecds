@@ -8,6 +8,7 @@ import com.google.common.collect.ImmutableMap;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -69,11 +70,27 @@ public class ExceptionCatch {
         return responseResult;
     }
 
+    /**
+     * 处理重复插入数据异常
+     *
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(DuplicateKeyException.class)
+    @ResponseBody
+    public ResponseResult duplicateKeyError(DuplicateKeyException e) {
+        log.error("重复插入数据错误", e);
+        return new ResponseResult(CommonCode.DUPLICATE_ERROR);
+    }
+
+
     static{
         //处理非法参数异常
         builder.put(org.springframework.http.converter.HttpMessageNotReadableException.class, CommonCode.INVLIDATE);
         //处理请求方法异常
         builder.put(HttpRequestMethodNotSupportedException.class,CommonCode.METHOD_NOT_SUPPORTED);
+        //处理重复插入数据异常
+        builder.put(DuplicateKeyException.class,CommonCode.DUPLICATE_ERROR);
         //除了CustomException以外的异常类型及对应的错误代码在这里定义,，如果不定义则统一返回固定的错误信息
     }
 

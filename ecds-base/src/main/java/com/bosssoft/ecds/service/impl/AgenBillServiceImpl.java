@@ -3,12 +3,12 @@ package com.bosssoft.ecds.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.bosssoft.ecds.common.response.CommonCode;
-import com.bosssoft.ecds.common.response.QueryResponseResult;
-import com.bosssoft.ecds.common.response.ResponseResult;
+import com.bosssoft.ecds.response.CommonCode;
+import com.bosssoft.ecds.response.QueryResponseResult;
+import com.bosssoft.ecds.response.ResponseResult;
 import com.bosssoft.ecds.dao.AgenBillDao;
 import com.bosssoft.ecds.dao.BillTypeDao;
-import com.bosssoft.ecds.entity.dto.AgenBillDTO;
+import com.bosssoft.ecds.entity.dto.agendto.AgenBillDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.po.AgenBillPO;
 import com.bosssoft.ecds.entity.po.BillTypePO;
@@ -73,7 +73,7 @@ public class AgenBillServiceImpl extends ServiceImpl<AgenBillDao, AgenBillPO> im
     }
 
     /**
-     * 分页查询单位项目关系
+     * 分页查询单位票据关系
      * 通过单位编码，查询出所有可用票据
      *
      * @param pageDTO

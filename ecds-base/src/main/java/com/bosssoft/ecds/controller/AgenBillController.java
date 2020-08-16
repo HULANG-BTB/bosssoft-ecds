@@ -1,9 +1,9 @@
 package com.bosssoft.ecds.controller;
 
 
-import com.bosssoft.ecds.common.response.QueryResponseResult;
-import com.bosssoft.ecds.common.response.ResponseResult;
-import com.bosssoft.ecds.entity.dto.AgenBillDTO;
+import com.bosssoft.ecds.response.QueryResponseResult;
+import com.bosssoft.ecds.response.ResponseResult;
+import com.bosssoft.ecds.entity.dto.agendto.AgenBillDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.po.BillTypePO;
 import com.bosssoft.ecds.entity.vo.AgenBillVO;
@@ -78,5 +78,7 @@ public class AgenBillController {
         AgenBillDTO agenBillDTO = MyBeanUtil.myCopyProperties(agenBillVO, AgenBillDTO.class);
         return agenBillService.getBill(agenBillDTO);
     }
+
+
 }
 

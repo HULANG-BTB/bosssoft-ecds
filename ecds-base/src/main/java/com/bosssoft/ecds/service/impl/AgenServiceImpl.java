@@ -3,20 +3,20 @@ package com.bosssoft.ecds.service.impl;
 import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.bosssoft.ecds.entity.dto.AgenDTO;
+import com.bosssoft.ecds.entity.dto.agendto.AgenDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
+import com.bosssoft.ecds.entity.dto.agendto.AgenInfoDTO;
 import com.bosssoft.ecds.entity.dto.PagesDTO;
 import com.bosssoft.ecds.entity.po.AgenPO;
 import com.bosssoft.ecds.dao.AgenDao;
-import com.bosssoft.ecds.entity.po.CrtPO;
 import com.bosssoft.ecds.service.AgenService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bosssoft.ecds.utils.MyBeanUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * <p>
@@ -29,6 +29,9 @@ import java.util.Map;
 @Service
 @DS("master")
 public class AgenServiceImpl extends ServiceImpl<AgenDao, AgenPO> implements AgenService {
+
+    @Autowired
+    private AgenDao agenDao;
 
     /**
      *
@@ -270,5 +273,16 @@ public class AgenServiceImpl extends ServiceImpl<AgenDao, AgenPO> implements Age
         MyBeanUtil.copyProperties(fabAgenDTO, fabAgenPO);
         List<AgenPO> fabAgenPOList = super.list(new QueryWrapper<AgenPO>(fabAgenPO));
         return MyBeanUtil.copyListProperties(fabAgenPOList, AgenDTO.class);
+    }
+
+    /**
+     * 通过单位名称，查询单位信息,包括单位的开票点
+     *
+     * @param agenName 单位名称
+     * @return 区划id，单位识别码，单位编码，开票点id，开票点编码，开票点名称
+     */
+    @Override
+    public AgenInfoDTO getDetailByUnitName(String agenName) {
+        return agenDao.getDetailByUnitName(agenName);
     }
 }

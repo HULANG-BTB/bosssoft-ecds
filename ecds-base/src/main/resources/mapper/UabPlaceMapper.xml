@@ -3,7 +3,7 @@
 <mapper namespace="com.bosssoft.ecds.dao.UabPlaceDao">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.bosssoft.ecds.entity.po.UabPlacePO">
+    <resultMap id="BaseResultMap" type="com.bosssoft.ecds.entity.po.PlacePO">
         <id column="f_id" property="id" />
         <result column="f_rgn_id" property="rgnId" />
         <result column="f_place_id" property="placeId" />

@@ -1,4 +1,4 @@
-package com.bosssoft.ecds.entity.dto;
+package com.bosssoft.ecds.entity.dto.agendto;
 
 import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.annotations.ApiModel;
