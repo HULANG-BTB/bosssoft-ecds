@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bosssoft.ecds.dao.BillAvailableArchiveDao;
 import com.bosssoft.ecds.entity.dto.BillApplyDTO;
-import com.bosssoft.ecds.entity.dto.BillAvailableInfoDto;
+import com.bosssoft.ecds.entity.dto.BillAvailableInfoDTO;
 import com.bosssoft.ecds.entity.po.AgenBillPO;
 import com.bosssoft.ecds.entity.po.BillAvailableArchivePO;
 import com.bosssoft.ecds.entity.po.WriteoffBillsummaryPO;
@@ -53,7 +53,7 @@ public class BillAvailableArchiveServiceImpl extends ServiceImpl<BillAvailableAr
 
     @Override
     public void finaBillApplyArchive() {
-        List<BillAvailableInfoDto> res = new ArrayList<>();
+        List<BillAvailableInfoDTO> res = new ArrayList<>();
 
         /*
          * 获取所有单位一天之内的票据申领信息
@@ -67,7 +67,7 @@ public class BillAvailableArchiveServiceImpl extends ServiceImpl<BillAvailableAr
          */
         list.forEach(
                 temp -> {
-                    BillAvailableInfoDto dto = new BillAvailableInfoDto();
+                    BillAvailableInfoDTO dto = new BillAvailableInfoDTO();
                     dto.setAgenCode(temp.getAgenIdcode());
                     dto.setBillCode(temp.getTypeCode());
                     res.add(dto);
@@ -78,7 +78,7 @@ public class BillAvailableArchiveServiceImpl extends ServiceImpl<BillAvailableAr
          * 信息处理
          */
         for (int i = 0; i < res.size(); i++) {
-            BillAvailableInfoDto tempDto = res.get(i);
+            BillAvailableInfoDTO tempDto = res.get(i);
             LambdaQueryWrapper<WriteoffBillsummaryPO> lqw = new LambdaQueryWrapper<>();
             LambdaQueryWrapper<WriteoffBillsummaryPO> eq = lqw
                     .eq(WriteoffBillsummaryPO::getBillCode, tempDto.getBillCode())
@@ -108,6 +108,8 @@ public class BillAvailableArchiveServiceImpl extends ServiceImpl<BillAvailableAr
                     billAvailableArchiveDao.insert(po);
                 }
         );
+        /*批量插入*/
+
     }
 
     /**

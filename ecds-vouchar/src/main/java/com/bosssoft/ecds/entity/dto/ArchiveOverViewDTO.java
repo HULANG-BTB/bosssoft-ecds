@@ -56,15 +56,6 @@ public class ArchiveOverViewDTO implements Serializable {
     @ApiModelProperty(value = "票据未审核数量")
     private Long unAuthorNumber;
 
-    @ApiModelProperty(value = "票据预警票数")
-    private Long warnNumber;
-
-    @ApiModelProperty(value = "票据退票数量")
-    private Long returnNumber;
-
-    @ApiModelProperty(value = "票据销毁数量")
-    private Long destoryNumber;
-
     @ApiModelProperty(value = "创建时间")
     private Date createTime;
 

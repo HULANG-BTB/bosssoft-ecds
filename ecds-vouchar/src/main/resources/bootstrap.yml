@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: archive-server
+  cloud:
+    nacos:
+      config:
+        enabled: true
+        server-addr: 49.234.75.113:8848
+        file-extension: yml
+        name: archive-server

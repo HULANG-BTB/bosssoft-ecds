@@ -7,7 +7,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bosssoft.ecds.dao.ArchiveOverViewDao;
 import com.bosssoft.ecds.entity.dto.AgenDto;
 import com.bosssoft.ecds.entity.dto.ArchiveOverViewDTO;
-import com.bosssoft.ecds.entity.po.AgenPO;
 import com.bosssoft.ecds.entity.po.ArchivePO;
 import com.bosssoft.ecds.entity.query.ArchiveOverViewQuery;
 import com.bosssoft.ecds.service.AgenService;
@@ -15,7 +14,6 @@ import com.bosssoft.ecds.service.ArchiveOverViewService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,36 +63,10 @@ public class ArchiveOverViewServiceImpl extends ServiceImpl<ArchiveOverViewDao, 
      */
     @Override
     public List<ArchiveOverViewDTO> queryOverViewArchiveAllInfo() {
-        List<ArchiveOverViewDTO> res = new ArrayList<>();
-
-        /*
-         * 查询出所有公司的公司编码
-         */
-        List<ArchivePO> archivePOS = archiveDao.selectList(null);
-
-        /*
-         * 转换参数类型
-         */
-        Assert.notEmpty(archivePOS, "归档中暂无公司信息");
-        ArchiveOverViewDTO dto = null;
-        for (ArchivePO po : archivePOS) {
-            dto = new ArchiveOverViewDTO();
-            BeanUtil.copyProperties(po, dto);
-            res.add(dto);
-        }
-
         /*
          * 查询出所有公司的信息,并且转换参数类型
          */
-        for (int i = 0; i < res.size(); i++) {
-            ArchiveOverViewDTO temp = res.get(i);
-            LambdaQueryWrapper<AgenPO> lqw = new LambdaQueryWrapper<>();
-            lqw.eq(AgenPO::getAgenCode, temp.getAgenCode());
-            AgenPO one = agenService.getOne(lqw);
-            BeanUtil.copyProperties(one, temp);
-            res.set(i, temp);
-        }
-        return res;
+        return archiveDao.queryOverViewArchiveAllInfo();
     }
 
     /**

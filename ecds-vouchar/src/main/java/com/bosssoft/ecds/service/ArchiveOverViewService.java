@@ -26,7 +26,7 @@ public interface ArchiveOverViewService extends IService<ArchivePO> {
     ArchiveOverViewDTO queryOverViewArchiveInfo(ArchiveOverViewQuery archiveOverViewQuery);
 
     /**
-     * 财政端查询  查询所有单位的信息，以及票据使用情况。
+     * 查询所有单位的信息，以及票据使用情况。
      *
      * @return List<ArchiveOverViewDto>
      */

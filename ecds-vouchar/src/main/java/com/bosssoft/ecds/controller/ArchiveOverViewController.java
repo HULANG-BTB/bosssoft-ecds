@@ -5,7 +5,7 @@ import com.bosssoft.ecds.entity.dto.ArchiveOverViewDTO;
 import com.bosssoft.ecds.entity.query.ArchiveOverViewQuery;
 import com.bosssoft.ecds.entity.vo.ArchiveOverViewVo;
 import com.bosssoft.ecds.service.ArchiveOverViewService;
-import com.bosssoft.ecds.util.ResponseUtils;
+import com.bosssoft.ecds.utils.ResponseUtils;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

@@ -5,10 +5,12 @@ import com.bosssoft.ecds.entity.dto.ArchiveOverViewDTO;
 import com.bosssoft.ecds.entity.po.ArchivePO;
 import com.bosssoft.ecds.entity.query.ArchiveOverViewQuery;
 
+import java.util.List;
+
 /**
  * <p>
- *  Mapper 接口
- *  归档总览
+ * Mapper 接口
+ * 归档总览
  * </p>
  *
  * @author liuke
@@ -16,11 +18,18 @@ import com.bosssoft.ecds.entity.query.ArchiveOverViewQuery;
  */
 public interface ArchiveOverViewDao extends BaseMapper<ArchivePO> {
     /**
-     * 根据传来的查询信息，查询出归档总览表中信息  （已归档状态下）
+     * 根据传来的查询信息，查询出归档总览表中信息
      *
      * @param archiveOverViewQuery
      * @return OverViewArchiveDto
      */
     ArchiveOverViewDTO queryOverViewArchiveInfo(ArchiveOverViewQuery archiveOverViewQuery);
+
+    /**
+     * 查询所有单位的归档总览表中的信息
+     *
+     * @return List<ArchiveOverViewDTO>
+     */
+    List<ArchiveOverViewDTO> queryOverViewArchiveAllInfo();
 
 }

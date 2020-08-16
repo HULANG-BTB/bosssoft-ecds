@@ -27,18 +27,6 @@ import java.util.Date;
 @ApiModel(value = "BillAvailableArchivePO对象", description = "可用票据归档")
 public class BillAvailableArchivePO extends Model<BillAvailableArchivePO> {
 
-
-    public static final String F_ID = "f_id";
-    public static final String F_AGEN_CODE = "f_agen_code";
-    public static final String F_BILL_CODE = "f_bill_code";
-    public static final String F_BILL_NAME = "f_bill_name";
-    public static final String F_NUMBER = "f_number";
-    public static final String F_CREATE_TIME = "f_create_time";
-    public static final String F_UPDATE_TIME = "f_update_time";
-    public static final String F_OPERATOR_ID = "f_operator_id";
-    public static final String F_OPERATOR = "f_operator";
-    public static final String F_VERSION = "f_version";
-    public static final String F_LOGIC_DELETE = "f_logic_delete";
     @ApiModelProperty(value = "主键")
     @TableId(value = "f_id", type = IdType.AUTO)
     private Long id;

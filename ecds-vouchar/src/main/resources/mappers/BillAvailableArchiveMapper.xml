@@ -12,6 +12,14 @@
             #{item.updateTime}, #{item.operatorId}, #{item.operator}, #{item.version}, #{item.logicDelete})
         </foreach>
     </insert>
+
+    <select id="collectBillAvailableInfo" resultType="com.bosssoft.ecds.entity.dto.BillAvailableInfoDTO">
+        SELECT
+
+        FROM
+        WHERE
+
+    </select>
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.bosssoft.ecds.entity.po.BillAvailableArchivePO">
         <id column="f_id" property="id"/>
