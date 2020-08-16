@@ -7,6 +7,8 @@ import com.bosssoft.ecds.entity.dto.PagesDTO;
 import com.bosssoft.ecds.entity.vo.DeptVO;
 import com.bosssoft.ecds.entity.vo.PageVO;
 import com.bosssoft.ecds.entity.vo.PagesVO;
+import com.bosssoft.ecds.response.CommonCode;
+import com.bosssoft.ecds.response.QueryResponseResult;
 import com.bosssoft.ecds.service.DeptService;
 import com.bosssoft.ecds.utils.MyBeanUtil;
 import com.bosssoft.ecds.utils.ResponseUtils;
@@ -46,12 +48,12 @@ public class DeptController {
      */
     @ApiOperation(value = "新增单位")
     @PostMapping("/save")
-    public String save(@RequestBody DeptVO fabDeptVO){
+    public QueryResponseResult save(@RequestBody DeptVO fabDeptVO){
         DeptDTO fabDeptDTO = new DeptDTO();
         MyBeanUtil.copyProperties(fabDeptVO,fabDeptDTO);
         fabDeptDTO = fabDeptService.save(fabDeptDTO);
         MyBeanUtil.copyProperties(fabDeptDTO,fabDeptVO);
-        return ResponseUtils.getResponse(fabDeptVO,ResponseUtils.ResultType.OK);
+        return new QueryResponseResult<>(CommonCode.SUCCESS,fabDeptVO);
     }
 
     /**
@@ -65,12 +67,12 @@ public class DeptController {
      */
     @ApiOperation(value = "按部门编码删除部门")
     @PostMapping("/remove")
-    public String remove(@RequestBody DeptVO fabDeptVO){
+    public QueryResponseResult remove(@RequestBody DeptVO fabDeptVO){
         DeptDTO fabDeptDTO = new DeptDTO();
         MyBeanUtil.copyProperties(fabDeptVO,fabDeptDTO);
         Boolean result = fabDeptService.remove(fabDeptDTO);
         MyBeanUtil.copyProperties(fabDeptDTO,fabDeptVO);
-        return ResponseUtils.getResponse(result,ResponseUtils.ResultType.OK);
+        return new QueryResponseResult<>(CommonCode.SUCCESS,result);
     }
 
     /**
@@ -84,12 +86,12 @@ public class DeptController {
      */
     @ApiOperation(value = "用于修改部门信息")
     @PostMapping("/update")
-    public String update(@RequestBody DeptVO fabDeptVO){
+    public QueryResponseResult update(@RequestBody DeptVO fabDeptVO){
         DeptDTO fabDeptDTO = new DeptDTO();
         MyBeanUtil.copyProperties(fabDeptVO,fabDeptDTO);
         Boolean result = fabDeptService.update(fabDeptDTO);
         MyBeanUtil.copyProperties(fabDeptDTO,fabDeptVO);
-        return ResponseUtils.getResponse(result,ResponseUtils.ResultType.OK);
+        return new QueryResponseResult<>(CommonCode.SUCCESS,result);
     }
 
     /**
@@ -103,12 +105,12 @@ public class DeptController {
      */
     @ApiOperation(value = "根据部门编码查询部门")
     @PostMapping("/getByDeptCode")
-    public String getByDeptCode(@RequestBody DeptVO fabDeptVO){
+    public QueryResponseResult getByDeptCode(@RequestBody DeptVO fabDeptVO){
         DeptDTO fabDeptDTO = new DeptDTO();
         MyBeanUtil.copyProperties(fabDeptVO,fabDeptDTO);
         fabDeptDTO = fabDeptService.getByDeptCode(fabDeptDTO);
         MyBeanUtil.copyProperties(fabDeptDTO,fabDeptVO);
-        return ResponseUtils.getResponse(fabDeptVO,ResponseUtils.ResultType.OK);
+        return new QueryResponseResult<>(CommonCode.SUCCESS,fabDeptVO);
     }
 
     /**
@@ -122,12 +124,12 @@ public class DeptController {
      */
     @ApiOperation(value = "根据部门名查询部门")
     @PostMapping("/getByDeptName")
-    public String getByDeptName(@RequestBody DeptVO fabDeptVO){
+    public QueryResponseResult getByDeptName(@RequestBody DeptVO fabDeptVO){
         DeptDTO fabDeptDTO = new DeptDTO();
         MyBeanUtil.copyProperties(fabDeptVO,fabDeptDTO);
         fabDeptDTO = fabDeptService.getByDeptName(fabDeptDTO);
         MyBeanUtil.copyProperties(fabDeptDTO,fabDeptVO);
-        return ResponseUtils.getResponse(fabDeptVO,ResponseUtils.ResultType.OK);
+        return new QueryResponseResult<>(CommonCode.SUCCESS,fabDeptVO);
     }
 
     /**
@@ -140,10 +142,10 @@ public class DeptController {
      */
     @ApiOperation(value = "用于查看部门列表")
     @GetMapping("/listAll")
-    public String listAll(){
+    public QueryResponseResult listAll(){
         List<DeptDTO> fabDeptDTOList = fabDeptService.listAll();
         List<DeptVO> fabDeptVOList = MyBeanUtil.copyListProperties(fabDeptDTOList, DeptVO.class);
-        return ResponseUtils.getResponse(fabDeptVOList,ResponseUtils.ResultType.OK);
+        return new QueryResponseResult<>(CommonCode.SUCCESS,fabDeptVOList);
     }
 
     /**
@@ -154,12 +156,12 @@ public class DeptController {
      */
     @ApiOperation(value = "通过分页查询")
     @PostMapping("/listByPage")
-    public String listByPage(@RequestBody PagesVO pagesVO) {
+    public QueryResponseResult listByPage(@RequestBody PagesVO pagesVO) {
         PagesDTO pagesDTO = MyBeanUtil.copyProperties(pagesVO, PagesDTO.class);
         pagesDTO = fabDeptService.listByPage(pagesDTO);
 
         pagesVO = MyBeanUtil.copyProperties(pagesDTO, PagesVO.class);
-        return ResponseUtils.getResponse(pagesVO, ResponseUtils.ResultType.OK);
+        return new QueryResponseResult<>(CommonCode.SUCCESS,pagesVO);
     }
 
     /**
@@ -170,10 +172,10 @@ public class DeptController {
      */
     @ApiOperation(value = "批量删除")
     @PostMapping("/removeBatch")
-    public String removeBatch(@RequestBody List<DeptVO> fabDeptVOList) {
+    public QueryResponseResult removeBatch(@RequestBody List<DeptVO> fabDeptVOList) {
         List<DeptDTO> fabDeptDTOList = MyBeanUtil.copyListProperties(fabDeptVOList, DeptDTO.class);
         Boolean result = fabDeptService.removeBatch(fabDeptDTOList);
-        return ResponseUtils.getResponse(result, ResponseUtils.ResultType.OK);
+        return new QueryResponseResult<>(CommonCode.SUCCESS,result);
     }
 }
 
