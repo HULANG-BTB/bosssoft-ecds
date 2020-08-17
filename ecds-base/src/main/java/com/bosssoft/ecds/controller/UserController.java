@@ -1,8 +1,8 @@
 package com.bosssoft.ecds.controller;
 
 
-import com.bosssoft.ecds.common.response.CommonCode;
-import com.bosssoft.ecds.common.response.QueryResponseResult;
+import com.bosssoft.ecds.response.CommonCode;
+import com.bosssoft.ecds.response.QueryResponseResult;
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.dto.RoleDTO;
 import com.bosssoft.ecds.entity.dto.UserDTO;

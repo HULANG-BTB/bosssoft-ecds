@@ -1,5 +1,8 @@
 package com.bosssoft.ecds.security.auth;
 
+import cn.hutool.json.JSONUtil;
+import com.bosssoft.ecds.response.CommonCode;
+import com.bosssoft.ecds.response.QueryResponseResult;
 import com.bosssoft.ecds.security.utils.ResponseUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -10,6 +13,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
+
+import java.nio.charset.StandardCharsets;
 
 /**
  * @ClassName CustomServerAuthenticationEntryPoint
@@ -40,8 +45,8 @@ public class CustomServerAuthenticationEntryPoint implements ServerAuthenticatio
         response.getHeaders().set(WWW_AUTHENTICATE, this.headerValue);
         response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
         // 三设置 验证异常返回信息
-        String responseBodyString = ResponseUtils.getResponse(e.getMessage(), ResponseUtils.ResultType.UNAUTHORIZED);
-        byte[] responseBodyBytes = responseBodyString.getBytes();
+        QueryResponseResult<String> responseResult = new QueryResponseResult<>(CommonCode.addEnum("认证失败!", false, 40001, "用户未认证"), e.getMessage());
+        byte[] responseBodyBytes = JSONUtil.toJsonStr(responseResult).getBytes(StandardCharsets.UTF_8);
         // 写入信息
         return response.writeWith(Mono.just(response.bufferFactory().wrap(responseBodyBytes)));
     }

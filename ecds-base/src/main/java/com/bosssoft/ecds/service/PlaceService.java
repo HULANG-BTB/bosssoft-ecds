@@ -1,9 +1,9 @@
 package com.bosssoft.ecds.service;
 
-import com.bosssoft.ecds.common.response.QueryResponseResult;
-import com.bosssoft.ecds.common.response.ResponseResult;
+import com.bosssoft.ecds.response.QueryResponseResult;
+import com.bosssoft.ecds.response.ResponseResult;
 import com.bosssoft.ecds.entity.dto.PageDTO;
-import com.bosssoft.ecds.entity.dto.PlaceDTO;
+import com.bosssoft.ecds.entity.dto.placedto.PlaceAllDTO;
 import com.bosssoft.ecds.entity.po.PlacePO;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.bosssoft.ecds.entity.vo.PageVO;
@@ -26,7 +26,7 @@ public interface PlaceService extends IService<PlacePO> {
      * @param placeDTO 单位开票点相关信息
      * @return 返回成功或者失败的code和msg
      */
-    ResponseResult save(PlaceDTO placeDTO);
+    ResponseResult save(PlaceAllDTO placeDTO);
 
     /**
      * 修改开票点信息
@@ -34,7 +34,7 @@ public interface PlaceService extends IService<PlacePO> {
      * @param placeDTO 修改后的开票点信息
      * @return 返回成功或者失败的code和msg
      */
-    ResponseResult update(PlaceDTO placeDTO);
+    ResponseResult update(PlaceAllDTO placeDTO);
 
     /**
      * 删除单个开票点
@@ -42,7 +42,7 @@ public interface PlaceService extends IService<PlacePO> {
      * @param placeDTO 需要删除的开票点id
      * @return 返回成功或者失败的code和msg
      */
-    ResponseResult delete(PlaceDTO placeDTO);
+    ResponseResult delete(PlaceAllDTO placeDTO);
 
     /**
      * 分页查询开票点信息
@@ -51,7 +51,7 @@ public interface PlaceService extends IService<PlacePO> {
      *                keyword为空时普通查询，keyword不为空时模糊查询
      * @return limit、page、total、items
      */
-    QueryResponseResult<PageVO> listByPage(PageDTO<PlaceDTO> pageDTO);
+    QueryResponseResult<PageVO> listByPage(PageDTO<PlaceAllDTO> pageDTO);
 
     /**
      * 批量删除开票点
@@ -59,7 +59,7 @@ public interface PlaceService extends IService<PlacePO> {
      * @param placeDTOList 需要删除的开票点idList
      * @return 返回成功或者失败的code和msg
      */
-    ResponseResult batchDelete(List<PlaceDTO> placeDTOList);
+    ResponseResult batchDelete(List<PlaceAllDTO> placeDTOList);
 
     /**
      * 主要用于批量审核,修改开票点启用状态，输入需要修改
@@ -67,5 +67,5 @@ public interface PlaceService extends IService<PlacePO> {
      * @param placeDTOList 需要修改审核的开票点id
      * @return 返回成功或者失败的code和msg
      */
-    ResponseResult batchVerify(List<PlaceDTO> placeDTOList);
+    ResponseResult batchVerify(List<PlaceAllDTO> placeDTOList);
 }

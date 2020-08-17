@@ -3,12 +3,12 @@ package com.bosssoft.ecds.service.impl;
 import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.bosssoft.ecds.entity.dto.AgenDTO;
+import com.bosssoft.ecds.entity.dto.agendto.AgenDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.dto.agendto.AgenInfoDTO;
+import com.bosssoft.ecds.entity.dto.PagesDTO;
 import com.bosssoft.ecds.entity.po.AgenPO;
 import com.bosssoft.ecds.dao.AgenDao;
-import com.bosssoft.ecds.entity.po.CrtPO;
 import com.bosssoft.ecds.service.AgenService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bosssoft.ecds.utils.MyBeanUtil;
@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * <p>
@@ -137,56 +136,92 @@ public class AgenServiceImpl extends ServiceImpl<AgenDao, AgenPO> implements Age
     /**
      * 分页读取
      *
-     * @param pageDTO
+     * @param pagesDTO
      * @return
      */
     @Override
-    public PageDTO listByPage(PageDTO pageDTO) {
+    public PagesDTO listByPage(PagesDTO pagesDTO) {
         Page<AgenPO> fabAgenPOPage = new Page<>();
         // 设置分页信息
-        fabAgenPOPage.setCurrent(pageDTO.getPage());
-        fabAgenPOPage.setSize(pageDTO.getLimit());
+        fabAgenPOPage.setCurrent(pagesDTO.getPage());
+        fabAgenPOPage.setSize(pagesDTO.getLimit());
         // 读取分页数据
         QueryWrapper<AgenPO> queryWrapper = new QueryWrapper<>();
-        queryWrapper.like(AgenPO.F_DEPT_CODE, pageDTO.getKeyword()).or().like(AgenPO.F_AGEN_CODE, pageDTO.getKeyword()).or().like(AgenPO.F_AGEN_NAME, pageDTO.getKeyword())
-                .or().like(AgenPO.F_SORT_CODE, pageDTO.getKeyword()).or().like(AgenPO.F_ISENABLE, pageDTO.getKeyword()).or().like(AgenPO.F_IND_CODE, pageDTO.getKeyword());
+        if(pagesDTO.getKeyword().get("deptName") != null && pagesDTO.getKeyword().get("deptName").equals("")){
+            queryWrapper.and(wrapper -> wrapper.like(AgenPO.F_DEPT_CODE, pagesDTO.getKeyword().get("deptName")));
+        }
+        if(pagesDTO.getKeyword().get("agenCode") != null && pagesDTO.getKeyword().get("agenCode").equals("")){
+            queryWrapper.and(wrapper -> wrapper.like(AgenPO.F_AGEN_CODE, pagesDTO.getKeyword().get("agenCode")));
+        }
+        if(pagesDTO.getKeyword().get("agenName") != null && pagesDTO.getKeyword().get("agenName").equals("")){
+            queryWrapper.and(wrapper -> wrapper.like(AgenPO.F_AGEN_NAME, pagesDTO.getKeyword().get("agenName")));
+        }
+        if(pagesDTO.getKeyword().get("sortCode") != null && pagesDTO.getKeyword().get("sortCode").equals("")){
+            queryWrapper.and(wrapper -> wrapper.like(AgenPO.F_SORT_CODE, pagesDTO.getKeyword().get("sortCode")));
+        }
+        if(pagesDTO.getKeyword().get("typeCode") != null && pagesDTO.getKeyword().get("typeCode").equals("")) {
+            queryWrapper.and(wrapper -> wrapper.like(AgenPO.F_TYPE_CODE, pagesDTO.getKeyword().get("typeCode")));
+        }
+        if(pagesDTO.getKeyword().get("isenable") != null) {
+            String s = (String) pagesDTO.getKeyword().get("isenable");
+            if(s.equals("false")){
+                queryWrapper.eq(AgenPO.F_ISENABLE, false);
+            }
+            if(s.equals("true")){
+                queryWrapper.eq(AgenPO.F_ISENABLE, true);
+            }
+
+        }
         queryWrapper.orderByAsc(AgenPO.F_CREATE_TIME);
         // 读取分页数据
         Page<AgenPO> fabAgenPOPage1 = super.page(fabAgenPOPage, queryWrapper);
         List<AgenPO> records = fabAgenPOPage1.getRecords();
         // 转换数据
         List<AgenDTO> userDTOList = MyBeanUtil.copyListProperties(records, AgenDTO.class);
-        pageDTO.setTotal(fabAgenPOPage1.getTotal());
-        pageDTO.setItems(userDTOList);
-        return pageDTO;
+        pagesDTO.setTotal(fabAgenPOPage1.getTotal());
+        pagesDTO.setItems(userDTOList);
+        return pagesDTO;
     }
 
     /**
      * 未审核单位分页读取
      *
-     * @param pageDTO
+     * @param pagesDTO
      * @return
      */
     @Override
-    public PageDTO checkListByPage(PageDTO pageDTO) {
+    public PagesDTO checkListByPage(PagesDTO pagesDTO) {
         Page<AgenPO> fabAgenPOPage = new Page<>();
         // 设置分页信息
-        fabAgenPOPage.setCurrent(pageDTO.getPage());
-        fabAgenPOPage.setSize(pageDTO.getLimit());
+        fabAgenPOPage.setCurrent(pagesDTO.getPage());
+        fabAgenPOPage.setSize(pagesDTO.getLimit());
         // 读取分页数据
         QueryWrapper<AgenPO> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(AgenPO.F_ISENABLE, false);
-        queryWrapper.and(wrapper -> wrapper.like(AgenPO.F_DEPT_CODE, pageDTO.getKeyword()).or().like(AgenPO.F_AGEN_CODE, pageDTO.getKeyword()).or().like(AgenPO.F_AGEN_NAME, pageDTO.getKeyword())
-                .or().like(AgenPO.F_SORT_CODE, pageDTO.getKeyword()).or().like(AgenPO.F_ISENABLE, pageDTO.getKeyword()).or().like(AgenPO.F_IND_CODE, pageDTO.getKeyword()));
+        if(pagesDTO.getKeyword().get("deptName") != null && pagesDTO.getKeyword().get("deptName").equals("")){
+            queryWrapper.and(wrapper -> wrapper.like(AgenPO.F_DEPT_CODE, pagesDTO.getKeyword().get("deptName")));
+        }
+        if(pagesDTO.getKeyword().get("agenCode") != null && pagesDTO.getKeyword().get("agenCode").equals("")){
+            queryWrapper.and(wrapper -> wrapper.like(AgenPO.F_AGEN_CODE, pagesDTO.getKeyword().get("agenCode")));
+        }
+        if(pagesDTO.getKeyword().get("agenName") != null && pagesDTO.getKeyword().get("agenName").equals("")){
+            queryWrapper.and(wrapper -> wrapper.like(AgenPO.F_AGEN_NAME, pagesDTO.getKeyword().get("agenName")));
+        }
+        if(pagesDTO.getKeyword().get("sortCode") != null && pagesDTO.getKeyword().get("sortCode").equals("")){
+            queryWrapper.and(wrapper -> wrapper.like(AgenPO.F_SORT_CODE, pagesDTO.getKeyword().get("sortCode")));
+        }
+        if(pagesDTO.getKeyword().get("typeCode") != null && pagesDTO.getKeyword().get("typeCode").equals("")) {
+            queryWrapper.and(wrapper -> wrapper.like(AgenPO.F_TYPE_CODE, pagesDTO.getKeyword().get("typeCode")));
+        }
         queryWrapper.orderByAsc(AgenPO.F_CREATE_TIME);
         // 读取分页数据
         Page<AgenPO> fabAgenPOPage1 = super.page(fabAgenPOPage, queryWrapper);
         List<AgenPO> records = fabAgenPOPage1.getRecords();
         // 转换数据
         List<AgenDTO> userDTOList = MyBeanUtil.copyListProperties(records, AgenDTO.class);
-        pageDTO.setTotal(fabAgenPOPage1.getTotal());
-        pageDTO.setItems(userDTOList);
-        return pageDTO;
+        pagesDTO.setTotal(fabAgenPOPage1.getTotal());
+        pagesDTO.setItems(userDTOList);
+        return pagesDTO;
     }
 
     /**
@@ -223,11 +258,6 @@ public class AgenServiceImpl extends ServiceImpl<AgenDao, AgenPO> implements Age
         return removeResult;
     }
 
-    @Override
-    public AgenInfoDTO getDetailByUnitName(String agenName) {
-        return agenDao.getDetailByUnitName(agenName);
-    }
-
     /**
      *
      *
@@ -243,5 +273,16 @@ public class AgenServiceImpl extends ServiceImpl<AgenDao, AgenPO> implements Age
         MyBeanUtil.copyProperties(fabAgenDTO, fabAgenPO);
         List<AgenPO> fabAgenPOList = super.list(new QueryWrapper<AgenPO>(fabAgenPO));
         return MyBeanUtil.copyListProperties(fabAgenPOList, AgenDTO.class);
+    }
+
+    /**
+     * 通过单位名称，查询单位信息,包括单位的开票点
+     *
+     * @param agenName 单位名称
+     * @return 区划id，单位识别码，单位编码，开票点id，开票点编码，开票点名称
+     */
+    @Override
+    public AgenInfoDTO getDetailByUnitName(String agenName) {
+        return agenDao.getDetailByUnitName(agenName);
     }
 }

@@ -253,8 +253,8 @@ public class SubjectServiceImpl extends ServiceImpl<SubjectDao, SubjectPO> imple
         if (subjectPO.getLevel() <= getMaxLevelFromIncome()) {
             incomeSortSubjectService.deleteBySid(subjectPO.getId());
         }
-        baseMapper.deleteById(subjectPO.getId());
-        return true;
+        return baseMapper.deleteById(subjectPO.getId())==1?true:false;
+
     }
 
     /**
@@ -356,6 +356,7 @@ public class SubjectServiceImpl extends ServiceImpl<SubjectDao, SubjectPO> imple
         return subjectVOTree;
     }
 
+
     /**
      * 查看收入类别最大层级
      */
@@ -375,13 +376,16 @@ public class SubjectServiceImpl extends ServiceImpl<SubjectDao, SubjectPO> imple
      * 对外接口，更新预算科目编码,更新成功或无须更新都返回true
      */
     @Transactional(rollbackFor = Exception.class)
-    public boolean updateFromInconme(Long incomeId, String code) {
+    public boolean updateFromInconme(Long incomeId, String name) {
         IncomeSortSubjectPO incomeSortSubjectPO = incomeSortSubjectService.selectByIncomeId(incomeId);
+        if (incomeSortSubjectPO == null) {
+            return true;
+        }
         SubjectPO subjectPO = baseMapper.selectById(incomeSortSubjectPO.getSubjectId());
-        subjectPO.setCode(code);
         if (!subjectPO.getYear().equals(getCurrentYear())) {
             return true;
         }
+        subjectPO.setCode(name);
         return baseMapper.updateById(subjectPO) == 1 ? true : false;
     }
 

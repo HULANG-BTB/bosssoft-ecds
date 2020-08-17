@@ -1,7 +1,7 @@
 package com.bosssoft.ecds.service;
 
 
-import com.bosssoft.ecds.common.response.ResponseResult;
+import com.bosssoft.ecds.response.ResponseResult;
 import com.bosssoft.ecds.entity.dto.ItemDTO;
 import com.bosssoft.ecds.entity.po.ItemPO;
 import com.baomidou.mybatisplus.extension.service.IService;
