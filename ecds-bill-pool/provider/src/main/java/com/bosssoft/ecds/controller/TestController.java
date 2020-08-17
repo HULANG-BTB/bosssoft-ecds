@@ -2,12 +2,8 @@ package com.bosssoft.ecds.controller;
 
 import com.bosssoft.ecds.dao.BillDao;
 import com.bosssoft.ecds.dao.SourceSetDao;
-import com.bosssoft.ecds.entity.dto.SourceSetDto;
-import com.bosssoft.ecds.entity.po.SourceSetPo;
-import com.bosssoft.ecds.utils.BeanUtils;
 import com.bosssoft.ecds.utils.UpdateSourceMessageUtils;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,9 +24,7 @@ public class TestController {
     SourceSetDao sourceSetDao;
 
     @RequestMapping("/test")
-    public int test(@RequestBody SourceSetDto sourceSetDto) {
-        SourceSetPo sourceSetPo = BeanUtils.convertObject(sourceSetDto, SourceSetPo.class);
-        sourceSetDao.createTypeToPool(sourceSetPo);
-        return 0;
+    public void test() {
+        utils.update();
     }
 }

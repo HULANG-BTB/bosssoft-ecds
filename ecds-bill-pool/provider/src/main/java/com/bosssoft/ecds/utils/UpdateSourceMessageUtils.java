@@ -78,6 +78,13 @@ public class UpdateSourceMessageUtils {
 
         SourceMessagePo sourceMessagePo = sourceSetDao.retrieveSourceMessageByCode(billTypeCode);
 
+        List<String> stringList = billDao.retrieveBillTypeCode();
+
+        redisTemplate.delete("billTypeCode");
+        redisTemplate.opsForList().leftPushAll("billTypeCode", stringList);
+
+        logger.info("更新billTypeCode列表:" + stringList);
+
         RLock lock = redissonClient.getLock(LOCK_KEY);
         RedissonRedLock redLock = new RedissonRedLock(lock);
 
@@ -90,8 +97,7 @@ public class UpdateSourceMessageUtils {
                 map.put("threshold", sourceMessagePo.getThreshold());
                 redisTemplate.delete(sourceMessagePo.getBillTypeCode());
                 redisTemplate.opsForHash().putAll(sourceMessagePo.getBillTypeCode(), map);
-                logger.info("更新billTypeCode对象"
-                        + redisTemplate.opsForHash().entries(sourceMessagePo.getBillTypeCode()).toString());
+                logger.info("更新billTypeCode对象" + sourceMessagePo);
             }
         } catch (Exception e) {
             e.printStackTrace();

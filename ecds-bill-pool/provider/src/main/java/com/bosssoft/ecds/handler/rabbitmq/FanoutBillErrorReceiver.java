@@ -31,7 +31,6 @@ public class FanoutBillErrorReceiver {
         int threshold = (int) redisTemplate.opsForHash().get(billTypeCode, "threshold");
         String table = (String) redisTemplate.opsForHash().get(billTypeCode, "table");
         int remainderBill = billDao.retrieveNumber(table);
-        logger.warn(redisTemplate.opsForHash().entries(billTypeCode).toString());
         if (remainderBill <= threshold) {
             logger.error(billTypeCode + " 放票请求系统未及时相应" + dateFormat.format(new Date()));
         }

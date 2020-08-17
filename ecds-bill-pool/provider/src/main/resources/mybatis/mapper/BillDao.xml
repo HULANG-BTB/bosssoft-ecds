@@ -39,6 +39,6 @@
     </delete>
 
     <select id="retrieveBillTypeCode" resultType="String">
-        select f_bill_type from uaa_set_ticketcenter
+        select f_bill_type from uaa_set_ticketcenter where f_enable = 1
     </select>
 </mapper>
