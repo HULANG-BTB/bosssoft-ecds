@@ -66,9 +66,8 @@ public class KafkaAppender extends AppenderBase<ILoggingEvent> {
     @Override
     protected void append(ILoggingEvent eventObject) {
         String msg = eventObject.getFormattedMessage();
-        String key = eventObject.getLevel().toString();
         log.debug("向kafka推送日志开始:" + msg);
-        ProducerRecord<String, String> record = new ProducerRecord<String, String>(logTopic, key, msg);
+        ProducerRecord<String, String> record = new ProducerRecord<String, String>(logTopic, msg);
         producer.send(record);
     }
 }

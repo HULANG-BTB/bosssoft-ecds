@@ -1,6 +1,7 @@
 package com.bosssoft.ecds.controller;
 
-import com.bosssoft.ecds.common.response.ResponseResult;
+import com.bosssoft.ecds.exception.CustomException;
+import com.bosssoft.ecds.response.ResponseResult;
 import com.bosssoft.ecds.entity.vo.billtypevo.AddBillTypeVO;
 import com.bosssoft.ecds.entity.vo.billtypevo.BillTypeIdVo;
 import com.bosssoft.ecds.entity.vo.billtypevo.QueryTableVO;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+
+import static com.bosssoft.ecds.response.CommonCode.EMAIL_NOTIFICATION;
 
 /**
  * @author :Raiz
@@ -69,5 +72,10 @@ public class BillTypeController {
     @PostMapping("queryBillTypeTree")
     public ResponseResult queryBillTypeTree() {
         return billTypeService.queryBillTypeTree();
+    }
+
+    @PostMapping("exception")
+    public ResponseResult exception() {
+        throw new CustomException(EMAIL_NOTIFICATION, "自定义信息");
     }
 }
