@@ -1,92 +1,60 @@
 package com.bosssoft.ecds.entity.dto;
 
+import com.baomidou.mybatisplus.annotation.*;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+
+import java.math.BigDecimal;
+import java.util.Date;
 
 @Data
 public class WriteOffDetailDTO {
 
-    /**
-     * 开票总览
-     * */
-    //开票单位
+    // 审验单ID
+    private String fPid;
+
+    //审验顺序-序号
+    private Integer fSortNo;
 
     //票据编码
+    private String fBillCode;
 
     //票据名称
+    private String fBillName;
 
-    //计量单位
+    //票据ID
+    private String fBillId;
 
-    //份数
+    //票据代码
+    private String fBatchCode;
+
+    //数量
+    private Integer fNumber;
+
+    //票据起始号
+    private String fBillNo1;
+
+    //票据结束号
+    private String fBillNo2;
+
+    //票面金额
+    private BigDecimal fAmt;
 
     //开票份数
+    private Integer fInvNum;
 
-    //开票金额
+    //版本号
+    private Integer fVersion;
 
-    //作废份数
+    //创建时间
+    private Date fCreateTime;
 
-    /**
-     * 收入情况
-     * */
-    // 开票单位
+    //修改时间
+    private Date fUpdateTime;
 
-    // 收费项目编码
+    //操作人id
+    private Long fOperatorId;
 
-    // 收费项目名称
-
-    // 开票金额
-
-    // 应缴金额
-
-    // 已缴金额
-
-    // 欠费金额
-
-    /**
-     * 开票明细
-     * */
-    // 开票单位
-
-    // 票据批次编码
-
-    // 票据批次名称
-
-    // 份数
-
-    // 起始号
-
-    // 终止号
-
-    // 开票金额
-
-    // 作废份数
-
-    /**
-     * 作废票号段
-     * */
-    // 开票单位
-
-    // 票据批次编码
-
-    // 票据批次名称
-
-    // 作废份数
-
-    // 起始号
-
-    // 终止号
-
-    /**
-     * 预警记录
-     * */
-    // 开票单位
-
-    // 预警日期
-
-    // 发送时间
-
-    // 监控事件
-
-    // 预警内容
-
-    // 处理状态
+    //操作人
+    private String fOperator;
 }
