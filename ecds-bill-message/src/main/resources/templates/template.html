@@ -1,24 +1,22 @@
 <!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8"/>
-    <title>freemarker简单示例</title>
+<html style="text-align: center;height: 100%;" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>开票通知模版</title>
 </head>
-<body>
-<div style="width:500px" align="center">
-    <div align="left">
-        <div>您开具了财政电子票据，票据信息如下：</div>
-        <br>
-        <div>开票日期：${billDate?string('yyyy-MM-dd hh:mm:ss')}</div>
-        <div>票据类型：${billType}</div>
-        <div>票据代码：${billPreCode}</div>
-        <div>票据号码：${billCode}</div>
-        <div>校验码：${billVerifyCode}</div>
-        <div>开票部门：${billDep}</div>
-        <div>交款人：${payer}</div>
-        <div>总金额：${billAmount} 元</div>
-    </div>
+<body style="height: 100%;">
+<div style="height: 100%;width: 40%;text-align: left;padding-top: 7%;padding-left: 9%;">
+    <div>您开具了财政电子票据，票据信息如下：</div>
+    <br>
+    <div>开票日期：${FCreateTime?string('yyyy.MM.dd HH:mm:ss')}</div>
+    <div>开票单位：${FPlaceName}</div>
+    <div>票据类型：${FBillType}</div>
+    <div>票据代码：${FBillId}</div>
+    <div>票据号码：${FBillNo}</div>
+    <div>校验码：${FCheckCode}</div>
+    <div>交款人：${FPayerName}</div>
+    <div>总金额：${FTotalAmt} 元</div>
+    <img src="${FBillImgUrl}"/>
 </div>
-
 </body>
 </html>

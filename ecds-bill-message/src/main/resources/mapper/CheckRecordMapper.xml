@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.boss.msg.mapper.CheckRecordMapper">
-    <resultMap id="BaseResultMap" type="com.boss.msg.entity.po.CheckRecordPo">
+<mapper namespace="com.bosssoft.ecds.msg.mapper.CheckRecordMapper">
+    <resultMap id="BaseResultMap" type="com.bosssoft.ecds.msg.entity.po.CheckRecordPo">
         <!--@mbg.generated-->
         <!--@Table fbe_check_record-->
         <id column="f_id" jdbcType="BIGINT" property="id"/>
