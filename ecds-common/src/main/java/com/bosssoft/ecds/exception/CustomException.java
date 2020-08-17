@@ -9,18 +9,11 @@ import com.bosssoft.ecds.response.ResultCode;
 public class CustomException extends RuntimeException {
 
     private ResultCode resultCode;
-    private Class clazz;
     public CustomException(ResultCode resultCode){
         this.resultCode = resultCode;
-        this.clazz=CustomException.class;
     }
-    public CustomException(ResultCode resultCode,Class clazz){
-        this.resultCode = resultCode;
-        this.clazz=clazz;
-    }
-    public Class getClazz() {
-        return clazz;
-    }
+
+
     public ResultCode getResultCode() {
         return resultCode;
     }
