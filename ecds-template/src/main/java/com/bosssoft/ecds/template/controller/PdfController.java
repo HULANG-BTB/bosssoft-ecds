@@ -12,6 +12,8 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 
 @Api("PDF生成相关控制器")
 @Slf4j
@@ -80,5 +82,20 @@ public class PdfController {
         String url = pdfService.getRemoteAddress(billDTO, false);
         log.info(url);
         return ResponseBody.ok(url);
+    }
+
+    /**
+     * 返回一个样板PDF
+     * @return
+     */
+    @ApiOperation("返回一个样板 PDF")
+    @GetMapping(value = "/template", produces = MediaType.APPLICATION_PDF_VALUE)
+    public byte[] getTemplate() {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        NontaxBillDTO billDTO = new NontaxBillDTO();
+        billDTO.setBillCode("01160201");
+        billDTO.setItems(new ArrayList<>());
+        pdfService.createPdf(billDTO, output);
+        return output.toByteArray();
     }
 }

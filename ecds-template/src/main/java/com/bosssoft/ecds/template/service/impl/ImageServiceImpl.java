@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 
 import javax.imageio.ImageIO;
+import javax.imageio.stream.FileImageInputStream;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
@@ -137,7 +138,8 @@ public class ImageServiceImpl implements ImageService {
      */
     private byte[] addMark(List<TextValue> billValues, String srcImgName){
 
-        Font font = new Font("宋体", Font.PLAIN, 16);
+//        Font font = new Font("宋体", Font.PLAIN, 16);
+        Font font = getFileFont();
         Color color = new Color(5, 0, 0, 255);
 
         File srcImgFile = null;
@@ -206,5 +208,23 @@ public class ImageServiceImpl implements ImageService {
         return value;
     }
 
+    /**
+     * 从 resources 中读取宋体 simsun.ttc 字体文件
+     * @return
+     */
+    private Font getFileFont() {
+        String fontName = "simsun.ttc";
+        Font font = new Font("宋体", Font.PLAIN, 16);
+        try {
+            File fontFile = ResourceUtils.getFile("classpath:" + fontName);
+//            FileInputStream is = new FileInputStream(fontFile);
+//            BufferedInputStream bis = new BufferedInputStream(is);
+            Font font1 = Font.createFont(Font.TRUETYPE_FONT, fontFile);
+            font = font1.deriveFont((float) 16);
+        } catch (IOException | FontFormatException e) {
+            e.printStackTrace();
+        }
 
+        return font;
+    }
 }
