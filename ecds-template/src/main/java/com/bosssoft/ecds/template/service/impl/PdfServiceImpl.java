@@ -1,9 +1,8 @@
 package com.bosssoft.ecds.template.service.impl;
 
-import com.bosssoft.ecds.template.dto.NontaxBillDTO;
+import com.bosssoft.ecds.template.entity.dto.NontaxBillDTO;
 import com.bosssoft.ecds.template.service.PdfService;
 import com.bosssoft.ecds.template.util.AliyunOSSUtil;
-import com.bosssoft.ecds.template.util.ResponseBody;
 import com.itextpdf.text.pdf.BaseFont;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -102,10 +101,15 @@ public class PdfServiceImpl implements PdfService {
     @Override
     public File createPdf(String htmlData, String pdfDest) {
         File file = new File(pdfDest);
-        log.info(file.getParent());
+        File dir = new File(file.getParent());
+        if (!dir.exists() && !dir.isDirectory()) {
+            dir.mkdirs();
+        }
+        //log.info(file.getParent());
         try (FileOutputStream outputStream = new FileOutputStream(file)) {
 
             createPdf(htmlData, outputStream);
+            log.info("createPdf: {}", file);
         }
         catch (IOException e) {
             e.printStackTrace();

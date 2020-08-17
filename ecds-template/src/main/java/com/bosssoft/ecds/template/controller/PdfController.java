@@ -1,11 +1,12 @@
 package com.bosssoft.ecds.template.controller;
 
-import com.bosssoft.ecds.template.dto.NontaxBillDTO;
+import com.bosssoft.ecds.template.entity.dto.NontaxBillDTO;
 import com.bosssoft.ecds.template.service.PdfService;
 import com.bosssoft.ecds.template.util.ResponseBody;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 
 @Api("PDF生成相关控制器")
+@Slf4j
 @RestController
 @RequestMapping("/pdf")
 public class PdfController {
@@ -76,6 +78,7 @@ public class PdfController {
     @PostMapping("/getRemoteAddress")
     public ResponseBody getRemoteAddress(@RequestBody NontaxBillDTO billDTO) {
         String url = pdfService.getRemoteAddress(billDTO, false);
+        log.info(url);
         return ResponseBody.ok(url);
     }
 }

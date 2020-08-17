@@ -106,11 +106,11 @@
                 <version>${druid.version}</version>
             </dependency>
             <!--mybatis-->
-            <dependency>
+            <!--<dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-boot-starter</artifactId>
                 <version>${mybatis-plus.version}</version>
-            </dependency>
+            </dependency>-->
             <!--junit-->
             <dependency>
                 <groupId>junit</groupId>

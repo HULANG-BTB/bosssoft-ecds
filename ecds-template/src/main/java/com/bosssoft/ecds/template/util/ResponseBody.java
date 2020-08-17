@@ -1,11 +1,19 @@
 package com.bosssoft.ecds.template.util;
 
 import com.bosssoft.ecds.util.ResponseUtils;
-import org.apache.tomcat.util.http.ResponseUtil;
 
+/**
+ * 统一响应类
+ */
 public class ResponseBody extends ResponseUtils.ResponseBody {
 
     public ResponseBody(){}
+
+    public ResponseBody(Integer status, String msg, Object data) {
+        setStatus(status);
+        setMsg(msg);
+        setData(data);
+    }
 
     public ResponseBody(ResponseUtils.ResultType resultType, Object data){
         setStatus(resultType.getCode());

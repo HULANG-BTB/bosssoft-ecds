@@ -1,7 +1,6 @@
 package com.bosssoft.ecds.template.service;
 
-import com.bosssoft.ecds.template.dto.NontaxBillDTO;
-import com.bosssoft.ecds.template.util.ResponseBody;
+import com.bosssoft.ecds.template.entity.dto.NontaxBillDTO;
 import freemarker.template.Configuration;
 
 import java.io.File;

@@ -1,4 +1,4 @@
-package com.bosssoft.ecds.template.dto;
+package com.bosssoft.ecds.template.entity.dto;
 
 import lombok.Data;
 
