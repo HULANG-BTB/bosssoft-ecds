@@ -1,7 +1,6 @@
 package com.bosssoft.ecds.controller;
 
 
-import com.bosssoft.ecds.encryption.SecretAnnotation;
 import com.bosssoft.ecds.entity.vo.incomesortvo.AddIncomeSortVO;
 import com.bosssoft.ecds.entity.vo.incomesortvo.DeleteIncomeSortVO;
 import com.bosssoft.ecds.entity.vo.incomesortvo.FuzzyQueryIncomeSortVO;
@@ -37,7 +36,7 @@ public class IncomeSortController {
 
     @ApiOperation(value = "获取所有收入类别信息", notes = "返回一个多级的树形结构数据")
     @GetMapping("/getAll")
-    @SecretAnnotation(encode = true)
+//    @SecretAnnotation(encode = true)
     public QueryResponseResult getAll() {
         QueryResponseResult incomeSortDTOS = incomeSortService.getAll();
         return incomeSortDTOS;
@@ -52,7 +51,7 @@ public class IncomeSortController {
 
     @ApiOperation(value = "分页查询收入类别信息", notes = "通过id查询显示子级收入类别")
     @PostMapping("/pageQueryById")
-    @SecretAnnotation(encode = true, decode = true)
+//    @SecretAnnotation(encode = true, decode = true)
     public QueryResponseResult pageQueryById(@RequestBody @Validated FuzzyQueryIncomeSortVO fuzzyQueryIncomeSortVO) {
         QueryResponseResult incomeSortDTOS = incomeSortService.pageQueryByName(fuzzyQueryIncomeSortVO);
         return incomeSortDTOS;

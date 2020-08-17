@@ -75,10 +75,8 @@ public class DecodeRequestBodyAdvice implements RequestBodyAdvice {
         if (decode) {
             //获取请求数据
             String builderString = stringBuilder.toString();
-            log.info("【接受的请求数据】", builderString);
             try {
                 String decodeString = AESUtils.decrypt(builderString);
-                log.info("【解密后的请求数据】", decodeString);
                 //把数据放到我们封装的对象中
                 return new MyHttpInputMessage(inputMessage.getHeaders(), new ByteArrayInputStream(decodeString.getBytes("UTF-8")));
             } catch (Exception e) {

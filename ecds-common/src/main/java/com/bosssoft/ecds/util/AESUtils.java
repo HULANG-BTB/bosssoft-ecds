@@ -17,7 +17,9 @@ import javax.crypto.spec.SecretKeySpec;
 @Slf4j
 @Component
 public class AESUtils {
-    //使用AES-128-CBC加密模式，key需要为16位,key和iv可以相同，也可以不同!
+    /**
+     * 使用AES-128-CBC加密模式，key需要为16位
+     */
     private static String KEY;
     private static String IV;
 
@@ -50,7 +52,8 @@ public class AESUtils {
      */
     public static String encrypt(String data, String key, String iv) throws Exception {
         try {
-            Cipher cipher = Cipher.getInstance(CIPHER_ALGORITHM_CBC);//"算法/模式/补码方式"NoPadding PKCS5Padding
+            //创建密码器，"算法/模式/补码方式"NoPadding PKCS5Padding
+            Cipher cipher = Cipher.getInstance(CIPHER_ALGORITHM_CBC);
             int blockSize = cipher.getBlockSize();
 
             byte[] dataBytes = data.getBytes();
@@ -85,7 +88,6 @@ public class AESUtils {
      */
     public static String decrypt(String data, String key, String iv) throws Exception {
         try {
-//        byte[] encrypted1 = new Base64().decode(data);
             Cipher cipher = Cipher.getInstance(CIPHER_ALGORITHM_CBC);
             SecretKeySpec keyspec = new SecretKeySpec(key.getBytes(), "AES");
             IvParameterSpec ivspec = new IvParameterSpec(iv.getBytes());
