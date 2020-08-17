@@ -1,5 +1,6 @@
 package com.bosssoft.ecds.entity.vo.itemvo;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -57,6 +58,9 @@ public class ItemVO {
 
     @ApiModelProperty(value = "预算科目")
     private String subject;
+
+    @ApiModelProperty(value = "预算科目名字")
+    private String subjectName;
 
     @ApiModelProperty(value = "收缴方式")
     private String paymode;

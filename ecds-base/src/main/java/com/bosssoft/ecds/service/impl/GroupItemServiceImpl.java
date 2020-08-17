@@ -68,11 +68,14 @@ public class GroupItemServiceImpl extends ServiceImpl<GroupItemDao, GroupItemPO>
 
     @Override
     public ResponseResult delete(GroupItemDTO groupItemDTO) {
-        GroupItemPO byId = super.getById(groupItemDTO.getId());
-        if (byId == null) {
+        QueryWrapper<GroupItemPO> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(GroupItemPO.F_GROUP_CODE,groupItemDTO.getGroupCode())
+                .and(wrapper->wrapper.eq(GroupItemPO.F_ITEM_CODE,groupItemDTO.getItemCode()));
+        GroupItemPO groupItemPO = groupItemDao.selectOne(queryWrapper);
+        if (groupItemPO == null) {
             return new ResponseResult(ItemResultCode.NOT_EXISTS);
         }
-        boolean remove = super.removeById(byId);
+        boolean remove = super.removeById(groupItemPO);
         if (!remove) {
             return new ResponseResult(CommonCode.FAIL);
         }
