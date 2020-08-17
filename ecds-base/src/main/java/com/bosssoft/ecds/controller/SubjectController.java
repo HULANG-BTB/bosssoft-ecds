@@ -39,7 +39,7 @@ public class SubjectController {
 
     @ApiOperation(value = "添加预算科目",notes = "只传code,name,parentId,year四个字段")
     @PostMapping("/add")
-    public ResponseResult add(@RequestBody @Validated SubjectVO subjectVO){
+    public QueryResponseResult add(@RequestBody @Validated SubjectVO subjectVO){
         SubjectDTO subjectDTO = MyBeanUtil.copyProperties(subjectVO, SubjectDTO.class);
         return subjectService.add(subjectDTO);
     }

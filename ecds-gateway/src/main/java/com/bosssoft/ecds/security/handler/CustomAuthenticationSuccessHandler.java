@@ -2,6 +2,9 @@ package com.bosssoft.ecds.security.handler;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.crypto.asymmetric.RSA;
+import cn.hutool.json.JSONUtil;
+import com.bosssoft.ecds.response.CommonCode;
+import com.bosssoft.ecds.response.QueryResponseResult;
 import com.bosssoft.ecds.security.config.RsaKeyProperties;
 import com.bosssoft.ecds.security.entity.domain.AuthUserDetails;
 import com.bosssoft.ecds.security.entity.vo.RoleVO;
@@ -10,7 +13,6 @@ import com.bosssoft.ecds.security.service.impl.SecurityUserServiceImpl;
 import com.bosssoft.ecds.security.utils.BeanUtils;
 import com.bosssoft.ecds.security.utils.JwtUtils;
 import com.bosssoft.ecds.security.utils.RedisUtils;
-import com.bosssoft.ecds.security.utils.ResponseUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpHeaders;
@@ -84,10 +86,12 @@ public class CustomAuthenticationSuccessHandler extends WebFilterChainServerAuth
             userDetails.setPassword(null);
             String token = JwtUtils.generateTokenExpireInMinutes(userDetails, rsa.getPrivateKey(), 60 * 24 * 30);
             userVO.setToken(token);
-            dataBytes = ResponseUtils.getResponse(userVO, ResponseUtils.ResultType.OK).getBytes(StandardCharsets.UTF_8);
+            QueryResponseResult<UserVO> responseResult = new QueryResponseResult<>(CommonCode.SUCCESS, userVO);
+            dataBytes = JSONUtil.toJsonStr(responseResult).getBytes(StandardCharsets.UTF_8);
         } catch (Exception ex) {
             ex.printStackTrace();
-            dataBytes = ResponseUtils.getResponse(ex.getMessage(), ResponseUtils.ResultType.UNAUTHORIZED).getBytes();
+            QueryResponseResult<String> responseResult = new QueryResponseResult<>(CommonCode.SUCCESS, ex.getMessage());
+            dataBytes = JSONUtil.toJsonStr(responseResult).getBytes(StandardCharsets.UTF_8);
         }
         DataBuffer bodyDataBuffer = response.bufferFactory().wrap(dataBytes);
         return response.writeWith(Mono.just(bodyDataBuffer));

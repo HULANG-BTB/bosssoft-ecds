@@ -35,7 +35,7 @@ public interface FabItemBillDao extends BaseMapper<FabItemBillPO> {
             "SELECT  a.f_id as  id ," +
             "a.f_operator as operator, " +
             "a.f_is_enabled as enabled, " +
-            " a.f_bill_code as billCode, " +
+            " a.f_bill_code as billCode,a.f_create_time as createTime,a.f_update_time as updateTime, " +
             "b.f_item_id as itemId , " +
             "b.f_item_name as itemName,  " +
             "b.f_isenable as  itemIsEnabled " +
@@ -59,7 +59,7 @@ public interface FabItemBillDao extends BaseMapper<FabItemBillPO> {
      */
     @Select({"<script> " +
             "select  f_id as id ,f_rgn_id as  rgnId,f_item_id as itemId,f_item_name as itemName,f_incom_sort_code as incomSortCode,\n" +
-            "f_subject as subject,f_operator as operator from fab_item where  f_isenable='1' " +
+            "f_subject as subject,f_operator as operator,f_create_time as createTime,f_update_time as updateTime from fab_item where  f_isenable='1' " +
             " and f_item_id not in (select  f_item_id_code from fab_item_bill  " +
             "<if test = 'fBillCode !=null  and fBillCode !=\"\"  '>" +
             "  where f_bill_code =#{fBillCode} </if> " +

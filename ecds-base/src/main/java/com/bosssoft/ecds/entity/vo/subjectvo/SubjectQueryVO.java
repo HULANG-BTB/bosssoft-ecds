@@ -1,6 +1,5 @@
 package com.bosssoft.ecds.entity.vo.subjectvo;
 
-import com.bosssoft.ecds.constant.IncomeSortConstant;
 import com.bosssoft.ecds.constant.SubjectConstant;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
@@ -9,7 +8,6 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -25,6 +23,7 @@ import javax.validation.constraints.NotNull;
 public class SubjectQueryVO {
 
     @ApiModelProperty(value = "左侧菜单预算科目的id，即父id")
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
     @NotBlank(message = SubjectConstant.Subject_YEAR_NOT_NULL)
