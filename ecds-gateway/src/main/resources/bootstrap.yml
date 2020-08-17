@@ -20,7 +20,7 @@ spring:
             group: DEFAULT_GROUP
             refresh: true
 
-          - data‐id: base-datasource-dev.yaml
+          - data‐id: gateway-datasource-dev.yaml
             group: DEFAULT_GROUP
             refresh: true
 

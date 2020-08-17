@@ -87,6 +87,8 @@ public class CustomAuthenticationSuccessHandler extends WebFilterChainServerAuth
             String token = JwtUtils.generateTokenExpireInMinutes(userDetails, rsa.getPrivateKey(), 60 * 24 * 30);
             userVO.setToken(token);
             QueryResponseResult<UserVO> responseResult = new QueryResponseResult<>(CommonCode.SUCCESS, userVO);
+            System.out.println(responseResult);
+            System.out.println(JSONUtil.toJsonStr(responseResult));
             dataBytes = JSONUtil.toJsonStr(responseResult).getBytes(StandardCharsets.UTF_8);
         } catch (Exception ex) {
             ex.printStackTrace();
