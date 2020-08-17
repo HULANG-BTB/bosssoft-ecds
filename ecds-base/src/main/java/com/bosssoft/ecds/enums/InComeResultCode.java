@@ -1,6 +1,6 @@
 package com.bosssoft.ecds.enums;
 
-import com.bosssoft.ecds.common.response.ResultCode;
+import com.bosssoft.ecds.response.ResultCode;
 
 /**
  * @author: Jianbinbing
