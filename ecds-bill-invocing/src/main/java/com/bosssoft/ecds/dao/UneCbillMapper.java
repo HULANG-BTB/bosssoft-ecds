@@ -12,4 +12,7 @@ public interface UneCbillMapper extends BaseMapper<UneCbill> {
 
     @Select("select * from une_cbill")
     List<UneCbill> selectPageVO(Page<UneCbill> page);
+
+    @Select("select count(*) from une_cbill")
+    int billCount();
 }
