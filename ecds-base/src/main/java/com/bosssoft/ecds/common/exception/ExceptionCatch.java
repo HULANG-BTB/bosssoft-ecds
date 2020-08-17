@@ -1,13 +1,10 @@
 package com.bosssoft.ecds.common.exception;
 
 import com.bosssoft.ecds.common.response.CommonCode;
-import com.bosssoft.ecds.common.response.QueryResponseResult;
 import com.bosssoft.ecds.common.response.ResponseResult;
 import com.bosssoft.ecds.common.response.ResultCode;
 import com.google.common.collect.ImmutableMap;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -45,7 +42,6 @@ public class ExceptionCatch {
     }
     /**
      * 处理请求参数校验异常
-     *
      * @param e
      * @return
      */
@@ -69,20 +65,6 @@ public class ExceptionCatch {
         ResponseResult responseResult = new ResponseResult(e.getResultCode());
         return responseResult;
     }
-
-    /**
-     * 处理重复插入数据异常
-     *
-     * @param e
-     * @return
-     */
-    @ExceptionHandler(DuplicateKeyException.class)
-    @ResponseBody
-    public ResponseResult duplicateKeyError(DuplicateKeyException e) {
-        log.error("重复插入数据错误", e);
-        return new ResponseResult(CommonCode.DUPLICATE_ERROR);
-    }
-
 
     static{
         //处理非法参数异常
