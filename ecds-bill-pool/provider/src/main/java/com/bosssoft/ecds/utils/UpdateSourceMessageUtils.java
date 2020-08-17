@@ -6,6 +6,8 @@ import com.bosssoft.ecds.entity.po.SourceMessagePo;
 import org.redisson.RedissonRedLock;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +21,8 @@ import java.util.concurrent.TimeUnit;
 public class UpdateSourceMessageUtils {
 
     private static final String LOCK_KEY = "Source_Set";
+
+    private static final Logger logger = LoggerFactory.getLogger(UpdateSourceMessageUtils.class);
 
     @Resource
     SourceSetDao sourceSetDao;
@@ -40,8 +44,10 @@ public class UpdateSourceMessageUtils {
 
         List<String> stringList = billDao.retrieveBillTypeCode();
 
-        redisTemplate.delete("RegionCode");
-        redisTemplate.opsForList().leftPushAll("RegionCode", stringList);
+        redisTemplate.delete("billTypeCode");
+        redisTemplate.opsForList().leftPushAll("billTypeCode", stringList);
+
+        logger.info("更新billTypeCode列表:" + stringList);
 
         RLock lock = redissonClient.getLock(LOCK_KEY);
         RedissonRedLock redLock = new RedissonRedLock(lock);
@@ -56,6 +62,7 @@ public class UpdateSourceMessageUtils {
                     map.put("table", list.get(i).getTable());
                     map.put("threshold", list.get(i).getThreshold());
                     redisTemplate.opsForHash().putAll(list.get(i).getBillTypeCode(), map);
+                    logger.info("更新billTypeCode对象:" + list.get(i));
                 }
             }
         } catch (Exception e) {
@@ -68,6 +75,7 @@ public class UpdateSourceMessageUtils {
     public void update(String billTypeCode) {
 
         boolean isLock;
+
         SourceMessagePo sourceMessagePo = sourceSetDao.retrieveSourceMessageByCode(billTypeCode);
 
         RLock lock = redissonClient.getLock(LOCK_KEY);
@@ -82,6 +90,8 @@ public class UpdateSourceMessageUtils {
                 map.put("threshold", sourceMessagePo.getThreshold());
                 redisTemplate.delete(sourceMessagePo.getBillTypeCode());
                 redisTemplate.opsForHash().putAll(sourceMessagePo.getBillTypeCode(), map);
+                logger.info("更新billTypeCode对象"
+                        + redisTemplate.opsForHash().entries(sourceMessagePo.getBillTypeCode()).toString());
             }
         } catch (Exception e) {
             e.printStackTrace();

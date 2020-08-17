@@ -5,6 +5,7 @@ public class SourceSetDto {
     String billTypeCode;
     int pushNumber;
     int minNumber;
+    int enable;
     int alterCode;
     String operator;
     int operatorID;
@@ -31,6 +32,14 @@ public class SourceSetDto {
 
     public void setMinNumber(int minNumber) {
         this.minNumber = minNumber;
+    }
+
+    public int getEnable() {
+        return enable;
+    }
+
+    public void setEnable(int enable) {
+        this.enable = enable;
     }
 
     public int getAlterCode() {
@@ -63,6 +72,7 @@ public class SourceSetDto {
                 "billTypeCode='" + billTypeCode + '\'' +
                 ", pushNumber=" + pushNumber +
                 ", minNumber=" + minNumber +
+                ", enable=" + enable +
                 ", alterCode=" + alterCode +
                 ", operator='" + operator + '\'' +
                 ", operatorID=" + operatorID +

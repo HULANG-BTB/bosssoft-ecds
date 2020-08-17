@@ -1,6 +1,5 @@
 package com.bosssoft.ecds.handler.quartz;
 
-import com.bosssoft.ecds.utils.BeanUtils;
 import com.bosssoft.ecds.utils.UpdateSourceMessageUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

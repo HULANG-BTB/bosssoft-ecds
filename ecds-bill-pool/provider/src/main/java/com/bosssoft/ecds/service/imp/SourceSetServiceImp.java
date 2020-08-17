@@ -37,9 +37,28 @@ public class SourceSetServiceImp implements SourceSetService {
     }
 
     @Override
-    public int updateSet(SourceSetDto sourceSetDto) {
+    public int createSource(SourceSetDto sourceSetDto) {
         SourceSetPo sourceSetPo = BeanUtils.convertObject(sourceSetDto, SourceSetPo.class);
-        int result = sourceSetDao.updateSet(sourceSetPo);
+        sourceSetDao.deleteSourceTable(sourceSetPo);
+        sourceSetDao.createTable(sourceSetPo);
+        sourceSetDao.createTypeToPool(sourceSetPo);
+        return sourceSetDao.createSet(sourceSetPo);
+    }
+
+    @Override
+    public int updateSet(SourceSetDto sourceSetDto) {
+        int result;
+        SourceSetPo sourceSetPo = BeanUtils.convertObject(sourceSetDto, SourceSetPo.class);
+        switch (sourceSetDto.getAlterCode()) {
+            case 1:
+                result = createSource(sourceSetDto);
+                break;
+            case 2:
+                result = sourceSetDao.updateSet(sourceSetPo);
+                break;
+            default:
+                result = -1;
+        }
         utils.update(sourceSetDto.getBillTypeCode());
         return result;
     }

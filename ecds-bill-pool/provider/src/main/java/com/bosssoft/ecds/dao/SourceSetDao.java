@@ -13,6 +13,14 @@ public interface SourceSetDao {
 
     int updateSet(SourceSetPo sourceSetPo);
 
+    int createTable(SourceSetPo sourceSetPo);
+
+    int createTypeToPool(SourceSetPo sourceSetPo);
+
+    int deleteSourceTable(SourceSetPo sourceSetPo);
+
+    int createSet(SourceSetPo sourceSetPo);
+
     List<SourceMessagePo> retrieveSourceMessageList();
 
     SourceMessagePo retrieveSourceMessageByCode(String billTypeCode);

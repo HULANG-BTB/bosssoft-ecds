@@ -28,8 +28,9 @@ public class TestController {
     SourceSetDao sourceSetDao;
 
     @RequestMapping("/test")
-    public void test(@RequestBody SourceSetDto sourceSetDto) {
+    public int test(@RequestBody SourceSetDto sourceSetDto) {
         SourceSetPo sourceSetPo = BeanUtils.convertObject(sourceSetDto, SourceSetPo.class);
-        sourceSetDao.updateMin(sourceSetPo);
+        sourceSetDao.createTypeToPool(sourceSetPo);
+        return 0;
     }
 }

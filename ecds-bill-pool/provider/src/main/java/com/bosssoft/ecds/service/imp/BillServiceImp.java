@@ -56,7 +56,7 @@ public class BillServiceImp implements BillService {
                 remainderBill = redisTemplate.opsForValue().get("remainderBill");
 
                 if (remainderBill < number) {
-                    fanoutRabbitUtils.sendBillExhaust();
+                    fanoutRabbitUtils.sendBillExhaust("255");
                     return null;
                 }
 
