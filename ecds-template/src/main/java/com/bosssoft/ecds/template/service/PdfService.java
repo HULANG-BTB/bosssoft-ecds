@@ -4,6 +4,7 @@ import com.bosssoft.ecds.template.entity.dto.NontaxBillDTO;
 import freemarker.template.Configuration;
 
 import java.io.File;
+import java.io.OutputStream;
 import java.util.Map;
 
 public interface PdfService {
@@ -14,6 +15,8 @@ public interface PdfService {
     File createPdf(String htmlData, String pdfDest);
 
     void createPdf(NontaxBillDTO billDTO);
+
+    void createPdf(NontaxBillDTO billDTO, OutputStream outputStream);
 
     byte[] getBytesFromFile(String filename);
 

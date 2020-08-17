@@ -59,11 +59,11 @@ public class PdfServiceImpl implements PdfService {
     /**
      * 获取前端数据与html模板整合到一起的数据，并转成字符串的形式
      * @param data 需要整合的数据
-     * @param htmlName html模板地址
+     * @param ftlName html模板地址
      * @return
      */
     @Override
-    public String getOutData(Map<String, Object> data, String htmlName) {
+    public String getOutData(Map<String, Object> data, String ftlName) {
         Configuration cfg = getConfiguration();
         Writer writer = new StringWriter();
         /**
@@ -74,7 +74,7 @@ public class PdfServiceImpl implements PdfService {
             /**
              * 获取html模板
              */
-            Template template = cfg.getTemplate(htmlName);
+            Template template = cfg.getTemplate(ftlName);
             /**
              * 将map中的数据与html模板整合到一起
              */
@@ -129,6 +129,16 @@ public class PdfServiceImpl implements PdfService {
         String pdfDest = defaultPdfDest + getPdfDest(billDTO.getBillCode(), billDTO.getSerialCode());
         String outData = getOutData(data, htmlName);
         createPdf(outData, pdfDest);
+    }
+
+    @Override
+    public void createPdf(NontaxBillDTO billDTO, OutputStream outputStream) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("billDTO",billDTO);
+        String htmlName = getHtmlName(billDTO.getBillCode());
+//        String pdfDest = defaultPdfDest + getPdfDest(billDTO.getBillCode(), billDTO.getSerialCode());
+        String outData = getOutData(data, htmlName);
+        createPdf(outData, outputStream);
     }
 
     @Override
@@ -206,14 +216,5 @@ public class PdfServiceImpl implements PdfService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    private void createPdf(NontaxBillDTO billDTO, OutputStream outputStream) {
-        Map<String, Object> data = new HashMap<>();
-        data.put("billDTO",billDTO);
-        String htmlName = getHtmlName(billDTO.getBillCode());
-//        String pdfDest = defaultPdfDest + getPdfDest(billDTO.getBillCode(), billDTO.getSerialCode());
-        String outData = getOutData(data, htmlName);
-        createPdf(outData, outputStream);
     }
 }
