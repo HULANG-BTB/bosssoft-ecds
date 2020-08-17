@@ -21,7 +21,7 @@ public class ImageTest {
         Color color = new Color(5, 0, 0, 255);
         String mark = "xiaoming";
 
-        addMark(sourceImg, destImg, mark, color, font);
+        //addMark(sourceImg, destImg, mark, color, font);
     }
 
     public void addMark(String srcImgName, String destImgName, String mark,  Color color, Font font)

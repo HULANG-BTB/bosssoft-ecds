@@ -1,7 +1,7 @@
 package com.bosssoft.ecds.template.service.impl;
 
-import com.bosssoft.ecds.template.dto.BillItemDTO;
-import com.bosssoft.ecds.template.dto.NontaxBillDTO;
+import com.bosssoft.ecds.template.entity.dto.BillItemDTO;
+import com.bosssoft.ecds.template.entity.dto.NontaxBillDTO;
 import com.bosssoft.ecds.template.service.ImageService;
 import com.bosssoft.ecds.template.util.AliyunOSSUtil;
 import com.bosssoft.ecds.template.util.TextValue;
