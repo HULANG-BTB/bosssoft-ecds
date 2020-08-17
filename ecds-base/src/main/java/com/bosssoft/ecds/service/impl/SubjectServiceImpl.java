@@ -347,7 +347,8 @@ public class SubjectServiceImpl extends ServiceImpl<SubjectDao, SubjectPO> imple
      * @param year
      * @return
      */
-    private List<SubjectVO> getAll(String year) {
+    @Override
+    public List<SubjectVO> getAll(String year) {
         QueryWrapper<SubjectPO> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("f_year", year);
         List<SubjectPO> subjectPOS = subjectDao.selectList(queryWrapper);

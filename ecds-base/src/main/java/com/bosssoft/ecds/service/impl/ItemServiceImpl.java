@@ -7,7 +7,7 @@ import com.bosssoft.ecds.response.QueryResponseResult;
 import com.bosssoft.ecds.response.ResponseResult;
 import com.bosssoft.ecds.dao.AgenItemDao;
 import com.bosssoft.ecds.dao.ItemStdDao;
-import com.bosssoft.ecds.entity.dto.ItemDTO;
+import com.bosssoft.ecds.entity.dto.itemdto.ItemDTO;
 import com.bosssoft.ecds.entity.po.AgenItemPO;
 import com.bosssoft.ecds.entity.po.ItemPO;
 import com.bosssoft.ecds.dao.ItemDao;

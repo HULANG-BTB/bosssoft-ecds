@@ -3,9 +3,9 @@ package com.bosssoft.ecds.controller;
 
 import com.bosssoft.ecds.response.QueryResponseResult;
 import com.bosssoft.ecds.response.ResponseResult;
-import com.bosssoft.ecds.entity.dto.ItemStdDTO;
+import com.bosssoft.ecds.entity.dto.itemdto.ItemStdDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
-import com.bosssoft.ecds.entity.vo.ItemStdVO;
+import com.bosssoft.ecds.entity.vo.itemvo.ItemStdVO;
 import com.bosssoft.ecds.entity.vo.PageVO;
 import com.bosssoft.ecds.service.ItemStdService;
 import com.bosssoft.ecds.utils.MyBeanUtil;

@@ -49,7 +49,6 @@ public interface SubjectService extends IService<SubjectPO> {
 
     /**
      * 删除预算科目
-     *
      */
     QueryResponseResult delete(Long id);
 
@@ -60,4 +59,12 @@ public interface SubjectService extends IService<SubjectPO> {
      * @return
      */
     QueryResponseResult copy(Long id);
+
+    /**
+     * 返回预算科目树
+     *
+     * @param year
+     * @return
+     */
+    List<SubjectVO> getAll(String year);
 }
