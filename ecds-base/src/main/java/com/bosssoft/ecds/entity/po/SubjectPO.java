@@ -10,6 +10,9 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
+
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -34,6 +37,7 @@ public class SubjectPO extends Model<SubjectPO> {
 
 
     @ApiModelProperty(value = "科目id")
+    @JsonSerialize(using = ToStringSerializer.class)
     @TableId(value = "f_id", type=IdType.ASSIGN_ID)
     private Long id;
 
@@ -59,6 +63,7 @@ public class SubjectPO extends Model<SubjectPO> {
     private Boolean leaf;
 
     @ApiModelProperty(value = "父级ID")
+    @JsonSerialize(using = ToStringSerializer.class)
     @TableField("f_parent_id")
     private Long parentId;
 
@@ -80,6 +85,7 @@ public class SubjectPO extends Model<SubjectPO> {
     private Date updateTime;
 
     @ApiModelProperty(value = "操作人id")
+    @JsonSerialize(using = ToStringSerializer.class)
     @TableField(value = "f_operator_id", fill = FieldFill.INSERT_UPDATE)
     private Long operatorId;
 

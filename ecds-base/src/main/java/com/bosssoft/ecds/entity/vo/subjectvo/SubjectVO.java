@@ -3,6 +3,8 @@ package com.bosssoft.ecds.entity.vo.subjectvo;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.bosssoft.ecds.constant.CheckConstant;
 import com.bosssoft.ecds.constant.SubjectConstant;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -25,6 +27,7 @@ import java.util.List;
 public class SubjectVO extends Model<SubjectVO> {
 
     @ApiModelProperty(value = "科目id")
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
     @NotBlank(message = SubjectConstant.Subject_YEAR_NOT_NULL)
@@ -50,6 +53,7 @@ public class SubjectVO extends Model<SubjectVO> {
 
     @NotNull(message = SubjectConstant.Subject_PID_NOT_NULL)
     @ApiModelProperty(value = "父级ID")
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long parentId;
 
     @Value("true")
@@ -61,4 +65,5 @@ public class SubjectVO extends Model<SubjectVO> {
 
     @ApiModelProperty(value = "下一级科目集合")
     private List<SubjectVO> subjectVOS;
+
 }
