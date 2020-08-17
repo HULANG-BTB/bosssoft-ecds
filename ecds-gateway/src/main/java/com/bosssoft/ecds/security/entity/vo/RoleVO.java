@@ -12,7 +12,8 @@ import java.util.List;
  * @ClassName RoleVO
  * @Author AloneH
  * @Date 2020/8/9 19:41
- * @Description TODO
+ * @Description
+ *      UserPO 对象
  **/
 @Data
 @Accessors(chain = true)

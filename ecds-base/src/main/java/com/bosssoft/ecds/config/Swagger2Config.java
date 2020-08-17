@@ -28,6 +28,7 @@ public class Swagger2Config {
     public Docket getDocket() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(getApiInfo())
+                .enable(true)
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.bosssoft.ecds.controller"))
                 .paths(PathSelectors.any())
@@ -43,5 +44,4 @@ public class Swagger2Config {
                 .version("2.0")
                 .build();
     }
-
 }

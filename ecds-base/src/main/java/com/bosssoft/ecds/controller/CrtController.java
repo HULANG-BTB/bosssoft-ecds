@@ -112,6 +112,25 @@ public class CrtController {
     /**
      *
      *
+     * @description: 根据领购证id查询领购证。
+     * @param {UabCrtVO} uabCrtVO
+     * @return: {String}
+     * @author: YuHangChen
+     * @time: 09/08/2020 上午10:17
+     */
+    @PostMapping("/getById")
+    @ApiOperation(value = "根据领购证id查询领购证")
+    public String getById(@RequestBody CrtVO uabCrtVO){
+        CrtDTO uabCrtDTO = new CrtDTO();
+        MyBeanUtil.copyProperties(uabCrtVO,uabCrtDTO);
+        uabCrtDTO = uabCrtService.getById(uabCrtDTO);
+        MyBeanUtil.copyProperties(uabCrtDTO,uabCrtVO);
+        return ResponseUtils.getResponse(uabCrtVO,ResponseUtils.ResultType.OK);
+    }
+
+    /**
+     *
+     *
      * @description: 根据单位编码查询领购证。
      * @param {UabCrtVO} uabCrtVO
      * @return: {String}
@@ -161,6 +180,22 @@ public class CrtController {
     }
 
     /**
+     * 准购证审核分页查询
+     *
+     * @param pageVO
+     * @return
+     */
+    @PostMapping("/checkListByPage")
+    @ApiOperation(value = "准购证审核分页查询")
+    public String checkListByPage(@RequestBody PageVO pageVO) {
+        PageDTO pageDTO = MyBeanUtil.copyProperties(pageVO, PageDTO.class);
+        pageDTO = uabCrtService.checkListByPage(pageDTO);
+
+        pageVO = MyBeanUtil.copyProperties(pageDTO, PageVO.class);
+        return ResponseUtils.getResponse(pageVO, ResponseUtils.ResultType.OK);
+    }
+
+    /**
      * 批量删除领购证
      *
      * @param uabCrtVOList
@@ -171,6 +206,20 @@ public class CrtController {
     public String removeBatch(@RequestBody List<CrtVO> uabCrtVOList) {
         List<CrtDTO> uabCrtDTOList = MyBeanUtil.copyListProperties(uabCrtVOList, CrtDTO.class);
         Boolean result = uabCrtService.removeBatch(uabCrtDTOList);
+        return ResponseUtils.getResponse(result, ResponseUtils.ResultType.OK);
+    }
+
+    /**
+     * 批量审核领购证
+     *
+     * @param uabCrtVOList
+     * @return
+     */
+    @PostMapping("checkBatch")
+    @ApiOperation(value = "批量删除领购证")
+    public String checkBatch(@RequestBody List<CrtVO> uabCrtVOList) {
+        List<CrtDTO> uabCrtDTOList = MyBeanUtil.copyListProperties(uabCrtVOList, CrtDTO.class);
+        Boolean result = uabCrtService.checkBatch(uabCrtDTOList);
         return ResponseUtils.getResponse(result, ResponseUtils.ResultType.OK);
     }
 

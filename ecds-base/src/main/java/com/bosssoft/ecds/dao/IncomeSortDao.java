@@ -121,4 +121,12 @@ public interface IncomeSortDao extends BaseMapper<IncomeSortPO> {
             "WHERE f_logic_delete=0 and f_level=1")
     List<IncomeSortDTO> getFirst();
 
+    /**
+     * 获取最大层级
+     *
+     * @return
+     */
+    @Select("select max(f_level) from fab_income_sort")
+    int getMaxLevelFromIncome();
+
 }

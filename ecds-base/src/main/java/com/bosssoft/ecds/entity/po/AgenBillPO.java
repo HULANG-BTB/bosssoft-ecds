@@ -55,11 +55,6 @@ public class AgenBillPO extends Model<AgenBillPO> {
     @TableField(value = "f_update_time", fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
 
-    @ApiModelProperty(value = "版本号")
-    @TableField("f_version")
-    @Version
-    private Integer version;
-
     @ApiModelProperty(value = "备注")
     @TableField("f_note")
     private String note;

@@ -18,6 +18,7 @@ public enum CommonCode implements ResultCode {
     METHOD_NOT_SUPPORTED(false,1005, "请求方法不受支持"),
 
     SERVER_ERROR(false,99999,"抱歉，系统繁忙，请稍后重试！"),
+    DUPLICATE_ERROR(false,21111,"该数据已存在"),
     ;
 
     //操作是否成功
