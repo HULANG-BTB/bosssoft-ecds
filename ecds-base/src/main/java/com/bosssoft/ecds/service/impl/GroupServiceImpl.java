@@ -21,6 +21,7 @@ import com.bosssoft.ecds.utils.MyBeanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -44,6 +45,11 @@ public class GroupServiceImpl extends ServiceImpl<GroupDao, GroupPO> implements 
     public ResponseResult save(GroupDTO groupDTO) {
         // 将dto转化为po
         GroupPO groupPO = MyBeanUtil.copyProperties(groupDTO, GroupPO.class);
+        Date date = new Date();
+        groupPO.setCreateTime(date);
+        groupPO.setUpdateTime(date);
+        groupPO.setLogicDelete(false);
+        groupPO.setVersion(1);
         boolean save = super.save(groupPO);
         if (!save) {
             return new ResponseResult(CommonCode.FAIL);
