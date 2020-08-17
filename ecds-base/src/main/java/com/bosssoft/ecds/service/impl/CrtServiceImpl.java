@@ -183,13 +183,22 @@ public class CrtServiceImpl extends ServiceImpl<CrtDao, CrtPO> implements CrtSer
         uabCrtPOPage.setSize(pagesDTO.getLimit());
         // 读取分页数据
         QueryWrapper<CrtPO> queryWrapper = new QueryWrapper<>();
-        if(pagesDTO.getKeyword().get("crtName") != null && pagesDTO.getKeyword().get("crtName") != ""){
+        if(pagesDTO.getKeyword().get("isenable") != null){
+            String s = (String) pagesDTO.getKeyword().get("isenable");
+            if(s.equals("false")){
+                queryWrapper.eq(CrtPO.F_ISENABLE, false);
+            }
+            if(s.equals("true")){
+                queryWrapper.eq(CrtPO.F_ISENABLE, true);
+            }
+        }
+        if(pagesDTO.getKeyword().get("crtName") != null && pagesDTO.getKeyword().get("crtName").equals("")==false){
             queryWrapper.like(CrtPO.F_CRT_NAME, pagesDTO.getKeyword().get("crtName"));
         }
-        if(pagesDTO.getKeyword().get("agenName") != null && pagesDTO.getKeyword().get("agenName") != ""){
+        if(pagesDTO.getKeyword().get("agenName") != null && pagesDTO.getKeyword().get("agenName").equals("")==false){
             queryWrapper.and(wrapper -> wrapper.like(CrtPO.F_AGEN_NAME, pagesDTO.getKeyword().get("agenName")));
         }
-        if(pagesDTO.getKeyword().get("crtCode") != null && pagesDTO.getKeyword().get("crtCode") != ""){
+        if(pagesDTO.getKeyword().get("crtCode") != null && pagesDTO.getKeyword().get("crtCode").equals("")==false){
             queryWrapper.and(wrapper -> wrapper.like(CrtPO.F_CRT_CODE, pagesDTO.getKeyword().get("crtCode")));
         }
         queryWrapper.orderByAsc(CrtPO.F_CREATE_TIME);
@@ -218,13 +227,13 @@ public class CrtServiceImpl extends ServiceImpl<CrtDao, CrtPO> implements CrtSer
         // 读取分页数据
         QueryWrapper<CrtPO> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(CrtPO.F_ISENABLE, false);
-        if(pagesDTO.getKeyword().get("crtName") != null && pagesDTO.getKeyword().get("crtName") != ""){
+        if(pagesDTO.getKeyword().get("crtName") != null && pagesDTO.getKeyword().get("crtName").equals("")==false){
             queryWrapper.like(CrtPO.F_CRT_NAME, pagesDTO.getKeyword().get("crtName"));
         }
-        if(pagesDTO.getKeyword().get("agenName") != null && pagesDTO.getKeyword().get("agenName") != ""){
+        if(pagesDTO.getKeyword().get("agenName") != null && pagesDTO.getKeyword().get("agenName").equals("")==false){
             queryWrapper.and(wrapper -> wrapper.like(CrtPO.F_AGEN_NAME, pagesDTO.getKeyword().get("agenName")));
         }
-        if(pagesDTO.getKeyword().get("crtCode") != null && pagesDTO.getKeyword().get("crtCode") != ""){
+        if(pagesDTO.getKeyword().get("crtCode") != null && pagesDTO.getKeyword().get("crtCode").equals("")==false){
             queryWrapper.and(wrapper -> wrapper.like(CrtPO.F_CRT_CODE, pagesDTO.getKeyword().get("crtCode")));
         }
         queryWrapper.orderByAsc(CrtPO.F_CREATE_TIME);
