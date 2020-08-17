@@ -57,10 +57,10 @@ public class StockOutnoticeController {
     @PostMapping("/showAll")
     public String showAll(@RequestBody StockOutPageVo pageVo) {
 
-        Long total = outService.getCount(pageVo.getChangeState());
+        Long total = outService.getCount(pageVo);
         log.info("--------------------{}", pageVo.toString());
-        List<StockOutDto> stockOutDtos = outService.queryByChangeState(
-                pageVo.getChangeState(),
+        List<StockOutDto> stockOutDtos = outService.queryByPageVo(
+                pageVo,
                 pageVo.getPage(),
                 pageVo.getLimit());
 

@@ -7,7 +7,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 
 /**
- * @author zhangxiaohui
+ * @author misheep
  * 配置多个schedule的线程配置
  */
 

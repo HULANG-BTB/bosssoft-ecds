@@ -1,15 +1,18 @@
 package com.bosssoft.ecds.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bosssoft.ecds.entity.dto.StockOutDto;
 import com.bosssoft.ecds.entity.dto.StockOutItemDto;
 import com.bosssoft.ecds.entity.po.StockOutnoticePo;
+import com.bosssoft.ecds.entity.vo.StockOutPageVo;
 import com.bosssoft.ecds.mapper.StockOutnoticeMapper;
 import com.bosssoft.ecds.service.StockOutnoticeItemService;
 import com.bosssoft.ecds.service.StockOutnoticeService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bosssoft.ecds.util.ConverUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +26,7 @@ import java.util.List;
  * @author misheep
  * @since 2020-08-11
  */
+@Slf4j
 @Service
 public class StockOutnoticeServiceImpl extends ServiceImpl<StockOutnoticeMapper, StockOutnoticePo> implements StockOutnoticeService {
     @Autowired
@@ -81,6 +85,30 @@ public class StockOutnoticeServiceImpl extends ServiceImpl<StockOutnoticeMapper,
     }
 
     /**
+     * 根据pagevo获取出库请求信息
+     *
+     * 其中，审核状态changeState:
+     * 0新建（在前台请求新增时默认，无用），
+     * 1已保存（未审核），
+     * 2已提交（待审核），
+     * 3审核通过，
+     * 4审核退回
+     *
+     * @param pageVo 出库页vo
+     * @param page 页数
+     * @param limit 每页限制数
+     * @return 出库请求list
+     */
+    @Override
+    public List<StockOutDto> queryByPageVo(StockOutPageVo pageVo, Long page, Long limit) {
+        QueryWrapper<StockOutnoticePo> wrapper = getWrapper(pageVo);
+        Page<StockOutnoticePo> pageQuery = new Page<>(page, limit);
+        Page<StockOutnoticePo> stockOutnoticePoPage = outMapper.selectPage(pageQuery, wrapper);
+        List<StockOutnoticePo> stockOutnoticePos = stockOutnoticePoPage.getRecords();
+        return ConverUtil.converList(StockOutDto.class, stockOutnoticePos);
+    }
+
+    /**
      * 根据审核状态获得数量
      *
      * @param changeState 审核状态
@@ -92,6 +120,42 @@ public class StockOutnoticeServiceImpl extends ServiceImpl<StockOutnoticeMapper,
         QueryWrapper<StockOutnoticePo> wrapper = new QueryWrapper<>();
         wrapper.eq(StockOutnoticePo.F_CHANGE_STATE, changeState);
         return outMapper.selectCount(wrapper).longValue();
+    }
+
+    /**
+     * 根据pagevo获得符合条件的数量
+     *
+     * @param pageVo 出库页vo
+     *
+     * @return 记录数量
+     */
+    @Override
+    public Long getCount(StockOutPageVo pageVo) {
+        QueryWrapper<StockOutnoticePo> wrapper = getWrapper(pageVo);
+        return outMapper.selectCount(wrapper).longValue();
+    }
+
+    /**
+     * 根据pageVo获得符合各项条件的wrapper
+     * @param pageVo StockOutPageVo前端需要展示list时请求的vo
+     * @return wrapper
+     */
+    public QueryWrapper<StockOutnoticePo> getWrapper(StockOutPageVo pageVo) {
+        QueryWrapper<StockOutnoticePo> wrapper = new QueryWrapper<>();
+        if(StrUtil.isNotBlank(pageVo.getAuthor())) {
+            wrapper.eq(StockOutnoticePo.F_AUTHOR, pageVo.getAuthor());
+        } else {
+            if(pageVo.getId() != null) {
+                wrapper.eq(StockOutnoticePo.F_ID, pageVo.getId());
+            }
+            if(pageVo.getChangeState() != null) {
+                wrapper.eq(StockOutnoticePo.F_CHANGE_STATE, pageVo.getChangeState());
+            }
+            if(pageVo.getPeriod() != null && pageVo.getPeriod().size()==2) {
+                wrapper.between(StockOutnoticePo.F_DATE, pageVo.getPeriod().get(0), pageVo.getPeriod().get(1));
+            }
+        }
+        return wrapper;
     }
 
     /**

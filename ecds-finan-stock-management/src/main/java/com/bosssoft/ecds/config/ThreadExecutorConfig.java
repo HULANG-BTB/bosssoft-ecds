@@ -9,8 +9,9 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.ThreadPoolExecutor;
 
 /**
- * @author zhangxiaohui
- * 线程池异步配置
+ * @Author misheep
+ * @Date 2020/8/10
+ * @Description 线程的异步config
  */
 @Configuration
 @EnableAsync
@@ -28,7 +29,7 @@ public class ThreadExecutorConfig implements AsyncConfigurer {
         // 设置线程活跃时间（秒）
         executor.setKeepAliveSeconds(60);
         // 设置默认线程名称
-        executor.setThreadNamePrefix("zxh-msg-");
+        executor.setThreadNamePrefix("Thread-sheep-");
         // 设置拒绝策略
         executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
         // 等待所有任务结束后再关闭线程池
