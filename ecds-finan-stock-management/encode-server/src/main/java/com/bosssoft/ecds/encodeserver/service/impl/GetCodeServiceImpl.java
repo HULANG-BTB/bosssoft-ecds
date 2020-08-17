@@ -45,7 +45,7 @@ public class GetCodeServiceImpl implements GetCodeService {
     private Integer GET_NUM_EVERY_TIME;
     private final String REDIS_START = "start";
     private final String REDIS_END = "end";
-    private final String lock_key = "lock_key";
+    private final String LOCK_KEY = "lock_key";
 
     @Autowired
     public GetCodeServiceImpl(CodeMapper codeMapper, RedissonClient redissonClient) {
@@ -64,7 +64,7 @@ public class GetCodeServiceImpl implements GetCodeService {
         NumSegDto financeCodeSeg = null;
 
         // 获取可重入锁
-        RLock lock = redissonClient.getLock(lock_key);
+        RLock lock = redissonClient.getLock(LOCK_KEY);
         // 获取红锁
         RedissonRedLock redLock = new RedissonRedLock(lock);
         try {
@@ -134,7 +134,6 @@ public class GetCodeServiceImpl implements GetCodeService {
             // 根据指定获取数量从MySQL中取票
             getFinanceNumFromSqlDto.setCodeNum(GET_NUM_EVERY_TIME);
             NumSegDto batchCodeFromSql = getBatchCodeFromSql(getFinanceNumFromSqlDto);
-            log.info("getCodeFromRedis - GetFinanceNumDto: " + getFinanceNumDto);
             // 更新Redis中库存的票据号码
             map.put(REDIS_END, batchCodeFromSql.getEndCode());
         }
@@ -163,7 +162,6 @@ public class GetCodeServiceImpl implements GetCodeService {
 
         // 从MySQL中取出号码段
         NumSegDto codeFromSql = getBatchCodeFromSql(getFinanceNumDtoFromSql);
-        log.info("createNewHashInRedis - GetFinanceNumDto: " + getFinanceNumDtoFromSql);
         // 根据MySQL中取出号码段初始化Redis，完成Hash记录创建
         map.put(REDIS_START, codeFromSql.getBeginCode());
         map.put(REDIS_END, codeFromSql.getEndCode());
@@ -210,7 +208,7 @@ public class GetCodeServiceImpl implements GetCodeService {
     public boolean createNewCode(CreateFinanceCodeDto createFinanceCodeDTO) {
         CodePo codePo = new CodePo();
 
-        // 未防止对已创建的票据代码进行创建，需要多查询一次MySQL数据库（创建操作并不是频繁发生的，对性能影响不大）
+        // 为了防止对已创建的票据代码进行创建，需要多查询一次MySQL数据库（创建操作并不是频繁发生的，对性能影响不大）
         Map<String, Object> selectMap = getSelectMap(createFinanceCodeDTO);
         CodePo queryCodePo = codeMapper.selectOne(new QueryWrapper<CodePo>().allEq(selectMap));
         if (queryCodePo != null) {
@@ -224,6 +222,7 @@ public class GetCodeServiceImpl implements GetCodeService {
         codePo.setFUpdateTime(new Timestamp(System.currentTimeMillis()));
         codePo.setFEndCode(0);
         int insertNum = codeMapper.insert(codePo);
+
         return insertNum > 0;
     }
 
