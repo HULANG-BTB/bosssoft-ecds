@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -46,6 +47,26 @@ public class AgenServiceImpl extends ServiceImpl<AgenDao, AgenPO> implements Age
     public AgenDTO save(AgenDTO fabAgenDTO) {
         AgenPO fabAgenPO = new AgenPO();
         MyBeanUtil.copyProperties(fabAgenDTO, fabAgenPO);
+        Date data = new Date();
+        fabAgenPO.setRgnId("1111111");
+        fabAgenPO.setAgenCode("123");
+        fabAgenPO.setPidCode("1");
+        fabAgenPO.setIsleaf(true);
+        fabAgenPO.setOrgCode("1");
+        fabAgenPO.setTypeCode("1");
+        fabAgenPO.setIsenable(false);
+        fabAgenPO.setIstickAgen(false);
+        fabAgenPO.setIsunpaid(false);
+        fabAgenPO.setIsalarmAgen(false);
+        fabAgenPO.setProvinceId("1");
+        fabAgenPO.setCityId("1");
+        fabAgenPO.setCountyId("1");
+        fabAgenPO.setOperator("123");
+        fabAgenPO.setOperatorId(123L);
+        fabAgenPO.setCreateTime(data);
+        fabAgenPO.setUpdateTime(data);
+        fabAgenPO.setLogicDelete(false);
+        fabAgenPO.setVersion(1);
         super.save(fabAgenPO);
         return fabAgenDTO;
     }

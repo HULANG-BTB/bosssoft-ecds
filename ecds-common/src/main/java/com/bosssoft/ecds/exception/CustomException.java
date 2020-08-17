@@ -8,14 +8,26 @@ import com.bosssoft.ecds.response.ResultCode;
  */
 public class CustomException extends RuntimeException {
 
-    private ResultCode resultCode;
+    private final ResultCode resultCode;
+
+    private String errorMsg;
+
     public CustomException(ResultCode resultCode){
         this.resultCode = resultCode;
+    }
+
+    public CustomException(ResultCode resultCode, String errorMsg) {
+        this.resultCode = resultCode;
+        this.errorMsg = errorMsg;
     }
 
 
     public ResultCode getResultCode() {
         return resultCode;
+    }
+
+    public String getErrorMsg() {
+        return errorMsg;
     }
 
     @Override

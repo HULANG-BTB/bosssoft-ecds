@@ -1,5 +1,6 @@
 package com.bosssoft.ecds.exception;
 
+import com.alibaba.fastjson.JSON;
 import com.bosssoft.ecds.response.CommonCode;
 import com.bosssoft.ecds.response.ResponseResult;
 import com.bosssoft.ecds.response.ResultCode;
@@ -70,8 +71,9 @@ public class ExceptionCatch {
     @ExceptionHandler(CustomException.class)
     @ResponseBody
     public ResponseResult customException(CustomException e){
-        ResponseResult responseResult = new ResponseResult(e.getResultCode());
-        log.error("catch customException info:{}",e.getResultCode().message());
+        ResponseResult responseResult = new ResponseResult(e.getResultCode(), e.getErrorMsg());
+        String message = JSON.toJSONString(responseResult);
+        log.error(message);
         return responseResult;
     }
 

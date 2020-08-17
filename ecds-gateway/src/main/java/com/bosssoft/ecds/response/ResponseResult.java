@@ -25,16 +25,6 @@ public class ResponseResult {
         this.message = resultCode.message();
     }
 
-    public ResponseResult(ResultCode resultCode, String message) {
-        this.success = resultCode.success();
-        this.code = resultCode.code();
-        if (message != null && !"".equals(message.trim())) {
-            this.message = message;
-        } else {
-            this.message = resultCode.message();
-        }
-    }
-
     public ResponseResult(boolean success, int code, String message) {
         this.success = success;
         this.code = code;

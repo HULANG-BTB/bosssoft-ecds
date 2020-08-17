@@ -1,0 +1,35 @@
+spring:
+  profiles:
+    active: dev
+  application:
+    name: ecds-gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 49.234.75.113:8848
+      config:
+        server-addr: 49.234.75.113:8848
+        file-extension: yaml
+        prefix: gateway-config
+        ext‐config:
+          - data‐id: rsa-key-dev.yaml
+            group: DEFAULT_GROUP
+            refresh: true
+
+          - data‐id: redis-server-dev.yaml
+            group: DEFAULT_GROUP
+            refresh: true
+
+          - data‐id: gateway-datasource-dev.yaml
+            group: DEFAULT_GROUP
+            refresh: true
+
+          - data‐id: gateway-routes-dev.yaml
+            group: DEFAULT_GROUP
+            refresh: true
+
+server:
+  port: 7000
+
+
+

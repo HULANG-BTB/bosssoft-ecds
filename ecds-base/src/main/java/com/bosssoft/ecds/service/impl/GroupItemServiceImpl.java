@@ -112,7 +112,6 @@ public class GroupItemServiceImpl extends ServiceImpl<GroupItemDao, GroupItemPO>
         List<ItemPO> itemPos = new ArrayList<>();
         for (GroupItemPO groupItemPO : groupItemPOS) {
             ItemPO itemInfo = groupItemDao.getItemInfo(groupItemPO.getItemCode());
-            System.out.println(itemInfo);
             itemPos.add(itemInfo);
         }
         List<ItemVO> itemVOS = MyBeanUtil.copyListProperties(itemPos, ItemVO::new);
