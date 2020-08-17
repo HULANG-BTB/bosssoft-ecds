@@ -1,7 +1,7 @@
 package com.bosssoft.ecds.controller;
 
 
-import com.bosssoft.ecds.common.response.ResponseResult;
+import com.bosssoft.ecds.response.ResponseResult;
 import com.bosssoft.ecds.entity.dto.GroupItemDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.vo.PageVO;
@@ -68,6 +68,19 @@ public class GroupItemController {
     public ResponseResult listByPage(@RequestBody PageVO pageVO) {
         PageDTO<GroupItemVO> pageDTO = MyBeanUtil.copyProperties(pageVO, PageDTO.class);
         return groupItemService.listByPage(pageDTO);
+    }
+
+    /**
+     * 通过分组编码获得项目信息
+     *
+     * @param groupItemVO 输入分组编码
+     * @return 返回成功或者失败的code和msg
+     */
+    @ApiOperation(value = "通过分组编码获得项目信息", notes = "输入分组编码")
+    @PostMapping("/getItemInfo")
+    public ResponseResult getItemInfo(@RequestBody GroupItemVO groupItemVO) {
+        GroupItemDTO groupItemDTO = MyBeanUtil.myCopyProperties(groupItemVO, GroupItemDTO.class);
+        return groupItemService.getItemInfo(groupItemDTO);
     }
 
 }

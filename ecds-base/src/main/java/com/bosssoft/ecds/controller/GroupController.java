@@ -1,7 +1,7 @@
 package com.bosssoft.ecds.controller;
 
 
-import com.bosssoft.ecds.common.response.ResponseResult;
+import com.bosssoft.ecds.response.ResponseResult;
 import com.bosssoft.ecds.entity.dto.GroupDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.vo.PageVO;
@@ -80,6 +80,17 @@ public class GroupController {
     public ResponseResult listByPage(@RequestBody PageVO pageVO) {
         PageDTO<GroupVO> pageDTO = MyBeanUtil.copyProperties(pageVO, PageDTO.class);
         return groupService.listByPage(pageDTO);
+    }
+
+    /**
+     * 查询所有分组信息
+     *
+     * @return limit、page、total、items
+     */
+    @ApiOperation(value = "查询所有分组信息")
+    @GetMapping("/getGroupName")
+    public ResponseResult getGroupName() {
+        return groupService.getGroupName();
     }
 }
 

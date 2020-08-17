@@ -4,20 +4,18 @@ import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.bosssoft.ecds.common.response.CommonCode;
-import com.bosssoft.ecds.common.response.QueryResponseResult;
-import com.bosssoft.ecds.common.response.ResponseResult;
+import com.bosssoft.ecds.response.CommonCode;
+import com.bosssoft.ecds.response.QueryResponseResult;
+import com.bosssoft.ecds.response.ResponseResult;
 import com.bosssoft.ecds.dao.GroupDao;
 import com.bosssoft.ecds.dao.GroupItemDao;
 import com.bosssoft.ecds.entity.dto.GroupDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.po.GroupItemPO;
 import com.bosssoft.ecds.entity.po.GroupPO;
-import com.bosssoft.ecds.entity.po.ItemPO;
 import com.bosssoft.ecds.entity.vo.PageVO;
 import com.bosssoft.ecds.entity.vo.groupvo.GroupVO;
 import com.bosssoft.ecds.enums.ItemResultCode;
-import com.bosssoft.ecds.service.GroupItemService;
 import com.bosssoft.ecds.service.GroupService;
 import com.bosssoft.ecds.utils.MyBeanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +37,8 @@ public class GroupServiceImpl extends ServiceImpl<GroupDao, GroupPO> implements 
 
     @Autowired
     private GroupItemDao groupItemDao;
+    @Autowired
+    private GroupDao groupDao;
 
     @Override
     public ResponseResult save(GroupDTO groupDTO) {
@@ -116,5 +116,12 @@ public class GroupServiceImpl extends ServiceImpl<GroupDao, GroupPO> implements 
         pageDTO.setTotal(page.getTotal());
         PageVO pageVO = MyBeanUtil.copyProperties(pageDTO, PageVO.class);
         return new QueryResponseResult<>(CommonCode.SUCCESS, pageVO);
+    }
+
+    @Override
+    public ResponseResult getGroupName() {
+        List<GroupPO> groupPOS = groupDao.selectList(null);
+        List<GroupVO> groupVOS = MyBeanUtil.copyListProperties(groupPOS, GroupVO::new);
+        return new QueryResponseResult<>(CommonCode.SUCCESS,groupVOS);
     }
 }
