@@ -5,7 +5,7 @@ import java.util.Date;
 public class SourceSetPo {
 
     int id;
-    String regionCode;
+    String billTypeCode;
     int sourceID;
     int pushNumber;
     int minNumber;
@@ -24,12 +24,12 @@ public class SourceSetPo {
         this.id = id;
     }
 
-    public String getRegionCode() {
-        return regionCode;
+    public String getBillTypeCode() {
+        return billTypeCode;
     }
 
-    public void setRegionCode(String regionCode) {
-        this.regionCode = regionCode;
+    public void setBillTypeCode(String billTypeCode) {
+        this.billTypeCode = billTypeCode;
     }
 
     public int getSourceID() {
@@ -108,7 +108,7 @@ public class SourceSetPo {
     public String toString() {
         return "SourceSetPo{" +
                 "id=" + id +
-                ", regionCode='" + regionCode + '\'' +
+                ", billTypeCode='" + billTypeCode + '\'' +
                 ", sourceID=" + sourceID +
                 ", pushNumber=" + pushNumber +
                 ", minNumber=" + minNumber +

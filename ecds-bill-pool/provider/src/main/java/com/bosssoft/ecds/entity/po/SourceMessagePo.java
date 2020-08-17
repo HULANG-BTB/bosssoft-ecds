@@ -2,16 +2,16 @@ package com.bosssoft.ecds.entity.po;
 
 public class SourceMessagePo {
 
-    private String regionCode;
+    private String billTypeCode;
     private String table;
     private int threshold;
 
-    public String getRegionCode() {
-        return regionCode;
+    public String getBillTypeCode() {
+        return billTypeCode;
     }
 
-    public void setRegionCode(String regionCode) {
-        this.regionCode = regionCode;
+    public void setBillTypeCode(String billTypeCode) {
+        this.billTypeCode = billTypeCode;
     }
 
     public String getTable() {
@@ -33,7 +33,7 @@ public class SourceMessagePo {
     @Override
     public String toString() {
         return "SourceMessagePo{" +
-                "regionCode='" + regionCode + '\'' +
+                "billTypeCode='" + billTypeCode + '\'' +
                 ", table='" + table + '\'' +
                 ", threshold=" + threshold +
                 '}';

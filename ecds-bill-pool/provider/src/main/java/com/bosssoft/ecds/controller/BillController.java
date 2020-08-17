@@ -25,5 +25,4 @@ public class BillController {
     public List retrieveBill(@RequestParam int number) {
         return billService.retrieveBill(number);
     }
-
 }

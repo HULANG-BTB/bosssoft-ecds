@@ -38,7 +38,7 @@
         </foreach>
     </delete>
 
-    <select id="retrieveRegionCode" resultType="String">
-        select f_rgn_code from uaa_set_ticketcenter
+    <select id="retrieveBillTypeCode" resultType="String">
+        select f_bill_type from uaa_set_ticketcenter
     </select>
 </mapper>

@@ -10,7 +10,7 @@ public interface BillDao {
 
     int retrieveNumber(String table);
 
-    List<String> retrieveRegionCode();
+    List<String> retrieveBillTypeCode();
 
     List retrieveList(int number);
 

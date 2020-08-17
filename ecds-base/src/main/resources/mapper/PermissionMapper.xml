@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bosssoft.ecds.dao.PermissionDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.bosssoft.ecds.entity.po.PermissionPO">
+        <id column="f_id" property="id" />
+        <result column="f_parent_id" property="parentId" />
+        <result column="f_url" property="url" />
+        <result column="f_name" property="name" />
+        <result column="f_method" property="method" />
+        <result column="f_operator_id" property="operatorId" />
+        <result column="f_operator" property="operator" />
+        <result column="f_create_time" property="createTime" />
+        <result column="f_update_time" property="updateTime" />
+        <result column="f_logic_delete" property="logicDelete" />
+        <result column="f_version" property="version" />
+        <result column="f_note" property="note" />
+        <collection
+                property="children"
+                column="f_id"
+                ofType="com.bosssoft.ecds.entity.po.PermissionPO"
+                javaType="java.util.List"
+                select="com.bosssoft.ecds.dao.PermissionDao.queryTreeList"
+                >
+        </collection>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        f_id, f_parent_id, f_url, f_name, f_method, f_operator_id, f_operator, f_create_time, f_update_time, f_logic_delete, f_version, f_note
+    </sql>
+
+    <!--  根据UID查询权限  -->
+    <select id="getByUid" parameterType="Long" resultMap="BaseResultMap">
+        select DISTINCT permission.*
+        from faa_role_permission role_permission, faa_user_role user_role, faa_permission permission
+        where user_role.f_user_id = #{id}
+            and role_permission.f_role_id = user_role.f_role_id
+            and permission.f_logic_delete = 0
+            and role_permission.f_logic_delete = 0
+            and user_role.f_logic_delete = 0
+    </select>
+
+    <!--  根据RID查询权限  -->
+    <select id="getByRid" parameterType="Long" resultMap="BaseResultMap">
+        select DISTINCT permission.*
+        from faa_role_permission role_permission, faa_permission permission
+        where role_permission.f_role_id = #{id}
+            and permission.f_id = role_permission.f_permission_id
+            and permission.f_logic_delete = 0
+            and role_permission.f_logic_delete = 0
+    </select>
+
+    <select id="queryTreeList" parameterType="Long" resultMap="BaseResultMap">
+        SELECT
+            f_id, f_parent_id, f_url, f_name, f_method, f_operator_id, f_operator, f_create_time, f_update_time, f_logic_delete, f_version, f_note
+        FROM
+            `faa_permission`
+        WHERE
+            `f_logic_delete` = 0
+                AND
+            `f_parent_id` = #{parentId}
+    </select>
+
+</mapper>

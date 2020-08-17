@@ -2,16 +2,16 @@ package com.bosssoft.ecds.entity.vo;
 
 public class SourceSetVo {
 
-    String regionCode;
+    String billTypeCode;
     int pushNumber;
     int minNumber;
 
-    public String getRegionCode() {
-        return regionCode;
+    public String getBillTypeCode() {
+        return billTypeCode;
     }
 
-    public void setRegionCode(String regionCode) {
-        this.regionCode = regionCode;
+    public void setBillTypeCode(String billTypeCode) {
+        this.billTypeCode = billTypeCode;
     }
 
     public int getPushNumber() {
@@ -33,7 +33,7 @@ public class SourceSetVo {
     @Override
     public String toString() {
         return "SourceSetVo{" +
-                "regionCode='" + regionCode + '\'' +
+                "billTypeCode='" + billTypeCode + '\'' +
                 ", pushNumber=" + pushNumber +
                 ", minNumber=" + minNumber +
                 '}';

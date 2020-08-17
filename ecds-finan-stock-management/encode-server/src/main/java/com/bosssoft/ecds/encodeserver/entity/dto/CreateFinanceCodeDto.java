@@ -1,5 +1,6 @@
 package com.bosssoft.ecds.encodeserver.entity.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
@@ -51,11 +52,13 @@ public class CreateFinanceCodeDto {
     /**
      * 码创建时间
      */
+    @JsonIgnore
     private Timestamp fCreateTime;
 
     /**
      * 码更新时间
      */
+    @JsonIgnore
     private Timestamp fUpdateTime;
 
     public String financeCode() {

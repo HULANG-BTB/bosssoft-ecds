@@ -10,5 +10,9 @@ public interface SourceSetService {
 
     int updatePushNumber(SourceSetDto sourceSetDto);
 
+    int updateSet(SourceSetDto sourceSetDto);
+
     List<SourceSetDto> retrieveSetList();
+
+    SourceSetDto retrieveSetByCode(String billTypeCode);
 }

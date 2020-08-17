@@ -26,7 +26,7 @@ public class ScheduleJob {
     public void scheduleSourceSetMonitorJob(Scheduler scheduler) throws SchedulerException {
         JobDetail jobDetail = JobBuilder.newJob(SourceSetMonitorJob.class)
                 .withIdentity("SourceSetMonitorJob", "SourceSetMonitorJob").build();
-        CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule("0 0/30 * * * ?");
+        CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule("0/15 * * * * ?");
         CronTrigger cronTrigger = TriggerBuilder.newTrigger().withIdentity("SourceSetMonitorJob", "SourceSetMonitorJob")
                 .withSchedule(scheduleBuilder).build();
         scheduler.scheduleJob(jobDetail, cronTrigger);
