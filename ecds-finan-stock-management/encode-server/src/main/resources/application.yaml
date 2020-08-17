@@ -3,14 +3,14 @@ spring:
     #redis数据库索引(默认为0)
     database: 0
     #redis服务器IP地址
-    host: 39.108.14.141
+#    host: 39.108.14.141
     #redis端口号
-    port: 6382
+#    port: 6382
     #redis密码
     password: 123456
     #连接redis超时时间（毫秒）
 #    timeout:
-    #jedis连接池
+    #redis集群
     cluster:
       nodes:
         - 39.108.14.141:7000
