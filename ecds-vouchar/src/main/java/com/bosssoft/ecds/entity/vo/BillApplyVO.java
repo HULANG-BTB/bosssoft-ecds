@@ -1,6 +1,5 @@
 package com.bosssoft.ecds.entity.vo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -19,7 +18,6 @@ public class BillApplyVO implements Serializable {
     private String agenCode;
 
     @ApiModelProperty(value = "申请时间")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date applyTime;
 
     @ApiModelProperty(value = "票据代码")
