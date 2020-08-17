@@ -148,10 +148,10 @@ public class DeptServiceImpl extends ServiceImpl<DeptDao, DeptPO> implements Dep
                 queryWrapper.eq(DeptPO.F_ISENABLE, true);
             }
         }
-        if(pagesDTO.getKeyword().get("deptCode") != null && pagesDTO.getKeyword().get("deptCode").equals("")){
+        if(pagesDTO.getKeyword().get("deptCode") != null && pagesDTO.getKeyword().get("deptCode").equals("")==false){
             queryWrapper.and(wrapper -> wrapper.like(DeptPO.F_DEPT_CODE, pagesDTO.getKeyword().get("deptCode")));
         }
-        if(pagesDTO.getKeyword().get("deptName") != null && pagesDTO.getKeyword().get("deptName").equals("")){
+        if(pagesDTO.getKeyword().get("deptName") != null && pagesDTO.getKeyword().get("deptName").equals("")==false){
             queryWrapper.and(wrapper -> wrapper.like(DeptPO.F_DEPT_NAME, pagesDTO.getKeyword().get("deptName")));
         }
         queryWrapper.orderByAsc(DeptPO.F_CREATE_TIME);

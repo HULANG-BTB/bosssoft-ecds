@@ -58,6 +58,10 @@ public class ItemStdPO extends Model<ItemStdPO> {
     @TableField("f_max_charge")
     private BigDecimal maxCharge;
 
+    @ApiModelProperty(value = "标准金额")
+    @TableField("f_charge")
+    private BigDecimal charge;
+
     @ApiModelProperty(value = "标准下限")
     @TableField("f_min_charge")
     private BigDecimal minCharge;
@@ -109,6 +113,8 @@ public class ItemStdPO extends Model<ItemStdPO> {
     private String note;
 
 
+
+
     public static final String F_ID = "f_id";
 
     public static final String F_ITEMSTD_CODE = "f_itemstd_code";
@@ -122,6 +128,8 @@ public class ItemStdPO extends Model<ItemStdPO> {
     public static final String F_MAX_CHARGE = "f_max_charge";
 
     public static final String F_MIN_CHARGE = "f_min_charge";
+
+    public static final String F_CHARGE = "f_charge";
 
     public static final String F_UNITS = "f_units";
 
