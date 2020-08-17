@@ -16,49 +16,41 @@ public class CreateFinanceCodeDto {
     /**
      * 区划编码
      */
-    @NotBlank
     private String fRegiId;
 
     /**
      * 分类号
      */
-    @NotBlank
     private String fSortId;
 
     /**
      * 种类号
      */
-    @NotBlank
     private String fTypeId;
 
     /**
      * 年度号
      */
-    @NotBlank
     private String fAnnualId;
 
     /**
      * 操作人名称
      */
-    @NotBlank
     private String fOperator;
 
     /**
      * 操作人ID
      */
-    @NotBlank
     private Long fOperatorId;
 
     /**
      * 码创建时间
      */
-    @JsonIgnore
     private Timestamp fCreateTime;
 
     /**
      * 码更新时间
      */
-    @JsonIgnore
     private Timestamp fUpdateTime;
 
     public String financeCode() {
