@@ -1,13 +1,17 @@
 package com.bosssoft.ecds.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bosssoft.ecds.dao.BillWarnArchiveDao;
+import com.bosssoft.ecds.entity.dto.BillWarnDTO;
 import com.bosssoft.ecds.entity.po.BillWarnArchivePO;
 import com.bosssoft.ecds.service.BillWarnArchiveService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,6 +28,21 @@ public class BillWarnArchiveServiceImpl extends ServiceImpl<BillWarnArchiveDao, 
 
     @Autowired
     private BillWarnArchiveDao billWarnArchiveDao;
+
+    @Override
+    public List<BillWarnDTO> getBillWarnInfos(String agenCode) {
+        LambdaQueryWrapper<BillWarnArchivePO> lambdaQuery = new LambdaQueryWrapper<>();
+        LambdaQueryWrapper<BillWarnArchivePO> eq = lambdaQuery.eq(BillWarnArchivePO::getAgenCode, agenCode);
+        List<BillWarnArchivePO> list = list(eq);
+        List<BillWarnDTO> res = new ArrayList<>();
+        list.forEach(
+                po -> {
+                    BillWarnDTO dto = BeanUtil.toBean(po, BillWarnDTO.class);
+                    res.add(dto);
+                }
+        );
+        return res;
+    }
 
     @Override
     public void finaBillWarnArchive() {

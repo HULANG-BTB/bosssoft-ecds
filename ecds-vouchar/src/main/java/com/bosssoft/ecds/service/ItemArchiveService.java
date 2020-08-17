@@ -16,33 +16,19 @@ import java.util.List;
  * @since 2020-08-11
  */
 public interface ItemArchiveService extends IService<ItemArchivePO> {
-    /**
-     * 财政端
-     */
 
     /**
      * 获取所有单位的可用项目情况
      * 分页查询
      *
+     * @param agenCode
      * @return List<ItemAvailableDto>
      */
-    List<ItemAvailableDTO> getItemAvailableInfos();
+    List<ItemAvailableDTO> getItemAvailableInfos(String agenCode);
 
     /**
      * 财政端 可用项目归档
      */
     void finaItemAvailableArchive();
-
-    /**
-     * 单位端
-     */
-
-    /**
-     * 根据单位编码获取可用票据归档的情况
-     *
-     * @param agenCode
-     * @return BillApplyDto
-     */
-    ItemAvailableDTO getBillApplyInfo(String agenCode);
 
 }

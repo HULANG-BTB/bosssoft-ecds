@@ -105,42 +105,6 @@ public class ArchivePO extends Model<ArchivePO> {
     private Boolean logicDelete;
 
 
-    public static final String F_ID = "f_id";
-
-    public static final String F_AGEN_IDCODE = "f_agen_idcode";
-
-    public static final String F_AGEN_NAME = "f_agen_name";
-
-    public static final String F_KIND_NAME = "f_kind_name";
-
-    public static final String F_LINK_ADDR = "f_link_addr";
-
-    public static final String F_APPLY_NUMBER = "f_apply_number";
-
-    public static final String F_USE_NUMBER = "f_use_number";
-
-    public static final String F_AUTHOR_NUMBER = "f_author_number";
-
-    public static final String F_UNAUTHOR_NUMBER = "f_unauthor_number";
-
-    public static final String F_WARN_NUMBER = "f_warn_number";
-
-    public static final String F_RETURN_NUMBER = "f_return_number";
-
-    public static final String F_DESTORY_NUMBER = "f_destory_number";
-
-    public static final String F_CREATE_TIME = "f_create_time";
-
-    public static final String F_UPDATE_TIME = "f_update_time";
-
-    public static final String F_OPERATOR_ID = "f_operator_id";
-
-    public static final String F_OPERATOR = "f_operator";
-
-    public static final String F_VERSION = "f_version";
-
-    public static final String F_LOGIC_DELETE = "f_logic_delete";
-
     @Override
     protected Serializable pkVal() {
         return this.id;

@@ -1,8 +1,11 @@
 package com.bosssoft.ecds.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.lang.Assert;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bosssoft.ecds.dao.BillPayArchiveDao;
+import com.bosssoft.ecds.entity.dto.BillPayDTO;
 import com.bosssoft.ecds.entity.po.BillPayArchivePO;
 import com.bosssoft.ecds.service.BillPayArchiveService;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +33,21 @@ import java.util.stream.Collectors;
 public class BillPayArchiveServiceImpl extends ServiceImpl<BillPayArchiveDao, BillPayArchivePO> implements BillPayArchiveService {
     @Autowired
     BillPayArchiveDao billPayArchiveDao;
+
+    @Override
+    public List<BillPayDTO> getBillPayInfos(String agenCode) {
+        LambdaQueryWrapper<BillPayArchivePO> lambdaQuery = new LambdaQueryWrapper<>();
+        LambdaQueryWrapper<BillPayArchivePO> eq = lambdaQuery.eq(BillPayArchivePO::getAgenCode, agenCode);
+        List<BillPayArchivePO> list = list(eq);
+        List<BillPayDTO> res = new ArrayList<>();
+        list.forEach(
+                po -> {
+                    BillPayDTO dto = BeanUtil.toBean(po, BillPayDTO.class);
+                    res.add(dto);
+                }
+        );
+        return res;
+    }
 
     @Override
     public void finaBillPayArchive() {

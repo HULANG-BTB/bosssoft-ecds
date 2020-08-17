@@ -53,6 +53,7 @@ public class BillCheckArchivePO extends Model<BillCheckArchivePO> {
 
     @ApiModelProperty(value = "审核时间")
     @TableField("f_sign_time")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date signTime;
 
     @ApiModelProperty(value = "(审核)签名状态")
@@ -60,13 +61,13 @@ public class BillCheckArchivePO extends Model<BillCheckArchivePO> {
     private Boolean signStatus;
 
     @ApiModelProperty(value = "创建时间")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @TableField(value = "f_create_time", fill = FieldFill.INSERT)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createTime;
 
     @ApiModelProperty(value = "修改时间")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @TableField(value = "f_update_time", fill = FieldFill.INSERT_UPDATE)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date updateTime;
 
     @ApiModelProperty(value = "操作人id")

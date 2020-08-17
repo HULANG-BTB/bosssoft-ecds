@@ -1,5 +1,7 @@
 package com.bosssoft.ecds.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bosssoft.ecds.dao.BillCheckArchiveDao;
 import com.bosssoft.ecds.entity.dto.BillCheckDTO;
@@ -14,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,8 +39,18 @@ public class BillCheckArchiveServiceImpl extends ServiceImpl<BillCheckArchiveDao
     BillCheckArchiveDao billCheckArchiveDao;
 
     @Override
-    public List<BillCheckDTO> getBillCheckInfos() {
-        return null;
+    public List<BillCheckDTO> getBillCheckInfos(String agenCode) {
+        LambdaQueryWrapper<BillCheckArchivePO> lambdaQuery = new LambdaQueryWrapper<>();
+        LambdaQueryWrapper<BillCheckArchivePO> eq = lambdaQuery.eq(BillCheckArchivePO::getAgenCode, agenCode);
+        List<BillCheckArchivePO> list = list(eq);
+        List<BillCheckDTO> res = new ArrayList<>();
+        list.forEach(
+                po -> {
+                    BillCheckDTO dto = BeanUtil.toBean(po, BillCheckDTO.class);
+                    res.add(dto);
+                }
+        );
+        return res;
     }
 
     @Override
@@ -135,11 +148,6 @@ public class BillCheckArchiveServiceImpl extends ServiceImpl<BillCheckArchiveDao
          * 批量更新
          */
         return archiveOverViewService.updateBatchById(infos);
-    }
-
-    @Override
-    public List<BillCheckDTO> getBillCheckInfo(String agenIdCode) {
-        return null;
     }
 
 }

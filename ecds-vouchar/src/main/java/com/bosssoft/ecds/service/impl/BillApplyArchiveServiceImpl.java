@@ -1,5 +1,7 @@
 package com.bosssoft.ecds.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bosssoft.ecds.dao.BillApplyArchiveDao;
 import com.bosssoft.ecds.entity.dto.ArchiveOverViewDTO;
@@ -11,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -32,11 +35,21 @@ public class BillApplyArchiveServiceImpl extends ServiceImpl<BillApplyArchiveDao
     private ArchiveOverViewService archiveOverViewService;
 
     /**
-     * 财政端记录票据的使用方式
+     * 获取单位申请的可用票据
      */
     @Override
-    public List<BillApplyDTO> getBillApplyInfos() {
-        return null;
+    public List<BillApplyDTO> getBillApplyInfo(String agenCode) {
+        LambdaQueryWrapper<BillApplyArchivePO> lambdaQuery = new LambdaQueryWrapper<>();
+        LambdaQueryWrapper<BillApplyArchivePO> eq = lambdaQuery.eq(BillApplyArchivePO::getAgenCode, agenCode);
+        List<BillApplyArchivePO> list = list(eq);
+        List<BillApplyDTO> res = new ArrayList<>();
+        list.forEach(
+                po -> {
+                    BillApplyDTO billApplyDTO = BeanUtil.toBean(po, BillApplyDTO.class);
+                    res.add(billApplyDTO);
+                }
+        );
+        return res;
     }
 
     /**
@@ -100,32 +113,4 @@ public class BillApplyArchiveServiceImpl extends ServiceImpl<BillApplyArchiveDao
         );
         archiveOverViewService.updateBatch(archiveOverViewDTOS);
     }
-
-    @Override
-    public Long queryBillApplyAllNumber() {
-        return null;
-    }
-
-    /**
-     * <p>前提：一定时间段下  ×
-     * 单位段
-     * 1.获取本单位的票据申领信息
-     * 2.记录归档
-     * 3.统计本单位的票据申领情况汇总到归档主表
-     * 可创建新的数据结构 BillApplyCount[agenCode,billApplyCount]
-     * 统计数量，更新主表信息
-     * 4.相关表 ：une_cbill
-     * </p>
-     */
-
-    @Override
-    public BillApplyDTO getBillApplyInfo(String agenCode) {
-        return null;
-    }
-
-    @Override
-    public Long queryBillApplyNumber(String agenCode) {
-        return null;
-    }
-
 }

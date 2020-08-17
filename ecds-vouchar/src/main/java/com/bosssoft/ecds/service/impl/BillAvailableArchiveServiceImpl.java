@@ -1,9 +1,9 @@
 package com.bosssoft.ecds.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bosssoft.ecds.dao.BillAvailableArchiveDao;
-import com.bosssoft.ecds.entity.dto.BillApplyDTO;
 import com.bosssoft.ecds.entity.dto.BillAvailableInfoDTO;
 import com.bosssoft.ecds.entity.po.BillAvailableArchivePO;
 import com.bosssoft.ecds.service.BillAvailableArchiveService;
@@ -29,13 +29,19 @@ public class BillAvailableArchiveServiceImpl extends ServiceImpl<BillAvailableAr
     @Autowired
     private BillAvailableArchiveDao billAvailableArchiveDao;
 
-    /**
-     * 财政端
-     */
-
     @Override
-    public List<BillApplyDTO> getBillApplyInfos() {
-        return null;
+    public List<BillAvailableInfoDTO> getBillApplyInfos(String agenCode) {
+        LambdaQueryWrapper<BillAvailableArchivePO> lambdaQuery = new LambdaQueryWrapper<>();
+        LambdaQueryWrapper<BillAvailableArchivePO> eq = lambdaQuery.eq(BillAvailableArchivePO::getAgenCode, agenCode);
+        List<BillAvailableArchivePO> list = list(eq);
+        List<BillAvailableInfoDTO> res = new ArrayList<>();
+        list.forEach(
+                po -> {
+                    BillAvailableInfoDTO dto = BeanUtil.toBean(po, BillAvailableInfoDTO.class);
+                    res.add(dto);
+                }
+        );
+        return res;
     }
 
     @Override
@@ -57,14 +63,6 @@ public class BillAvailableArchiveServiceImpl extends ServiceImpl<BillAvailableAr
         );
         /*批量插入*/
         saveBatch(billAvailableArchivePOS);
-    }
-
-    /**
-     * 单位端
-     */
-    @Override
-    public BillApplyDTO getBillApplyInfo(String agenCode) {
-        return null;
     }
 
 }

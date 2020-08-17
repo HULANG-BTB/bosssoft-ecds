@@ -1,5 +1,7 @@
 package com.bosssoft.ecds.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bosssoft.ecds.dao.ItemArchiveDao;
 import com.bosssoft.ecds.entity.dto.ItemAvailableDTO;
@@ -8,6 +10,7 @@ import com.bosssoft.ecds.service.ItemArchiveService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,12 +28,18 @@ public class ItemArchiveServiceImpl extends ServiceImpl<ItemArchiveDao, ItemArch
     private ItemArchiveDao itemArchiveDao;
 
     @Override
-    public List<ItemAvailableDTO> getItemAvailableInfos() {
-        /*
-         * 分页查询  分页对象
-         */
-        //itemArchiveDao.selectList();
-        return null;
+    public List<ItemAvailableDTO> getItemAvailableInfos(String agenCode) {
+        LambdaQueryWrapper<ItemArchivePO> lambdaQuery = new LambdaQueryWrapper<>();
+        LambdaQueryWrapper<ItemArchivePO> eq = lambdaQuery.eq(ItemArchivePO::getAgenCode, agenCode);
+        List<ItemArchivePO> list = list(eq);
+        List<ItemAvailableDTO> res = new ArrayList<>();
+        list.forEach(
+                po -> {
+                    ItemAvailableDTO billApplyDTO = BeanUtil.toBean(po, ItemAvailableDTO.class);
+                    res.add(billApplyDTO);
+                }
+        );
+        return res;
     }
 
     @Override
@@ -40,13 +49,4 @@ public class ItemArchiveServiceImpl extends ServiceImpl<ItemArchiveDao, ItemArch
         saveBatch(itemArchivePOS);
     }
 
-    @Override
-    public ItemAvailableDTO getBillApplyInfo(String agenCode) {
-        return null;
-    }
-
-    @Override
-    public void unitItemAvailableArchive() {
-
-    }
 }

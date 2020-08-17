@@ -1,4 +1,4 @@
-package com.bosssoft.ecds.entity.dto;
+package com.bosssoft.ecds.entity.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
@@ -13,8 +13,8 @@ import java.util.Date;
  * @author liuke
  */
 @Data
-@ApiModel(value = "BillPayDTO", description = "票据缴费信息传输对象")
-public class BillPayDTO implements Serializable {
+@ApiModel(value = "BillPayVO", description = "票据缴款信息展示对象")
+public class BillPayVO implements Serializable {
 
     @ApiModelProperty(value = "单位编码")
     private String agenCode;

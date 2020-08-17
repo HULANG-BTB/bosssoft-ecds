@@ -3,7 +3,7 @@ package com.bosssoft.ecds.controller;
 import cn.hutool.core.bean.BeanUtil;
 import com.bosssoft.ecds.entity.dto.ArchiveOverViewDTO;
 import com.bosssoft.ecds.entity.query.ArchiveOverViewQuery;
-import com.bosssoft.ecds.entity.vo.ArchiveOverViewVo;
+import com.bosssoft.ecds.entity.vo.ArchiveOverViewVO;
 import com.bosssoft.ecds.service.ArchiveOverViewService;
 import com.bosssoft.ecds.utils.ResponseUtils;
 import io.swagger.annotations.Api;
@@ -30,16 +30,17 @@ public class ArchiveOverViewController {
     private ArchiveOverViewService service;
 
     /**
-     * 根据单位信息查询单位票据归档的信息
+     * 根据单位信息查询单位票据归档的信息 单位信息中包括基础信息
+     *
      * @param query
      * @return String
      */
     @PostMapping("/unit/info")
     public String queryArchiveInfo(@RequestBody ArchiveOverViewQuery query){
         ArchiveOverViewDTO archiveOverViewDto = service.queryOverViewArchiveInfo(query);
-        ArchiveOverViewVo vo = new ArchiveOverViewVo();
+        ArchiveOverViewVO vo = new ArchiveOverViewVO();
         BeanUtil.copyProperties(archiveOverViewDto,vo);
-        return ResponseUtils.getResponse(vo,ResponseUtils.ResultType.OK);
+        return ResponseUtils.getResponse(vo, ResponseUtils.ResultType.SUCCESS);
     }
 
     /**
@@ -52,20 +53,21 @@ public class ArchiveOverViewController {
          * 获取全部的单位信息
          */
         List<ArchiveOverViewDTO> archiveOverViewDTOS = service.queryOverViewArchiveAllInfo();
-        List<ArchiveOverViewVo> voList = new ArrayList<>();
+        List<ArchiveOverViewVO> voList = new ArrayList<>();
 
         /**
          * 类型转换
          */
-        ArchiveOverViewVo vo = null;
+        ArchiveOverViewVO vo = null;
         for (ArchiveOverViewDTO dto : archiveOverViewDTOS) {
-            vo = new ArchiveOverViewVo();
+            vo = new ArchiveOverViewVO();
             BeanUtil.copyProperties(dto, vo);
             voList.add(vo);
         }
 
-        return ResponseUtils.getResponse(voList,ResponseUtils.ResultType.OK);
+        return ResponseUtils.getResponse(voList, ResponseUtils.ResultType.SUCCESS);
     }
+
 
     /**
      * 用户自定义设置归档周期
