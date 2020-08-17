@@ -20,7 +20,8 @@ public enum CommonCode implements ResultCode {
 
     SERVER_ERROR(false, 99999, "抱歉，系统繁忙，请稍后重试！"),
     DUPLICATE_ERROR(false, 21111, "该数据已存在"),
-    UNAUTHORIZED(false, 400001, "认证失败，重新登录"),
+    UNAUTHORIZED(false, 40001, "认证失败，重新登录!"),
+    ACCESSDENIED(false, 40003, "认证失败，无访问权限!"),
     ;
     //操作是否成功
     boolean success;
