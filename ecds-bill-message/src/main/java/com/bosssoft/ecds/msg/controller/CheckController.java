@@ -50,7 +50,7 @@ public class CheckController {
     public String billCheck(@RequestParam String billId,@RequestParam String checkCode) {
         if (StringUtils.isNotBlank(billId) && StringUtils.isNotBlank(checkCode)) {
             int res = 0;
-            String response = checkClient.billCheck(billId, checkCode);
+            String response = checkClient.getBillByIdAndCheckCode(billId, checkCode);
             // 对返回体进行解析，获取响应状态码及携带的信息
             ResponseUtils.ResponseBody resBody = JSON.parseObject(response, ResponseUtils.ResponseBody.class);
             if (ResponseUtils.ResultType.OK.getCode().equals(resBody.getStatus())){
@@ -67,7 +67,7 @@ public class CheckController {
         // 参数为空
         return ResponseUtils.getResponse(
                 ResponseUtils.ResultType.METHOD_NOT_ALLOWED.getCode(),
-                ResponseUtils.ResultType.METHOD_NOT_ALLOWED.getMsg());
+                ResponseUtils.ResultType.METHOD_NOT_ALLOWED.getMsg(),null);
 
 
     }

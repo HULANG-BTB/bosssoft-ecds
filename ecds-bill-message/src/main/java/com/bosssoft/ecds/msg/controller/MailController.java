@@ -1,6 +1,5 @@
 package com.bosssoft.ecds.msg.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.bosssoft.ecds.msg.entity.dto.MailDto;
 import com.bosssoft.ecds.msg.entity.dto.MessageDto;
 import com.bosssoft.ecds.msg.entity.vo.*;
@@ -38,31 +37,35 @@ public class MailController {
 
     /**
      * 邮件发送接口
-     * @param mailVo 邮件发送对象包括：邮件收件人、主题、正文内容（messageDto的json格式）
+     * @param sendMailVo 邮件发送对象包括：邮件收件人、主题、正文内容（messageDto的json格式）
      * @return 发送结果，成功与否
      * @throws ExecutionException 多线程异常
      * @throws InterruptedException 多线程异常
+     * MessageDto messageDto = new MessageDto(
+     *                 "12345678",
+     *                 "12345678901",
+     *                 new Date(),
+     *                 "500",
+     *                 "测试单位",
+     *                 "张三",
+     *                 "email",
+     *                 "tel",
+     *                 "a1b2c3",
+     *                 "电子票据",
+     *                 "https://tse4-mm.cn.bing.net/th/id/OIP.jCt8g_6ITHZ6phR83HTjwwHaE8?pid=Api&rs=1"
+     *         );
+     *         mailVo.setSubject("电子票据");
+     *         ObjectMapper objectMapper = new ObjectMapper();
+     *         String s = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(messageDto);
+     *         mailVo.setContent(s);
+     *         mailVo.setTemplate("billTemplate.ftl");
      */
     @ApiOperation("发送邮件")
     @PostMapping("/send")
-    public String sendMail(@RequestBody SendMailVo mailVo) throws ExecutionException, InterruptedException {
-        MessageDto messageDto = new MessageDto(
-                "12345678",
-                "12345678901",
-                new Date(),
-                "500",
-                "测试单位",
-                "张三",
-                "email",
-                "tel",
-                "a1b2c3",
-                "电子票据",
-                "https://tse4-mm.cn.bing.net/th/id/OIP.jCt8g_6ITHZ6phR83HTjwwHaE8?pid=Api&rs=1"
-        );
-        mailVo.setSubject("电子票据");
-        mailVo.setContent(JSON.toJSONString(messageDto));
+    public String sendMail(@RequestBody SendMailVo sendMailVo) throws ExecutionException, InterruptedException {
 
-        MailDto mailDto = DozerUtils.map(mailVo, MailDto.class);
+        log.info("进来了");
+        MailDto mailDto = DozerUtils.map(sendMailVo, MailDto.class);
         Boolean isSent = sendMailService.sendMail(mailDto).get().getIsSent();
 
         return ResponseUtils.getResponse(
@@ -110,13 +113,13 @@ public class MailController {
             return ResponseUtils.getResponse(
                     ResponseUtils.ResultType.OK.getCode(),
                     ResponseUtils.ResultType.OK.getMsg(),
-                    "success");
+                    true);
         }
 
         return ResponseUtils.getResponse(
                 ResponseUtils.ResultType.NOT_MODIFIED.getCode(),
                 ResponseUtils.ResultType.NOT_MODIFIED.getMsg(),
-                "fail");
+                false);
 
     }
 
@@ -147,7 +150,6 @@ public class MailController {
 
     /**
      * 邮件删除功能
-     *
      * @param id 邮件id
      */
     @ApiOperation("根据Id删除邮件发件记录")

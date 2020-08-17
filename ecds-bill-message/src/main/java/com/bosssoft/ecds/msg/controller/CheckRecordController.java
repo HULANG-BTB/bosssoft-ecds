@@ -2,9 +2,11 @@ package com.bosssoft.ecds.msg.controller;
 
 import com.bosssoft.ecds.msg.entity.dto.CheckRecordDto;
 import com.bosssoft.ecds.msg.entity.vo.CheckRecordQueryVo;
+import com.bosssoft.ecds.msg.entity.vo.CheckRecordVo;
 import com.bosssoft.ecds.msg.entity.vo.PageResult;
 import com.bosssoft.ecds.msg.service.CheckRecordService;
 import com.bosssoft.ecds.msg.util.ResponseUtils;
+import com.google.common.collect.Lists;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -49,5 +51,51 @@ public class CheckRecordController {
                 ResponseUtils.ResultType.OK.getMsg(),
                 pageResult);
     }
+
+    /**
+     * 邮件删除功能
+     * @param id 邮件id
+     */
+    @ApiOperation("根据Id删除查验记录")
+    @DeleteMapping("/deleteCheckRecord")
+    public String delCheckRecord(String id) {
+        boolean b = checkRecordService.removeById(id);
+        if (b) {
+            return ResponseUtils.getResponse(
+                    ResponseUtils.ResultType.OK.getCode(),
+                    ResponseUtils.ResultType.OK.getMsg(),
+                    true);
+        }
+
+        return ResponseUtils.getResponse(
+                ResponseUtils.ResultType.NOT_MODIFIED.getCode(),
+                ResponseUtils.ResultType.NOT_MODIFIED.getMsg(),
+                false);
+
+    }
+
+    /**
+     * 查验记录批量删除功能
+     * @param recordVos 邮件集合
+     */
+    @ApiOperation("批量删除查验记录")
+    @DeleteMapping("/deleteCheckRecordBatch")
+    public String delCheckRecordBatch(@RequestBody List<CheckRecordVo> recordVos) {
+        List<Long> ids = Lists.newArrayList();
+        recordVos.forEach(recordVo -> ids.add(recordVo.getId()));
+        boolean b = checkRecordService.removeByIds(ids);
+        if (b) {
+            return ResponseUtils.getResponse(
+                    ResponseUtils.ResultType.OK.getCode(),
+                    ResponseUtils.ResultType.OK.getMsg(),
+                    true);
+        }
+        return ResponseUtils.getResponse(
+                ResponseUtils.ResultType.NOT_MODIFIED.getCode(),
+                ResponseUtils.ResultType.NOT_MODIFIED.getMsg(),
+                false);
+
+    }
+
 
 }

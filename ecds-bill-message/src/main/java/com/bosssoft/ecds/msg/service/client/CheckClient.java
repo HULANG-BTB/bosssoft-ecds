@@ -8,8 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @author zhangxiaohui
  * @create 2020/8/14 13:58
  */
-
-@FeignClient("ecds-bill-invocing")
+@FeignClient(value = "ecds-bill-invocing")
 public interface CheckClient {
 
     /**
@@ -18,7 +17,7 @@ public interface CheckClient {
      * @param checkCode 票据校验码
      * @return 票据查验结果
      */
-    @GetMapping("/getBillByIdAndCheckCode")
-    String billCheck(@RequestParam("billId") String billId, @RequestParam("checkCode") String checkCode);
+    @GetMapping("/billInvoicing/getBillByIdAndCheckCode")
+    String getBillByIdAndCheckCode(@RequestParam("billId") String billId, @RequestParam("checkCode") String checkCode);
 
 }

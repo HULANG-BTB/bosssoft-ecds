@@ -129,20 +129,20 @@ public class SmsServiceImpl extends ServiceImpl<SmsMapper, SmsPo> implements Sms
         QueryWrapper<SmsPo> query = new QueryWrapper<>();
         query.orderByDesc(SmsPo.COL_F_SMS_SENTDATE);
         if (smsQuery.getId() != null) {
-            query.eq("f_sms_id", smsQuery.getId());
+            query.eq(SmsPo.COL_F_SMS_ID, smsQuery.getId());
         }
         if (StringUtils.isNotBlank(smsQuery.getSmsTo())) {
-            query.eq("f_sms_to", smsQuery.getSmsTo());
+            query.eq(SmsPo.COL_F_SMS_TO, smsQuery.getSmsTo());
         }
         if (smsQuery.getIsSent() != null) {
-            query.eq("f_sms_is_sent", smsQuery.getIsSent());
+            query.eq(SmsPo.COL_F_SMS_IS_SENT, smsQuery.getIsSent());
         }
 
         if (smsQuery.getPeriod() != null) {
             Date startDate = smsQuery.getPeriod().get(0);
             Date endDate = smsQuery.getPeriod().get(1);
             if (startDate != null && endDate != null && endDate.compareTo(startDate) > 0) {
-                query.le("f_sms_sentDate", endDate).ge("f_sms_sentDate", startDate);
+                query.le(SmsPo.COL_F_SMS_SENTDATE, endDate).ge(SmsPo.COL_F_SMS_SENTDATE, startDate);
             }
         }
 

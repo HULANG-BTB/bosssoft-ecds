@@ -30,6 +30,10 @@ public class SendMailVo {
      * 邮件内容
      */
     private String content;
+    /**
+     * 邮件模版
+     */
+    private String template;
 
     /**
      * 邮件附件

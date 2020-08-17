@@ -16,7 +16,7 @@ import java.util.Date;
  * @create 2020/8/13 15:01
  */
 @Slf4j
-@Component
+//@Component
 public class MailTask {
 
     @Resource

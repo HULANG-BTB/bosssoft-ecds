@@ -5,10 +5,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
+import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.service.ApiInfo;
 
-import springfox.documentation.service.Contact;
+import springfox.documentation.service.ApiInfo;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
@@ -20,8 +20,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {
-
-
     /**
      * 配置docket以配置Swagger具体参数
      * 相关注解的作用：
@@ -50,21 +48,13 @@ public class SwaggerConfig {
     }
 
     /**
-     * 配置文档信息
+     * 创建该API的基本信息（这些基本信息会展现在文档页面中）
+     * 访问地址：http://项目实际地址/swagger-ui.html
      */
     private ApiInfo apiInfo() {
-        // 联系人信息
-        Contact contact = new Contact(
-                "张晓辉",
-                "http://www.baidu.com/",
-                "dkhaos@foxmail.com");
-        return new ApiInfo(
-                "票据消息推送及查验模块",
-                "开放短信、邮件消息推送，及其发件记录的查询。票据真伪查验",
-                "v1.0",
-                "http://editor.swagger.io/",
-                contact,
-                "Apach 2.0 许可",
-                "http://www.apache.org/licenses/LICENSE-2.0");
+        return new ApiInfoBuilder()
+                .title("票据消息推送及查验模块")
+                .description("开放短信、邮件消息推送，及其发件记录的查询。票据真伪查验")
+                .version("v1.0").build();
     }
 }

@@ -43,26 +43,27 @@ public class SmsController {
     /**
      * 短信发送接口
      *
+     *  MessageDto messageDto = new MessageDto(
+     *                 "12345678",
+     *                 "12345678901",
+     *                 new Date(),
+     *                 "500",
+     *                 "测试单位",
+     *                 "张三",
+     *                 "email",
+     *                 "tel",
+     *                 "a1b2c3",
+     *                 "电子票据",
+     *                 "https://tse4-mm.cn.bing.net/th/id/OIP.jCt8g_6ITHZ6phR83HTjwwHaE8?pid=Api&rs=1"
+     *         );
+     *         smsVo.setContent(JSON.toJSONString(messageDto));
      * @param smsVo 短信收件人，及内容是必须的
      * @return 发件成功与否
      */
     @ApiOperation("发送短信")
     @PostMapping("/send")
     public String sendSms(@RequestBody SendSmsVo smsVo) throws ClientException, ExecutionException, InterruptedException {
-        MessageDto messageDto = new MessageDto(
-                "12345678",
-                "12345678901",
-                new Date(),
-                "500",
-                "测试单位",
-                "张三",
-                "email",
-                "tel",
-                "a1b2c3",
-                "电子票据",
-                "https://tse4-mm.cn.bing.net/th/id/OIP.jCt8g_6ITHZ6phR83HTjwwHaE8?pid=Api&rs=1"
-        );
-        smsVo.setContent(JSON.toJSONString(messageDto));
+
 
         SmsDto smsDto = DozerUtils.map(smsVo, SmsDto.class);
         boolean b = sendsmsService.sendSms(smsDto).get();
@@ -71,11 +72,11 @@ public class SmsController {
             return ResponseUtils.getResponse(
                     ResponseUtils.ResultType.OK.getCode(),
                     ResponseUtils.ResultType.OK.getMsg(),
-                    "success");
+                    true);
         }
         return ResponseUtils.getResponse(
                 ResponseUtils.ResultType.NOT_ACCEPTABLE.getCode(),
-                ResponseUtils.ResultType.NOT_ACCEPTABLE.getMsg(), "fail");
+                ResponseUtils.ResultType.NOT_ACCEPTABLE.getMsg(), false);
     }
 
     /**
@@ -105,7 +106,7 @@ public class SmsController {
             // 校验码参数有误
             return ResponseUtils.getResponse(
                     ResponseUtils.ResultType.METHOD_NOT_ALLOWED.getCode(),
-                    ResponseUtils.ResultType.METHOD_NOT_ALLOWED.getMsg());
+                    ResponseUtils.ResultType.METHOD_NOT_ALLOWED.getMsg(),null);
         }
 
         // 参数无误，查询票据
@@ -118,7 +119,7 @@ public class SmsController {
         }
         return ResponseUtils.getResponse(
                 ResponseUtils.ResultType.NOT_FOUND.getCode(),
-                ResponseUtils.ResultType.NOT_FOUND.getMsg());
+                ResponseUtils.ResultType.NOT_FOUND.getMsg(),null);
     }
 
 
@@ -161,13 +162,13 @@ public class SmsController {
             return ResponseUtils.getResponse(
                     ResponseUtils.ResultType.OK.getCode(),
                     ResponseUtils.ResultType.OK.getMsg(),
-                    "success");
+                    true);
         }
 
         return ResponseUtils.getResponse(
                 ResponseUtils.ResultType.NOT_MODIFIED.getCode(),
                 ResponseUtils.ResultType.NOT_MODIFIED.getMsg(),
-                "fail");
+                false);
 
     }
 }

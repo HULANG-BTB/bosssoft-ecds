@@ -63,7 +63,10 @@ public class MailDto {
      * 报错信息
      */
     private String error;
-
+    /**
+     * 邮件模版
+     */
+    private String template;
     /**
      * 邮件附件
      */

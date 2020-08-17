@@ -56,23 +56,24 @@ public class CheckRecordServiceImpl extends ServiceImpl<CheckRecordMapper, Check
      */
     public QueryWrapper<CheckRecordPo> getQuery(CheckRecordQueryVo recordQuery) {
         QueryWrapper<CheckRecordPo> query = new QueryWrapper<>();
+        query.orderByDesc(CheckRecordPo.COL_F_CREATE_TIME);
         if (recordQuery.getId() != null) {
-            query.eq("f_id", recordQuery.getId());
+            query.eq(CheckRecordPo.COL_F_ID, recordQuery.getId());
         }
         if (recordQuery.getResult() != null) {
-            query.eq("f_result", recordQuery.getResult());
+            query.eq(CheckRecordPo.COL_F_RESULT, recordQuery.getResult());
         }
         if (recordQuery.getBillCode() != null) {
-            query.eq("f_bill_code", recordQuery.getBillCode());
+            query.eq(CheckRecordPo.COL_F_BILL_CODE, recordQuery.getBillCode());
         }
         if (recordQuery.getPeriod() != null) {
             Date startDate = recordQuery.getPeriod().get(0);
             Date endDate = recordQuery.getPeriod().get(1);
             if (startDate != null && endDate != null && endDate.compareTo(startDate) > 0) {
-                query.le("f_create_time", endDate).ge("f_create_time", startDate);
+                query.le(CheckRecordPo.COL_F_CREATE_TIME, endDate).ge(CheckRecordPo.COL_F_CREATE_TIME, startDate);
             }
         }
-        query.eq("f_logic_delete", 0);
+        query.eq(CheckRecordPo.COL_F_LOGIC_DELETE, 0);
         return query;
     }
 }

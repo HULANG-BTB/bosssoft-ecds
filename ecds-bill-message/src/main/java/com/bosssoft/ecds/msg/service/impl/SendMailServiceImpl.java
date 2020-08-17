@@ -2,7 +2,6 @@ package com.bosssoft.ecds.msg.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.aliyuncs.utils.StringUtils;
-import com.bosssoft.ecds.msg.entity.dto.MessageDto;
 import com.bosssoft.ecds.msg.entity.po.MailPo;
 import com.bosssoft.ecds.msg.exception.MsgException;
 import com.bosssoft.ecds.msg.mapper.MailMapper;
@@ -48,6 +47,7 @@ public class SendMailServiceImpl implements SendMailService {
 
     /**
      * 异步发送邮件实现
+     *
      * @param mailDto 发送邮件所需信息
      */
     @Async
@@ -62,8 +62,9 @@ public class SendMailServiceImpl implements SendMailService {
         } catch (Exception e) {
             mailDto.setIsSent(false);
             mailDto.setError(e.getMessage());
-            return new AsyncResult<>(mailDto);
-        }finally {
+            throw new MsgException("发件错误" + e);
+
+        } finally {
             //3.保存邮件
             saveMail(mailDto);
         }
@@ -100,7 +101,8 @@ public class SendMailServiceImpl implements SendMailService {
             // 邮件主题
             messageHelper.setSubject(mailDto.getSubject());
             // 邮件内容，格式化为html
-            messageHelper.setText(templateMail(mailDto.getContent()), true);
+            String templateMail = templateMail(mailDto.getContent(), mailDto.getTemplate());
+            messageHelper.setText(templateMail, true);
             if (mailDto.getFiles() != null) {
                 // 添加邮件附件
                 for (File file : mailDto.getFiles()) {
@@ -115,7 +117,7 @@ public class SendMailServiceImpl implements SendMailService {
 
             mailDto.setIsSent(true);
         } catch (Exception e) {
-            throw new MsgException("发件错误："+e);
+            throw new MsgException("发件错误：" + e);
         }
     }
 
@@ -149,22 +151,21 @@ public class SendMailServiceImpl implements SendMailService {
 
     /**
      * mailVo.getText()为JSON格式，需要将Json转为Html模版格式
+     *
      * @param content 待处理邮件正文
      */
-    private String templateMail(String content) {
+    private String templateMail(String content, String localTemplate) {
         try {
             // 获得模板
-            final String localTemplate = "template.html";
             Template template = freeMarkerConfigurer.getConfiguration().getTemplate(localTemplate);
 
             log.info(content);
 
-            // 解析正文内容   Map<?,?> model = JSON.parseObject(content, Map.class)
-            MessageDto messageDto = JSON.parseObject(content, MessageDto.class);
-            Map<String, Object> model = DozerUtils.beanToMap(messageDto);
-            log.info(model.toString());
+            // 解析正文内容
+            Map<?, ?> map = JSON.parseObject(content, Map.class);
+            log.info(map.toString());
             // 传入数据模型到模板，替代模板中的占位符，并将模板转化为html字符串
-            return FreeMarkerTemplateUtils.processTemplateIntoString(template, model);
+            return FreeMarkerTemplateUtils.processTemplateIntoString(template, map);
 
         } catch (TemplateException | IOException e) {
             log.error("发送邮件时发生异常！", e);
