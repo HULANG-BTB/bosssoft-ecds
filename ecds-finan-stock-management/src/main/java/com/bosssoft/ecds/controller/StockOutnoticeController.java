@@ -227,8 +227,8 @@ public class StockOutnoticeController {
      *
      * @return 提交是否成功
      */
-    @RequestMapping("/sentToCheck")
-    public String sentToCheck() {
+    @RequestMapping("/submit")
+    public String submit() {
 
         return SUCCESS;
     }
