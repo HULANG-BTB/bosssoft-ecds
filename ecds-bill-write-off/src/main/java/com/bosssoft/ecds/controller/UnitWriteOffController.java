@@ -5,8 +5,12 @@ import cn.hutool.core.convert.Convert;
 import cn.hutool.core.lang.TypeReference;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.bosssoft.ecds.entity.dto.UnitWriteOffApplyQueryInfoDTO;
+import com.bosssoft.ecds.entity.dto.UnitWriteOffItemQueryInfoDTO;
 import com.bosssoft.ecds.entity.dto.WriteOffApplyDTO;
+import com.bosssoft.ecds.entity.dto.WriteOffApplyItemDTO;
 import com.bosssoft.ecds.entity.vo.UnitWriteOffApplyQueryInfoVO;
+import com.bosssoft.ecds.entity.vo.UnitWriteOffItemQueryInfoVO;
+import com.bosssoft.ecds.entity.vo.WriteOffApplyItemVO;
 import com.bosssoft.ecds.entity.vo.WriteOffApplyVO;
 import com.bosssoft.ecds.service.UnitWriteOffService;
 import com.bosssoft.ecds.util.ResponseUtils;
@@ -14,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 /**
@@ -37,6 +42,45 @@ public class UnitWriteOffController {
         IPage<WriteOffApplyDTO> page = unitWriteOffService.selectApplyPage(queryInfoDTO);
         IPage<WriteOffApplyVO> data = Convert.convert(new TypeReference<IPage<WriteOffApplyVO>>() {}, page);
         List<WriteOffApplyVO> list = Convert.toList(WriteOffApplyVO.class, page.getRecords());
+        transformApplyDTOToVO(list);
+        data.setRecords(list);
+        return ResponseUtils.getResponse(data, ResponseUtils.ResultType.OK);
+    }
+
+    @DeleteMapping("deleteApply/{no}")
+    public String deleteApply(@PathVariable String no) {
+        if (unitWriteOffService.deleteApply(no)) {
+            return ResponseUtils.getResponse(ResponseUtils.ResultType.OK);
+        }
+        return ResponseUtils.getResponse(601, "删除失败");
+    }
+
+    @PutMapping("uploadApply")
+    public String uploadApply(@RequestBody List<String> noList) {
+        if (unitWriteOffService.uploadApply(noList)) {
+            return ResponseUtils.getResponse(ResponseUtils.ResultType.OK);
+        }
+        return ResponseUtils.getResponse(601, "上报失败");
+    }
+
+    @PutMapping("rescindApply")
+    public String rescindApply(@RequestBody List<String> noList) {
+        if (unitWriteOffService.rescindApply(noList)) {
+            return ResponseUtils.getResponse(ResponseUtils.ResultType.OK);
+        }
+        return ResponseUtils.getResponse(601, "无法撤销");
+    }
+
+    @GetMapping("selectItem")
+    public String selectItem(UnitWriteOffItemQueryInfoVO queryInfoVO) {
+        UnitWriteOffItemQueryInfoDTO queryInfoDTO = BeanUtil.copyProperties(queryInfoVO, UnitWriteOffItemQueryInfoDTO.class);
+        IPage<WriteOffApplyItemDTO> page = unitWriteOffService.selectItem(queryInfoDTO);
+        IPage<WriteOffApplyItemVO> data = Convert.convert(new TypeReference<IPage<WriteOffApplyItemVO>>() {}, page);
+        data.setRecords(Convert.toList(WriteOffApplyItemVO.class, page.getRecords()));
+        return ResponseUtils.getResponse(data, ResponseUtils.ResultType.OK);
+    }
+    
+    private void transformApplyDTOToVO(List<WriteOffApplyVO> list) {
         // 将对应的数字代码转换为字符串
         for (WriteOffApplyVO item : list){
             switch (item.getFChangeState()) {
@@ -78,15 +122,5 @@ public class UnitWriteOffController {
                     break;
             }
         }
-        data.setRecords(list);
-        return ResponseUtils.getResponse(data, ResponseUtils.ResultType.OK);
-    }
-
-    @DeleteMapping("deleteApply/{no}")
-    public String deleteApply(@PathVariable String no) {
-        if (unitWriteOffService.deleteApply(no)) {
-            return ResponseUtils.getResponse(ResponseUtils.ResultType.OK);
-        }
-        return ResponseUtils.getResponse(601, "删除失败");
     }
 }

@@ -50,13 +50,17 @@ public class WriteOffApplyItemPO {
     @TableField("f_type")
     private String fType;
 
-    @ApiModelProperty(value = "开票日期")
-    @TableField("f_date")
-    private Date fDate;
+    @ApiModelProperty(value = "开票份数")
+    @TableField("f_number")
+    private Integer fNumber;
 
-    @ApiModelProperty(value = "票据状态 1 正常 2作废")
-    @TableField("f_state")
-    private Boolean fState;
+    @ApiModelProperty(value = "票据起始号")
+    @TableField("f_bill_no1")
+    private String fBillNo1;
+
+    @ApiModelProperty(value = "票据结束号")
+    @TableField("f_bill_no2")
+    private String fBillNo2;
 
     @ApiModelProperty(value = "票面金额")
     @TableField("f_amt")
