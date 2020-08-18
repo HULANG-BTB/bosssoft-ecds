@@ -33,7 +33,7 @@ public class FanoutRabbitUtils {
 
     public void sendBillDelayMessage(String billTypeCode) {
         rabbitTemplate.convertAndSend("fanoutErrorExchange", null, billTypeCode, message -> {
-            long expire = 10 * 1000;
+            long expire = 10 * 60 * 1000;
             message.getMessageProperties().setExpiration(String.valueOf(expire));
             return message;
         });

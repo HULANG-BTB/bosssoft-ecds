@@ -1,14 +1,15 @@
 package com.bosssoft.ecds.service;
 
 import com.bosssoft.ecds.entity.dto.BillDto;
+import com.bosssoft.ecds.entity.dto.RetrieveBillDto;
 
 import java.util.List;
 
 public interface BillService {
 
-    List retrieveBill(int number);
+    List retrieveBill(RetrieveBillDto retrieveBillDto);
 
-    int createBill(List<BillDto> list);
+    int createBill(BillDto billDto);
 
     int retrieveNumber(String table);
 }

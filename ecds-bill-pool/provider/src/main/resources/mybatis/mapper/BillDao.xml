@@ -28,11 +28,11 @@
     </select>
 
     <select id="retrieveList" resultMap="billResultMap" parameterType="int">
-        select * from fbb_billpool order by f_id asc limit 0, #{number}
+        select * from ${table} order by f_id asc limit 0, #{number}
     </select>
 
     <delete id="deleteList">
-        delete from fbb_billpool where f_id in
+        delete from ${table} where f_id in
         <foreach collection="list" item="item" open="(" close=")" separator=",">
             #{item}
         </foreach>
