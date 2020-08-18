@@ -43,11 +43,6 @@ public class PrintTemplateVO {
     private String name;
 
     /**
-     * 模板文本
-     */
-    private String template;
-
-    /**
      * 备注
      */
     private String memo;
