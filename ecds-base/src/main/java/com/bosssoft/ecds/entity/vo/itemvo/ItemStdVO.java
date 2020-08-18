@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -49,9 +50,11 @@ public class ItemStdVO {
     @ApiModelProperty(value = "是否启用")
     private Integer isenable;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @ApiModelProperty(value = "标准生效日期")
     private Date itemstdEffdate;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @ApiModelProperty(value = "标准失效日期")
     private Date itemstdExpdate;
 
