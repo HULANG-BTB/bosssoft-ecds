@@ -60,7 +60,7 @@ public class KafkaBusinessAppender extends AppenderBase<ILoggingEvent> {
     @Override
     protected void append(ILoggingEvent eventObject) {
         String msg = eventObject.getFormattedMessage();
-        log.info("向kafka推送业务日志开始:" + msg);
+        log.debug("向kafka推送业务日志开始:" + msg);
         ProducerRecord<String, String> record = new ProducerRecord<>(businessTopic, msg);
         producer.send(record);
     }

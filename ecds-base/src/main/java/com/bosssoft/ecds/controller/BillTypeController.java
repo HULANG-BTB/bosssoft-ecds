@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
-import static com.bosssoft.ecds.response.CommonCode.EMAIL_NOTIFICATION;
+import static com.bosssoft.ecds.response.CommonCode.FAIL;
 
 /**
  * @author :Raiz
@@ -76,6 +76,6 @@ public class BillTypeController {
 
     @PostMapping("exception")
     public ResponseResult exception() {
-        throw new CustomException(EMAIL_NOTIFICATION, "自定义信息");
+        throw new CustomException(FAIL, "自定义信息");
     }
 }

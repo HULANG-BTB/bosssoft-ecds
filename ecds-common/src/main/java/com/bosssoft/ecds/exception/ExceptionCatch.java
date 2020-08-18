@@ -71,8 +71,10 @@ public class ExceptionCatch {
     @ExceptionHandler(CustomException.class)
     @ResponseBody
     public ResponseResult customException(CustomException e){
-        ResponseResult responseResult = new ResponseResult(e.getResultCode(), e.getErrorMsg());
-        String message = JSON.toJSONString(responseResult);
+        ResponseResult responseResult = new ResponseResult(e.getResultCode());
+        String expationType = CustomException.class.getSimpleName();
+        ExceptionDetail exceptionDetail = new ExceptionDetail(e.getResultCode(),e.getErrorMsg(),expationType);
+        String message = JSON.toJSONString(exceptionDetail);
         log.error(message);
         return responseResult;
     }
