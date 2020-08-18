@@ -11,6 +11,7 @@ import com.bosssoft.ecds.dao.DeptDao;
 import com.bosssoft.ecds.service.DeptService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bosssoft.ecds.utils.MyBeanUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
