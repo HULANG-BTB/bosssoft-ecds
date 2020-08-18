@@ -25,7 +25,7 @@ public interface WriteOffApplyMapper extends BaseMapper<WriteOffApplyPO> {
      * @param fAgenIdCode
      * @return java.util.List
      */
-    @Select("SELECT * FROM ube_writeoff_apply WHERE f_agen_id_code = #{fAgenIdCode} AND f_is_upload = 2")
+    @Select("SELECT * FROM ube_writeoff_apply WHERE f_agen_id_code = #{fAgenIdCode} AND f_is_upload = 2 ORDER BY f_date")
     List<WriteOffApplyPO> getWriteOffApplyPOByAgenIdCode(@Param("fAgenIdCode") String fAgenIdCode);
 
     /**
