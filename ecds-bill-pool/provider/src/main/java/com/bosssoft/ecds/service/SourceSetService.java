@@ -10,6 +10,8 @@ public interface SourceSetService {
 
     int updatePushNumber(SourceSetDto sourceSetDto);
 
+    int createSource(SourceSetDto sourceSetDto);
+
     int updateSet(SourceSetDto sourceSetDto);
 
     List<SourceSetDto> retrieveSetList();

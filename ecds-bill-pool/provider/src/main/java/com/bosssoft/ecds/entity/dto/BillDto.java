@@ -5,11 +5,13 @@ import java.util.Date;
 public class BillDto {
 
     private int id;
+    private String billTypeCode;
     private String regionCode;
     private String type;
     private String sort;
     private String batch;
-    private String billCode;
+    private long billCodeBegin;
+    private long billCodeEnd;
     private int version;
     private String operator;
     private int operatorID;
@@ -22,6 +24,14 @@ public class BillDto {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getBillTypeCode() {
+        return billTypeCode;
+    }
+
+    public void setBillTypeCode(String billTypeCode) {
+        this.billTypeCode = billTypeCode;
     }
 
     public String getRegionCode() {
@@ -56,12 +66,20 @@ public class BillDto {
         this.batch = batch;
     }
 
-    public String getBillCode() {
-        return billCode;
+    public long getBillCodeBegin() {
+        return billCodeBegin;
     }
 
-    public void setBillCode(String billCode) {
-        this.billCode = billCode;
+    public void setBillCodeBegin(long billCodeBegin) {
+        this.billCodeBegin = billCodeBegin;
+    }
+
+    public long getBillCodeEnd() {
+        return billCodeEnd;
+    }
+
+    public void setBillCodeEnd(long billCodeEnd) {
+        this.billCodeEnd = billCodeEnd;
     }
 
     public int getVersion() {
@@ -106,13 +124,15 @@ public class BillDto {
 
     @Override
     public String toString() {
-        return "BillPo{" +
+        return "BillDto{" +
                 "id=" + id +
+                ", billTypeCode='" + billTypeCode + '\'' +
                 ", regionCode='" + regionCode + '\'' +
                 ", type='" + type + '\'' +
                 ", sort='" + sort + '\'' +
                 ", batch='" + batch + '\'' +
-                ", billCode='" + billCode + '\'' +
+                ", billCodeBegin=" + billCodeBegin +
+                ", billCodeEnd=" + billCodeEnd +
                 ", version=" + version +
                 ", operator='" + operator + '\'' +
                 ", operatorID=" + operatorID +

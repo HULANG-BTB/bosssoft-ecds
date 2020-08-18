@@ -6,10 +6,10 @@ public class SourceSetPo {
 
     int id;
     String billTypeCode;
-    int sourceID;
     int pushNumber;
     int minNumber;
     int alterCode;
+    int enable;
     int version;
     String operator;
     int operatorID;
@@ -30,14 +30,6 @@ public class SourceSetPo {
 
     public void setBillTypeCode(String billTypeCode) {
         this.billTypeCode = billTypeCode;
-    }
-
-    public int getSourceID() {
-        return sourceID;
-    }
-
-    public void setSourceID(int sourceID) {
-        this.sourceID = sourceID;
     }
 
     public int getPushNumber() {
@@ -62,6 +54,14 @@ public class SourceSetPo {
 
     public void setAlterCode(int alterCode) {
         this.alterCode = alterCode;
+    }
+
+    public int getEnable() {
+        return enable;
+    }
+
+    public void setEnable(int enable) {
+        this.enable = enable;
     }
 
     public int getVersion() {
@@ -109,10 +109,10 @@ public class SourceSetPo {
         return "SourceSetPo{" +
                 "id=" + id +
                 ", billTypeCode='" + billTypeCode + '\'' +
-                ", sourceID=" + sourceID +
                 ", pushNumber=" + pushNumber +
                 ", minNumber=" + minNumber +
                 ", alterCode=" + alterCode +
+                ", enable=" + enable +
                 ", version=" + version +
                 ", operator='" + operator + '\'' +
                 ", operatorID=" + operatorID +

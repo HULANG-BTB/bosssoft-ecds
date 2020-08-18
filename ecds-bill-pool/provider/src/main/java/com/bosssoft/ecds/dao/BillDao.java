@@ -12,7 +12,7 @@ public interface BillDao {
 
     List<String> retrieveBillTypeCode();
 
-    List retrieveList(int number);
+    List retrieveList(String table, int number);
 
-    int deleteList(List<Integer> list);
+    int deleteList(String table, List<Integer> list);
 }
