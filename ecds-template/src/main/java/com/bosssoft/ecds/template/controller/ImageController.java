@@ -5,6 +5,7 @@ import com.bosssoft.ecds.template.service.ImageService;
 import com.bosssoft.ecds.template.util.ResponseBody;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.util.FileCopyUtils;
@@ -12,9 +13,7 @@ import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 
 @Api(value = "图片生成相关控制器")
 @RestController
@@ -33,14 +32,8 @@ public class ImageController {
     @ApiOperation(value = "返回一个图片样板 PNG")
     @GetMapping(value = "/template", produces = MediaType.IMAGE_PNG_VALUE)
     public byte[] pictureTemplate() throws IOException{
-        File file = ResourceUtils.getFile("classpath:templates/NontaxBill.png");
-        byte[] bytes = new byte[0];
-        try {
-            bytes = FileCopyUtils.copyToByteArray(file);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return bytes;
+        InputStream inputStream = imageService.getTemplateFile();
+        return IOUtils.toByteArray(inputStream);
     }
 
     /**
