@@ -29,7 +29,6 @@ public class CustomAuthenticationAccessDeniedHandler implements ServerAccessDeni
     public Mono<Void> handle(ServerWebExchange exchange, AccessDeniedException denied) {
         ServerHttpResponse response = exchange.getResponse();
         // 设置响应头
-        response.setStatusCode(HttpStatus.UNAUTHORIZED);
         response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
         // 三设置 验证异常返回信息
         QueryResponseResult<String> responseResult = new QueryResponseResult<>(CommonCode.ACCESSDENIED, denied.getMessage());
