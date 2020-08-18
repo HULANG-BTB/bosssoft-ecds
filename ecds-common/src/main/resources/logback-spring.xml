@@ -10,13 +10,11 @@
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <layout class="ch.qos.logback.classic.PatternLayout">
             <springProfile name="dev">
-                <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5level) %magenta([%-15.15(%thread)]) %cyan(
-                    %-50.50(%logger{50} )) : %msg%n
+                <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5level) %magenta([%-15.15(%thread)]) %cyan(%-50.50(%logger{50} )) : %msg%n
                 </pattern>
             </springProfile>
             <springProfile name="!dev">
-                <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5level) %magenta([%-15.15(%thread)]) %cyan(
-                    %-50.50(%logger{50} )) : %msg%n
+                <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5level) %magenta([%-15.15(%thread)]) %cyan(%-50.50(%logger{50} )) : %msg%n
                 </pattern>
             </springProfile>
         </layout>
@@ -35,11 +33,11 @@
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
         </encoder>
     </appender>
-    <appender name="KAFKA" class="com.bosssoft.elkkafkazkdemo.appender.KafkaAppender">
+    <appender name="KAFKA" class="com.bosssoft.ecds.appender.KafkaAppender">
         <bootstrapServers>${bootstrapServers}</bootstrapServers>
         <logTopic>${logTopic}</logTopic>
     </appender>
-    <appender name="BUSINESSKAFKA" class="com.bosssoft.elkkafkazkdemo.appender.KafkaBusinessAppender">
+    <appender name="BUSINESSKAFKA" class="com.bosssoft.ecds.appender.KafkaBusinessAppender">
         <bootstrapServers>${bootstrapServers}</bootstrapServers>
         <businessTopic>${businessTopic}</businessTopic>
     </appender>
