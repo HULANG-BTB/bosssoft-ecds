@@ -11,13 +11,12 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import java.util.Properties;
 
 /**
- * 将日志放入kafka中
- * @author wuliming
- * @date 2020-07-22 13:49
+ * @author :Raiz
+ * @date :2020/8/18
  */
 @Data
 @Slf4j
-public class KafkaAppender extends AppenderBase<ILoggingEvent> {
+public class KafkaBusinessAppender extends AppenderBase<ILoggingEvent> {
     /**
      * 设置kafka服务器地址
      */
@@ -27,13 +26,9 @@ public class KafkaAppender extends AppenderBase<ILoggingEvent> {
      */
     private Producer<String, String> producer;
     /**
-     * 日志消息前缀
-     */
-    private String logPrefix;
-    /**
      * kafka topic
      */
-    private String logTopic;
+    private String businessTopic;
 
     @Override
     public void start() {
@@ -65,8 +60,9 @@ public class KafkaAppender extends AppenderBase<ILoggingEvent> {
     @Override
     protected void append(ILoggingEvent eventObject) {
         String msg = eventObject.getFormattedMessage();
-        log.debug("向kafka推送日志开始:" + msg);
-        ProducerRecord<String, String> record = new ProducerRecord<>(logTopic, msg);
+        log.debug("向kafka推送业务日志开始:" + msg);
+        ProducerRecord<String, String> record = new ProducerRecord<>(businessTopic, msg);
         producer.send(record);
     }
 }
+
