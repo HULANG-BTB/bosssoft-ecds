@@ -1,17 +1,18 @@
 package com.bosssoft.ecds.encodeserver.entity.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
-import java.io.Serializable;
+import java.sql.Timestamp;
 
 /**
  * @Author 黄杰峰
- * @Date 2020/8/6 0006 17:37
- * @Description
+ * @Date 2020/8/7 0007 10:34
+ * @Description 创建财政编码DTO，需要加入创建人名称和创建人id。
  */
 @Data
-public class GetFinanceNumDto implements Serializable {
+public class CreateBillCodeDto {
     /**
      * 区划编码
      */
@@ -33,14 +34,25 @@ public class GetFinanceNumDto implements Serializable {
     private String fAnnualId;
 
     /**
-     * 申请的票数量，若为1则为申请单张票
+     * 操作人名称
      */
-    private Integer codeNum;
+    private String fOperator;
 
     /**
-     * 获取8位财政编码
-     * @return
+     * 操作人ID
      */
+    private Long fOperatorId;
+
+    /**
+     * 码创建时间
+     */
+    private Timestamp fCreateTime;
+
+    /**
+     * 码更新时间
+     */
+    private Timestamp fUpdateTime;
+
     public String financeCode() {
         return fRegiId + fSortId + fTypeId + fAnnualId;
     }

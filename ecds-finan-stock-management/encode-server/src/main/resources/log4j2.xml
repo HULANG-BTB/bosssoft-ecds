@@ -83,7 +83,7 @@
     <Loggers>
         <!-- LOG everything at INFO level -->
         <Root level="ALL">
-            <AppenderRef ref="Console"/>
+<!--            <AppenderRef ref="Console"/>-->
             <AppenderRef ref="RollingInfoFile"/>
             <AppenderRef ref="RollingWarnFile"/>
             <AppenderRef ref="RollingErrorFile"/>

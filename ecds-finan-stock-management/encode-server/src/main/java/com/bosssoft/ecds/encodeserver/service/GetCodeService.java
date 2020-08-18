@@ -2,8 +2,7 @@ package com.bosssoft.ecds.encodeserver.service;
 
 
 import com.bosssoft.ecds.encodeserver.entity.dto.NumSegDto;
-import com.bosssoft.ecds.encodeserver.entity.dto.CreateFinanceCodeDto;
-import com.bosssoft.ecds.encodeserver.entity.dto.GetFinanceNumDto;
+import com.bosssoft.ecds.encodeserver.entity.dto.GetBillNumDto;
 
 /**
  * @Author 黄杰峰
@@ -17,25 +16,18 @@ import com.bosssoft.ecds.encodeserver.entity.dto.GetFinanceNumDto;
  *      2. 自动发放时赋码（单张发放）
  */
 public interface GetCodeService {
-
     /**
-     * 赋码 - 单张发放
-     * @param getFinanceNumDTO
+     * 赋码 - 单个票号
+     * @param getBillNumDto
      * @return 单个票号
      */
-    long getSingleCode(GetFinanceNumDto getFinanceNumDTO);
+    long getSingleCode(GetBillNumDto getBillNumDto);
 
     /**
-     * 赋码 - 批量发放
-     * @param getFinanceNumDTO
+     * 赋码 - 票号段
+     * @param getBillNumDto
      * @return 票号段实体类
      */
-    NumSegDto getBatchCode(GetFinanceNumDto getFinanceNumDTO);
+    NumSegDto getBatchCode(GetBillNumDto getBillNumDto);
 
-    /**
-     * 若是一段从未使用的编码，则需要进行创建，需要操作人ID和名称
-     * @param createFinanceCodeDTO
-     * @return
-     */
-    boolean createNewCode(CreateFinanceCodeDto createFinanceCodeDTO);
 }
