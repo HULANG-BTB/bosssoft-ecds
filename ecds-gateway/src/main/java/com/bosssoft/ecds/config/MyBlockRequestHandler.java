@@ -1,10 +1,9 @@
 package com.bosssoft.ecds.config;
 
 import com.alibaba.csp.sentinel.adapter.gateway.sc.callback.BlockRequestHandler;
-import com.alibaba.csp.sentinel.slots.block.flow.FlowException;
+import com.alibaba.fastjson.JSON;
+import com.bosssoft.ecds.code.ExceptionDetail;
 import com.bosssoft.ecds.code.GatewayCode;
-import com.bosssoft.ecds.exception.ExceptionDetail;
-import com.bosssoft.ecds.response.ResponseResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -30,7 +29,7 @@ public class MyBlockRequestHandler implements BlockRequestHandler {
         String massage = "Blocked by Sentinel: " + t.getClass().getSimpleName() + ",time:"+new Date();
         String tags = t.getClass().getSimpleName();
         ExceptionDetail detail = new ExceptionDetail(GatewayCode.TOO_MANY_REQUESTS,massage,tags);
-        log.info("Blocked by Sentinel:{}",t.getClass().getSimpleName());
+        log.info(JSON.toJSONString(detail));
         return ServerResponse.status(HttpStatus.TOO_MANY_REQUESTS)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .body(BodyInserters.fromValue(GatewayCode.TOO_MANY_REQUESTS));
