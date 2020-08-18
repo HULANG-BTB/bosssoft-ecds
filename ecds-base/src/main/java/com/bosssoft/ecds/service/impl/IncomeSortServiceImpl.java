@@ -302,5 +302,15 @@ public class IncomeSortServiceImpl implements IncomeSortService {
         return queryResponseResult;
     }
 
+    @Override
+    public QueryResponseResult getBySubjectId(Long subjectId) {
+        if (subjectId == null) {
+            throw new CustomException(InComeResultCode.SUBJECT_ID_IS_NULL);
+        }
+        IncomeSortShowDTO incomeSortDTO = incomeSortDao.getBySubjectId(subjectId);
+        QueryResponseResult queryResponseResult = new QueryResponseResult(CommonCode.SUCCESS, incomeSortDTO);
+        return queryResponseResult;
+    }
+
 
 }
