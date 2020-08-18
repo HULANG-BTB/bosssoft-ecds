@@ -108,21 +108,7 @@ public class FinancialWriteOffController {
         WriteOffDetailDTO writeOffDetailDTO = new WriteOffDetailDTO();
         return financialWriteOffService.setResult(writeOffDetailDTO , writeOffResultDTO);
     }
-
-    /**
-     * 实现搜索功能
-     * 后端搜索完对多条数据进行分页
-     *
-     * @param searchFromVo
-     * @return java.lang.String
-     */
-    @ResponseBody
-    @RequestMapping(value = "/search", method = RequestMethod.POST)
-    public String search(@RequestBody SearchFromVO searchFromVo){
-        System.out.println(searchFromVo.getNumber());
-        return "success";
-    }
-
+    
     /**
      * 通过审核
      * 存储数据
