@@ -11,39 +11,46 @@ import javax.validation.constraints.NotBlank;
  * @Description
  */
 @Data
-public class GetFinanceNumVo {
+public class CreateBillCodeVo {
     /**
      * 区划编码
      */
-    @NotBlank(message = "请输入区划编码")
+    @NotBlank
     @Alias("fRegiId")
     private String regiId;
 
     /**
      * 分类号
      */
-    @NotBlank(message = "请输入分类编码")
+    @NotBlank
     @Alias("fSortId")
     private String sortId;
 
     /**
      * 种类号
      */
-    @NotBlank(message = "请输入种类编码")
+    @NotBlank
     @Alias("fTypeId")
     private String typeId;
 
     /**
      * 年度号
      */
-    @NotBlank(message = "请输入年度编码")
+    @NotBlank
     @Alias("fAnnualId")
     private String annualId;
 
     /**
-     * 申请的票数量，若为1则为申请单张票
+     * 操作人名称
      */
-    @NotBlank(message = "请输入取号数量")
-    @Alias("codeNum")
-    private Integer codeNum;
+    @NotBlank
+    @Alias("fOperator")
+    private String operator;
+
+    /**
+     * 操作人ID
+     */
+    @NotBlank
+    @Alias("fOperatorId")
+    private Long operatorId;
 }

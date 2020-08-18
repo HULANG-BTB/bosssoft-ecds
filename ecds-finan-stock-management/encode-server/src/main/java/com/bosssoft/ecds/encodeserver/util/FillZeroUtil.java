@@ -1,7 +1,8 @@
 package com.bosssoft.ecds.encodeserver.util;
 
-import com.bosssoft.ecds.encodeserver.entity.dto.CreateFinanceCodeDto;
-import com.bosssoft.ecds.encodeserver.entity.dto.GetFinanceNumDto;
+import com.bosssoft.ecds.encodeserver.entity.dto.CreateBatchBillCodeDto;
+import com.bosssoft.ecds.encodeserver.entity.dto.CreateBillCodeDto;
+import com.bosssoft.ecds.encodeserver.entity.dto.GetBillNumDto;
 
 import java.text.DecimalFormat;
 
@@ -22,17 +23,17 @@ public class FillZeroUtil {
         }
     }
 
-    public static void fillZero(GetFinanceNumDto getFinanceNumDto) {
-        getFinanceNumDto.setFRegiId(fillBefore(getFinanceNumDto.getFRegiId()));
-        getFinanceNumDto.setFSortId(fillBefore(getFinanceNumDto.getFSortId()));
-        getFinanceNumDto.setFTypeId(fillBefore(getFinanceNumDto.getFTypeId()));
-        getFinanceNumDto.setFAnnualId(fillBefore(getFinanceNumDto.getFAnnualId()));
+    public static void fillZero(GetBillNumDto getBillNumDto) {
+        getBillNumDto.setFRegiId(fillBefore(getBillNumDto.getFRegiId()));
+        getBillNumDto.setFSortId(fillBefore(getBillNumDto.getFSortId()));
+        getBillNumDto.setFTypeId(fillBefore(getBillNumDto.getFTypeId()));
+        getBillNumDto.setFAnnualId(fillBefore(getBillNumDto.getFAnnualId()));
     }
 
-    public static void fillZero(CreateFinanceCodeDto createFinanceCodeDto) {
-        createFinanceCodeDto.setFRegiId(fillBefore(createFinanceCodeDto.getFRegiId()));
-        createFinanceCodeDto.setFSortId(fillBefore(createFinanceCodeDto.getFSortId()));
-        createFinanceCodeDto.setFTypeId(fillBefore(createFinanceCodeDto.getFTypeId()));
-        createFinanceCodeDto.setFAnnualId(fillBefore(createFinanceCodeDto.getFAnnualId()));
+    public static void fillZero(CreateBillCodeDto createBillCodeDto) {
+        createBillCodeDto.setFRegiId(fillBefore(createBillCodeDto.getFRegiId()));
+        createBillCodeDto.setFSortId(fillBefore(createBillCodeDto.getFSortId()));
+        createBillCodeDto.setFTypeId(fillBefore(createBillCodeDto.getFTypeId()));
+        createBillCodeDto.setFAnnualId(fillBefore(createBillCodeDto.getFAnnualId()));
     }
 }

@@ -1,11 +1,9 @@
 package com.bosssoft.ecds.encodeserver.entity.vo;
 
 import cn.hutool.core.annotation.Alias;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
-import java.sql.Timestamp;
 
 /**
  * @Author 黄杰峰
@@ -13,46 +11,39 @@ import java.sql.Timestamp;
  * @Description
  */
 @Data
-public class CreateFinanceCodeVo {
+public class GetBillNumVo {
     /**
      * 区划编码
      */
-    @NotBlank
+    @NotBlank(message = "请输入区划编码")
     @Alias("fRegiId")
     private String regiId;
 
     /**
      * 分类号
      */
-    @NotBlank
+    @NotBlank(message = "请输入分类编码")
     @Alias("fSortId")
     private String sortId;
 
     /**
      * 种类号
      */
-    @NotBlank
+    @NotBlank(message = "请输入种类编码")
     @Alias("fTypeId")
     private String typeId;
 
     /**
      * 年度号
      */
-    @NotBlank
+    @NotBlank(message = "请输入年度编码")
     @Alias("fAnnualId")
     private String annualId;
 
     /**
-     * 操作人名称
+     * 申请的票数量，若为1则为申请单张票
      */
-    @NotBlank
-    @Alias("fOperator")
-    private String operator;
-
-    /**
-     * 操作人ID
-     */
-    @NotBlank
-    @Alias("fOperatorId")
-    private Long operatorId;
+    @NotBlank(message = "请输入取号数量")
+    @Alias("codeNum")
+    private Integer codeNum;
 }
