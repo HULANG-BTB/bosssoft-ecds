@@ -5,9 +5,9 @@
     <resultMap id="sourceSetMap" type="sourceSetPo">
         <id column="f_id" property="id"/>
         <result column="f_bill_type" property="billTypeCode"/>
-        <result column="f_pool_id" property="sourceID"/>
         <result column="f_push_num" property="pushNumber"/>
         <result column="f_min_stock" property="minNumber"/>
+        <result column="f_enable" property="enable"/>
         <result column="f_alter_code" property="alterCode"/>
         <result column="f_operator" property="operator"/>
         <result column="f_operator_id" property="operatorID"/>
@@ -36,10 +36,44 @@
             <if test="minNumber != null and minNumber != 0">
                 f_min_stock = #{minNumber},
             </if>
+            <if test="enable != null and minNumber != 0">
+                f_enable = #{enable},
+            </if>
             f_operator = #{operator}, f_operator_id = #{operatorID}
         </set>
         where f_bill_type = #{billTypeCode}
     </update>
+
+    <update id="deleteSourceTable" parameterType="sourceSetPo">
+        DROP TABLE IF EXISTS `bill_source`.f_pool_${billTypeCode}
+    </update>
+
+    <update id="createTable" parameterType="sourceSetPo">
+        CREATE TABLE `bill_source`.f_pool_${billTypeCode} (
+        `f_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+        `f_rgn_code` varchar(2) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL COMMENT '区块编码',
+        `f_type` varchar(2) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL COMMENT '票据编码',
+        `f_sort` varchar(2) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL COMMENT '票据编码',
+        `f_batch` varchar(2) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL COMMENT '年度编码',
+        `f_bill_code` varchar(10) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL COMMENT '票号',
+        `f_version` bigint(11) NOT NULL DEFAULT 0 COMMENT '乐观锁',
+        `f_operator` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '操作人',
+        `f_operator_id` bigint(20) NOT NULL COMMENT '操作人ID',
+        `f_create_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
+        `f_update_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
+         PRIMARY KEY (`f_id`) USING BTREE
+        )
+    </update>
+
+    <insert id="createTypeToPool" parameterType="sourceSetPo">
+        insert into f_bill_pool (f_bill_type, f_pool, f_operator, f_operator_id) value
+        (#{billTypeCode}, 'f_pool_${billTypeCode}', #{operator}, #{operatorID})
+    </insert>
+
+    <insert id="createSet" parameterType="sourceSetPo">
+        insert into uaa_set_ticketcenter (f_bill_type, f_push_num, f_min_stock, f_enable, f_alter_code, f_operator, f_operator_id)
+        value (#{billTypeCode}, #{pushNumber}, #{minNumber}, #{alterCode}, #{enable}, #{operator}, #{operatorID})
+    </insert>
 
     <resultMap id="sourceMessageMap" type="sourceMessagePo">
         <result column="f_bill_type" property="billTypeCode"/>
@@ -48,13 +82,13 @@
     </resultMap>
 
     <select id="retrieveSourceMessageList" resultMap="sourceMessageMap">
-        select u.f_bill_type, u.f_min_stock, b.f_pool from uaa_set_ticketcenter u left join bill_pool b
-        on u.f_pool_id = b.f_pool_id
+        select u.f_bill_type, u.f_min_stock, b.f_pool from uaa_set_ticketcenter u left join f_bill_pool b
+        on u.f_bill_type = b.f_bill_type
     </select>
 
     <select id="retrieveSourceMessageByCode" resultMap="sourceMessageMap">
-        select u.f_bill_type, u.f_min_stock, b.f_pool from uaa_set_ticketcenter u left join bill_pool b
-        on u.f_pool_id = b.f_pool_id where u.f_bill_type = #{billTypeCode}
+        select u.f_bill_type, u.f_min_stock, b.f_pool from uaa_set_ticketcenter u left join f_bill_pool b
+        on u.f_bill_type = b.f_bill_type where u.f_bill_type = #{billTypeCode}
     </select>
 
     <select id="retrieveSetList" resultMap="sourceSetMap">
