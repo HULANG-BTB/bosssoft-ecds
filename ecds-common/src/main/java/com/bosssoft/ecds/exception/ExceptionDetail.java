@@ -16,6 +16,11 @@ public class ExceptionDetail {
 
     String tags;
 
+    public ExceptionDetail (ResultCode resultCode, String tags){
+        this.code  = resultCode.code();
+        this.message = resultCode.message();
+        this.tags = tags;
+    }
     public ExceptionDetail (ResultCode resultCode, String errorMsg,String tags){
         this.code  = resultCode.code();
         this.tags = tags;
