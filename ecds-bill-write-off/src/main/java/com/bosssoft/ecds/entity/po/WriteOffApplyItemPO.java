@@ -42,10 +42,6 @@ public class WriteOffApplyItemPO {
     @TableField("f_bill_id")
     private String fBillId;
 
-    @ApiModelProperty(value = "票据代码")
-    @TableField("f_batch_code")
-    private String fBatchCode;
-
     @ApiModelProperty(value = "票据种类")
     @TableField("f_type")
     private String fType;

@@ -18,7 +18,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.lang.reflect.Type;
 import java.util.List;
 
 /**
@@ -74,10 +73,16 @@ public class UnitWriteOffController {
     @GetMapping("selectItem")
     public String selectItem(UnitWriteOffItemQueryInfoVO queryInfoVO) {
         UnitWriteOffItemQueryInfoDTO queryInfoDTO = BeanUtil.copyProperties(queryInfoVO, UnitWriteOffItemQueryInfoDTO.class);
-        IPage<WriteOffApplyItemDTO> page = unitWriteOffService.selectItem(queryInfoDTO);
+        IPage<WriteOffApplyItemDTO> page = unitWriteOffService.selectItemPage(queryInfoDTO);
         IPage<WriteOffApplyItemVO> data = Convert.convert(new TypeReference<IPage<WriteOffApplyItemVO>>() {}, page);
         data.setRecords(Convert.toList(WriteOffApplyItemVO.class, page.getRecords()));
         return ResponseUtils.getResponse(data, ResponseUtils.ResultType.OK);
+    }
+
+    @GetMapping("selectItemList")
+    public String selectItemList(String no) {
+        List<WriteOffApplyItemDTO> list = unitWriteOffService.selectItems(no);
+        return ResponseUtils.getResponse(Convert.toList(WriteOffApplyItemVO.class, list), ResponseUtils.ResultType.OK);
     }
     
     private void transformApplyDTOToVO(List<WriteOffApplyVO> list) {

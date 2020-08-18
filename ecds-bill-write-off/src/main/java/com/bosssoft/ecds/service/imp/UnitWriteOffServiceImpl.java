@@ -102,7 +102,7 @@ public class UnitWriteOffServiceImpl implements UnitWriteOffService {
     }
 
     @Override
-    public IPage<WriteOffApplyItemDTO> selectItem(UnitWriteOffItemQueryInfoDTO queryInfoDTO) {
+    public IPage<WriteOffApplyItemDTO> selectItemPage(UnitWriteOffItemQueryInfoDTO queryInfoDTO) {
         Page<WriteOffApplyItemPO> page = new Page<>(queryInfoDTO.getPageNum(), queryInfoDTO.getPageSize());
         QueryWrapper<WriteOffApplyItemPO> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(WriteOffApplyItemPO::getFPid, queryInfoDTO.getNo());
@@ -110,5 +110,13 @@ public class UnitWriteOffServiceImpl implements UnitWriteOffService {
         IPage<WriteOffApplyItemDTO> applyItemDTOIPage = Convert.convert(new TypeReference<IPage<WriteOffApplyItemDTO>>() {}, writeOffApplyItemPOIPage);
         applyItemDTOIPage.setRecords(Convert.toList(WriteOffApplyItemDTO.class, writeOffApplyItemPOIPage.getRecords()));
         return applyItemDTOIPage;
+    }
+
+    @Override
+    public List<WriteOffApplyItemDTO> selectItems(String no) {
+        QueryWrapper<WriteOffApplyItemPO> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().eq(WriteOffApplyItemPO::getFPid, no);
+        List<WriteOffApplyItemPO> itemPOList = writeOffApplyItemMapper.selectList(queryWrapper);
+        return Convert.toList(WriteOffApplyItemDTO.class, itemPOList);
     }
 }
