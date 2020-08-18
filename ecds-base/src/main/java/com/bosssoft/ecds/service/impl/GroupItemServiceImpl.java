@@ -43,7 +43,13 @@ public class GroupItemServiceImpl extends ServiceImpl<GroupItemDao, GroupItemPO>
     @Override
     public ResponseResult save(GroupItemDTO groupItemDTO) {
         // 将dto转化为po
-        GroupItemPO groupItemPO = MyBeanUtil.copyProperties(groupItemDTO, GroupItemPO.class);
+        QueryWrapper<GroupItemPO> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(GroupItemPO.F_GROUP_CODE,groupItemDTO.getGroupCode())
+                .and(wrapper->wrapper.eq(GroupItemPO.F_ITEM_CODE,groupItemDTO.getItemCode()));
+        if (groupItemDao.selectOne(queryWrapper) != null){
+            return new ResponseResult(ItemResultCode.ITEM_STD_EXISTS);
+        }
+        GroupItemPO groupItemPO =  MyBeanUtil.copyProperties(groupItemDTO,GroupItemPO.class);
         boolean save = super.save(groupItemPO);
         if (!save) {
             return new ResponseResult(CommonCode.FAIL);
