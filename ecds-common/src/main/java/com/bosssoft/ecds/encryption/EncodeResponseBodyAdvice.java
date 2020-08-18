@@ -4,10 +4,8 @@ package com.bosssoft.ecds.encryption;
 import com.bosssoft.ecds.response.CommonCode;
 import com.bosssoft.ecds.response.QueryResponseResult;
 import com.bosssoft.ecds.util.AESUtil;
-import com.bosssoft.ecds.util.RSAUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.ServerHttpRequest;
@@ -53,9 +51,9 @@ public class EncodeResponseBodyAdvice implements ResponseBodyAdvice {
                 log.info("需要加密的data数据：" + result);
                 String data = AESUtil.encrypt(result, key);
                 //用前端的公钥来加密AES的key，并转成Base64
-                String aesKey = Base64.encodeBase64String(RSAUtil.encryptByPublicKey(key.getBytes(), publicKey));
+//                String aesKey = Base64.encodeBase64String(RSAUtil.encryptByPublicKey(key.getBytes(), publicKey));
 
-                return new QueryResponseResult(CommonCode.SUCCESS, objectMapper.readValue("{\"data\":\"" + data + "\",\"aesKey\":\"" + aesKey + "\"}", Object.class));
+                return new QueryResponseResult(CommonCode.SUCCESS, objectMapper.readValue("{\"data\":\"" + data + "\",}", Object.class));
             } catch (Exception e) {
                 e.printStackTrace();
             }

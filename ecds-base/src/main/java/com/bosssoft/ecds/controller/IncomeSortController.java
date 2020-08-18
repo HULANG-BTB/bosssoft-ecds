@@ -1,6 +1,7 @@
 package com.bosssoft.ecds.controller;
 
 
+import com.bosssoft.ecds.encryption.SecretAnnotation;
 import com.bosssoft.ecds.entity.vo.incomesortvo.AddIncomeSortVO;
 import com.bosssoft.ecds.entity.vo.incomesortvo.DeleteIncomeSortVO;
 import com.bosssoft.ecds.entity.vo.incomesortvo.FuzzyQueryIncomeSortVO;
@@ -51,7 +52,9 @@ public class IncomeSortController {
 
     @ApiOperation(value = "分页查询收入类别信息", notes = "通过id查询显示子级收入类别")
     @PostMapping("/pageQueryById")
-//    @SecretAnnotation(encode = true, decode = true)
+    @SecretAnnotation(encode = true, decode = true)
+//    @Decrypt
+//    @Encrypt
     public QueryResponseResult pageQueryById(@RequestBody @Validated FuzzyQueryIncomeSortVO fuzzyQueryIncomeSortVO) {
         QueryResponseResult incomeSortDTOS = incomeSortService.pageQueryByName(fuzzyQueryIncomeSortVO);
         return incomeSortDTOS;

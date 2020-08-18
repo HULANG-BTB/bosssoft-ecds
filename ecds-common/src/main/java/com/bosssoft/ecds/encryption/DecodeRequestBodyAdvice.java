@@ -1,8 +1,12 @@
 package com.bosssoft.ecds.encryption;
 
 
+import com.alibaba.fastjson.JSONObject;
+import com.bosssoft.ecds.util.AESUtil;
 import com.bosssoft.ecds.util.AESUtils;
+import com.bosssoft.ecds.util.RSAUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpInputMessage;
@@ -76,7 +80,22 @@ public class DecodeRequestBodyAdvice implements RequestBodyAdvice {
             //获取请求数据
             String builderString = stringBuilder.toString();
             try {
-                String decodeString = AESUtils.decrypt(builderString);
+                JSONObject jsonObject = JSONObject.parseObject(builderString);
+                String data = jsonObject.get("data").toString();
+                String publicKey = jsonObject.get("publicKey").toString();
+//                String aesKey = jsonObject.get("aseKey").toString();
+                String decodeString = AESUtils.decrypt(data);
+                String aesKey = "";
+
+                //后端私钥解密的到AES的key
+                byte[] plaintext = RSAUtil.decryptByPrivateKey(Base64.decodeBase64(aesKey), RSAUtil.getPrivateKey());
+                aesKey = new String(plaintext);
+                log.info("解密出来的AES的key：" + aesKey);
+                //RSA解密出来字符串多一对双引号
+                aesKey = aesKey.substring(1, aesKey.length() - 1);
+                //AES解密得到明文data数据
+                String decrypt = AESUtil.decrypt(data, aesKey);
+
                 //把数据放到我们封装的对象中
                 return new MyHttpInputMessage(inputMessage.getHeaders(), new ByteArrayInputStream(decodeString.getBytes("UTF-8")));
             } catch (Exception e) {
