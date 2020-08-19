@@ -46,7 +46,7 @@ public class StockOutDto extends Model<StockOutDto> {
     @ApiModelProperty(value = "编制人")
     private String author;
 
-    @ApiModelProperty(value = "审核状态(0未1提交2通过3退回）")
+    @ApiModelProperty(value = "审核状态(0新建1保存2提交3通过4退回）")
     private Integer changeState;
 
     @ApiModelProperty(value = "摘要")

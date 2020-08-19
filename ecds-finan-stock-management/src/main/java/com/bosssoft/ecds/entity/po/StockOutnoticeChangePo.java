@@ -36,10 +36,10 @@ public class StockOutnoticeChangePo extends Model<StockOutnoticeChangePo> {
     private Long id;
 
     @ApiModelProperty(value = "业务ID")
-    @TableField("f_buss_id")
-    private Long bussId;
+    @TableField("f_pid")
+    private Long pid;
 
-    @ApiModelProperty(value = "变更状态(0无用1新增2修改3删除)")
+    @ApiModelProperty(value = "审核状态(0新建1保存2提交3通过4退回）")
     @TableField("f_change_state")
     private Integer changeState;
 
@@ -56,7 +56,7 @@ public class StockOutnoticeChangePo extends Model<StockOutnoticeChangePo> {
     @Version
     private Integer version;
 
-    @ApiModelProperty(value = "1新增　2修改   3 删除")
+    @ApiModelProperty(value = "变更状态(0无用1新增2修改3删除)")
     @TableField("f_altercode")
     private Integer altercode;
 

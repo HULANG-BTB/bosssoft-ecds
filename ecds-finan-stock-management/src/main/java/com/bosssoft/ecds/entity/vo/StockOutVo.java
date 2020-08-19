@@ -1,7 +1,5 @@
 package com.bosssoft.ecds.entity.vo;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -10,6 +8,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -22,7 +21,7 @@ import java.util.Date;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@ApiModel(value = "StockOutVo对象", description = "")
+@ApiModel(value = "StockOutVo对象", description = "StockOutVo对象")
 public class StockOutVo extends Model<StockOutVo> {
 
     @ApiModelProperty(value = "主键")
@@ -43,7 +42,7 @@ public class StockOutVo extends Model<StockOutVo> {
     @ApiModelProperty(value = "编制人")
     private String author;
 
-    @ApiModelProperty(value = "审核状态(0未1提交2通过3退回）")
+    @ApiModelProperty(value = "审核状态(0新建1保存2提交3通过4退回）")
     private Integer changeState;
 
     @ApiModelProperty(value = "摘要")
@@ -54,5 +53,10 @@ public class StockOutVo extends Model<StockOutVo> {
      * 用于出库变动表记录
      */
     private Integer altercode;
+
+    /**
+     * 出库所含的出库明细
+     */
+    private List<StockOutItemVo> outItemVos;
 
 }

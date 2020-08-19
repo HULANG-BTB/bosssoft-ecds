@@ -64,7 +64,7 @@ public class StockOutnoticeDto extends Model<StockOutnoticeDto> {
     @ApiModelProperty(value = "最后修改时间")
     private Date updateTime;
 
-    @ApiModelProperty(value = "审核状态")
+    @ApiModelProperty(value = "审核状态(0新建1保存2提交3通过4退回）")
     private Integer changeState;
 
     @ApiModelProperty(value = "审核日期")

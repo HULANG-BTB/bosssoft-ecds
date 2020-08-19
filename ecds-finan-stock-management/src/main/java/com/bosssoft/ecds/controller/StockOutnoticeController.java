@@ -8,13 +8,17 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.bosssoft.ecds.entity.PageResult;
+import com.bosssoft.ecds.entity.dto.StockOutChangeDto;
 import com.bosssoft.ecds.entity.dto.StockOutDto;
 import com.bosssoft.ecds.entity.dto.StockOutItemDto;
+import com.bosssoft.ecds.entity.po.StockOutnoticeChangePo;
 import com.bosssoft.ecds.entity.po.StockOutnoticeItemPo;
 import com.bosssoft.ecds.entity.po.StockOutnoticePo;
+import com.bosssoft.ecds.entity.vo.StockOutCheckResultVo;
 import com.bosssoft.ecds.entity.vo.StockOutItemVo;
 import com.bosssoft.ecds.entity.vo.StockOutPageVo;
 import com.bosssoft.ecds.entity.vo.StockOutVo;
+import com.bosssoft.ecds.service.StockOutnoticeChangeService;
 import com.bosssoft.ecds.service.StockOutnoticeItemService;
 import com.bosssoft.ecds.service.StockOutnoticeService;
 import com.bosssoft.ecds.util.ConverUtil;
@@ -27,6 +31,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.bosssoft.ecds.entity.constant.StockOutChangeConstant.UN_CHANGE;
 
 /**
  * <p>
@@ -46,6 +52,8 @@ public class StockOutnoticeController {
     private StockOutnoticeService outService;
     @Autowired
     private StockOutnoticeItemService itemService;
+    @Autowired
+    private StockOutnoticeChangeService changeService;
 
     private static final String SUCCESS = "success";
 
@@ -133,12 +141,12 @@ public class StockOutnoticeController {
      *
      * @return 出库通知单号（主键id）
      */
-    @PostMapping("/add")
+    @GetMapping("/add")
     public String add(@RequestParam String author) {
         return ResponseUtil.getResponse(
                 ResponseUtil.ResultType.OK.getCode(),
                 ResponseUtil.ResultType.OK.getMsg(),
-                outService.addNewBuss(author));
+                Convert.convert(StockOutDto.class, outService.addNewBuss(author)));
     }
 
     /**
@@ -147,114 +155,158 @@ public class StockOutnoticeController {
      * 后端写入保存数据。
      * 在此过程中，后台会进行一次自动审核，若数据没问题，则允许保存。
      *
-     * \@RequestBody StockOutVo outVo,
-     * \@RequestBody List<StockOutItemVo> outItemVos
-     * Map<StockOutVo, List<StockOutItemVo>>
-     *
-     * @param outMap key=出库表数据，value=出库明细表数据list
+     * @param outVo 出库vo，其中也包含了itemvo内容
      *
      * @return 结果
      */
     @PostMapping("/save")
-    public String save(@RequestBody Map<String, Object> outMap) {
-        /**
-         * 提取并转换成vo实体
-         */
-        JSONObject obj = new JSONObject(outMap);
-        StockOutVo outVo = Convert.convert(
-                StockOutVo.class,
-                obj.getJSONObject("outVo"));
-        List<StockOutItemVo> outItemVos = ConverUtil.converList(
-                StockOutItemVo.class,
-                obj.getJSONArray("outItemVos"));
+    public String save(@RequestBody StockOutVo outVo) {
         /**
          * 转换为Dto
          */
         StockOutDto outDto = Convert.convert(StockOutDto.class, outVo);
-        List<StockOutItemDto> outItemDtos = ConverUtil.converList(StockOutItemDto.class, outItemVos);
+        List<StockOutItemDto> outItemDtos = ConverUtil.converList(StockOutItemDto.class, outVo.getOutItemVos());
         outItemDtos.forEach(dto -> dto.setPid(outDto.getId()));
         /**
          * 自动审核，
          * 需要出库表和出库明细表数据正确
          */
-        if (outService.checkSave(outDto, outItemDtos)) {
+        if (outService.checkSave(outDto) && itemService.checkSave(outItemDtos)) {
             /**
              * 通过主键id，新增or更新出库表数据
              */
             outService.saveOrUpdate(
                     Convert.convert(StockOutnoticePo.class, outDto),
                     Wrappers.<StockOutnoticePo>lambdaQuery().eq(StockOutnoticePo::getId, outDto.getId()));
+
             /**
+             * 记录变动到出库变动表
              * 通过altercode 确定新增的变动表的altercode变动状态属性
              */
-
-
-            //变动表代码
-
+            changeService.save(Convert.convert(
+                    StockOutnoticeChangePo.class,
+                    ConverUtil.outVoToChangeDto(outVo)));
 
             /**
              * 通过pid，新增or更新出库明细表
              */
-            itemService.saveOrUpdateBatch(
-                    ConverUtil.converList(StockOutnoticeItemPo.class, outItemDtos));
-
-        }
-        return ResponseUtil.getResponse(
-                ResponseUtil.ResultType.OK.getCode(),
-                ResponseUtil.ResultType.OK.getMsg());
-    }
-
-    @PostMapping("/testmap")
-    public String testMap() {
-        Map<String, Object> outMap = new HashMap<>();
-        StockOutVo outVo = Convert.convert(StockOutVo.class, outService.getById(1));
-        List<StockOutItemVo> outItemVos = ConverUtil.converList(
-                StockOutItemVo.class,
-                itemService.lambdaQuery()
-                        .eq(StockOutnoticeItemPo::getPid, 1)
-                        .list());
-        outMap.put("outVo", outVo);
-        outMap.put("outItemVos", outItemVos);
-        String result = JSONUtil.toJsonStr(outMap);
-        log.info("-------------{}", result);
-        return result;
-    }
-
-
-    /**
-     * 提交审核
-     * 用户将保存的出库请求提交到审核人处。
-     *
-     * @return 提交是否成功
-     */
-    @RequestMapping("/submit")
-    public String submit() {
-
-        return SUCCESS;
-    }
-
-    /**
-     * 人工审核
-     * 人工进行判断出库请求是否通过审核。
-     * 参数中的changeState确定是3通过or4退回
-     *
-     * @param stockOutVo 出库请求vo
-     *
-     * @return 是否通过
-     */
-    @RequestMapping("check")
-    public String check(StockOutVo stockOutVo) {
-        StockOutnoticePo outnoticePo = Convert.convert(StockOutnoticePo.class, stockOutVo);
-        if(outnoticePo.updateById()) {
+            log.info("进入了save,dto:{}", outItemDtos.toString());
+            log.info(ConverUtil.converList(StockOutnoticeItemPo.class, outItemDtos).toString());
+            itemService.saveChange(ConverUtil.converList(StockOutnoticeItemPo.class, outItemDtos), outDto.getId());
+            /**
+             * 返回正确通知
+             */
             return ResponseUtil.getResponse(
                     ResponseUtil.ResultType.OK.getCode(),
-                    ResponseUtil.ResultType.OK.getMsg());
+                    ResponseUtil.ResultType.OK.getMsg(),
+                    true);
         } else {
             return ResponseUtil.getResponse(
                     ResponseUtil.ResultType.NOT_MODIFIED.getCode(),
                     ResponseUtil.ResultType.NOT_MODIFIED.getMsg(),
                     false);
         }
+    }
+
+    /**
+     * 提交审核
+     * 用户将保存的出库请求提交到审核人处。
+     * 更改审核状态为2：待审核
+     *
+     * @param id 出库主键
+     *
+     * @return 提交是否成功
+     */
+    @PutMapping("/submit")
+    public String submit(@RequestParam Long id) {
+        log.info("-----------------------id:{}", id);
+        Boolean result = outService.updateChangeState(id, UN_CHANGE);
+        return ResponseUtil.getResponse(
+                ResponseUtil.ResultType.OK.getCode(),
+                ResponseUtil.ResultType.OK.getMsg(),
+                result);
+    }
+
+    /**
+     * 提交多选list
+     * 更改审核状态为2：待审核
+     *
+     * @param outVos 出库vo的list
+     *
+     * @return 是否成功
+     */
+    @PutMapping("/submitAll")
+    public String submitAll(@RequestBody List<StockOutVo> outVos) {
+        List<StockOutDto> outDtos = ConverUtil.converList(StockOutDto.class, outVos);
+        Boolean result = outService.updateChangeState(outDtos, UN_CHANGE);
+        return ResponseUtil.getResponse(
+                ResponseUtil.ResultType.OK.getCode(),
+                ResponseUtil.ResultType.OK.getMsg(),
+                result);
+    }
+
+    /**
+     * 删除多选list
+     *
+     * @param outVos 要删除的出库vo的list
+     *
+     * @return 是否成功
+     */
+    @PutMapping("/deleteAll")
+    public String deleteAll(@RequestBody List<StockOutVo> outVos) {
+        List<StockOutnoticePo> pos = ConverUtil.converList(StockOutnoticePo.class, outVos);
+        Boolean result = outService.deleteByPos(pos);
+        return ResponseUtil.getResponse(
+                ResponseUtil.ResultType.OK.getCode(),
+                ResponseUtil.ResultType.OK.getMsg(),
+                result);
+    }
+
+    /**
+     * 人工审核
+     * 人工进行判断出库请求是否通过审核。
+     * 参数中的changeState是:3通过,4退回
+     *
+     * @param outVo 出库vo
+     *
+     * @return 是否通过
+     */
+    @PostMapping("check")
+    public String check(StockOutVo outVo) {
+        Boolean result = outService.updateChangeState(outVo.getId(), outVo.getChangeState());
+        return ResponseUtil.getResponse(
+                ResponseUtil.ResultType.OK.getCode(),
+                ResponseUtil.ResultType.OK.getMsg(),
+                result);
+    }
+
+    /**
+     * 审核多选list
+     * 更改审核状态为：
+     * 3：通过；
+     * 4：退回。
+     *
+     * @param outVos 出库vo的list
+     *
+     * @return 是否成功
+     */
+    @PutMapping("/checkAll")
+    public String checkAll(@RequestBody List<StockOutVo> outVos) {
+        if (outVos == null || outVos.isEmpty()) {
+            return ResponseUtil.getResponse(
+                    ResponseUtil.ResultType.BAD_REQUEST.getCode(),
+                    ResponseUtil.ResultType.BAD_REQUEST.getMsg(),
+                    false);
+
+        }
+        List<StockOutDto> outDtos = ConverUtil.converList(StockOutDto.class, outVos);
+        Integer changeState = outDtos.stream().findAny().get().getChangeState();
+        log.info("changeState(use Stream):{}", changeState);
+        Boolean result = outService.updateChangeState(outDtos, changeState);
+        return ResponseUtil.getResponse(
+                ResponseUtil.ResultType.OK.getCode(),
+                ResponseUtil.ResultType.OK.getMsg(),
+                result);
     }
 
 
