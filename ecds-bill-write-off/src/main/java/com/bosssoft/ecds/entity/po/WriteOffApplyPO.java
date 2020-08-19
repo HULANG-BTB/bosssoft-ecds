@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.Version;
 import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -48,7 +49,7 @@ public class WriteOffApplyPO {
 
     @ApiModelProperty(value = "合计份数")
     @TableField("f_number")
-    private int fNumber;
+    private Integer fNumber;
 
     @ApiModelProperty(value = "总金额")
     @TableField("f_total_amt")
@@ -63,7 +64,7 @@ public class WriteOffApplyPO {
     private Integer fChangeState;
 
     @ApiModelProperty(value = "审验结果：1 良好 2 合格 3 问题 4 整改通过")
-    @TableField("f_check_result")
+    @TableField(value = "f_check_result", updateStrategy = FieldStrategy.IGNORED)
     private Integer fCheckResult;
 
     @ApiModelProperty(value = "是否上报：1 未上报 2 已上报")
