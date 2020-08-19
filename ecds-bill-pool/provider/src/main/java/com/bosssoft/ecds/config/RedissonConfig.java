@@ -9,6 +9,11 @@ import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
 
+/**
+ * @author lixin
+ * @version 1.0
+ * @date 2020/8/18 10:43
+ */
 @Configuration
 public class RedissonConfig {
     @Bean(destroyMethod = "shutdown")

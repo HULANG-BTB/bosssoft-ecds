@@ -17,6 +17,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * @author lixin
+ * @version 1.0
+ * @date 2020/8/18 10:43
+ */
 @Component
 public class UpdateSourceMessageUtils {
 
@@ -42,12 +47,7 @@ public class UpdateSourceMessageUtils {
         List<SourceMessagePo> list;
         list = sourceSetDao.retrieveSourceMessageList();
 
-        List<String> stringList = billDao.retrieveBillTypeCode();
-
-        redisTemplate.delete("billTypeCode");
-        redisTemplate.opsForList().leftPushAll("billTypeCode", stringList);
-
-        logger.info("更新billTypeCode列表:" + stringList);
+        updateBillTypeCode();
 
         RLock lock = redissonClient.getLock(LOCK_KEY);
         RedissonRedLock redLock = new RedissonRedLock(lock);
@@ -58,7 +58,7 @@ public class UpdateSourceMessageUtils {
             if (isLock) {
                 for (int i = 0; i < list.size(); i++) {
                     redisTemplate.delete(list.get(i).getBillTypeCode());
-                    Map map = new HashMap();
+                    Map map = new HashMap(16);
                     map.put("table", list.get(i).getTable());
                     map.put("threshold", list.get(i).getThreshold());
                     redisTemplate.opsForHash().putAll(list.get(i).getBillTypeCode(), map);
@@ -78,12 +78,11 @@ public class UpdateSourceMessageUtils {
 
         SourceMessagePo sourceMessagePo = sourceSetDao.retrieveSourceMessageByCode(billTypeCode);
 
-        List<String> stringList = billDao.retrieveBillTypeCode();
+        if(sourceMessagePo.equals(null)) {
+            return;
+        }
 
-        redisTemplate.delete("billTypeCode");
-        redisTemplate.opsForList().leftPushAll("billTypeCode", stringList);
-
-        logger.info("更新billTypeCode列表:" + stringList);
+        updateBillTypeCode();
 
         RLock lock = redissonClient.getLock(LOCK_KEY);
         RedissonRedLock redLock = new RedissonRedLock(lock);
@@ -92,7 +91,7 @@ public class UpdateSourceMessageUtils {
             isLock = redLock.tryLock(100L, 10L, TimeUnit.SECONDS);
 
             if (isLock) {
-                Map map = new HashMap();
+                Map map = new HashMap(16);
                 map.put("table", sourceMessagePo.getTable());
                 map.put("threshold", sourceMessagePo.getThreshold());
                 redisTemplate.delete(sourceMessagePo.getBillTypeCode());
@@ -104,5 +103,14 @@ public class UpdateSourceMessageUtils {
         } finally {
             redLock.unlock();
         }
+    }
+
+    private void updateBillTypeCode() {
+        List<String> stringList = billDao.retrieveBillTypeCode();
+
+        redisTemplate.delete("billTypeCode");
+        redisTemplate.opsForList().leftPushAll("billTypeCode", stringList);
+
+        logger.info("票号编码链表更新完成 " + stringList.toString());
     }
 }

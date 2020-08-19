@@ -20,4 +20,6 @@ public interface PrintTemplateService extends IService<PrintTemplatePO> {
     boolean add(PrintTemplateDTO templateDTO);
 
     boolean remove(Long id);
+
+    PrintTemplateDTO getDtoById(Long id);
 }

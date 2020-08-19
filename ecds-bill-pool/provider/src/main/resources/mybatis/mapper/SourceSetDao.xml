@@ -10,20 +10,20 @@
         <result column="f_enable" property="enable"/>
         <result column="f_alter_code" property="alterCode"/>
         <result column="f_operator" property="operator"/>
-        <result column="f_operator_id" property="operatorID"/>
+        <result column="f_operator_id" property="operatorId"/>
         <result column="f_create_time" property="createDate"/>
         <result column="f_update_time" property="updateDate"/>
     </resultMap>
 
     <update id="updateMin" parameterType="sourceSetPo">
         update uaa_set_ticketcenter set f_min_stock = #{minNumber}, f_alter_code = #{alterCode},
-        f_operator = #{operator}, f_operator_id = #{operatorID}
+        f_operator = #{operator}, f_operator_id = #{operatorId}
         where f_bill_type = #{billTypeCode}
     </update>
 
     <update id="updatePushNumber" parameterType="sourceSetPo">
         update uaa_set_ticketcenter set f_push_num = #{pushNumber}, f_alter_code = #{alterCode},
-        f_operator = #{operator}, f_operator_id = #{operatorID}
+        f_operator = #{operator}, f_operator_id = #{operatorId}
         where f_bill_type = #{billTypeCode}
     </update>
 
@@ -39,7 +39,7 @@
             <if test="enable != null and minNumber != 0">
                 f_enable = #{enable},
             </if>
-            f_operator = #{operator}, f_operator_id = #{operatorID}
+            f_operator = #{operator}, f_operator_id = #{operatorId}
         </set>
         where f_bill_type = #{billTypeCode}
     </update>
@@ -67,12 +67,12 @@
 
     <insert id="createTypeToPool" parameterType="sourceSetPo">
         insert into f_bill_pool (f_bill_type, f_pool, f_operator, f_operator_id) value
-        (#{billTypeCode}, 'f_pool_${billTypeCode}', #{operator}, #{operatorID})
+        (#{billTypeCode}, 'f_pool_${billTypeCode}', #{operator}, #{operatorId})
     </insert>
 
     <insert id="createSet" parameterType="sourceSetPo">
         insert into uaa_set_ticketcenter (f_bill_type, f_push_num, f_min_stock, f_enable, f_alter_code, f_operator, f_operator_id)
-        value (#{billTypeCode}, #{pushNumber}, #{minNumber}, #{alterCode}, #{enable}, #{operator}, #{operatorID})
+        value (#{billTypeCode}, #{pushNumber}, #{minNumber}, #{alterCode}, #{enable}, #{operator}, #{operatorId})
     </insert>
 
     <resultMap id="sourceMessageMap" type="sourceMessagePo">

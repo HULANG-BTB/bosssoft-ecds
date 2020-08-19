@@ -11,8 +11,12 @@ import com.bosssoft.ecds.encodeserver.util.FillZeroUtil;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.log4j.Log4j2;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 /**
  * @Author 黄杰峰
@@ -48,12 +52,10 @@ public class CreateCodeController {
         // 填充0
         FillZeroUtil.fillZero(createBillCodeDto);
         boolean createdFlag = createCodeService.createSingleCode(createBillCodeDto);
-        if (createdFlag) {
-            return new ResponseResult(true, 200, "创建成功");
-        } else {
-            return new ResponseResult(false, 500, "已创建，请勿重复创建");
-        }
-    }
+        return createdFlag ?
+                new ResponseResult(true, 200, "创建成功") :
+                new ResponseResult(false, 500, "已创建，请勿重复创建");
+}
 
     @PostMapping("/batch")
     @ApiOperation(value = "批量创建新的票据代码", notes = "传入区划编码、分类编码、种类编码起始及末尾、年度编码、创建人和创建人Id进行创建，" +
@@ -66,10 +68,8 @@ public class CreateCodeController {
         BeanUtil.copyProperties(createBatchBillCodeVo, createBatchBillCodeDto);
 
         boolean createdFlag = createCodeService.createBatchCode(createBatchBillCodeDto);
-        if (createdFlag) {
-            return new ResponseResult(true, 200, "批量创建成功");
-        } else {
-            return new ResponseResult(false, 500, "批量创建失败，部分代码已创建");
-        }
+        return createdFlag ?
+                new ResponseResult(true, 200, "批量创建成功") :
+                new ResponseResult(false, 500, "批量创建失败，部分代码已创建");
     }
 }

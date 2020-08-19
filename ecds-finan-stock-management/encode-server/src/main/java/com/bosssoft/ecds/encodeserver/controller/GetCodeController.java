@@ -13,7 +13,11 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  * @Author 黄杰峰
@@ -50,11 +54,8 @@ public class GetCodeController {
         FillZeroUtil.fillZero(getBillNumDto);
         log.info("=====获取财政编码：");
         NumSegDto batchCode = getCodeService.getBatchCode(getBillNumDto);
-        log.info(batchCode);
-        if (batchCode != null) {
-            return new QueryResponseResult<>(CommonCode.GET_CODE_SUCCESS, batchCode);
-        } else {
-            return new ResponseResult(false, 500, "财政代码可能未创建，请创建后再赋码");
-        }
+        return batchCode != null ?
+                new QueryResponseResult<>(CommonCode.GET_CODE_SUCCESS, batchCode) :
+                new ResponseResult(false, 500, "财政代码可能未创建，请创建后再赋码");
     }
 }

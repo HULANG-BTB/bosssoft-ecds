@@ -1,5 +1,10 @@
 package com.bosssoft.ecds.entity.po;
 
+/**
+ * @author lixin
+ * @version 1.0
+ * @date 2020/8/18 10:43
+ */
 public class SourceMessagePo {
 
     private String billTypeCode;

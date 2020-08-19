@@ -45,4 +45,10 @@ class PrintTemplateServiceTest {
         templateDTO.setTypeId("02");
         printTemplateService.add(templateDTO);
     }
+
+    @Test
+    void getTest() {
+        PrintTemplateDTO templateDTO = printTemplateService.getDtoById(11L);
+        System.out.println(templateDTO.getTemplate());
+    }
 }

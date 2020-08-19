@@ -7,6 +7,8 @@ import com.bosssoft.ecds.template.util.AliyunOSSUtil;
 import com.bosssoft.ecds.template.util.TextValue;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 
@@ -28,6 +30,10 @@ public class ImageServiceImpl implements ImageService {
 
     @Autowired
     AliyunOSSUtil ossUtil;
+
+    /** 字体文件名，会从 Resources 中查找 */
+    @Value("${fontType}")
+    private String fontType;
 
     @Override
     public byte[] generateImage(NontaxBillDTO billDTO) {
@@ -75,8 +81,8 @@ public class ImageServiceImpl implements ImageService {
         }
 
         // 模板图片位置
-        String srcImgName = "classpath:templates/NontaxBill.png";
-        return addMark(billValues, srcImgName);
+        //String srcImgName = "classpath:templates/NontaxBill.png";
+        return addMark(billValues, getTemplateFile());
     }
 
     /**
@@ -131,23 +137,32 @@ public class ImageServiceImpl implements ImageService {
     }
 
     /**
+     * 获取模板图片的输入流
+     * @return 模板图片输入流
+     */
+    @Override
+    public InputStream getTemplateFile() {
+        ClassPathResource resource = new ClassPathResource("templates/NontaxBill.png");
+        InputStream is = null;
+        try {
+            is = resource.getInputStream();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return is;
+    }
+
+    /**
      * 使用 Graphics2D 在图片上绘制文字
      * @param billValues 包含文字内容，坐标
-     * @param srcImgName 可以带 `classpath:` 前缀的图片文件位置
+     * @param srcImgFile 图片文件输入流
      * @return 图片字节数组
      */
-    private byte[] addMark(List<TextValue> billValues, String srcImgName){
+    private byte[] addMark(List<TextValue> billValues, InputStream srcImgFile){
 
 //        Font font = new Font("宋体", Font.PLAIN, 16);
         Font font = getFileFont();
         Color color = new Color(5, 0, 0, 255);
-
-        File srcImgFile = null;
-        try {
-            srcImgFile = ResourceUtils.getFile(srcImgName);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
 
         Image srcImg = null;
         try {
@@ -213,13 +228,12 @@ public class ImageServiceImpl implements ImageService {
      * @return
      */
     private Font getFileFont() {
-        String fontName = "simsun.ttc";
+        String fontName = fontType;
         Font font = new Font("宋体", Font.PLAIN, 16);
         try {
-            File fontFile = ResourceUtils.getFile("classpath:" + fontName);
-//            FileInputStream is = new FileInputStream(fontFile);
-//            BufferedInputStream bis = new BufferedInputStream(is);
-            Font font1 = Font.createFont(Font.TRUETYPE_FONT, fontFile);
+            InputStream is = new ClassPathResource(fontName).getInputStream();
+            BufferedInputStream bis = new BufferedInputStream(is);
+            Font font1 = Font.createFont(Font.TRUETYPE_FONT, bis);
             font = font1.deriveFont((float) 16);
         } catch (IOException | FontFormatException e) {
             e.printStackTrace();

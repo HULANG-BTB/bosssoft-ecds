@@ -47,4 +47,12 @@ public class PrintTemplateServiceImpl extends ServiceImpl<PrintTemplateMapper, P
     public boolean remove(Long id) {
         return this.removeById(id);
     }
+
+    @Override
+    public PrintTemplateDTO getDtoById(Long id) {
+        PrintTemplatePO printTemplatePO = this.getById(id);
+        PrintTemplateDTO printTemplateDTO = new PrintTemplateDTO();
+        BeanUtils.copyProperties(printTemplatePO, printTemplateDTO);
+        return printTemplateDTO;
+    }
 }
