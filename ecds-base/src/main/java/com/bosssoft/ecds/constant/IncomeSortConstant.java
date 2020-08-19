@@ -27,6 +27,8 @@ public class IncomeSortConstant {
     public static final String F_NAME = "f_name";
     public static final String F_CODE = "f_code";
     public static final String F_LEVEL = "f_level";
+    public static final String F_INCOM_SORT_CODE = "f_incom_sort_code";
+    public static final String F_INCOME_SORT_ID = "f_income_sort_id";
 
 
 }

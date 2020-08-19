@@ -270,15 +270,15 @@ public class IncomeSortServiceImpl implements IncomeSortService {
         }
         //判断项目里是否存在收入类别信息
         QueryWrapper<ItemPO> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("f_logic_delete", IncomeSortConstant.LOGC_DELETE_NUM);
-        queryWrapper.eq("f_incom_sort_code", incomeSortDTO.getCode());
+        queryWrapper.eq(IncomeSortConstant.F_LOGIC_DELETE, IncomeSortConstant.LOGC_DELETE_NUM);
+        queryWrapper.eq(IncomeSortConstant.F_INCOM_SORT_CODE, incomeSortDTO.getCode());
         if (itemDao.selectOne(queryWrapper) != null) {
             throw new CustomException(InComeResultCode.ITEM_EXISTS);
         }
         //判断预算科目里是否存在收入类别信息
         QueryWrapper<IncomeSortSubjectPO> poQueryWrapper = new QueryWrapper<>();
-        poQueryWrapper.eq("f_logic_delete", IncomeSortConstant.LOGC_DELETE_NUM);
-        poQueryWrapper.eq("f_income_sort_id", incomeId);
+        poQueryWrapper.eq(IncomeSortConstant.F_LOGIC_DELETE, IncomeSortConstant.LOGC_DELETE_NUM);
+        poQueryWrapper.eq(IncomeSortConstant.F_INCOME_SORT_ID, incomeId);
         if (incomeSortSubjectDao.selectOne(poQueryWrapper) != null) {
             throw new CustomException(InComeResultCode.SUBJECT_EXISTS);
         }
