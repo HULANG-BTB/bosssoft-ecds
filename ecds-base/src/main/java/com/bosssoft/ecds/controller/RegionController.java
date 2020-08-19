@@ -75,7 +75,7 @@ public class RegionController {
     }
 
     @GetMapping("/getBusIds/{busParentId}")
-    @ApiOperation(value = "获取当前节点上级节点ID")
+    @ApiOperation(value = "获取当前节点父级以上节点ID")
     public QueryResponseResult getBusIds(@PathVariable("busParentId") Long pid){
         return regionService.getBusIds(pid);
     }

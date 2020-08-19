@@ -3,11 +3,6 @@ package com.bosssoft.ecds.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.bosssoft.ecds.exception.ExceptionCast;
-import com.bosssoft.ecds.response.CommonCode;
-import com.bosssoft.ecds.response.QueryResult;
-import com.bosssoft.ecds.response.QueryResponseResult;
-import com.bosssoft.ecds.response.ResponseResult;
 import com.bosssoft.ecds.dao.RegionMapper;
 import com.bosssoft.ecds.entity.po.AuthRegion;
 import com.bosssoft.ecds.entity.vo.AddRegionVO;
@@ -15,6 +10,11 @@ import com.bosssoft.ecds.entity.vo.EditRegionVO;
 import com.bosssoft.ecds.entity.vo.QueryRegionRequestVO;
 import com.bosssoft.ecds.entity.vo.RegionExt;
 import com.bosssoft.ecds.enums.RegionCode;
+import com.bosssoft.ecds.exception.ExceptionCast;
+import com.bosssoft.ecds.response.CommonCode;
+import com.bosssoft.ecds.response.QueryResponseResult;
+import com.bosssoft.ecds.response.QueryResult;
+import com.bosssoft.ecds.response.ResponseResult;
 import com.bosssoft.ecds.service.RegionService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +22,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import java.lang.reflect.Array;
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author: lpb
@@ -74,9 +76,7 @@ public class RegionServiceImp implements RegionService {
         if(size <= 0){
             size = 10;
         }
-        QueryWrapper queryWrapper = wrapRegionRequest(queryRegionRequest);
         Page<AuthRegion> pageInfo = new Page<>(page,size);
-//        IPage<AuthRegion> iPage = regionMapper.selectPage(pageInfo, queryWrapper);
         IPage<AuthRegion> iPage = regionMapper.pageList(pageInfo,queryRegionRequest);
         QueryResult<AuthRegion> queryResult = new QueryResult<>();
         queryResult.setList(iPage.getRecords());
@@ -121,7 +121,6 @@ public class RegionServiceImp implements RegionService {
             ExceptionCast.cast(RegionCode.REGION_NOTEXISTS);
         }
         BeanUtils.copyProperties(editRegion,authRegion);
-//        authRegion.setUpdateTime(new Date());
         regionMapper.updateById(authRegion);
         return ResponseResult.SUCCESS();
     }
@@ -202,21 +201,4 @@ public class RegionServiceImp implements RegionService {
         return new QueryResponseResult(CommonCode.SUCCESS,ids);
     }
 
-    /**
-     * 将查询条件进行包装
-     * @param queryRegionRequest 查询条件
-     * @return
-     */
-    private QueryWrapper wrapRegionRequest(QueryRegionRequestVO queryRegionRequest){
-        QueryWrapper<Object> queryWrapper = new QueryWrapper<>();
-        if(!StringUtils.isEmpty(queryRegionRequest.getId())){
-            queryWrapper.eq("f_id",queryRegionRequest.getId());
-        }
-        if(!StringUtils.isEmpty(queryRegionRequest.getParentId())){
-            queryWrapper.eq("f_id",queryRegionRequest.getParentId())
-                    .or()
-                    .eq("f_parentid",queryRegionRequest.getParentId());
-        }
-        return queryWrapper;
-    }
 }
