@@ -4,14 +4,8 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.lang.TypeReference;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.bosssoft.ecds.entity.dto.UnitWriteOffApplyQueryInfoDTO;
-import com.bosssoft.ecds.entity.dto.UnitWriteOffItemQueryInfoDTO;
-import com.bosssoft.ecds.entity.dto.WriteOffApplyDTO;
-import com.bosssoft.ecds.entity.dto.WriteOffApplyItemDTO;
-import com.bosssoft.ecds.entity.vo.UnitWriteOffApplyQueryInfoVO;
-import com.bosssoft.ecds.entity.vo.UnitWriteOffItemQueryInfoVO;
-import com.bosssoft.ecds.entity.vo.WriteOffApplyItemVO;
-import com.bosssoft.ecds.entity.vo.WriteOffApplyVO;
+import com.bosssoft.ecds.entity.dto.*;
+import com.bosssoft.ecds.entity.vo.*;
 import com.bosssoft.ecds.service.UnitWriteOffService;
 import com.bosssoft.ecds.util.ResponseUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -77,6 +71,16 @@ public class UnitWriteOffController {
         IPage<WriteOffApplyItemVO> data = Convert.convert(new TypeReference<IPage<WriteOffApplyItemVO>>() {}, page);
         data.setRecords(Convert.toList(WriteOffApplyItemVO.class, page.getRecords()));
         return ResponseUtils.getResponse(data, ResponseUtils.ResultType.OK);
+    }
+
+    @GetMapping("getBillInfo")
+    public String getBillInfo(BillQueryVO billQueryVO) {
+        BillQueryDTO billQueryDTO = BeanUtil.copyProperties(billQueryVO, BillQueryDTO.class);
+        BillInfoDTO billInfoDTO = unitWriteOffService.getData(billQueryDTO);
+        BillInfoVO billInfoVO = new BillInfoVO();
+        billInfoVO.setApplyItemVOS(Convert.toList(WriteOffApplyItemVO.class, billInfoDTO.getApplyItemDTOS()));
+        billInfoVO.setApplyIncomeVOS(Convert.toList(WriteOffApplyIncomeVO.class, billInfoDTO.getApplyIncomeDTOS()));
+        return ResponseUtils.getResponse(billInfoVO, ResponseUtils.ResultType.OK);
     }
     
     private void transformApplyDTOToVO(List<WriteOffApplyVO> list) {

@@ -2,35 +2,43 @@ package com.bosssoft.ecds.service.imp;
 
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.lang.TypeReference;
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bosssoft.ecds.dao.unit.WriteOffApplyItemMapper;
 import com.bosssoft.ecds.dao.unit.WriteOffApplyMapper;
-import com.bosssoft.ecds.entity.dto.UnitWriteOffApplyQueryInfoDTO;
-import com.bosssoft.ecds.entity.dto.UnitWriteOffItemQueryInfoDTO;
-import com.bosssoft.ecds.entity.dto.WriteOffApplyDTO;
-import com.bosssoft.ecds.entity.dto.WriteOffApplyItemDTO;
+import com.bosssoft.ecds.entity.dto.*;
 import com.bosssoft.ecds.entity.po.WriteOffApplyItemPO;
 import com.bosssoft.ecds.entity.po.WriteOffApplyPO;
+import com.bosssoft.ecds.service.BillService;
 import com.bosssoft.ecds.service.UnitWriteOffService;
+import com.bosssoft.ecds.util.ResponseUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class UnitWriteOffServiceImpl implements UnitWriteOffService {
     private final WriteOffApplyMapper writeOffApplyMapper;
     private final WriteOffApplyItemMapper writeOffApplyItemMapper;
+    private final BillService billService;
 
     @Autowired(required = false)
-    public UnitWriteOffServiceImpl (WriteOffApplyMapper writeOffApplyMapper, WriteOffApplyItemMapper writeOffApplyItemMapper) {
+    public UnitWriteOffServiceImpl (WriteOffApplyMapper writeOffApplyMapper,
+                                    WriteOffApplyItemMapper writeOffApplyItemMapper,
+                                    BillService billService) {
         this.writeOffApplyMapper = writeOffApplyMapper;
         this.writeOffApplyItemMapper = writeOffApplyItemMapper;
+        this.billService = billService;
     }
 
     @Override
@@ -110,5 +118,74 @@ public class UnitWriteOffServiceImpl implements UnitWriteOffService {
         IPage<WriteOffApplyItemDTO> applyItemDTOIPage = Convert.convert(new TypeReference<IPage<WriteOffApplyItemDTO>>() {}, writeOffApplyItemPOIPage);
         applyItemDTOIPage.setRecords(Convert.toList(WriteOffApplyItemDTO.class, writeOffApplyItemPOIPage.getRecords()));
         return applyItemDTOIPage;
+    }
+
+    @Override
+    public BillInfoDTO getData(BillQueryDTO billQueryDTO) {
+        ResponseUtils.ResponseBody responseBody = JSONUtil.toBean(billService.getWriteOffInfo(billQueryDTO.getStart(),
+                billQueryDTO.getEnd()), ResponseUtils.ResponseBody.class);
+        List<WriteOffDto> writeOffDtos = Convert.toList(WriteOffDto.class, responseBody.getData());
+        writeOffDtos.sort((o1, o2) -> {
+            int diff = Integer.parseInt(o1.getFBillNo()) - Integer.parseInt(o2.getFBillNo());
+            if (diff > 0) {
+                return 1;
+            } else if (diff < 0) {
+                return -1;
+            }
+            return 0;
+        });
+        Map<String, List<WriteOffApplyItemDTO>> map1 = new HashMap<>();
+        Map<String, WriteOffApplyIncomeDTO> map2 = new HashMap<>();
+        writeOffDtos.forEach(bill -> {
+            // 整合票号
+            if (map1.containsKey(bill.getFBillBatchCode())) {
+                List<WriteOffApplyItemDTO> list = map1.get(bill.getFBillBatchCode());
+                WriteOffApplyItemDTO writeOffApplyItemDTO = list.get(list.size() - 1);
+                if (Integer.parseInt(writeOffApplyItemDTO.getFBillNo2()) == Integer.parseInt(bill.getFBillNo()) - 1) {
+                    writeOffApplyItemDTO.setFNumber(writeOffApplyItemDTO.getFNumber() + 1);
+                    writeOffApplyItemDTO.setFBillNo2(bill.getFBillNo());
+                } else {
+                    WriteOffApplyItemDTO dto = new WriteOffApplyItemDTO();
+                    dto.setFBatchNo(bill.getFBillBatchCode());
+                    dto.setFBillCode(bill.getFBillId());
+                    dto.setFNumber(1);
+                    dto.setFBillNo1(bill.getFBillNo());
+                    dto.setFBillNo2(bill.getFBillNo());
+                    dto.setFAmt(BigDecimal.valueOf(bill.getFTotalAmt()));
+                    list.add(dto);
+                }
+            } else {
+                List<WriteOffApplyItemDTO> list = new ArrayList<>();
+                WriteOffApplyItemDTO writeOffApplyItemDTO = new WriteOffApplyItemDTO();
+                writeOffApplyItemDTO.setFBatchNo(bill.getFBillBatchCode());
+                writeOffApplyItemDTO.setFBillCode(bill.getFBillId());
+                // 票据名称
+                writeOffApplyItemDTO.setFNumber(1);
+                writeOffApplyItemDTO.setFBillNo1(bill.getFBillNo());
+                writeOffApplyItemDTO.setFBillNo2(bill.getFBillNo());
+                writeOffApplyItemDTO.setFAmt(BigDecimal.valueOf(bill.getFTotalAmt()));
+                list.add(writeOffApplyItemDTO);
+                map1.put(bill.getFBillBatchCode(), list);
+            }
+            // 整合项目
+            bill.getUneCbillItems().forEach(item -> {
+                if (map2.containsKey(item.getFItemCode())) {
+                    WriteOffApplyIncomeDTO writeOffApplyIncomeDTO = map2.get(item.getFItemCode());
+                    writeOffApplyIncomeDTO.setFAmt(writeOffApplyIncomeDTO.getFAmt().add(BigDecimal.valueOf(item.getFAmt())));
+                } else {
+                    WriteOffApplyIncomeDTO writeOffApplyIncomeDTO = new WriteOffApplyIncomeDTO();
+                    writeOffApplyIncomeDTO.setFItemCode(item.getFItemCode());
+                    writeOffApplyIncomeDTO.setFItemName(item.getFItemName());
+                    writeOffApplyIncomeDTO.setFUnits(item.getFUnits());
+                    writeOffApplyIncomeDTO.setFAmt(BigDecimal.valueOf(item.getFAmt()));
+                    map2.put(writeOffApplyIncomeDTO.getFItemCode(), writeOffApplyIncomeDTO);
+                }
+            });
+        });
+        List<WriteOffApplyItemDTO> applyItemDTOS = new ArrayList<>();
+        List<WriteOffApplyIncomeDTO> applyIncomeDTOS = new ArrayList<>();
+        map1.forEach((key, value) -> applyItemDTOS.addAll(value));
+        map2.forEach((key, value) -> applyIncomeDTOS.add(value));
+        return new BillInfoDTO(applyItemDTOS, applyIncomeDTOS);
     }
 }

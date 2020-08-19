@@ -1,10 +1,7 @@
 package com.bosssoft.ecds.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.bosssoft.ecds.entity.dto.UnitWriteOffApplyQueryInfoDTO;
-import com.bosssoft.ecds.entity.dto.UnitWriteOffItemQueryInfoDTO;
-import com.bosssoft.ecds.entity.dto.WriteOffApplyDTO;
-import com.bosssoft.ecds.entity.dto.WriteOffApplyItemDTO;
+import com.bosssoft.ecds.entity.dto.*;
 
 import java.util.List;
 
@@ -47,4 +44,11 @@ public interface UnitWriteOffService {
      * @return 分页对象
      */
     IPage<WriteOffApplyItemDTO> selectItemPage(UnitWriteOffItemQueryInfoDTO queryInfoDTO);
+
+    /**
+     * 从接口中获取数据并整合
+     * @param billQueryDTO 数据查询DTO
+     * @return 获取之后整合的数据
+     */
+    BillInfoDTO getData(BillQueryDTO billQueryDTO);
 }

@@ -2,8 +2,6 @@ package com.bosssoft.ecds.entity.vo;
 
 import lombok.Data;
 
-import java.util.Date;
-
 /**
  * @author hujierong
  * @date 2020-8-17
