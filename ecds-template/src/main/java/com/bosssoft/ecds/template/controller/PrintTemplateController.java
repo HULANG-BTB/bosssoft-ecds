@@ -1,9 +1,11 @@
 package com.bosssoft.ecds.template.controller;
 
 
-import com.bosssoft.ecds.template.entity.dto.NontaxBillDTO;
-import com.bosssoft.ecds.template.entity.dto.PrintTemplateDTO;
-import com.bosssoft.ecds.template.entity.vo.PrintTemplateVO;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.bosssoft.ecds.template.entity.dto.NontaxBillDto;
+import com.bosssoft.ecds.template.entity.dto.PrintTemplateDto;
+import com.bosssoft.ecds.template.entity.vo.PrintTemplateVo;
 import com.bosssoft.ecds.template.service.HtmlService;
 import com.bosssoft.ecds.template.service.PrintTemplateService;
 import com.bosssoft.ecds.template.util.BeanCopyUtil;
@@ -46,9 +48,9 @@ public class PrintTemplateController {
     @ApiOperation("列出所有的打印模板")
     @GetMapping("/list")
     public ResponseResult listTemplate() {
-        List<PrintTemplateDTO> templateDTOs = printTemplateService.listAll();
-        List<PrintTemplateVO> templateVOs =
-                BeanCopyUtil.copyListProperties(templateDTOs, PrintTemplateVO::new);
+        List<PrintTemplateDto> templateDTOs = printTemplateService.listAll();
+        List<PrintTemplateVo> templateVOs =
+                BeanCopyUtil.copyListProperties(templateDTOs, PrintTemplateVo::new);
         return new QueryResponseResult<>(CommonCode.SUCCESS, templateVOs);
     }
 
@@ -75,7 +77,7 @@ public class PrintTemplateController {
         }
 
         String content = new String(file.getBytes());
-        PrintTemplateDTO templateDTO = new PrintTemplateDTO();
+        PrintTemplateDto templateDTO = new PrintTemplateDto();
         templateDTO.setRgnCode(billCode.substring(0, 2));
         templateDTO.setTypeId(billCode.substring(2, 4));
         templateDTO.setSortId(billCode.substring(4, 6));
@@ -105,22 +107,49 @@ public class PrintTemplateController {
      * 根据模板id获取模板样板，即返回空的票样
      *
      * @param id 模板主键
-     * @return 模板文本文件
+     * @return 空白票据html
      */
     @ApiOperation("根据模板id获取模板票样")
     @GetMapping(value = "/content/{id}.html", produces = MediaType.TEXT_HTML_VALUE)
     public byte[] getHtml(@PathVariable Long id) {
-        PrintTemplateDTO templateDTO = printTemplateService.getDtoById(id);
-        // 空白票据
-        NontaxBillDTO billDTO = new NontaxBillDTO();
+        PrintTemplateDto templateDTO = printTemplateService.getDtoById(id);
+        // 渲染空白票据
+        NontaxBillDto billDTO = new NontaxBillDto();
         billDTO.setItems(new ArrayList<>());
         String htmlTemplate = htmlService.genBillHtml(billDTO, templateDTO.getTemplate());
         return htmlTemplate.getBytes();
     }
 
+    /**
+     * 根据模板id下载模板文件
+     *
+     * @param id 模板主键
+     * @return 票据模板ftl文件
+     */
+    @ApiOperation("根据模板id下载模板文件")
     @GetMapping(value = "/content/{id}.ftl", produces = MediaType.TEXT_PLAIN_VALUE)
     public byte[] getTemplate(@PathVariable Long id) {
-        PrintTemplateDTO templateDTO = printTemplateService.getDtoById(id);
+        PrintTemplateDto templateDTO = printTemplateService.getDtoById(id);
         return templateDTO.getTemplate().getBytes();
+    }
+
+    /**
+     * 模板列表分页查询
+     *
+     * @param current   第几页
+     * @param size 每页多少项
+     */
+    @ApiOperation("模板列表分页查询")
+    @GetMapping("/listPage")
+    public ResponseResult listPage(
+            @RequestParam
+            @ApiParam(value = "页码", example = "1")
+                    Long current,
+            @RequestParam(defaultValue = "10", required = false)
+            @ApiParam(value = "每页几项", example = "10")
+                    Long size
+    ) {
+        IPage<PrintTemplateVo> page = printTemplateService.getPageVO(new Page<>(current, size));
+        return new QueryResponseResult<>(CommonCode.SUCCESS, page);
     }
 }

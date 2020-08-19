@@ -2,10 +2,8 @@ package com.bosssoft.ecds.template.entity.vo;
 
 import lombok.Data;
 
-import java.sql.Blob;
-
 @Data
-public class PrintTemplateVO {
+public class PrintTemplateVo {
 
     /**
      * 主键

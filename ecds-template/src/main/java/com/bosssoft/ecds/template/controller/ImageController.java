@@ -1,6 +1,6 @@
 package com.bosssoft.ecds.template.controller;
 
-import com.bosssoft.ecds.template.entity.dto.NontaxBillDTO;
+import com.bosssoft.ecds.template.entity.dto.NontaxBillDto;
 import com.bosssoft.ecds.template.service.ImageService;
 import com.bosssoft.ecds.template.util.ResponseBody;
 import io.swagger.annotations.*;
@@ -8,8 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.util.FileCopyUtils;
-import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,7 +29,7 @@ public class ImageController {
      */
     @ApiOperation(value = "返回一个图片样板 PNG")
     @GetMapping(value = "/template", produces = MediaType.IMAGE_PNG_VALUE)
-    public byte[] pictureTemplate() throws IOException{
+    public byte[] pictureTemplate() throws IOException {
         InputStream inputStream = imageService.getTemplateFile();
         return IOUtils.toByteArray(inputStream);
     }
@@ -44,7 +42,7 @@ public class ImageController {
      */
     @ApiOperation("根据传入的票据信息实时渲染，返回PNG图片")
     @PostMapping(value = "/genImage", produces = MediaType.IMAGE_PNG_VALUE)
-    public byte[] generateImage(@RequestBody NontaxBillDTO billDTO) {
+    public byte[] generateImage(@RequestBody NontaxBillDto billDTO) {
         return imageService.generateImage(billDTO);
     }
 
@@ -57,7 +55,7 @@ public class ImageController {
      */
     @ApiOperation("根据传入的票据信息生成图片，返回图片的地址。图片储存在本地")
     @PostMapping("/getAddress")
-    public ResponseBody getImage(@RequestBody NontaxBillDTO billDTO, HttpServletRequest request) {
+    public ResponseBody getImage(@RequestBody NontaxBillDto billDTO, HttpServletRequest request) {
 
         // 裁剪得到根目录地址，例如：http://localhost:8080
         int l = request.getRequestURI().length();
@@ -77,8 +75,14 @@ public class ImageController {
      */
     @ApiOperation("根据传入的信息生成图片，返回图片的阿里云OSS地址")
     @PostMapping("/getRemoteAddress")
-    public ResponseBody getRemoteAddress(@RequestBody NontaxBillDTO billDTO) {
-        return ResponseBody.ok(imageService.getRemoteImage(billDTO));
+    public ResponseBody getRemoteAddress(
+            @RequestBody
+                    NontaxBillDto billDTO,
+            @RequestParam(defaultValue = "2592000000")
+            @ApiParam(value = "过期时间，默认是1个月", example = "0")
+                    Long expireTime
+    ) {
+        return ResponseBody.ok(imageService.getRemoteImage(billDTO, expireTime));
     }
 
     /**

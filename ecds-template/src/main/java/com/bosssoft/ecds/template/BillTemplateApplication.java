@@ -7,7 +7,6 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-@MapperScan("com.bosssoft.ecds.template.mapper")
 public class BillTemplateApplication {
 
     public static void main(String[] args) {

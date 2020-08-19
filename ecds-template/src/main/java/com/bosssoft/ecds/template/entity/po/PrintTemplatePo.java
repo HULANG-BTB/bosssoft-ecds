@@ -8,7 +8,6 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.sql.Blob;
 import java.io.Serializable;
 
 /**
@@ -21,7 +20,7 @@ import java.io.Serializable;
  */
 @Data
 @TableName("uaa_print_template")
-public class PrintTemplatePO extends Model<PrintTemplatePO> {
+public class PrintTemplatePo extends Model<PrintTemplatePo> {
 
     private static final long serialVersionUID = 1L;
 

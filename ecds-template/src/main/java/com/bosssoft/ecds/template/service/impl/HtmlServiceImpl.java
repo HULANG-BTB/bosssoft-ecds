@@ -1,6 +1,6 @@
 package com.bosssoft.ecds.template.service.impl;
 
-import com.bosssoft.ecds.template.entity.dto.NontaxBillDTO;
+import com.bosssoft.ecds.template.entity.dto.NontaxBillDto;
 import com.bosssoft.ecds.template.service.HtmlService;
 import freemarker.cache.StringTemplateLoader;
 import freemarker.template.Configuration;
@@ -42,7 +42,7 @@ public class HtmlServiceImpl implements HtmlService {
     }
 
     @Override
-    public String genBillHtml(NontaxBillDTO billDTO, String templateString) {
+    public String genBillHtml(NontaxBillDto billDTO, String templateString) {
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("billDTO", billDTO);
         return genHtml(dataMap, templateString);
