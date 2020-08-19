@@ -3,23 +3,16 @@ package com.bosssoft.ecds.util;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
 
-import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
-import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
-import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.HashMap;
@@ -79,8 +72,7 @@ public class RSAUtil {
         try {
             genKeyPair.putAll(genKeyPair());
         } catch (Exception e) {
-            //输出到日志文件中
-//            log.error(ErrorUtil.errorInfoToString(e));
+            e.printStackTrace();
         }
     }
 
@@ -100,6 +92,22 @@ public class RSAUtil {
         //私钥
         keyMap.put(PRIVATE_KEY, privateKey);
         return keyMap;
+    }
+
+    /**
+     * 获取私钥
+     */
+    public static String getPrivateKey() {
+        Key key = (Key) genKeyPair.get(PRIVATE_KEY);
+        return Base64.encodeBase64String(key.getEncoded());
+    }
+
+    /**
+     * 获取公钥
+     */
+    public static String getPublicKey() {
+        Key key = (Key) genKeyPair.get(PUBLIC_KEY);
+        return Base64.encodeBase64String(key.getEncoded());
     }
 
     /**
@@ -140,8 +148,6 @@ public class RSAUtil {
         //数据解密
         Cipher cipher = Cipher.getInstance(keyFactory.getAlgorithm());
         cipher.init(Cipher.DECRYPT_MODE, privateKey);
-//        byte[] out = cipher.doFinal(data);
-//        return Base64.encodeBase64String(cipher.doFinal(data));
         return cipher.doFinal(data);
     }
 
@@ -180,22 +186,6 @@ public class RSAUtil {
         return encryptAndDecryptOfSubsection(data, cipher, MAX_ENCRYPT_BLOCK);
     }
 
-    /**
-     * 获取私钥
-     */
-    public static String getPrivateKey() {
-        Key key = (Key) genKeyPair.get(PRIVATE_KEY);
-        return Base64.encodeBase64String(key.getEncoded());
-    }
-
-    /**
-     * 获取公钥
-     */
-    public static String getPublicKey() {
-        Key key = (Key) genKeyPair.get(PUBLIC_KEY);
-        return Base64.encodeBase64String(key.getEncoded());
-    }
-
 
     /**
      * 分段进行加密、解密操作
@@ -218,101 +208,9 @@ public class RSAUtil {
             offSet = i * encryptBlock;
         }
         out.close();
-//        return out.toByteArray();
         String encodeToString = Base64.encodeBase64String(out.toByteArray());
         return encodeToString;
     }
 
-
-    /**
-     * 用私钥加密
-     *
-     * @param key
-     * @param data
-     * @return
-     * @throws NoSuchAlgorithmException
-     * @throws InvalidKeySpecException
-     * @throws NoSuchPaddingException
-     * @throws IllegalBlockSizeException
-     * @throws BadPaddingException
-     * @throws InvalidKeyException
-     * @throws IOException
-     */
-    public static String encryptByPrivateKey(String key, String data) throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException, IOException {
-        byte[] decode = java.util.Base64.getDecoder().decode(key);
-        PKCS8EncodedKeySpec pkcs8EncodedKeySpec = new PKCS8EncodedKeySpec(decode);
-        KeyFactory kf = KeyFactory.getInstance(KEY_ALGORITHM);
-        PrivateKey generatePrivate = kf.generatePrivate(pkcs8EncodedKeySpec);
-        Cipher ci = Cipher.getInstance(KEY_ALGORITHM);
-        ci.init(Cipher.ENCRYPT_MODE, generatePrivate);
-
-        byte[] bytes = data.getBytes();
-        int inputLen = bytes.length;
-        //偏移量
-        int offLen = 0;
-        int i = 0;
-        ByteArrayOutputStream bops = new ByteArrayOutputStream();
-        while (inputLen - offLen > 0) {
-            byte[] cache;
-            if (inputLen - offLen > 117) {
-                cache = ci.doFinal(bytes, offLen, 117);
-            } else {
-                cache = ci.doFinal(bytes, offLen, inputLen - offLen);
-            }
-            bops.write(cache);
-            i++;
-            offLen = 117 * i;
-        }
-        bops.close();
-        byte[] encryptedData = bops.toByteArray();
-        String encodeToString = java.util.Base64.getEncoder().encodeToString(encryptedData);
-        return encodeToString;
-    }
-
-
-    /**
-     * 用公钥解密
-     *
-     * @param key
-     * @param data
-     * @return
-     * @throws NoSuchAlgorithmException
-     * @throws InvalidKeyException
-     * @throws NoSuchPaddingException
-     * @throws InvalidKeySpecException
-     * @throws BadPaddingException
-     * @throws IllegalBlockSizeException
-     * @throws IOException
-     */
-    public static String decryptByPublicKey(String key, String data) throws NoSuchAlgorithmException, InvalidKeyException, NoSuchPaddingException, InvalidKeySpecException, IllegalBlockSizeException, BadPaddingException, IOException {
-        byte[] decode = java.util.Base64.getDecoder().decode(key);
-//		PKCS8EncodedKeySpec pkcs8EncodedKeySpec = new PKCS8EncodedKeySpec(decode); //java底层 RSA公钥只支持X509EncodedKeySpec这种格式
-        X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(decode);
-        KeyFactory kf = KeyFactory.getInstance(KEY_ALGORITHM);
-        PublicKey generatePublic = kf.generatePublic(x509EncodedKeySpec);
-        Cipher ci = Cipher.getInstance(kf.getAlgorithm());
-        ci.init(Cipher.DECRYPT_MODE, generatePublic);
-
-        byte[] bytes = java.util.Base64.getDecoder().decode(data);
-        int inputLen = bytes.length;
-        int offLen = 0;
-        int i = 0;
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        while (inputLen - offLen > 0) {
-            byte[] cache;
-            if (inputLen - offLen > 128) {
-                cache = ci.doFinal(bytes, offLen, 128);
-            } else {
-                cache = ci.doFinal(bytes, offLen, inputLen - offLen);
-            }
-            byteArrayOutputStream.write(cache);
-            i++;
-            offLen = 128 * i;
-
-        }
-        byteArrayOutputStream.close();
-        byte[] byteArray = byteArrayOutputStream.toByteArray();
-        return new String(byteArray);
-    }
 }
 
