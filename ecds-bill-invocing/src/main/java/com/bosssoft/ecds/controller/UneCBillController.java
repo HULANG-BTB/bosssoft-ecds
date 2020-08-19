@@ -1,6 +1,8 @@
 package com.bosssoft.ecds.controller;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -8,20 +10,28 @@ import com.bosssoft.ecds.entity.dto.*;
 import com.bosssoft.ecds.entity.po.UneCbill;
 import com.bosssoft.ecds.entity.po.UneCbillItem;
 import com.bosssoft.ecds.entity.pojo.BatchPojo;
+import com.bosssoft.ecds.entity.vo.SendMailVo;
+import com.bosssoft.ecds.entity.vo.SendSmsVo;
 import com.bosssoft.ecds.entity.vo.UneCbillVo;
 import com.bosssoft.ecds.service.UneCbillService;
-import com.bosssoft.ecds.service.UnitManagerService;
+import com.bosssoft.ecds.service.client.MessageService;
+import com.bosssoft.ecds.service.client.TemplateService;
+import com.bosssoft.ecds.service.client.UnitManagerService;
+import com.bosssoft.ecds.service.VerifyService;
 import com.bosssoft.ecds.util.CommonUtil;
 import com.bosssoft.ecds.util.ResponseUtils;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.redisson.Redisson;
-import org.redisson.api.RLock;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
+import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.locks.ReentrantLock;
 
 @Slf4j
@@ -31,20 +41,27 @@ import java.util.concurrent.locks.ReentrantLock;
 public class UneCBillController {
 
     @Autowired
+    private TemplateService templateService;
+
+    @Autowired
     private UnitManagerService unitManagerService;
 
     @Autowired
     private UneCbillService uneCbillService;
 
-/*    @Autowired
-    private Redisson redisson;*/
+    //@Autowired
+    //private Redisson redisson;
+
+    @Autowired
+    private VerifyService verifyService;
 
     @Autowired
     private CommonUtil commonUtil;
 
-    private ReentrantLock lock = new ReentrantLock();
+    @Autowired
+    private MessageService messageService;
 
-    //String lockKey = "lockKey";
+    private ReentrantLock lock = new ReentrantLock();
 
     /**
      * 分页查询当前单位的开票记录
@@ -67,7 +84,13 @@ public class UneCBillController {
     @RequestMapping(value = "/getUneCbillById", method = RequestMethod.GET)
     public String getUneCbillById(String billId) {
         log.info(billId);
-        return ResponseUtils.getResponse(uneCbillService.getUneCBillById(billId), ResponseUtils.ResultType.OK);
+        UneCbillVo uneCbillVo = new UneCbillVo();
+        UneCbill uneCbill = uneCbillService.getUneCBillById(billId);
+        if (uneCbill != null) {
+            BeanUtil.copyProperties(uneCbill, uneCbillVo);
+            return ResponseUtils.getResponse(uneCbillVo, ResponseUtils.ResultType.OK);
+        }
+        return ResponseUtils.getResponse(404, "票据不存在");
     }
 
     /**
@@ -82,7 +105,11 @@ public class UneCBillController {
         queryWrapper.eq("f_bill_id", billId)
                 .eq("f_check_code", checkCode);
         UneCbill uneCbill = uneCbillService.getBillByIdAndCheckCode(queryWrapper);
-        return ResponseUtils.getResponse(uneCbill, ResponseUtils.ResultType.OK);
+        log.info("success");
+        if (uneCbill != null) {
+            return ResponseUtils.getResponse(uneCbill, ResponseUtils.ResultType.OK);
+        }
+        return ResponseUtils.getResponse(404, "票据不存在");
     }
 
     /**
@@ -94,13 +121,23 @@ public class UneCBillController {
     public String addBillVerify(@RequestParam String unitName) {
         //TODO 执行开票前验证（单位是否欠缴/开票点开票数是否已经达到上限/当前单位是否有可用票据）--->返回预警信息
         WarnDto warnDto = new WarnDto();
+        /*
         int total = uneCbillService.billCount();
-        if (unitManagerService.isOutLimit(unitName, total)) {
+        if (unitManagerService.isOutLimit(unitName)) {
             warnDto.setEvtName("单位开票数限制");
             warnDto.setMntCont("单位目前开票数已经达到最大开票限制，禁止开票");
             warnDto.setMntTime(new Date());
+            return ResponseUtils.getResponse(失败);
+        }else if(unitManagerService.isArrear(batchPojo.getUnitName())){
+            warnDto.setEvtName("单位欠缴");
+            warnDto.setMntCont("单位目前已欠缴，禁止开票");
+            warnDto.setMntTime(new Date());
+        } else if(!unitManagerService.hasAvailableBill) {
+            warnDto.setEvtName("单位无可用票据");
+            warnDto.setMntCont("单位目前已没有可以使用的票据，禁止开票");
+            warnDto.setMntTime(new Date());
         }
-//        if (unitManagerService.)
+        */
         return ResponseUtils.getResponse(ResponseUtils.ResultType.OK);
     }
 
@@ -133,7 +170,6 @@ public class UneCBillController {
     @RequestMapping(path = "getItemList", method = RequestMethod.GET)
     public String getItemLisst(String unitName) {
         String itemList = unitManagerService.getItemList(unitName);
-        //转换成json字符串传到前端
         return "";
     }
 
@@ -149,23 +185,119 @@ public class UneCBillController {
      */
     @RequestMapping(path = "/addBill", method = RequestMethod.POST)
     public String addBill(@RequestBody BatchPojo batchPojo) {
-        //1 验证数据完整性/金额小于收费标准上限
-        log.info(batchPojo.getPayerDto().getfPayerName() + ":姓名");
         List<UneCbillItemDto> itemDtos = batchPojo.getItemDtos();
-        log.info(itemDtos.get(0).toString() + "金额:" + batchPojo.getAmt());
-        //2 分布式下，防止多个进程同时开票拿到同一张票据
+        //2 分布式下，防止多个进程同时开票
         //RLock lock = redisson.getLock(lockKey);
         lock.lock();
         try {
             //TODO 调用服务新增票据
             UneCbill uneCbill = commonUtil.convert(batchPojo.getUnitName(), batchPojo.getPayerDto(),
-                    batchPojo.getUneCbillDto(), commonUtil.generateID(), batchPojo.getAmt());
-            uneCbillService.addUneCbill(uneCbill);
-
-            //插入成功后移除仓库中相对应的票号
+                    batchPojo.getUneCbillDto(), commonUtil.generateID(), batchPojo.getfAmt());
+            uneCbillService.addUneCbill(uneCbill, itemDtos);
         } finally {
             lock.unlock();
         }
         return ResponseUtils.getResponse(ResponseUtils.ResultType.OK);
+    }
+
+    /**
+     * 获取票据模板
+     * @param billId
+     * @return
+     */
+    @RequestMapping(path = "/getTemplate", method = RequestMethod.GET)
+    public String getTemplate(String billId) throws ExecutionException, InterruptedException {
+        UneCbill uneCbill = uneCbillService.getUneCBillById(billId);
+        if (uneCbill != null) {
+            NontaxBillDTO nontaxBillDTO = uneCbillService.convert(uneCbill);
+            List<BillItemDTO> uneCbillItemDtos = new ArrayList<>();
+            List<UneCbillItem> uneCbillItems = uneCbillService.getItems(billId);
+            for (UneCbillItem uneCbillItem : uneCbillItems) {
+                BillItemDTO billItemDTO = uneCbillService.convertToItem(uneCbillItem);
+                uneCbillItemDtos.add(billItemDTO);
+            }
+            nontaxBillDTO.setItems(uneCbillItemDtos);
+            log.info(JSON.toJSONString(nontaxBillDTO));
+            String url = templateService.getTemplate(nontaxBillDTO);
+            return ResponseUtils.getResponse(url, ResponseUtils.ResultType.OK);
+        }
+        return ResponseUtils.getResponse(404, "票据不存在");
+    }
+
+    /**
+     * 缴款方需要的DTO
+     * @param fPayerTel
+     * @param checkCode
+     * @return
+     */
+    @RequestMapping(path = "/getItems", method = RequestMethod.GET)
+    public String getItems(String fPayerTel, String checkCode) {
+        QueryWrapper<UneCbill> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("f_payer_tel", fPayerTel)
+                .eq("f_check_code", checkCode);
+        UneCbill uneCbill = uneCbillService.getBillByIdAndCheckCode(queryWrapper);
+        if (uneCbill != null) {
+            PayDto payDto = new PayDto();
+            payDto.setPayerName(uneCbill.getFPayerName());
+            List<UneCbillItem> uneCbillItem = uneCbillService.getItems(String.valueOf(uneCbill.getFId()));
+            List<UneCbillItemDto> itemDtos = new ArrayList<>();
+            for (UneCbillItem uneCbillItem1 : uneCbillItem) {
+                UneCbillItemDto uneCbillItemDto = new UneCbillItemDto();
+                BeanUtil.copyProperties(uneCbillItem1, uneCbillItemDto);
+                itemDtos.add(uneCbillItemDto);
+            }
+            payDto.setUneCbillItems(itemDtos);
+            return ResponseUtils.getResponse(JSON.toJSONString(payDto), ResponseUtils.ResultType.OK);
+        }
+        return ResponseUtils.getResponse(404, "票据不存在");
+    }
+
+    /**
+     * 发送邮件
+     * @param billId
+     * @return
+     */
+    @RequestMapping(path = "/sendMail", method = RequestMethod.GET)
+    public String sendMail(String billId) throws ExecutionException, InterruptedException, JsonProcessingException {
+        UneCbill uneCbill = uneCbillService.getUneCBillById(billId);
+        if (uneCbill != null) {
+            MessageDto messageDto = new MessageDto();
+            BeanUtil.copyProperties(uneCbill, messageDto);
+            messageDto.setFBillType("通用非税票据");
+            messageDto.setFBillImgUrl("url");
+            SendMailVo sendMailVo = new SendMailVo();
+            String str = new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(messageDto);
+            sendMailVo.setContent(str);
+            sendMailVo.setMailTo(uneCbill.getFPayerEmail());
+            sendMailVo.setSubject("邮件通知");
+            sendMailVo.setTemplate("billTemplate.ftl");
+            log.info(System.currentTimeMillis() + "");
+            String res = messageService.sendMail(sendMailVo);
+            JSONObject jsonObject = JSONObject.parseObject(res);
+            if (jsonObject.getString("status").equals(200)) {
+                return ResponseUtils.getResponse(res, ResponseUtils.ResultType.OK);
+            }
+            return ResponseUtils.getResponse(404, "消息发送失败");
+        }
+        return ResponseUtils.getResponse(404, "票据不存在");
+    }
+
+    /**
+     * 发送短信
+     * @param billId
+     * @return
+     */
+    @RequestMapping(path = "/sendSms", method = RequestMethod.GET)
+    public String sendSms(String billId)  throws ExecutionException, InterruptedException{
+        UneCbill uneCbill = uneCbillService.getUneCBillById(billId);
+        MessageDto messageDto = new MessageDto();
+        BeanUtil.copyProperties(uneCbill, messageDto);
+        messageDto.setFBillImgUrl("url");
+        SendSmsVo sendSmsVo = new SendSmsVo();
+        sendSmsVo.setSmsFrom("开票单位：boss");
+        sendSmsVo.setSmsTo(uneCbill.getFPayerTel());
+        sendSmsVo.setContent(JSON.toJSONString(messageDto));
+        String res = messageService.send(sendSmsVo);
+        return res;
     }
 }
