@@ -6,11 +6,14 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bosssoft.ecds.msg.entity.dto.SmsDto;
 import com.bosssoft.ecds.msg.entity.po.SmsPo;
 import com.bosssoft.ecds.msg.entity.vo.SmsQueryVo;
+import com.bosssoft.ecds.msg.exception.MsgException;
 import com.bosssoft.ecds.msg.mapper.SmsMapper;
 import com.bosssoft.ecds.msg.service.SmsService;
 import com.bosssoft.ecds.msg.util.DozerUtils;
+import com.bosssoft.ecds.msg.util.SnowflakeUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -34,7 +37,6 @@ public class SmsServiceImpl extends ServiceImpl<SmsMapper, SmsPo> implements Sms
      * 先从redis中查找，若找不到则从mysql中查找
      * 返回从mysql数据库中的查找结果
      * 若不为空，则存入redis中，设置5分钟超时时间
-     *
      * @param tel        11位电话号码
      * @param verifyCode 6位校验码
      * @return 结果的json对象
@@ -42,7 +44,7 @@ public class SmsServiceImpl extends ServiceImpl<SmsMapper, SmsPo> implements Sms
     @Override
     public String getBillByKey(String tel, String verifyCode) {
         // 先从redis中查询记录
-        String key = "sms_" + tel + "_" + verifyCode;
+        String key = "bill_" + tel + "_" + verifyCode;
         String content = (String) redisTemplate.opsForValue().get(key);
         if (StringUtils.isNotBlank(content)) {
             // redis中非空，从redis找到了content
@@ -83,7 +85,6 @@ public class SmsServiceImpl extends ServiceImpl<SmsMapper, SmsPo> implements Sms
 
     /**
      * 获取匹配的发信记录数
-     *
      * @param smsQuery 查询对象
      * @return 发信记录数
      */
@@ -95,7 +96,6 @@ public class SmsServiceImpl extends ServiceImpl<SmsMapper, SmsPo> implements Sms
 
     /**
      * 修改发信状态
-     *
      * @param smsDto 短信信息
      * @return 修改成功与否
      */
@@ -119,9 +119,31 @@ public class SmsServiceImpl extends ServiceImpl<SmsMapper, SmsPo> implements Sms
         return baseMapper.updateById(dbSms) > 0;
     }
 
+    @Async
+    @Override
+    public void saveAutoSentSms(SmsDto smsDto) {
+        // 存入redis key = bill_tel_verifyCode;value = 票据的json
+        insertToRedis(smsDto);
+
+        SmsPo smsPo = DozerUtils.map(smsDto, SmsPo.class);
+        smsPo.setId(SnowflakeUtil.genId());
+        smsPo.setSentDate(new Date());
+        boolean b = baseMapper.insert(smsPo) > 0;
+        if (!b) {
+            throw new MsgException("短信记录保存失败!");
+        }
+    }
+
+    public void insertToRedis(SmsDto smsDto) {
+        String value = smsDto.getContent();
+        // 存入数据库
+        // 存入数据库中的key格式为 bill_tel_verifyCode
+        String key = "bill_" + smsDto.getSmsTo() + "_" + smsDto.getVerifyCode();
+        redisTemplate.opsForValue().set(key, value, 30, TimeUnit.DAYS);
+    }
+
     /**
      * 获取queryWrapper
-     *
      * @param smsQuery 查询对象
      * @return QueryWrapper
      */

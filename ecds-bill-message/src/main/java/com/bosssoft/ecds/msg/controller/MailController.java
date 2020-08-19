@@ -1,7 +1,6 @@
 package com.bosssoft.ecds.msg.controller;
 
 import com.bosssoft.ecds.msg.entity.dto.MailDto;
-import com.bosssoft.ecds.msg.entity.dto.MessageDto;
 import com.bosssoft.ecds.msg.entity.vo.*;
 import com.bosssoft.ecds.msg.service.MailService;
 import com.bosssoft.ecds.msg.service.SendMailService;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -37,40 +35,21 @@ public class MailController {
 
     /**
      * 邮件发送接口
+     *
      * @param sendMailVo 邮件发送对象包括：邮件收件人、主题、正文内容（messageDto的json格式）
      * @return 发送结果，成功与否
-     * @throws ExecutionException 多线程异常
+     * @throws ExecutionException   多线程异常
      * @throws InterruptedException 多线程异常
-     * MessageDto messageDto = new MessageDto(
-     *                 "12345678",
-     *                 "12345678901",
-     *                 new Date(),
-     *                 "500",
-     *                 "测试单位",
-     *                 "张三",
-     *                 "email",
-     *                 "tel",
-     *                 "a1b2c3",
-     *                 "电子票据",
-     *                 "https://tse4-mm.cn.bing.net/th/id/OIP.jCt8g_6ITHZ6phR83HTjwwHaE8?pid=Api&rs=1"
-     *         );
-     *         mailVo.setSubject("电子票据");
-     *         ObjectMapper objectMapper = new ObjectMapper();
-     *         String s = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(messageDto);
-     *         mailVo.setContent(s);
-     *         mailVo.setTemplate("billTemplate.ftl");
      */
     @ApiOperation("发送邮件")
     @PostMapping("/send")
     public String sendMail(@RequestBody SendMailVo sendMailVo) throws ExecutionException, InterruptedException {
-
-        log.info("进来了");
         MailDto mailDto = DozerUtils.map(sendMailVo, MailDto.class);
-        Boolean isSent = sendMailService.sendMail(mailDto).get().getIsSent();
-
+        MailDto sentMail = sendMailService.sendMail(mailDto).get();
+        mailService.saveAutoSentMail(sentMail);
         return ResponseUtils.getResponse(
                 ResponseUtils.ResultType.OK.getCode(),
-                ResponseUtils.ResultType.OK.getMsg(), isSent);
+                ResponseUtils.ResultType.OK.getMsg(), sentMail.getIsSent());
     }
 
     /**
@@ -125,6 +104,7 @@ public class MailController {
 
     /**
      * 邮件添加功能
+     *
      * @param mailVo 邮件详情
      */
     @ApiOperation("添加邮件发件记录")
@@ -132,7 +112,7 @@ public class MailController {
     public String add(@RequestBody MailVo mailVo) {
         MailDto mailDto = DozerUtils.map(mailVo, MailDto.class);
         // 修改isSent
-        boolean b = mailService.saveMail(mailDto);
+        boolean b = mailService.saveMailManually(mailDto);
 
         if (b) {
             return ResponseUtils.getResponse(
@@ -150,6 +130,7 @@ public class MailController {
 
     /**
      * 邮件删除功能
+     *
      * @param id 邮件id
      */
     @ApiOperation("根据Id删除邮件发件记录")
