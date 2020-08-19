@@ -3,6 +3,7 @@ package com.bosssoft.ecds.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.bosssoft.ecds.exception.ExceptionCast;
 import com.bosssoft.ecds.response.CommonCode;
 import com.bosssoft.ecds.response.QueryResult;
 import com.bosssoft.ecds.response.QueryResponseResult;
@@ -21,10 +22,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.Array;
+import java.util.*;
 
 /**
  * @author: lpb
@@ -92,22 +91,19 @@ public class RegionServiceImp implements RegionService {
      */
     @Override
     @Transactional
-    public ResponseResult add(String userName, Long uid, AddRegionVO addRegion) {
+    public ResponseResult add(AddRegionVO addRegion) {
         if(StringUtils.isEmpty(addRegion.getName())){
-           return ResponseResult.FAIL();
+            ExceptionCast.cast(RegionCode.REGION_INFO_NOT_FULL);
         }
         QueryWrapper<AuthRegion> queryWrapper = new QueryWrapper();
         queryWrapper.eq("f_name",addRegion.getName()).or()
             .eq("f_code",addRegion.getCode());
         List<Map<String, Object>> maps = regionMapper.selectMaps(queryWrapper);
         if(maps.size() > 0){
-            return new ResponseResult(RegionCode.REGION_NAME_EXISTS);
+            ExceptionCast.cast(RegionCode.REGION_NAME_EXISTS);
         }
         AuthRegion authRegion = new AuthRegion();
         BeanUtils.copyProperties(addRegion,authRegion);
-        authRegion.setOperator(userName);
-        authRegion.setOperatorId(uid);
-        authRegion.setCreateTime(new Date());
         regionMapper.insert(authRegion);
         return ResponseResult.SUCCESS();
     }
@@ -122,10 +118,10 @@ public class RegionServiceImp implements RegionService {
     public ResponseResult edit(EditRegionVO editRegion) {
         AuthRegion authRegion = regionMapper.selectById(editRegion.getId());
         if(authRegion == null){
-            return new ResponseResult(RegionCode.REGION_NOTEXISTS);
+            ExceptionCast.cast(RegionCode.REGION_NOTEXISTS);
         }
         BeanUtils.copyProperties(editRegion,authRegion);
-        authRegion.setUpdateTime(new Date());
+//        authRegion.setUpdateTime(new Date());
         regionMapper.updateById(authRegion);
         return ResponseResult.SUCCESS();
     }
@@ -142,11 +138,11 @@ public class RegionServiceImp implements RegionService {
         map.put("f_parentid",id);
         List<AuthRegion> list = regionMapper.selectByMap(map);
         if(list.size() > 0){
-            return new ResponseResult(RegionCode.CATEGORY_HASSON);
+            ExceptionCast.cast(RegionCode.CATEGORY_HASSON);
         }
         AuthRegion authRegion = regionMapper.selectById(id);
         if(authRegion == null){
-            return  new ResponseResult(RegionCode.REGION_NOTEXISTS);
+            ExceptionCast.cast(RegionCode.REGION_NOTEXISTS);
         }
         regionMapper.deleteById(id);
         return ResponseResult.SUCCESS();
@@ -181,9 +177,29 @@ public class RegionServiceImp implements RegionService {
     public QueryResponseResult getGrandId(Long pid) {
         AuthRegion authRegion = regionMapper.selectById(pid);
         if(authRegion == null){
-            return new QueryResponseResult(RegionCode.REGION_NOTEXISTS,null);
+            ExceptionCast.cast(RegionCode.REGION_NOTEXISTS);
         }
         return new QueryResponseResult(CommonCode.SUCCESS,authRegion.getParentId());
+    }
+
+    /**
+     * 根据业务上级节点获取业务上级及其上级id
+     * @param pid 业务上级节点id
+     * @return
+     */
+    @Override
+    public QueryResponseResult getBusIds(Long pid) {
+        if(pid == null){
+            return new QueryResponseResult(CommonCode.SUCCESS,null);
+        }
+        LinkedList<Long> ids = new LinkedList<>();
+        AuthRegion authRegion = regionMapper.selectById(pid);
+        ids.push(authRegion.getId());
+        while(authRegion.getParentId() != 0){
+            authRegion = regionMapper.selectById(authRegion.getParentId());
+            ids.push(authRegion.getId());
+        }
+        return new QueryResponseResult(CommonCode.SUCCESS,ids);
     }
 
     /**

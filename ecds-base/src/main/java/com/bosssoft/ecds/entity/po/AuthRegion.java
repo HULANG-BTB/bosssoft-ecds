@@ -54,16 +54,16 @@ public class AuthRegion {
     @TableField("f_remark")
     private String remark;
 
-    @TableField("f_operator_id")
+    @TableField(value = "f_operator_id", fill = FieldFill.INSERT_UPDATE)
     private Long operatorId;
 
-    @TableField("f_operator")
+    @TableField(value = "f_operator", fill = FieldFill.INSERT_UPDATE)
     private String operator;
 
-    @TableField("f_create_time")
+    @TableField(value = "f_create_time", fill = FieldFill.INSERT)
     private Date createTime;
 
-    @TableField("f_update_time")
+    @TableField(value = "f_update_time", fill = FieldFill.UPDATE)
     private Date updateTime;
 
     @TableField("f_version")
