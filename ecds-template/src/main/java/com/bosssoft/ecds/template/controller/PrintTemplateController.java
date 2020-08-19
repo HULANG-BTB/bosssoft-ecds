@@ -1,8 +1,5 @@
 package com.bosssoft.ecds.template.controller;
 
-
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bosssoft.ecds.template.entity.dto.NontaxBillDto;
 import com.bosssoft.ecds.template.entity.dto.PrintTemplateDto;
 import com.bosssoft.ecds.template.entity.vo.PrintTemplateVo;
@@ -144,12 +141,12 @@ public class PrintTemplateController {
     public ResponseResult listPage(
             @RequestParam
             @ApiParam(value = "页码", example = "1")
-                    Long current,
+                    Long currentPage,
             @RequestParam(defaultValue = "10", required = false)
             @ApiParam(value = "每页几项", example = "10")
-                    Long size
+                    Long pageSize
     ) {
-        IPage<PrintTemplateVo> page = printTemplateService.getPageVO(new Page<>(current, size));
+        Object page = printTemplateService.getPageVO(currentPage, pageSize);
         return new QueryResponseResult<>(CommonCode.SUCCESS, page);
     }
 }

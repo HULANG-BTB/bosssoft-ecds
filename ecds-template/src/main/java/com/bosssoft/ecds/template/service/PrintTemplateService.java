@@ -26,5 +26,5 @@ public interface PrintTemplateService extends IService<PrintTemplatePo> {
 
     PrintTemplateDto getDtoById(Long id);
 
-    IPage<PrintTemplateVo> getPageVO(Page<?> page);
+    IPage<PrintTemplateVo> getPageVO(Long current, Long size);
 }

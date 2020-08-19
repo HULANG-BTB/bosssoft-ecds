@@ -58,7 +58,7 @@ public class PrintTemplateServiceImpl extends ServiceImpl<PrintTemplateMapper, P
     }
 
     @Override
-    public IPage<PrintTemplateVo> getPageVO(Page<?> page) {
-        return printTemplateMapper.selectTemplateVo(page);
+    public IPage<PrintTemplateVo> getPageVO(Long current, Long size) {
+        return printTemplateMapper.selectTemplateVo(new Page<>(current, size));
     }
 }
