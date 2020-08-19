@@ -1,7 +1,8 @@
 package com.bosssoft.ecds.controller;
 
 
-import com.bosssoft.ecds.encryption.SecretAnnotation;
+import com.bosssoft.ecds.encryption.Decrypt;
+import com.bosssoft.ecds.encryption.Encrypt;
 import com.bosssoft.ecds.entity.vo.incomesortvo.AddIncomeSortVO;
 import com.bosssoft.ecds.entity.vo.incomesortvo.DeleteIncomeSortVO;
 import com.bosssoft.ecds.entity.vo.incomesortvo.FuzzyQueryIncomeSortVO;
@@ -10,6 +11,7 @@ import com.bosssoft.ecds.response.CommonCode;
 import com.bosssoft.ecds.response.QueryResponseResult;
 import com.bosssoft.ecds.response.ResponseResult;
 import com.bosssoft.ecds.service.IncomeSortService;
+import com.bosssoft.ecds.util.RSAUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +39,6 @@ public class IncomeSortController {
 
     @ApiOperation(value = "获取所有收入类别信息", notes = "返回一个多级的树形结构数据")
     @GetMapping("/getAll")
-//    @SecretAnnotation(encode = true)
     public QueryResponseResult getAll() {
         QueryResponseResult incomeSortDTOS = incomeSortService.getAll();
         return incomeSortDTOS;
@@ -52,9 +53,8 @@ public class IncomeSortController {
 
     @ApiOperation(value = "分页查询收入类别信息", notes = "通过id查询显示子级收入类别")
     @PostMapping("/pageQueryById")
-    @SecretAnnotation(encode = true, decode = true)
-//    @Decrypt
-//    @Encrypt
+    @Decrypt
+    @Encrypt
     public QueryResponseResult pageQueryById(@RequestBody @Validated FuzzyQueryIncomeSortVO fuzzyQueryIncomeSortVO) {
         QueryResponseResult incomeSortDTOS = incomeSortService.pageQueryByName(fuzzyQueryIncomeSortVO);
         return incomeSortDTOS;
@@ -93,4 +93,9 @@ public class IncomeSortController {
         return incomeSortService.selectAll();
     }
 
+    @GetMapping("/getRSAPublicKey")
+    public QueryResponseResult getRSAPublicKey() throws Exception {
+        QueryResponseResult queryResponseResult = new QueryResponseResult(CommonCode.SUCCESS, RSAUtil.getPublicKey());
+        return queryResponseResult;
+    }
 }

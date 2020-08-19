@@ -2,11 +2,12 @@ package com.bosssoft.ecds.encryption;
 
 
 import com.alibaba.fastjson.JSONObject;
+import com.bosssoft.ecds.exception.CustomException;
+import com.bosssoft.ecds.response.CommonCode;
 import com.bosssoft.ecds.util.AESUtil;
-import com.bosssoft.ecds.util.AESUtils;
 import com.bosssoft.ecds.util.RSAUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.util.codec.binary.Base64;
+import org.apache.commons.codec.binary.Base64;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpInputMessage;
@@ -23,19 +24,21 @@ import java.lang.reflect.Type;
 
 
 /**
+ * 拦截方法体上有@Decrypt的方法
+ *
  * @author: Jianbinbing
  * @Date: 2020/8/17 11:39
  */
-
 @Slf4j
 @RestControllerAdvice
 public class DecodeRequestBodyAdvice implements RequestBodyAdvice {
+
 
     @Override
     public boolean supports(MethodParameter methodParameter, Type targetType,
                             Class<? extends HttpMessageConverter<?>> converterType) {
         //只有@SecretAnnotation的方法才会触发该类
-        return methodParameter.hasMethodAnnotation(SecretAnnotation.class);
+        return methodParameter.hasMethodAnnotation(Decrypt.class);
     }
 
     @Override
@@ -44,8 +47,7 @@ public class DecodeRequestBodyAdvice implements RequestBodyAdvice {
         StringBuilder stringBuilder = new StringBuilder();
         BufferedReader bufferedReader = null;
         try {
-            //这个request其实就是入参 可以从这里获取流
-            //入参放在HttpInputMessage里面  这个方法的返回值也是HttpInputMessage
+            //获取请求入参 可以从这里获取流
             InputStream inputStream = inputMessage.getBody();
             if (inputStream != null) {
                 bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
@@ -68,44 +70,14 @@ public class DecodeRequestBodyAdvice implements RequestBodyAdvice {
                 }
             }
         }
-        /****   解密     */
-        boolean decode = false;
-        if (parameter.getMethod().isAnnotationPresent(SecretAnnotation.class)) {
-            //获取注解配置的包含和去除字段
-            SecretAnnotation serializedField = parameter.getMethodAnnotation(SecretAnnotation.class);
-            //出参是否需要加密
-            decode = serializedField.decode();
+        //获取请求数据
+        String builderString = stringBuilder.toString();
+        try {
+            return new MyHttpInputMessage(inputMessage.getHeaders(), builderString);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
-        if (decode) {
-            //获取请求数据
-            String builderString = stringBuilder.toString();
-            try {
-                JSONObject jsonObject = JSONObject.parseObject(builderString);
-                String data = jsonObject.get("data").toString();
-                String publicKey = jsonObject.get("publicKey").toString();
-//                String aesKey = jsonObject.get("aseKey").toString();
-                String decodeString = AESUtils.decrypt(data);
-                String aesKey = "";
-
-                //后端私钥解密的到AES的key
-                byte[] plaintext = RSAUtil.decryptByPrivateKey(Base64.decodeBase64(aesKey), RSAUtil.getPrivateKey());
-                aesKey = new String(plaintext);
-                log.info("解密出来的AES的key：" + aesKey);
-                //RSA解密出来字符串多一对双引号
-                aesKey = aesKey.substring(1, aesKey.length() - 1);
-                //AES解密得到明文data数据
-                String decrypt = AESUtil.decrypt(data, aesKey);
-
-                //把数据放到我们封装的对象中
-                return new MyHttpInputMessage(inputMessage.getHeaders(), new ByteArrayInputStream(decodeString.getBytes("UTF-8")));
-            } catch (Exception e) {
-                e.printStackTrace();
-                return null;
-            }
-        }
-        return null;
-
-
     }
 
     @Override
@@ -125,10 +97,18 @@ public class DecodeRequestBodyAdvice implements RequestBodyAdvice {
         }
     }
 
-    //这里实现了HttpInputMessage 封装一个自己的HttpInputMessage
+    /**
+     * 这里实现了HttpInputMessage 封装一个自己的HttpInputMessage
+     * 实现rsa+ase混合解密
+     */
     static class MyHttpInputMessage implements HttpInputMessage {
         HttpHeaders headers;
         InputStream body;
+
+        public MyHttpInputMessage(HttpHeaders headers, String data) throws Exception {
+            this.headers = headers;
+            body = new ByteArrayInputStream(getData(data).getBytes("UTF-8"));
+        }
 
         public MyHttpInputMessage(HttpHeaders headers, InputStream body) {
             this.headers = headers;
@@ -143,6 +123,23 @@ public class DecodeRequestBodyAdvice implements RequestBodyAdvice {
         @Override
         public HttpHeaders getHeaders() {
             return headers;
+        }
+
+        public String getData(String requestData) throws Exception {
+            if (requestData == null) {
+                throw new CustomException(CommonCode.ENCRYPTION_ERROR);
+            }
+            JSONObject jsonObject = JSONObject.parseObject(requestData);
+            String data = jsonObject.get("data").toString();
+            String aesKey = jsonObject.get("aseKey").toString();
+            if (data == null || aesKey == null) {
+                throw new CustomException(CommonCode.ENCRYPTION_ERROR);
+            }
+            //后端私钥解密的到AES的key
+            byte[] key = RSAUtil.decryptByPrivateKey(Base64.decodeBase64(aesKey), Base64.decodeBase64(RSAUtil.getPrivateKey()));
+            //AES解密得到明文data数据
+            String decrypt = AESUtil.decrypt(data, key);
+            return decrypt;
         }
     }
 

@@ -1,6 +1,6 @@
 package com.bosssoft.ecds.util;
 
-import org.apache.tomcat.util.codec.binary.Base64;
+import org.apache.commons.codec.binary.Base64;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import javax.crypto.Cipher;
@@ -99,14 +99,12 @@ public class AESUtil {
      * @param encryptStr 解密的字符串
      * @param decryptKey 解密的key值
      */
-    public static String decrypt(String encryptStr, String decryptKey) throws Exception {
+    public static String decrypt(String encryptStr, byte[] decryptKey) throws Exception {
         //base64格式的key字符串转byte
         byte[] decodeBase64 = Base64.decodeBase64(encryptStr);
-
         //设置Cipher对象
         Cipher cipher = Cipher.getInstance(ALGORITHMS, PROVIDER);
-        cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(decryptKey.getBytes(), KEY_ALGORITHM));
-
+        cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(decryptKey, KEY_ALGORITHM));
         //调用doFinal解密
         return new String(cipher.doFinal(decodeBase64));
     }
