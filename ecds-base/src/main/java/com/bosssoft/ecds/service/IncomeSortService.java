@@ -1,15 +1,12 @@
 package com.bosssoft.ecds.service;
 
 
-import com.bosssoft.ecds.entity.dto.IncomeSortDTO;
-import com.bosssoft.ecds.entity.dto.IncomeSortShowDTO;
 import com.bosssoft.ecds.entity.vo.incomesortvo.AddIncomeSortVO;
 import com.bosssoft.ecds.entity.vo.incomesortvo.DeleteIncomeSortVO;
 import com.bosssoft.ecds.entity.vo.incomesortvo.FuzzyQueryIncomeSortVO;
 import com.bosssoft.ecds.entity.vo.incomesortvo.PageIncomeSortVO;
 import com.bosssoft.ecds.entity.vo.incomesortvo.UpdateIncomeSortVO;
 import com.bosssoft.ecds.response.QueryResponseResult;
-import com.bosssoft.ecds.response.QueryResult;
 
 /**
  * @author: Jianbinbing
@@ -22,7 +19,7 @@ public interface IncomeSortService {
      *
      * @return
      */
-    QueryResponseResult<QueryResult<IncomeSortDTO>> getAll();
+    QueryResponseResult getAll();
 
     /**
      * 根据名称、编码分页获取收入信息
@@ -30,7 +27,7 @@ public interface IncomeSortService {
      * @param fuzzyQueryIncomeSortVO
      * @return
      */
-    QueryResponseResult<IncomeSortDTO> pageQueryByName(FuzzyQueryIncomeSortVO fuzzyQueryIncomeSortVO);
+    QueryResponseResult pageQueryByName(FuzzyQueryIncomeSortVO fuzzyQueryIncomeSortVO);
 
     /**
      * 根据收入类别id分页获取该种类的子类信息
@@ -38,7 +35,7 @@ public interface IncomeSortService {
      * @param pageIncomeSortVO
      * @return
      */
-    QueryResponseResult<IncomeSortDTO> pageQueryById(PageIncomeSortVO pageIncomeSortVO);
+    QueryResponseResult pageQueryById(PageIncomeSortVO pageIncomeSortVO);
 
     /**
      * 判断收入名称是否符合入库规则
@@ -80,7 +77,7 @@ public interface IncomeSortService {
      *
      * @return
      */
-    QueryResponseResult<QueryResult<IncomeSortDTO>> getFirstIncomeSort();
+    QueryResponseResult getFirstIncomeSort();
 
     /**
      * 删除指定的收入类别
@@ -95,13 +92,13 @@ public interface IncomeSortService {
      *
      * @return
      */
-    QueryResponseResult<QueryResult<IncomeSortShowDTO>> selectAll();
+    QueryResponseResult selectAll();
 
     /**
      * 对外提供收入类别信息
      *
      * @return
      */
-    QueryResponseResult<IncomeSortShowDTO> getBySubjectId(Long subjectId);
+    QueryResponseResult getBySubjectId(Long subjectId);
 
 }

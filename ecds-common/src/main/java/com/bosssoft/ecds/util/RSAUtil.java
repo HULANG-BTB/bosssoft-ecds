@@ -75,10 +75,6 @@ public class RSAUtil {
      */
     private static Map<String, Object> genKeyPair = new LinkedHashMap<>();
 
-    private RSAUtil() {
-        throw new IllegalStateException("RSAUtil");
-    }
-
     static {
         try {
             genKeyPair.putAll(genKeyPair());
