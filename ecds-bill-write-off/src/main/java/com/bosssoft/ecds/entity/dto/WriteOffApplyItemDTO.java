@@ -1,5 +1,7 @@
 package com.bosssoft.ecds.entity.dto;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -21,9 +23,9 @@ public class WriteOffApplyItemDTO {
     private String fBillName;
 
     /**
-     * 票据种类
+     * 票据批次号
      */
-    private String fType;
+    private String fBatchNo;
 
     /**
      * 开票份数
