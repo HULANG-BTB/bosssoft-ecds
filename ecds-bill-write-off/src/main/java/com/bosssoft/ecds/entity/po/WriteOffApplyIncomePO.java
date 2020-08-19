@@ -1,11 +1,6 @@
 package com.bosssoft.ecds.entity.po;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.Version;
-import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -14,12 +9,13 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * @author hjr
+ * @author hujierong
+ * @date 2020-8-19
  */
 @Data
-@TableName("ube_writeoff_apply_item")
-@ApiModel(value="WriteoffApplyItemPO对象")
-public class WriteOffApplyItemPO {
+@TableName("ube_writeoff_apply_income")
+@ApiModel(value="WriteOffIncomePO对象")
+public class WriteOffApplyIncomePO {
     @ApiModelProperty(value = "主键")
     @TableId(value = "f_id", type = IdType.AUTO)
     private Long fId;
@@ -28,31 +24,19 @@ public class WriteOffApplyItemPO {
     @TableField("f_pid")
     private String fPid;
 
-    @ApiModelProperty(value = "票据编码")
-    @TableField("f_bill_code")
-    private String fBillCode;
+    @ApiModelProperty(value = "项目编码")
+    @TableField("f_item_code")
+    private String fItemCode;
 
-    @ApiModelProperty(value = "票据名称")
-    @TableField("f_bill_name")
-    private String fBillName;
+    @ApiModelProperty(value = "项目名称")
+    @TableField("f_item_name")
+    private String fItemName;
 
-    @ApiModelProperty(value = "票据批次号")
-    @TableField("f_batch_no")
-    private String fBatchNo;
+    @ApiModelProperty(value = "计量单位")
+    @TableField("f_units")
+    private String fUnits;
 
-    @ApiModelProperty(value = "开票份数")
-    @TableField("f_number")
-    private Integer fNumber;
-
-    @ApiModelProperty(value = "票据起始号")
-    @TableField("f_bill_no1")
-    private String fBillNo1;
-
-    @ApiModelProperty(value = "票据结束号")
-    @TableField("f_bill_no2")
-    private String fBillNo2;
-
-    @ApiModelProperty(value = "票面金额")
+    @ApiModelProperty(value = "金额")
     @TableField("f_amt")
     private BigDecimal fAmt;
 

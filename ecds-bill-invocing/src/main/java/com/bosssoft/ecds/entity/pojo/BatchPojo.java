@@ -14,7 +14,7 @@ public class BatchPojo {
 
     List<UneCbillItemDto> itemDtos;
 
-    private double amt;
+    private double fAmt;
 
     public String getUnitName() {
         return unitName;
@@ -48,11 +48,11 @@ public class BatchPojo {
         this.itemDtos = itemDtos;
     }
 
-    public double getAmt() {
-        return amt;
+    public double getfAmt() {
+        return fAmt;
     }
 
-    public void setAmt(double amt) {
-        this.amt = amt;
+    public void setfAmt(double fAmt) {
+        this.fAmt = fAmt;
     }
 }

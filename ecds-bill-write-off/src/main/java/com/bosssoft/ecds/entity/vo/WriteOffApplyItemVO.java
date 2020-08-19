@@ -21,9 +21,9 @@ public class WriteOffApplyItemVO {
     private String fBillName;
 
     /**
-     * 票据种类
+     * 票据批次号
      */
-    private String fType;
+    private String fBatchNo;
 
     /**
      * 开票份数
