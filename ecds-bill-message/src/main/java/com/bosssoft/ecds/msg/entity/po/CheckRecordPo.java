@@ -55,7 +55,7 @@ public class CheckRecordPo {
     /**
      * 操作者（查验人）
      */
-    @TableField(value = "f_operator", fill = FieldFill.INSERT_UPDATE)
+    @TableField(value = "f_operator")
     private String operator;
     /**
      * 版本号

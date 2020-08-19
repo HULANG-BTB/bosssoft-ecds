@@ -15,5 +15,5 @@ public interface SendSmsService {
      * @return 发送成功与否
      * @throws ClientException sms获取response对象可能发生的异常
      */
-    Future<Boolean> sendSms(SmsDto smsDto) throws ClientException;
+    Future<SmsDto> sendSms(SmsDto smsDto) throws ClientException;
 }

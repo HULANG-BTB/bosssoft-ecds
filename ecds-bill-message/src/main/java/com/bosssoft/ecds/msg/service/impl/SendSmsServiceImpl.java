@@ -1,6 +1,5 @@
 package com.bosssoft.ecds.msg.service.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.aliyuncs.IAcsClient;
 import com.aliyuncs.dysmsapi.model.v20170525.SendSmsRequest;
 import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
@@ -8,12 +7,8 @@ import com.aliyuncs.exceptions.ClientException;
 import com.bosssoft.ecds.msg.constant.SmsConstants;
 import com.bosssoft.ecds.msg.entity.dto.SmsDto;
 import com.bosssoft.ecds.msg.entity.dto.VerifyCode;
-import com.bosssoft.ecds.msg.entity.po.SmsPo;
 import com.bosssoft.ecds.msg.service.SendSmsService;
-import com.bosssoft.ecds.msg.service.SmsService;
-import com.bosssoft.ecds.msg.util.DozerUtils;
 import com.bosssoft.ecds.msg.util.SmsUtil;
-import com.bosssoft.ecds.msg.util.SnowflakeUtil;
 import com.bosssoft.ecds.msg.util.VerifyCodeUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,9 +19,7 @@ import org.springframework.stereotype.Service;
 
 
 import javax.annotation.Resource;
-import java.util.Date;
 import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -49,8 +42,6 @@ public class SendSmsServiceImpl implements SendSmsService {
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
 
-    @Resource
-    private SmsService smsService;
 
     /**
      * 开票短信通知
@@ -62,17 +53,11 @@ public class SendSmsServiceImpl implements SendSmsService {
      */
     @Async
     @Override
-    public Future<Boolean> sendSms(SmsDto smsDto) throws ClientException {
-
-        //设置超时时间-可自行调整
-        System.setProperty("sun.net.client.defaultConnectTimeout", "10000");
-        System.setProperty("sun.net.client.defaultReadTimeout", "10000");
+    public Future<SmsDto> sendSms(SmsDto smsDto) throws ClientException {
 
         IAcsClient acsClient = SmsUtil.getSmsClient(accessKeyId, accessKeySecret);
         // 生成6位的校验码，由数字和小写字母组成
-        String verifyCode = VerifyCodeUtil.generateVerifyCode(6, null).toLowerCase();
-        smsDto.setVerifyCode(verifyCode);
-        VerifyCode code = new VerifyCode(verifyCode);
+        VerifyCode code = getValidCode(smsDto);
         SendSmsRequest request = SmsUtil.getSmsRequest(
                 smsDto.getSmsTo(),
                 "ABC商城",
@@ -83,8 +68,7 @@ public class SendSmsServiceImpl implements SendSmsService {
         if (sendSmsResponse.getCode() != null && SmsConstants.RES_SUCCESS_STATUS.equals(sendSmsResponse.getCode())) {
             // 请求发送成功
             smsDto.setIsSent(true);
-            save(smsDto);
-            return new AsyncResult<>(true);
+            return new AsyncResult<>(smsDto);
         }
         // 请求发送失败
         String error = "ResponseCode:" + sendSmsResponse.getCode() +
@@ -92,44 +76,31 @@ public class SendSmsServiceImpl implements SendSmsService {
                 ",ResponseRequestId:" + sendSmsResponse.getRequestId();
         smsDto.setError(error);
         smsDto.setIsSent(false);
-        save(smsDto);
-        return new AsyncResult<>(false);
+        return new AsyncResult<>(smsDto);
 
     }
 
     /**
-     * 将发信记录存入数据库
-     * @param smsDto 短信详情
+     * 获取与手机号对应的6位校验码
+     * 优化：雪花算法生成18位数字，转为10位的62进制字符串作为验证码
+     *
+     * @param smsDto 获取手机号，并设置校验码
+     * @return 校验码对象
      */
-    public void save(SmsDto smsDto) {
-        SmsPo sms = DozerUtils.map(smsDto, SmsPo.class);
-        sms.setId(SnowflakeUtil.genId());
-        sms.setSentDate(new Date());
-        smsService.save(sms);
+    public VerifyCode getValidCode(SmsDto smsDto) {
+        String verifyCode;
+        Object value;
+
+        // 6位由小写字母和数字组成的验证码由21亿种
+        do {
+            verifyCode = VerifyCodeUtil.generateVerifyCode(6, null).toLowerCase();
+            String key = "bill_" + smsDto.getSmsTo() + "_" + verifyCode;
+            value = redisTemplate.opsForValue().get(key);
+        } while (value != null);
+
+        smsDto.setVerifyCode(verifyCode);
+        return new VerifyCode(verifyCode);
     }
 
-    /**
-     * @deprecated 存入redis的方法
-     */
-    @Deprecated
-    public void save(SmsDto smsDto, boolean status) {
-        String value = JSON.toJSONString(smsDto);
-        StringBuilder key;
-        long timeout;
-        // 存入数据库
-        // 存入数据库中的key格式为 status_tel_verifyCode
-        if (status) {
-            // 发送成功的key前缀为SUCCESS，设置超时时间12小时
-            timeout = 12 * 60 * 60L;
-            smsDto.setIsSent(true);
-            key = new StringBuilder("SUCCESS");
-        } else {
-            // 发送成功的key前缀为FAIL，设置超时时间30天
-            timeout = 30 * 24 * 60 * 60L;
-            smsDto.setIsSent(false);
-            key = new StringBuilder("FAIL");
-        }
-        key.append("_").append(smsDto.getSmsTo()).append("_").append(smsDto.getVerifyCode());
-        redisTemplate.opsForValue().set(key.toString(), value, timeout, TimeUnit.SECONDS);
-    }
+
 }

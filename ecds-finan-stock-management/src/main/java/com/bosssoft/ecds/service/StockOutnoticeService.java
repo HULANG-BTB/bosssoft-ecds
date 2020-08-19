@@ -21,13 +21,11 @@ import java.util.List;
 public interface StockOutnoticeService extends IService<StockOutnoticePo> {
 
     /**
-     * 废弃
-     *
      * 新增一个空数据
      * 返回主键id
      * @return id
      */
-    Long addNewBuss(String author);
+    StockOutnoticePo addNewBuss(String author);
 
     /**
      * 废弃
@@ -62,16 +60,6 @@ public interface StockOutnoticeService extends IService<StockOutnoticePo> {
     List<StockOutDto> queryByPageVo(StockOutPageVo pageVo, Long page, Long limit);
 
     /**
-     * 废弃
-     *
-     * 根据审核状态获得数量
-     *
-     * @param changeState 审核状态
-     * @return 记录数量
-     */
-    Long getCount(Integer changeState);
-
-    /**
      * 根据pagevo获得符合条件的数量
      *
      * @param pageVo 出库页vo
@@ -83,10 +71,36 @@ public interface StockOutnoticeService extends IService<StockOutnoticePo> {
      * 检测判断出库请求中的数据是否合规
      *
      * @param outDto 出库Dto
-     * @param outItemDtos 出库明细Dto的list
      *
      * @return 合规true，违规false
      */
-    Boolean checkSave(StockOutDto outDto, List<StockOutItemDto> outItemDtos);
+    Boolean checkSave(StockOutDto outDto);
+
+    /**
+     * 更新审核状态ById
+     *
+     * @param id 出库表主键
+     * @param changeState 审核状态
+     *
+     * @return 是否成功
+     */
+    Boolean updateChangeState(Long id, Integer changeState);
+
+    /**
+     * 更新审核状态ByDtoList
+     *
+     * @param outDtos 出库表dto的list
+     * @param changeState 审核状态
+     *
+     * @return 是否成功
+     */
+    Boolean updateChangeState(List<StockOutDto> outDtos, Integer changeState);
+
+    /**
+     * 批量删除 byPoList
+     * @param pos 要删除的po的list
+     * @return 是否成功
+     */
+    Boolean deleteByPos(List<StockOutnoticePo> pos);
 
 }

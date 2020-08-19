@@ -1,10 +1,14 @@
 package com.bosssoft.ecds.service.impl;
 
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bosssoft.ecds.entity.dto.StockOutDto;
 import com.bosssoft.ecds.entity.dto.StockOutItemDto;
+import com.bosssoft.ecds.entity.po.StockOutnoticeItemPo;
 import com.bosssoft.ecds.entity.po.StockOutnoticePo;
 import com.bosssoft.ecds.entity.vo.StockOutPageVo;
 import com.bosssoft.ecds.mapper.StockOutnoticeMapper;
@@ -16,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,11 +38,6 @@ public class StockOutnoticeServiceImpl extends ServiceImpl<StockOutnoticeMapper,
     private StockOutnoticeMapper outMapper;
     @Autowired
     private StockOutnoticeItemService itemService;
-    /**
-     * 业务单号
-     * 默认0代表未更新，需要查询数据库更新
-     */
-    private Long BUSSNO = 0L;
 
     /**
      * 新增一个空数据
@@ -46,11 +46,11 @@ public class StockOutnoticeServiceImpl extends ServiceImpl<StockOutnoticeMapper,
      * @return id
      */
     @Override
-    public Long addNewBuss(String author) {
+    public StockOutnoticePo addNewBuss(String author) {
         StockOutnoticePo outnoticePo = new StockOutnoticePo();
         outnoticePo.setAuthor(author);
         outMapper.insert(outnoticePo);
-        return outnoticePo.getId();
+        return outnoticePo;
     }
 
     /**
@@ -86,7 +86,7 @@ public class StockOutnoticeServiceImpl extends ServiceImpl<StockOutnoticeMapper,
 
     /**
      * 根据pagevo获取出库请求信息
-     *
+     * <p>
      * 其中，审核状态changeState:
      * 0新建（在前台请求新增时默认，无用），
      * 1已保存（未审核），
@@ -95,8 +95,9 @@ public class StockOutnoticeServiceImpl extends ServiceImpl<StockOutnoticeMapper,
      * 4审核退回
      *
      * @param pageVo 出库页vo
-     * @param page 页数
-     * @param limit 每页限制数
+     * @param page   页数
+     * @param limit  每页限制数
+     *
      * @return 出库请求list
      */
     @Override
@@ -106,20 +107,6 @@ public class StockOutnoticeServiceImpl extends ServiceImpl<StockOutnoticeMapper,
         Page<StockOutnoticePo> stockOutnoticePoPage = outMapper.selectPage(pageQuery, wrapper);
         List<StockOutnoticePo> stockOutnoticePos = stockOutnoticePoPage.getRecords();
         return ConverUtil.converList(StockOutDto.class, stockOutnoticePos);
-    }
-
-    /**
-     * 根据审核状态获得数量
-     *
-     * @param changeState 审核状态
-     *
-     * @return 记录数量
-     */
-    @Override
-    public Long getCount(Integer changeState) {
-        QueryWrapper<StockOutnoticePo> wrapper = new QueryWrapper<>();
-        wrapper.eq(StockOutnoticePo.F_CHANGE_STATE, changeState);
-        return outMapper.selectCount(wrapper).longValue();
     }
 
     /**
@@ -137,21 +124,23 @@ public class StockOutnoticeServiceImpl extends ServiceImpl<StockOutnoticeMapper,
 
     /**
      * 根据pageVo获得符合各项条件的wrapper
+     *
      * @param pageVo StockOutPageVo前端需要展示list时请求的vo
+     *
      * @return wrapper
      */
     public QueryWrapper<StockOutnoticePo> getWrapper(StockOutPageVo pageVo) {
         QueryWrapper<StockOutnoticePo> wrapper = new QueryWrapper<>();
-        if(StrUtil.isNotBlank(pageVo.getAuthor())) {
-            wrapper.eq(StockOutnoticePo.F_AUTHOR, pageVo.getAuthor());
+        if (pageVo.getId() != null) {
+            wrapper.eq(StockOutnoticePo.F_ID, pageVo.getId());
         } else {
-            if(pageVo.getId() != null) {
-                wrapper.eq(StockOutnoticePo.F_ID, pageVo.getId());
+            if (StrUtil.isNotBlank(pageVo.getAuthor())) {
+                wrapper.eq(StockOutnoticePo.F_AUTHOR, pageVo.getAuthor());
             }
-            if(pageVo.getChangeState() != null) {
+            if (pageVo.getChangeState() != null) {
                 wrapper.eq(StockOutnoticePo.F_CHANGE_STATE, pageVo.getChangeState());
             }
-            if(pageVo.getPeriod() != null && pageVo.getPeriod().size()==2) {
+            if (pageVo.getPeriod() != null && !pageVo.getPeriod().isEmpty()) {
                 wrapper.between(StockOutnoticePo.F_DATE, pageVo.getPeriod().get(0), pageVo.getPeriod().get(1));
             }
         }
@@ -162,22 +151,75 @@ public class StockOutnoticeServiceImpl extends ServiceImpl<StockOutnoticeMapper,
      * 检测判断出库请求中的数据是否合规
      *
      * @param outDto      出库Dto
-     * @param outItemDtos 出库明细Dto的list
      *
      * @return 合规true，违规false
      */
     @Override
-    public Boolean checkSave(StockOutDto outDto, List<StockOutItemDto> outItemDtos) {
+    public Boolean checkSave(StockOutDto outDto) {
+        /**
+         * 1.票据领用人信息有效
+         */
+
+        /**
+         * 2.编制日期正确
+         * eg：编制日期不可长于当前日期
+         */
+
         return true;
     }
 
+    /**
+     * 更新审核状态
+     *
+     * @param id          出库表主键
+     * @param changeState 审核状态
+     *
+     * @return 是否成功
+     */
+    @Override
+    public Boolean updateChangeState(Long id, Integer changeState) {
+        StockOutnoticePo outnoticePo = new StockOutnoticePo();
+        outnoticePo.setId(id);
+        outnoticePo.setChangeState(changeState);
+        int result = outMapper.updateById(outnoticePo);
+        log.info("---result:{}", result);
+        return result == 1;
+    }
 
-    public List<StockOutDto> listPage(StockOutDto stockOutDto, Long page, Long limit) {
-        Page<StockOutnoticePo> pageQuery = new Page<>(page, limit);
-        QueryWrapper<StockOutnoticePo> query = new QueryWrapper<>();
-        Page<StockOutnoticePo> stockOutnoticePoPage = outMapper.selectPage(pageQuery, query);
-        List<StockOutnoticePo> stockOutnoticePos = stockOutnoticePoPage.getRecords();
-        return ConverUtil.converList(StockOutDto.class, stockOutnoticePos);
+    /**
+     * 更新审核状态ByDtoList
+     *
+     * @param outDtos     出库表dto的list
+     * @param changeState 审核状态
+     *
+     * @return 是否成功
+     */
+    @Override
+    public Boolean updateChangeState(List<StockOutDto> outDtos, Integer changeState) {
+        if (outDtos == null || outDtos.isEmpty()) {
+            return false;
+        }
+        LambdaUpdateWrapper<StockOutnoticePo> wrapper = Wrappers.lambdaUpdate();
+        outDtos.forEach(dto -> wrapper.eq(StockOutnoticePo::getId, dto.getId()).or());
+        wrapper.set(StockOutnoticePo::getChangeState, changeState);
+        this.update(wrapper);
+        return true;
+    }
+
+    /**
+     * 批量删除 byPoList
+     *
+     * @param pos 要删除的po的list
+     *
+     * @return 是否成功
+     */
+    @Override
+    public Boolean deleteByPos(List<StockOutnoticePo> pos) {
+        List<Long> ids = new ArrayList<>();
+        pos.forEach(po -> {
+            ids.add(po.getId());
+        });
+        return this.removeByIds(ids);
     }
 
 }

@@ -1,8 +1,6 @@
 package com.bosssoft.ecds.msg.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.aliyuncs.exceptions.ClientException;
-import com.bosssoft.ecds.msg.entity.dto.MessageDto;
 import com.bosssoft.ecds.msg.entity.dto.SmsDto;
 import com.bosssoft.ecds.msg.entity.vo.*;
 import com.bosssoft.ecds.msg.service.SendSmsService;
@@ -16,7 +14,6 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
@@ -33,7 +30,6 @@ import java.util.regex.Pattern;
 public class SmsController {
 
 
-
     @Resource
     private SendSmsService sendsmsService;
 
@@ -43,20 +39,6 @@ public class SmsController {
     /**
      * 短信发送接口
      *
-     *  MessageDto messageDto = new MessageDto(
-     *                 "12345678",
-     *                 "12345678901",
-     *                 new Date(),
-     *                 "500",
-     *                 "测试单位",
-     *                 "张三",
-     *                 "email",
-     *                 "tel",
-     *                 "a1b2c3",
-     *                 "电子票据",
-     *                 "https://tse4-mm.cn.bing.net/th/id/OIP.jCt8g_6ITHZ6phR83HTjwwHaE8?pid=Api&rs=1"
-     *         );
-     *         smsVo.setContent(JSON.toJSONString(messageDto));
      * @param smsVo 短信收件人，及内容是必须的
      * @return 发件成功与否
      */
@@ -66,9 +48,10 @@ public class SmsController {
 
 
         SmsDto smsDto = DozerUtils.map(smsVo, SmsDto.class);
-        boolean b = sendsmsService.sendSms(smsDto).get();
-
-        if (b) {
+        SmsDto sentSms = sendsmsService.sendSms(smsDto).get();
+        boolean isSent = sentSms.getIsSent();
+        smsService.saveAutoSentSms(sentSms);
+        if (isSent) {
             return ResponseUtils.getResponse(
                     ResponseUtils.ResultType.OK.getCode(),
                     ResponseUtils.ResultType.OK.getMsg(),
@@ -89,7 +72,7 @@ public class SmsController {
     @ApiOperation("通过手机号和校验码获取票据信息")
     @GetMapping("/getBill")
     public String getBillByKey(String tel, String verifyCode) {
-        log.info( "-- tel:"+tel+";verifyCode:"+verifyCode);
+        log.info("-- tel:" + tel + ";verifyCode:" + verifyCode);
 
         // 电话号码参数校验
         String telRegex = "^1\\d{10}$";
@@ -101,12 +84,12 @@ public class SmsController {
         }
 
         // 校验码参数校验
-         String verifyCodeRegex ="^[A-Za-z0-9]{6}$";
+        String verifyCodeRegex = "^[A-Za-z0-9]{6}$";
         if (verifyCode == null || !Pattern.matches(verifyCodeRegex, verifyCode)) {
             // 校验码参数有误
             return ResponseUtils.getResponse(
                     ResponseUtils.ResultType.METHOD_NOT_ALLOWED.getCode(),
-                    ResponseUtils.ResultType.METHOD_NOT_ALLOWED.getMsg(),null);
+                    ResponseUtils.ResultType.METHOD_NOT_ALLOWED.getMsg(), null);
         }
 
         // 参数无误，查询票据
@@ -119,7 +102,7 @@ public class SmsController {
         }
         return ResponseUtils.getResponse(
                 ResponseUtils.ResultType.NOT_FOUND.getCode(),
-                ResponseUtils.ResultType.NOT_FOUND.getMsg(),null);
+                ResponseUtils.ResultType.NOT_FOUND.getMsg(), null);
     }
 
 
@@ -127,6 +110,7 @@ public class SmsController {
      * 分页查询邮件
      * 根据Id,isSent,mailTo字段查询匹配的邮件
      * page是当前页码，limit是每页大小
+     *
      * @param smsQuery 分页查询对象
      */
     @ApiOperation("查询短信发信记录")
@@ -148,6 +132,7 @@ public class SmsController {
     /**
      * 短信更新功能
      * 实现未发件的邮件状态更新为已发件
+     *
      * @param smsVo 分页查询对象
      */
     @ApiOperation("更新短信发信状态为已发送")
