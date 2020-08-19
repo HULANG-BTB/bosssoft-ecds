@@ -14,7 +14,8 @@ import java.util.concurrent.TimeUnit;
  * @ClassName RedisUtils
  * @Author AloneH
  * @Date 2020/8/10 13:53
- * @Description TODO
+ * @Description
+ *      Redis 工具类
  **/
 @Component
 public class RedisUtils {
@@ -135,7 +136,7 @@ public class RedisUtils {
      * @param delta 要增加几(大于0)
      * @return
      */
-    public long incr(String key, long delta){
+    public long incr(String key, long delta) throws RuntimeException {
         if(delta<0){
             throw new RuntimeException("递增因子必须大于0");
         }
@@ -148,7 +149,7 @@ public class RedisUtils {
      * @param delta 要减少几(小于0)
      * @return
      */
-    public long decr(String key, long delta){
+    public long decr(String key, long delta) throws RuntimeException {
         if(delta<0){
             throw new RuntimeException("递减因子必须大于0");
         }
@@ -377,8 +378,7 @@ public class RedisUtils {
      */
     public long setRemove(String key, Object ...values) {
         try {
-            Long count = redisTemplate.opsForSet().remove(key, values);
-            return count;
+            return redisTemplate.opsForSet().remove(key, values);
         } catch (Exception e) {
             e.printStackTrace();
             return 0;
@@ -529,8 +529,7 @@ public class RedisUtils {
      */
     public long lRemove(String key,long count,Object value) {
         try {
-            Long remove = redisTemplate.opsForList().remove(key, count, value);
-            return remove;
+            return redisTemplate.opsForList().remove(key, count, value);
         } catch (Exception e) {
             e.printStackTrace();
             return 0;

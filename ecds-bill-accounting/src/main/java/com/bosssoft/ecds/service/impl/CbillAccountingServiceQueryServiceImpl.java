@@ -15,7 +15,9 @@ import com.bosssoft.ecds.entity.vo.CbillAccountingVO;
 import com.bosssoft.ecds.entity.vo.PageVO;
 import com.bosssoft.ecds.enums.CbillAccountingCode;
 import com.bosssoft.ecds.service.CbillAccountingQueryService;
+import com.bosssoft.ecds.service.VoucherService;
 import com.bosssoft.ecds.utils.MyBeanUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -33,6 +35,9 @@ import static com.bosssoft.ecds.enums.CbillAccountingCode.*;
  */
 @Service
 public class CbillAccountingServiceQueryServiceImpl extends ServiceImpl<CbillAccountingDao, CbillAccountingPO> implements CbillAccountingQueryService {
+
+    @Autowired
+    private VoucherService voucherService;
 
     /**
      * 查询入账单据列表
@@ -64,16 +69,34 @@ public class CbillAccountingServiceQueryServiceImpl extends ServiceImpl<CbillAcc
         accountingPOPage.setSize(pageDTO.getLimit());
         //读取分页数据
         QueryWrapper<CbillAccountingPO> queryWrapper = new QueryWrapper<>();
-        //对单位代码进行批量查询
-        queryWrapper.isNull(pageDTO.getKeyword())
-                .or()
-                .like(CbillAccountingPO.F_AGEN_IDCODE,pageDTO.getKeyword())
-                .or()
-                .like(CbillAccountingPO.F_BILL_BATCH_ID,pageDTO.getKeyword())
-                .or()
-                .like(CbillAccountingPO.F_ACCOUNT_TYPE,pageDTO.getKeyword());
-        //根据时间排序
-        queryWrapper.orderByAsc(CbillAccountingPO.F_CREATE_TIME);
+        //若选择了accountType则添加accountType判断条件
+        if(pageDTO.getAccountType()!=null){
+            queryWrapper.eq(CbillAccountingPO.F_ACCOUNT_TYPE,pageDTO.getAccountType());
+        }
+        //keyword为空代表查询全部
+        if(pageDTO.getKeyword()==""||pageDTO.getKeyword()=="null"||pageDTO.getKeyword()==null){
+            //不对queryWrapper进行任何修改
+        }else{
+            //模糊查询
+            queryWrapper
+                    .like(CbillAccountingPO.F_ACCOUNT_ID,pageDTO.getKeyword())
+                    .or()
+                    .like(CbillAccountingPO.F_BILL_NO,pageDTO.getKeyword())
+                    .or()
+                    .like(CbillAccountingPO.F_AGEN_IDCODE,pageDTO.getKeyword())
+                    .or()
+                    .like(CbillAccountingPO.F_OPERATOR,pageDTO.getKeyword())
+                    .or()
+                    .like(CbillAccountingPO.F_BILL_SERIAL_ID,pageDTO.getKeyword())
+                    .or()
+                    .like(CbillAccountingPO.F_AGEN_NAME,pageDTO.getKeyword());
+        }
+        //降序排序
+        if(pageDTO.getSort().equals("+id")){
+            queryWrapper.orderByAsc(CbillAccountingPO.F_ID);
+        }else {
+            queryWrapper.orderByDesc(CbillAccountingPO.F_ID);
+        }
         Page<CbillAccountingPO> poPage = super.page(accountingPOPage,queryWrapper);
         List<CbillAccountingPO> records = poPage.getRecords();
         //转换数据
@@ -148,6 +171,94 @@ public class CbillAccountingServiceQueryServiceImpl extends ServiceImpl<CbillAcc
     }
 
     /**
+     * 更新单条数据(必须新建几组数据，防止影响凭证部分)
+     *
+     * @param cbillAccountingDTO
+     * @return 统一响应
+     */
+    @Override
+    public ResponseResult updateBill(CbillAccountingDTO cbillAccountingDTO) {
+        //通过数据校验码查出某条需要插入的数据id
+        String serial = cbillAccountingDTO.getBillSerialId();
+        //检查票据校验码是否存在
+        ResultCode resultCode = checkBillSerialIdExist(serial);
+        if(resultCode!=SUCCESS){
+            return new ResponseResult(resultCode);
+        }
+        CbillAccountingPO cbillAccountingPO = MyBeanUtil.copyProperties(cbillAccountingDTO, CbillAccountingPO.class);
+        Boolean result = super.updateById(cbillAccountingPO);
+        if(!result){
+            return new ResponseResult(UPDATE_FAIL);
+        }else{
+            return new ResponseResult(SUCCESS);
+        }
+    }
+
+    /**
+     * 插入单条数据
+     *
+     * @param cbillAccountingDTO
+     * @return 统一请求
+     */
+    @Override
+    public ResponseResult insertBill(CbillAccountingDTO cbillAccountingDTO) {
+        //通过数据校验码查出某条需要插入的数据id
+        String serial = cbillAccountingDTO.getBillSerialId();
+        String num = cbillAccountingDTO.getBillNo();
+        //检查票据校验码是否重复
+        ResultCode resultCode = checkBillSerialIdRepeat(serial);
+        if(resultCode!=SUCCESS){
+            return new ResponseResult(resultCode);
+        }
+        //检测票据号是否重复
+        ResultCode resultCode1 = checkBillSerialIdRepeat(num);
+        if(resultCode1!=SUCCESS){
+            return new ResponseResult(resultCode1);
+        }
+        CbillAccountingPO cbillAccountingPO = MyBeanUtil.copyProperties(cbillAccountingDTO, CbillAccountingPO.class);
+        boolean result = super.save(cbillAccountingPO);
+        if(!result){
+            return new ResponseResult(INSERT_FAIL);
+        }else{
+            return new ResponseResult(SUCCESS);
+        }
+    }
+
+    /**
+     * 批量插入数据
+     *
+     * @param cbillAccountingDTOList
+     * @return 统一请求
+     */
+    @Override
+    public ResponseResult batchInsert(List<CbillAccountingDTO> cbillAccountingDTOList) {
+        //暂未检测数据的冲突性
+        List<CbillAccountingPO> cbillAccountingPOList = MyBeanUtil.copyListProperties(cbillAccountingDTOList, CbillAccountingPO::new);
+        boolean result = super.saveBatch(cbillAccountingPOList);
+        if(!result){
+            return new ResponseResult(INSERT_FAIL);
+        }else{
+            return new ResponseResult(SUCCESS);
+        }
+    }
+
+    /**
+     * 检查票据校验码的唯一性
+     *
+     * @return
+     */
+    private ResultCode checkBillSerialIdRepeat(String billSerialId) {
+        // 检查票据校验码是否已经存在
+        QueryWrapper<CbillAccountingPO> queryWrapper = new QueryWrapper<>();
+        queryWrapper.select("f_bill_serial_id").eq(CbillAccountingPO.F_BILL_SERIAL_ID,billSerialId);
+        int result = super.count(queryWrapper);
+        if(result>=1){
+            return BILL_SERIAL_ID_REPEAT;
+        }
+        return SUCCESS;
+    }
+
+    /**
      * 检查票据校验码的存在性
      *
      * @return
@@ -177,5 +288,22 @@ public class CbillAccountingServiceQueryServiceImpl extends ServiceImpl<CbillAcc
         }
         return SUCCESS;
     }
+
+    /**
+     * 检查票据号的唯一性
+     *
+     * @return
+     */
+    private ResultCode checkBillNoRepeat(String billNo) {
+        // 检查票据号码是否已经存在，已经存在不能插入
+        QueryWrapper<CbillAccountingPO> queryWrapper = new QueryWrapper<>();
+        queryWrapper.select("f_bill_no").eq(CbillAccountingPO.F_BILL_NO,billNo);
+        int result = count(queryWrapper);
+        if(result>=1){
+            return BILL_NO_REPEAT;
+        }
+        return SUCCESS;
+    }
+
 
 }

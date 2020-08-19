@@ -18,12 +18,18 @@ import java.util.Base64;
  * @ClassName JwtUtils
  * @Author AloneH
  * @Date 2020/8/5 20:34
- * @Description TODO
+ * @Description
+ *      JWT工具类
  **/
 public class JwtUtils {
 
+    /**
+     * 键值
+     */
     private static final String JWT_PAYLOAD_USER_KEY = "ecds_user";
 
+    public JwtUtils() {
+    }
 
     /**
      * 私钥加密token

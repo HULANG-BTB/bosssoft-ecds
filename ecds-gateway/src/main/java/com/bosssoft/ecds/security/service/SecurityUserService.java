@@ -9,7 +9,8 @@ import org.springframework.stereotype.Service;
  * @InterfaceName UserService
  * @Author AloneH
  * @Date 2020/8/9 16:55
- * @Description TODO
+ * @Description
+ *      security service
  **/
 public interface SecurityUserService extends ReactiveUserDetailsService, IService<UserPO>  {
 

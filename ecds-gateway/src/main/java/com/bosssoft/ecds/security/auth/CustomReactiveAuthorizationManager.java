@@ -7,7 +7,6 @@ import org.springframework.security.authorization.ReactiveAuthorizationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.server.authorization.AuthorizationContext;
 import org.springframework.stereotype.Component;
-import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 /**
@@ -24,7 +23,14 @@ import reactor.core.publisher.Mono;
 @Component
 public class CustomReactiveAuthorizationManager implements ReactiveAuthorizationManager<AuthorizationContext> {
 
+    /**
+     * 请求路径
+     */
     private String path;
+
+    /**
+     * 请求方法
+     */
     private String method;
 
     @Override
@@ -32,29 +38,23 @@ public class CustomReactiveAuthorizationManager implements ReactiveAuthorization
         this.path = object.getExchange().getRequest().getPath().toString();
         this.method = object.getExchange().getRequest().getMethod().toString();
         return authentication
-                .filter(a -> {
-                    return a.isAuthenticated();
-                })
-                .flatMapIterable(a -> {
-                    return a.getAuthorities();
-                })
-                .map(g -> {
-                    // 组合所有拥有的权限
-                    return ((AuthRoleGrantedAuthority) g).getPermissions();
-                })
+                .filter(Authentication::isAuthenticated)
+                .flatMapIterable(Authentication::getAuthorities)
+                // 组合所有拥有的权限
+                .map(g -> ((AuthRoleGrantedAuthority) g).getPermissions())
                 .any(c -> {
                     // 遍历所有权限，判断当前访问路径是否具有权限
                     for (PermissionVO permissionVO : c) {
-                        String url = permissionVO.getUrl();
-                        String method = permissionVO.getMethod();
+                        String reqUrl = permissionVO.getUrl();
+                        String reqMethod = permissionVO.getMethod();
                         // 如果 A 具有访问 /user 的权限，那么 A自动具有访问 /user/* 的权限 此逻辑可以修改 地址和访问方式同时确定是否具有权限
-                        if (url != null && url.startsWith(this.path) && method != null && method.equalsIgnoreCase(this.method)) {
+                        if (reqUrl != null && reqUrl.startsWith(this.path) && method != null && reqMethod.equalsIgnoreCase(this.method)) {
                             return true;
                         }
                     }
                     return false;
                 })
-                .map(hasAuthority -> new AuthorizationDecision(hasAuthority))
+                .map(AuthorizationDecision::new)
                 .defaultIfEmpty(new AuthorizationDecision(false));
     }
 

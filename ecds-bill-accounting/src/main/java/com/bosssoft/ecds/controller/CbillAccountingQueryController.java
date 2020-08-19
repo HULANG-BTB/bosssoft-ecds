@@ -16,6 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * <p>
  *  前端控制器
@@ -71,6 +74,30 @@ public class CbillAccountingQueryController {
         CbillAccountingDTO cbillAccountingDTO = new CbillAccountingDTO();
         MyBeanUtil.copyProperties(cbillAccountingVO,cbillAccountingDTO);
         return cbillAccountingQueryService.selectByAgenIdcode(cbillAccountingDTO);
+    }
+
+    @PostMapping("/updateBill")
+    @ApiOperation(value = "更新单条信息(仅用作前端测试)")
+    public ResponseResult updateBill(@RequestBody CbillAccountingVO cbillAccountingVO){
+        CbillAccountingDTO cbillAccountingDTO = new CbillAccountingDTO();
+        MyBeanUtil.copyProperties(cbillAccountingVO,cbillAccountingDTO);
+        return cbillAccountingQueryService.updateBill(cbillAccountingDTO);
+    }
+
+    @PostMapping("/insertBill")
+    @ApiOperation(value = "插入单条数据(仅用作前端测试)")
+    public ResponseResult insertBill(@RequestBody CbillAccountingVO cbillAccountingVO){
+        CbillAccountingDTO cbillAccountingDTO = new CbillAccountingDTO();
+        MyBeanUtil.copyProperties(cbillAccountingVO,cbillAccountingDTO);
+        return cbillAccountingQueryService.insertBill(cbillAccountingDTO);
+    }
+
+    @PostMapping("/batchInsert")
+    @ApiOperation(value = "插入多条数据(仅用作前端测试)")
+    public ResponseResult batchInsertBill(@RequestBody List<CbillAccountingVO> cbillAccountingVOList){
+        List<CbillAccountingDTO> cbillAccountingDTOList = new ArrayList<>();
+        MyBeanUtil.copyProperties(cbillAccountingVOList,cbillAccountingDTOList);
+        return cbillAccountingQueryService.batchInsert(cbillAccountingDTOList);
     }
 
 }

@@ -34,14 +34,12 @@ public class VoucherController {
     private VoucherService voucherService;
 
     @GetMapping("/listAll")
-    @ResponseBody
     @ApiOperation(value = "所有电子凭证信息")
     public ResponseResult listAll(){
         return voucherService.listAll();
     }
 
     @PostMapping("/listByPage")
-    @ResponseBody
     @ApiOperation(value = "所有电子凭证信息")
     public QueryResponseResult<PageVO> listByPage(@RequestBody @Validated PageVO pageVO){
         PageDTO<VoucherDTO> pageDTO = MyBeanUtil.myCopyProperties(pageVO, PageDTO.class);
@@ -49,7 +47,6 @@ public class VoucherController {
     }
 
     @PostMapping("/getByAccountId")
-    @ResponseBody
     @ApiImplicitParam(name = "accountId", value = "电子凭证号", dataType = "Long")
     @ApiOperation(value = "通过电子凭证号查询电子凭证")
     public ResponseResult getByAccountId(@RequestBody @Validated VoucherVO voucherVO){
@@ -58,21 +55,25 @@ public class VoucherController {
         return voucherService.getByAccountId(voucherDTO);
     }
 
-    @DeleteMapping("/delete")
-    @ResponseBody
+    @PostMapping("/delete")
     @ApiOperation(value = "删除电子凭证")
     public ResponseResult delete(@RequestBody VoucherVO voucherVO){
         VoucherDTO voucherDTO = MyBeanUtil.myCopyProperties(voucherVO, VoucherDTO.class);
         return voucherService.delete(voucherDTO);
     }
 
-    @DeleteMapping("/batchDelete")
-    @ResponseBody
+    @PostMapping("/batchDelete")
     @ApiOperation(value = "批量删除电子凭证")
     public ResponseResult batchDelete(@RequestBody List<VoucherVO> voucherVOList){
         List<VoucherDTO> voucherDTOList = MyBeanUtil.copyListProperties(voucherVOList, VoucherDTO::new);
         return voucherService.batchDelete(voucherDTOList);
     }
 
+    @PutMapping("/updateVoucher")
+    @ApiOperation(value = "更新电子凭证信息")
+    public ResponseResult updateVoucher(@RequestBody VoucherVO voucherVO){
+        VoucherDTO voucherDTO = MyBeanUtil.myCopyProperties(voucherVO, VoucherDTO.class);
+        return voucherService.updateVoucher(voucherDTO);
+    }
 }
 

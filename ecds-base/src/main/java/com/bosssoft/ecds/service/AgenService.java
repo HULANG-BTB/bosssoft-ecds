@@ -2,6 +2,7 @@ package com.bosssoft.ecds.service;
 
 import com.bosssoft.ecds.entity.dto.AgenDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
+import com.bosssoft.ecds.entity.dto.agendto.AgenInfoDTO;
 import com.bosssoft.ecds.entity.po.AgenPO;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -16,6 +17,7 @@ import java.util.List;
  * @since 2020-08-09
  */
 public interface AgenService extends IService<AgenPO> {
+
 
     /**
      *
@@ -102,11 +104,28 @@ public interface AgenService extends IService<AgenPO> {
     public PageDTO listByPage(PageDTO pageDTO);
 
     /**
-     * 批量删除角色
+     * 未审核分页读取
+     *
+     * @param pageDTO
+     * @return
+     */
+    public PageDTO checkListByPage(PageDTO pageDTO);
+
+    /**
+     * 批量删除单位
      *
      * @param fabAgenDTOList
      * @return
      */
     public Boolean removeBatch(List<AgenDTO> fabAgenDTOList);
 
+    /**
+     * 批量审核单位
+     *
+     * @param fabAgenDTOList
+     * @return
+     */
+    public Boolean checkBatch(List<AgenDTO> fabAgenDTOList);
+
+    AgenInfoDTO getDetailByUnitName(String agenName);
 }

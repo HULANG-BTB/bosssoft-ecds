@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+    <property name="LOG_HOME" value="/tmp/logs/mservice-zuul"/>
+    <springProperty scope="context" name="logPrefix" source="mylog.logPrefix" defaultValue=""/>
+    <springProperty scope="context" name="logTopic" source="mylog.logTopic" defaultValue="my-log-topic"/>
+    <springProperty scope="context" name="bootstrapServers" source="mylog.bootstrapServers"
+                    defaultValue="47.107.140.106:9092"/>
+    <!-- ch.qos.logback.core.ConsoleAppender 表示控制台输出 -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <springProfile name="dev">
+                <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5level) %magenta([%-15.15(%thread)]) %cyan( %-50.50(%logger{50} )):%msg%n</pattern>
+            </springProfile>
+            <springProfile name="!dev">
+                <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5level) %magenta([%-15.15(%thread)]) %cyan( %-50.50(%logger{50} )):%msg%n</pattern>
+            </springProfile>
+        </layout>
+    </appender>
+
+    <!-- 每天产生一个文件 -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${LOG_HOME}/mservice-zuul.%d{yyyy-MM-dd}.log</FileNamePattern>
+            <!--日志文件保留天数-->
+            <MaxHistory>15</MaxHistory>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    <appender name="KAFKA" class="com.bosssoft.ecds.appender.KafkaAppender">
+        <bootstrapServers>${bootstrapServers}</bootstrapServers>
+        <logPrefix>${logPrefix}</logPrefix>
+        <logTopic>${logTopic}</logTopic>
+    </appender>
+    <!--异步写入kafka，尽量不占用主程序的资源-->
+    <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+           
+        <neverBlock>true</neverBlock>
+           
+        <includeCallerData>true</includeCallerData>
+           
+        <discardingThreshold>0</discardingThreshold>
+           
+        <queueSize>2048</queueSize>
+           
+        <appender-ref ref="KAFKA"/>
+    </appender>
+    <!--将上面的appender添加到root-->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <!--<appender-ref ref="FILE"/>-->
+    </root>
+
+    <logger name="kafka_logger" additivity="false">
+        <appender-ref ref="ASYNC"/>
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+</configuration>

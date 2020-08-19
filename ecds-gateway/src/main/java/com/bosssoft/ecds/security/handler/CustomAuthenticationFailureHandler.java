@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+import java.nio.charset.StandardCharsets;
+
 /**
  * @ClassName CustomAuthenticationFailureHandler
  * @Author AloneH
@@ -40,10 +42,10 @@ public class CustomAuthenticationFailureHandler implements ServerAuthenticationF
         httpHeaders.add("Content-Type", "application/json; charset=UTF-8");
         httpHeaders.add("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
         // 设置body
-        exception.printStackTrace();
         // 生成响应内容
         String res = ResponseUtils.getResponse(exception.getMessage(), ResponseUtils.ResultType.FORBIDDEN);
-        DataBuffer bodyDataBuffer = response.bufferFactory().wrap(res.getBytes());
+        DataBuffer bodyDataBuffer = null;
+        bodyDataBuffer = response.bufferFactory().wrap(res.getBytes(StandardCharsets.UTF_8));
         // 写入内容 返回
         return response.writeWith(Mono.just(bodyDataBuffer));
     }

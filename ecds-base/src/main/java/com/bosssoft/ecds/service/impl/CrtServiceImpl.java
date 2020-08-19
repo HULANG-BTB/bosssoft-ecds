@@ -3,16 +3,21 @@ package com.bosssoft.ecds.service.impl;
 import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.bosssoft.ecds.entity.dto.AgenDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.dto.CrtDTO;
 import com.bosssoft.ecds.entity.po.CrtPO;
 import com.bosssoft.ecds.dao.CrtDao;
+import com.bosssoft.ecds.service.AgenService;
 import com.bosssoft.ecds.service.CrtService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bosssoft.ecds.utils.MyBeanUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.xml.crypto.Data;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -27,6 +32,8 @@ import java.util.List;
 @DS("slave")
 public class CrtServiceImpl extends ServiceImpl<CrtDao, CrtPO> implements CrtService {
 
+    @Autowired
+    private AgenService agenService;
     /**
      *
      *
@@ -40,6 +47,26 @@ public class CrtServiceImpl extends ServiceImpl<CrtDao, CrtPO> implements CrtSer
     public CrtDTO save(CrtDTO uabCrtDTO) {
         CrtPO uabCrtPO = new CrtPO();
         MyBeanUtil.copyProperties(uabCrtDTO, uabCrtPO);
+        //查询单位相关其他字段
+        AgenDTO agenDTO = new AgenDTO();
+        agenDTO.setAgenName(uabCrtPO.getAgenName());
+        agenDTO = agenService.getByAgenName(agenDTO);
+        uabCrtPO.setAddress(agenDTO.getAddr());
+        uabCrtPO.setFinmgr(agenDTO.getFinMgr());
+        uabCrtPO.setVersion(0);
+        uabCrtPO.setAgenCode(agenDTO.getAgenCode());
+        uabCrtPO.setLinkman(agenDTO.getLinkMan());
+        uabCrtPO.setLinkmanTel(agenDTO.getLinkTel());
+        uabCrtPO.setOperator(agenDTO.getOperator());
+        uabCrtPO.setOperatorId(agenDTO.getOperatorId());
+        //获取准购证ID
+        uabCrtPO.setCrtCode("112233");
+        //获取时间
+        Date data = new Date();
+        uabCrtPO.setCreateTime(data);
+        uabCrtPO.setUpdateTime(data);
+        uabCrtPO.setIssuedate(data);
+        //保存准购证
         super.save(uabCrtPO);
         return uabCrtDTO;
     }
@@ -90,6 +117,23 @@ public class CrtServiceImpl extends ServiceImpl<CrtDao, CrtPO> implements CrtSer
         CrtPO uabCrtPO = new CrtPO();
         MyBeanUtil.copyProperties(uabCrtDTO, uabCrtPO);
         CrtPO uabCrtPO1 = super.getOne(new QueryWrapper<CrtPO>(uabCrtPO));
+        return MyBeanUtil.copyProperties(uabCrtPO1, CrtDTO.class);
+    }
+
+    /**
+     *
+     *
+     * @description: 根据id查询领购证。
+     * @param {UabCrtDTO} uabCrtDTO
+     * @return: {UabCrtDTO}
+     * @author: YuHangChen
+     * @time: 09/08/2020 上午10:17
+     */
+    @Override
+    public CrtDTO getById(CrtDTO uabCrtDTO) {
+        CrtPO uabCrtPO = new CrtPO();
+        MyBeanUtil.copyProperties(uabCrtDTO, uabCrtPO);
+        CrtPO uabCrtPO1 = super.getById(uabCrtPO.getId());
         return MyBeanUtil.copyProperties(uabCrtPO1, CrtDTO.class);
     }
 
@@ -152,6 +196,33 @@ public class CrtServiceImpl extends ServiceImpl<CrtDao, CrtPO> implements CrtSer
     }
 
     /**
+     * 准购证审核分页读取领购证
+     *
+     * @param pageDTO
+     * @return
+     */
+    @Override
+    public PageDTO checkListByPage(PageDTO pageDTO) {
+        Page<CrtPO> uabCrtPOPage = new Page<>();
+        // 设置分页信息
+        uabCrtPOPage.setCurrent(pageDTO.getPage());
+        uabCrtPOPage.setSize(pageDTO.getLimit());
+        // 读取分页数据
+        QueryWrapper<CrtPO> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(CrtPO.F_ISENABLE, false);
+        queryWrapper.and(wrapper -> wrapper.like(CrtPO.F_CRT_NAME, pageDTO.getKeyword()).or().like(CrtPO.F_AGEN_CODE, pageDTO.getKeyword()).or().like(CrtPO.F_CRT_CODE, pageDTO.getKeyword()));
+        queryWrapper.orderByAsc(CrtPO.F_CREATE_TIME);
+        // 读取分页数据
+        Page<CrtPO> uabCrtPOPage1 = super.page(uabCrtPOPage, queryWrapper);
+        List<CrtPO> records = uabCrtPOPage1.getRecords();
+        // 转换数据
+        List<CrtDTO> userDTOList = MyBeanUtil.copyListProperties(records, CrtDTO.class);
+        pageDTO.setTotal(uabCrtPOPage1.getTotal());
+        pageDTO.setItems(userDTOList);
+        return pageDTO;
+    }
+
+    /**
      * 批量删除领购证
      *
      * @param uabCrtDTODTOList
@@ -166,6 +237,22 @@ public class CrtServiceImpl extends ServiceImpl<CrtDao, CrtPO> implements CrtSer
             }
         }
         boolean removeResult = super.removeByIds(ids);
+        return removeResult;
+    }
+
+    /**
+     * 批量审核领购证
+     *
+     * @param uabCrtDTOList
+     * @return
+     */
+    @Override
+    public Boolean checkBatch(List<CrtDTO> uabCrtDTOList) {
+        for (CrtDTO uabCrtDTO : uabCrtDTOList) {
+            uabCrtDTO.setIsenable(true);
+        }
+        List<CrtPO> crtPOList = MyBeanUtil.copyListProperties(uabCrtDTOList,CrtPO.class);
+        boolean removeResult = super.updateBatchById(crtPOList);
         return removeResult;
     }
 }

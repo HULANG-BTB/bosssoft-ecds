@@ -1,6 +1,5 @@
 package com.bosssoft.ecds.controller;
 
-
 import com.bosssoft.ecds.common.response.ResponseResult;
 import com.bosssoft.ecds.entity.dto.AccBaseInfoDTO;
 import com.bosssoft.ecds.entity.dto.AccBillDTO;
@@ -38,7 +37,7 @@ public class CbillAccountingController {
     @Autowired
     private CbillAccountingService cbillAccountingService;
 
-    @PostMapping("/insert")
+    @PostMapping("/insertAccount")
     @ApiOperation(value = "开票阶段基础信息")
     public ResponseResult insert(@RequestBody @Validated AccBaseInfoVO accBaseInfoVO){
         AccBaseInfoDTO accBaseInfoDTO = new AccBaseInfoDTO();
@@ -46,9 +45,9 @@ public class CbillAccountingController {
         return cbillAccountingService.insert(accBaseInfoDTO);
     }
 
-/*    @PostMapping("/insertBatch")
+/*    @PostMapping("/insertAccountBatch")
     @ApiOperation(value = "批量插入开票阶段基础信息")
-    public ResponseResult insertBatch(@RequestBody@Validated List<AccBaseInfoVO> accBaseInfoVOList){
+    public ResponseResult insertAccountBatch(@RequestBody@Validated List<AccBaseInfoVO> accBaseInfoVOList){
         List<AccBaseInfoDTO> accBaseInfoDTOList = MyBeanUtil.copyListProperties(accBaseInfoVOList,AccBaseInfoDTO::new);
         return cbillAccountingService.insertBatch(accBaseInfoDTOList);
     }*/
@@ -69,7 +68,7 @@ public class CbillAccountingController {
         return cbillAccountingService.selectAllAccount(accountingDTOList);
     }*/
 
-    @PutMapping("/updateAccount")
+    @PostMapping("/updateAccount")
     @ApiOperation(value = "缴费单位传值")
     public ResponseResult updateAccount(@RequestBody @Validated AccIntoInfoVO accIntoInfoVO){
         AccIntoInfoDTO accIntoInfoDto = new AccIntoInfoDTO();
@@ -99,7 +98,7 @@ public class CbillAccountingController {
         return cbillAccountingService.selectAllStatus(accBaseInfoDTOList);
     }*/
 
-    @PutMapping("/updateBillInfo")
+    @PostMapping("/updateBillInfo")
     @ApiOperation(value = "开票单位发放阶段传值")
     public ResponseResult updateBillInfo(@RequestBody @Validated AccBillVO accBillVO){
         AccBillDTO accBillDTO = new AccBillDTO();
@@ -107,14 +106,7 @@ public class CbillAccountingController {
         return cbillAccountingService.insertBillInfo(accBillDTO);
     }
 
-/*    @PutMapping("/updateBillBatch")
-    @ApiOperation(value = "批量插入开票阶段基础信息")
-    public ResponseResult updateBillBatch(){
-        return null;
-    }*/
-
-
-    @DeleteMapping("/delete")
+    @PostMapping("/delete")
     @ResponseBody
     @ApiOperation(value = "删除入账信息")
     public ResponseResult delete(@RequestBody CbillAccountingVO cbillAccountingVO){
@@ -122,7 +114,7 @@ public class CbillAccountingController {
         return cbillAccountingService.delete(cbillAccountingDTO);
     }
 
-    @DeleteMapping("/batchDelete")
+    @PostMapping("/batchDelete")
     @ResponseBody
     @ApiOperation(value = "批量删除入账信息")
     public ResponseResult batchDelete(@RequestBody List<CbillAccountingVO> cbillAccountingVOList){

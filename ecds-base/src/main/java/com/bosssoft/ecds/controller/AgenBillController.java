@@ -22,7 +22,7 @@ import java.util.List;
 
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  *
  * @author wzh
@@ -36,57 +36,47 @@ public class AgenBillController {
     @Autowired
     private AgenBillService agenBillService;
 
+
     /**
-     * 插入单位可用项目相关信息
+     * 批量插入单位可用票据相关信息
      *
-     * @param agenBillVO 可用项目相关信息
-     * @return
+     * @param agenBillVOList 输入单位编码和票据编码
+     * @return 返回成功或者失败的code和msg
      */
-    @ApiOperation(value = "添加单位可用票据关系")
-    @PostMapping("/save")
-    public ResponseResult save(@RequestBody AgenBillVO agenBillVO) {
-        AgenBillDTO agenBillDTO = MyBeanUtil.myCopyProperties(agenBillVO, AgenBillDTO.class);
-        return agenBillService.save(agenBillDTO);
+    @ApiOperation(value = "批量添加单位可用票据关系", notes = "输入单位编码和票据编码")
+    @PostMapping("/updateBatch")
+    public ResponseResult updateBatch(@RequestBody List<AgenBillVO> agenBillVOList) {
+        List<AgenBillDTO> agenBillDTOList = MyBeanUtil.copyListProperties(agenBillVOList, AgenBillDTO.class);
+        return agenBillService.updateBatch(agenBillDTOList);
     }
 
     /**
-     * 删除项目
-     *
-     * @param agenBillVO
-     * @return
-     */
-    @ApiOperation(value = "删除单位可用票据关系")
-    @PostMapping("/delete")
-    public ResponseResult delete(@RequestBody AgenBillVO agenBillVO) {
-        AgenBillDTO agenBillDTO = MyBeanUtil.myCopyProperties(agenBillVO, AgenBillDTO.class);
-        return agenBillService.delete(agenBillDTO);
-    }
-
-    /**
-     * 批量删除
-     *
-     * @param agenBillVOList
-     * @return
-     */
-    @ApiOperation(value = "批量删除单位可用票据关系")
-    @PostMapping("/batchDelete")
-    public ResponseResult batchDelete(@RequestBody List<AgenBillVO> agenBillVOList) {
-        List<AgenBillDTO> agenBillDTOList = MyBeanUtil.copyListProperties(agenBillVOList, AgenBillDTO::new);
-        return agenBillService.batchDelete(agenBillDTOList);
-    }
-
-    /**
+     * 查询单位的可用票据，供单位端使用
      * 分页查询
      *
-     * @param pageVO
-     * @return
+     * @param pageVO 输入分页信息,limit、page、keyword
+     *               keyword为空时普通查询，keyword不为空时模糊查询
+     * @return limit、page、total、items
      */
-    @ApiOperation(value = "分页查询")
+    @ApiOperation(value = "分页查询", notes = "输入分页信息,limit、page、keyword，" +
+            "keyword为空时普通查询，keyword不为空时模糊查询")
     @PostMapping("/listByPage")
     public QueryResponseResult<PageVO> listByPage(@RequestBody PageVO pageVO) {
         PageDTO<BillTypePO> pageDTO = MyBeanUtil.myCopyProperties(pageVO, PageDTO.class);
         return agenBillService.listByPage(pageDTO);
     }
 
+    /**
+     * 查询单位所有可用票据
+     *
+     * @param agenBillVO 输入单位编码
+     * @return 返回出单位所有的可用票据
+     */
+    @ApiOperation(value = "查询单位所有可用票据", notes = "输入单位编码")
+    @PostMapping("/getBillAll")
+    public QueryResponseResult<List<BillTypePO>> getBill(@RequestBody AgenBillVO agenBillVO) {
+        AgenBillDTO agenBillDTO = MyBeanUtil.myCopyProperties(agenBillVO, AgenBillDTO.class);
+        return agenBillService.getBill(agenBillDTO);
+    }
 }
 
