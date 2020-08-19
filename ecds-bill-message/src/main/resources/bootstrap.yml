@@ -1,15 +1,21 @@
 spring:
   application:
-    name: msg
+    name: boss-ecds-bill-message
+  profiles:
+    active: dev
   cloud:
     nacos:
-      discovery:
-        server-addr: localhost:8848
       config:
-        server-addr: localhost:8848
+        # 49.234.75.113:8848
+        server-addr: 49.234.75.113:8848
+        file-extension: yaml
+      discovery:
+        server-addr: 49.234.75.113:8848
   mail:
     host: smtp.qq.com
-    username: ENC(Y+VN/tbIspLlC5uW+42sb/o6w6obmXQeKFeIh55d3OA=)
+    # ENC(Y+VN/tbIspLlC5uW+42sb/o6w6obmXQeKFeIh55d3OA=) dkhaos@foxmail.com
+    username: dkhaos@foxmail.com
+    # ENC(kHxQkSKf/GBNwo3+dHB7h/INe73f+zHq0kT63b9PK9A=) zlpftgdayshcbjdh
     password: ENC(kHxQkSKf/GBNwo3+dHB7h/INe73f+zHq0kT63b9PK9A=)
     port: 465
     properties:
@@ -21,27 +27,30 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/nontax?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&useSSL=true
     username: root
+    # ENC(j+rzzxe9suhLXYfPm0qnlA==) root
     password: ENC(j+rzzxe9suhLXYfPm0qnlA==)
   redis:
     port: 6379
+    # ENC(ZEBATsM7M0zPjNxHdtR12A==) 123456
     password: ENC(ZEBATsM7M0zPjNxHdtR12A==)
     host: 192.168.100.100
     database: 0
   freemarker:
     cache: false # 缓存配置 开发阶段应该配置为false 因为经常会改
-    suffix: .html # 模版后缀名 默认为ftl
     charset: UTF-8 # 文件编码
     template-loader-path: classpath:/templates/  # 存放模板的文件夹，以resource文件夹为相对路径
-  jackson:
-    generator:
-      write_numbers_as_strings: true
-    date-format: yyyy-MM-dd HH:mm:ss
-    time-zone: GMT+8
+
 jasypt:
   encryptor:
     # 配置进服务器的环境变量 ${JASYPT_ENCRYPTOR_PASSWORD}
     password: 123456
-
 sms:
+  ## LTAI4FcCoJRW4aviETuiTnWF ENC(lAbFy3L2z9XuUG5UT6pYUJ7E5DAxrZlGjkbgeGp7LNfXZI0e3cipcg==)
   accessKeyID: ENC(lAbFy3L2z9XuUG5UT6pYUJ7E5DAxrZlGjkbgeGp7LNfXZI0e3cipcg==)
+  ## SwJFMx9ZNFITt9vcrBNzaWHemP5v1l ENC(xerxYkN/0PbK5CG+pEN10OcJ27dJB86n3LFZuph00flNbszyBwPsHA==)
   accessKeySecret: ENC(xerxYkN/0PbK5CG+pEN10OcJ27dJB86n3LFZuph00flNbszyBwPsHA==)
+server:
+  port: 8080
+feign:
+  httpclient:
+    connection-timeout: 10000
