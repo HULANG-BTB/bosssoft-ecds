@@ -152,4 +152,17 @@ public interface IncomeSortDao extends BaseMapper<IncomeSortPO> {
             "where f_logic_delete=0")
     List<IncomeSortShowDTO> selectAll();
 
+    /**
+     * 对外提供收入类别信息
+     *
+     * @param subjectId
+     * @return
+     */
+    @Select("SELECT fis.f_code AS CODE,fis.f_name AS NAME\n" +
+            "FROM fab_income_sort fis,fab_income_sort_subject fiss\n" +
+            "WHERE fis.f_id=fiss.f_income_sort_id AND \n" +
+            "fis.f_logic_delete=0 AND fiss.f_logic_delete=0 AND\n" +
+            " f_subject_id=#{subjectId}")
+    IncomeSortShowDTO getBySubjectId(Long subjectId);
+
 }

@@ -11,10 +11,9 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import java.util.Properties;
 
 /**
- * @ClassName :  KafkaAppender
- * @Description : 将日志放入kafka中
- * @Author : wuliming
- * @Date: 2020-07-22 13:49
+ * 将日志放入kafka中
+ * @author wuliming
+ * @date 2020-07-22 13:49
  */
 @Data
 @Slf4j
@@ -59,16 +58,15 @@ public class KafkaAppender extends AppenderBase<ILoggingEvent> {
             props.put("buffer.memory", 33554432);
             props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
             props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-            producer = new KafkaProducer<String, String>(props);
+            producer = new KafkaProducer<>(props);
         }
     }
 
     @Override
     protected void append(ILoggingEvent eventObject) {
         String msg = eventObject.getFormattedMessage();
-        String key = eventObject.getLevel().toString();
         log.debug("向kafka推送日志开始:" + msg);
-        ProducerRecord<String, String> record = new ProducerRecord<String, String>(logTopic, key, msg);
+        ProducerRecord<String, String> record = new ProducerRecord<>(logTopic, msg);
         producer.send(record);
     }
 }

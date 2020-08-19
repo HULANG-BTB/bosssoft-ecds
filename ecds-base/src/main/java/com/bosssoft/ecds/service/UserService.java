@@ -65,4 +65,10 @@ public interface UserService extends IService<UserPO> {
      */
     Boolean resetPassword(UserDTO userDTO);
 
+    /**
+     * 通过ID查询用户
+     * @return
+     */
+    UserDTO getById();
+
 }

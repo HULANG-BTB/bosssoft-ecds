@@ -63,6 +63,9 @@ public class ItemDTO {
     @ApiModelProperty(value = "预算科目")
     private String subject;
 
+    @ApiModelProperty(value = "预算科目名字")
+    private String subjectName;
+
     @ApiModelProperty(value = "收缴方式")
     private String paymode;
 

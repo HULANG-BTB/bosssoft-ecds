@@ -136,8 +136,19 @@ public class ItemController {
     @ApiOperation(value = "查询预算科目树")
     @GetMapping("/getItemTree")
     public ResponseResult getItemTree() {
-        List<SubjectVO> all = subjectServicec.getAll("2020");
+        List<SubjectVO> all = subjectServicec.getSecondTree("2020");
         return new QueryResponseResult<>(CommonCode.SUCCESS,all);
+    }
+
+    /**
+     * 根据收入类别编码，查询收入类别名字
+     *
+     * @return 项目信息集合
+     */
+    @ApiOperation(value = "根据收入类别编码，查询收入类别名字")
+    @GetMapping("/getIncomSortName")
+    public ResponseResult getIncomSortName(String code) {
+        return itemService.getIncomSortName(code);
     }
 }
 

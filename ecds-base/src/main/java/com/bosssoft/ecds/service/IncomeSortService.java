@@ -95,4 +95,11 @@ public interface IncomeSortService {
      */
     QueryResponseResult selectAll();
 
+    /**
+     * 对外提供收入类别信息
+     *
+     * @return
+     */
+    QueryResponseResult getBySubjectId(Long subjectId);
+
 }

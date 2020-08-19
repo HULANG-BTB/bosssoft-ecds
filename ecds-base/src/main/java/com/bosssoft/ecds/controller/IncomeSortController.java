@@ -11,7 +11,6 @@ import com.bosssoft.ecds.response.CommonCode;
 import com.bosssoft.ecds.response.QueryResponseResult;
 import com.bosssoft.ecds.response.ResponseResult;
 import com.bosssoft.ecds.service.IncomeSortService;
-import com.bosssoft.ecds.util.RSAUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -53,8 +52,6 @@ public class IncomeSortController {
 
     @ApiOperation(value = "分页查询收入类别信息", notes = "通过id查询显示子级收入类别")
     @PostMapping("/pageQueryById")
-    @Decrypt
-    @Encrypt
     public QueryResponseResult pageQueryById(@RequestBody @Validated FuzzyQueryIncomeSortVO fuzzyQueryIncomeSortVO) {
         QueryResponseResult incomeSortDTOS = incomeSortService.pageQueryByName(fuzzyQueryIncomeSortVO);
         return incomeSortDTOS;
@@ -93,9 +90,4 @@ public class IncomeSortController {
         return incomeSortService.selectAll();
     }
 
-    @GetMapping("/getRSAPublicKey")
-    public QueryResponseResult getRSAPublicKey() throws Exception {
-        QueryResponseResult queryResponseResult = new QueryResponseResult(CommonCode.SUCCESS, RSAUtil.getPublicKey());
-        return queryResponseResult;
-    }
 }

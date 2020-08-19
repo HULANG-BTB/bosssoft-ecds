@@ -15,7 +15,6 @@ import com.bosssoft.ecds.entity.po.AgenPO;
 import com.bosssoft.ecds.entity.po.FabFinDept;
 import com.bosssoft.ecds.entity.vo.FabFinDeptVo;
 import com.bosssoft.ecds.enums.FabFinDeptResultCode;
-import com.bosssoft.ecds.service.AgenService;
 import com.bosssoft.ecds.service.FabFinDeptService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +23,8 @@ import org.springframework.util.StringUtils;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * <p>
@@ -39,8 +40,8 @@ public class FabFinDeptServiceImpl extends ServiceImpl<FabFinDeptDao, FabFinDept
     private FabFinDeptDao fabFinDeptMapper;
     @Autowired
     private AgenDao fabAgenDao;
-    @Autowired
-    private AgenService fabAgenService;
+
+    private final String reg = "^1[3|4|5|6|7|8][0-9]{9}$";
 
     @Override
     /**
@@ -56,6 +57,7 @@ public class FabFinDeptServiceImpl extends ServiceImpl<FabFinDeptDao, FabFinDept
         if (!flag) {
             return new ResponseResult(CommonCode.INVLIDATE);
         }
+        fabFinDept.setVersion(null);
         //数据库操作
         //判断是insert操作还是update操作
         Long fId = fabFinDept.getId();
@@ -104,6 +106,17 @@ public class FabFinDeptServiceImpl extends ServiceImpl<FabFinDeptDao, FabFinDept
         //是否启用
         if (fabFinDept.getIsEnable() == null) {
             return false;
+        }
+        //手机号表达式
+        if (StringUtils.isEmpty(fabFinDept.getLinkTel())) {
+            return false;
+        } else {
+            Pattern p = Pattern.compile(reg);
+            Matcher m = p.matcher(fabFinDept.getLinkTel());
+            boolean isMatch = m.matches();
+            if (!isMatch) {
+                return false;
+            }
         }
         return true;
     }
