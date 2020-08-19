@@ -1,4 +1,4 @@
-package com.bosssoft.ecds.entity.dto;
+package com.bosssoft.ecds.entity.vo.itemvo;
 
 import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.annotations.ApiModel;
@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -17,8 +18,8 @@ import java.util.Date;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@ApiModel(value="ItemStdDTO对象", description="")
-public class ItemStdDTO {
+@ApiModel(value = "ItemStdVO对象", description = "")
+public class ItemStdVO {
     @ApiModelProperty(value = "主键")
     private Long id;
 
@@ -40,15 +41,20 @@ public class ItemStdDTO {
     @ApiModelProperty(value = "标准下限")
     private BigDecimal minCharge;
 
+    @ApiModelProperty(value = "标准金额")
+    private BigDecimal charge;
+
     @ApiModelProperty(value = "计量单位")
     private String units;
 
     @ApiModelProperty(value = "是否启用")
     private Integer isenable;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @ApiModelProperty(value = "标准生效日期")
     private Date itemstdEffdate;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @ApiModelProperty(value = "标准失效日期")
     private Date itemstdExpdate;
 

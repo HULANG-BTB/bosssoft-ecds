@@ -1,4 +1,4 @@
-package com.bosssoft.ecds.entity.dto;
+package com.bosssoft.ecds.entity.dto.placedto;
 
 import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.annotations.ApiModel;
@@ -17,7 +17,7 @@ import java.util.Date;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @ApiModel(value="PlaceDTO对象", description="")
-public class PlaceDTO {
+public class PlaceAllDTO {
     @ApiModelProperty(value = "主键")
     private Long id;
 

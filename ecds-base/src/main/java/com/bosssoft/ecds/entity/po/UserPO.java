@@ -10,6 +10,7 @@ import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -87,6 +88,9 @@ public class UserPO extends Model<UserPO> {
     @TableField("f_note")
     private String note;
 
+    @ApiModelProperty(value = "权限列表")
+    @TableField(exist = false)
+    private List<RolePO> roles;
 
     public static final String F_ID = "f_id";
 

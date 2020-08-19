@@ -1,11 +1,12 @@
 package com.bosssoft.ecds.security.handler;
 
-import com.bosssoft.ecds.security.utils.ResponseUtils;
+import cn.hutool.json.JSONUtil;
+import com.bosssoft.ecds.response.CommonCode;
+import com.bosssoft.ecds.response.QueryResponseResult;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.server.authorization.ServerAccessDeniedHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
@@ -28,11 +29,10 @@ public class CustomAuthenticationAccessDeniedHandler implements ServerAccessDeni
     public Mono<Void> handle(ServerWebExchange exchange, AccessDeniedException denied) {
         ServerHttpResponse response = exchange.getResponse();
         // 设置响应头
-        response.setStatusCode(HttpStatus.UNAUTHORIZED);
         response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
         // 三设置 验证异常返回信息
-        String responseBodyString = ResponseUtils.getResponse(denied.getMessage(), ResponseUtils.ResultType.FORBIDDEN);
-        byte[] responseBodyBytes = responseBodyString.getBytes();
+        QueryResponseResult<String> responseResult = new QueryResponseResult<>(CommonCode.ACCESSDENIED, denied.getMessage());
+        byte[] responseBodyBytes = JSONUtil.toJsonStr(responseResult).getBytes();
         // 写入信息
         return response.writeWith(Mono.just(response.bufferFactory().wrap(responseBodyBytes)));
     }
