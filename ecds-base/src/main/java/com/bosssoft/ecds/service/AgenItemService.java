@@ -1,10 +1,11 @@
 package com.bosssoft.ecds.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.bosssoft.ecds.entity.dto.itemdto.ItemInfoDTO;
 import com.bosssoft.ecds.response.QueryResponseResult;
 import com.bosssoft.ecds.response.ResponseResult;
 import com.bosssoft.ecds.entity.dto.agendto.AgenItemDTO;
-import com.bosssoft.ecds.entity.dto.ItemDTO;
+import com.bosssoft.ecds.entity.dto.itemdto.ItemDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.po.AgenItemPO;
 import com.bosssoft.ecds.entity.vo.itemvo.ItemVO;
@@ -47,5 +48,7 @@ public interface AgenItemService extends IService<AgenItemPO> {
      * @return 返回成功或者失败的code和msg
      */
     ResponseResult updateBatch(List<AgenItemDTO> agenItemDTOList);
+
+    List<ItemInfoDTO> getItemInfo(String agenName);
 
 }

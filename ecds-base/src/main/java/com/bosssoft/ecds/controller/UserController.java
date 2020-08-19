@@ -130,5 +130,13 @@ public class UserController {
         return new QueryResponseResult<>(CommonCode.SUCCESS, resetResult);
     }
 
+    @GetMapping("info")
+    @ApiOperation(value = "获取用户信息")
+    public QueryResponseResult<UserVO> getInfo() {
+        UserDTO userDTO = userService.getById();
+        UserVO userVO = MyBeanUtil.copyProperties(userDTO, UserVO.class);
+        return new QueryResponseResult<>(CommonCode.SUCCESS, userVO);
+    }
+
 }
 

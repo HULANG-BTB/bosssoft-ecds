@@ -1,7 +1,6 @@
 package com.bosssoft.ecds.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.bosssoft.ecds.entity.dto.ItemDTO;
 import com.bosssoft.ecds.entity.vo.*;
 
 public interface FabItemBillService {

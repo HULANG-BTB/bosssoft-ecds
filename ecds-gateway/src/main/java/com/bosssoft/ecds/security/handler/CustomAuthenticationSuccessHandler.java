@@ -12,7 +12,7 @@ import com.bosssoft.ecds.security.entity.vo.UserVO;
 import com.bosssoft.ecds.security.service.impl.SecurityUserServiceImpl;
 import com.bosssoft.ecds.security.utils.BeanUtils;
 import com.bosssoft.ecds.security.utils.JwtUtils;
-import com.bosssoft.ecds.security.utils.RedisUtils;
+import com.bosssoft.ecds.util.RedisUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpHeaders;
@@ -25,6 +25,7 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -86,8 +87,13 @@ public class CustomAuthenticationSuccessHandler extends WebFilterChainServerAuth
             userDetails.setPassword(null);
             String token = JwtUtils.generateTokenExpireInMinutes(userDetails, rsa.getPrivateKey(), 60 * 24 * 30);
             userVO.setToken(token);
-            QueryResponseResult<UserVO> responseResult = new QueryResponseResult<>(CommonCode.SUCCESS, userVO);
-            dataBytes = JSONUtil.toJsonStr(responseResult).getBytes(StandardCharsets.UTF_8);
+
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("success", CommonCode.SUCCESS.success());
+            map.put("code", CommonCode.SUCCESS.code());
+            map.put("message", CommonCode.SUCCESS.message());
+            map.put("data", userVO);
+            dataBytes = JSONUtil.toJsonStr(map).getBytes(StandardCharsets.UTF_8);
         } catch (Exception ex) {
             ex.printStackTrace();
             QueryResponseResult<String> responseResult = new QueryResponseResult<>(CommonCode.SUCCESS, ex.getMessage());

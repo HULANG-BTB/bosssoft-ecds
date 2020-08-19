@@ -1,7 +1,7 @@
-package com.bosssoft.ecds.common.exception;
+package com.bosssoft.ecds.exception;
 
 
-import com.bosssoft.ecds.common.response.ResultCode;
+import com.bosssoft.ecds.response.ResultCode;
 
 /**
  * 用于抛出自定义的指定状态码的异常信息

@@ -4,6 +4,7 @@ package com.bosssoft.ecds.controller;
 import com.bosssoft.ecds.entity.dto.agendto.AgenDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.dto.agendto.AgenInfoDTO;
+import com.bosssoft.ecds.entity.dto.agendto.AlarmDTO;
 import com.bosssoft.ecds.entity.dto.agendto.ArrearDTO;import com.bosssoft.ecds.entity.dto.PagesDTO;import com.bosssoft.ecds.entity.vo.AgenVO;
 import com.bosssoft.ecds.entity.vo.PageVO;
 import com.bosssoft.ecds.entity.vo.PagesVO;
@@ -225,6 +226,21 @@ public class AgenController {
         agenDTO.setAgenName(ageName);
         AgenDTO byAgenName = fabAgenService.getByAgenName(agenDTO);
         return MyBeanUtil.copyProperties(byAgenName, ArrearDTO.class);
+    }
+
+    /**
+     * 查询是否预警单位
+     *
+     * @param ageName 单位名字
+     * @return 是否为预警单位
+     */
+    @ApiOperation(value = "查询是否预警单位",notes = "单位名字")
+    @PostMapping("/isAlarm")
+    public AlarmDTO isAlarm(String ageName) {
+        AgenDTO agenDTO = new AgenDTO();
+        agenDTO.setAgenName(ageName);
+        AgenDTO byAgenName = fabAgenService.getByAgenName(agenDTO);
+        return MyBeanUtil.copyProperties(byAgenName, AlarmDTO.class);
     }
 
 

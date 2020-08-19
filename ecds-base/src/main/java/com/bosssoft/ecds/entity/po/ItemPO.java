@@ -92,9 +92,13 @@ public class ItemPO extends Model<ItemPO> {
     @TableField("f_fundsnature_code")
     private String fundsnatureCode;
 
-    @ApiModelProperty(value = "预算科目")
+    @ApiModelProperty(value = "预算科目编码")
     @TableField("f_subject")
     private String subject;
+
+    @ApiModelProperty(value = "预算科目名字")
+    @TableField("f_subject_name")
+    private String subjectName;
 
     @ApiModelProperty(value = "收缴方式")
     @TableField("f_paymode")
@@ -158,6 +162,8 @@ public class ItemPO extends Model<ItemPO> {
     public static final String F_FUNDSNATURE_CODE = "f_fundsnature_code";
 
     public static final String F_SUBJECT = "f_subject";
+
+    public static final String F_SUBJECT_NAME = "f_subject_name";
 
     public static final String F_PAYMODE = "f_paymode";
 

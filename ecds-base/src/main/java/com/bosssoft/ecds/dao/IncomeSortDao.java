@@ -2,6 +2,7 @@ package com.bosssoft.ecds.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.bosssoft.ecds.entity.dto.IncomeSortDTO;
+import com.bosssoft.ecds.entity.dto.IncomeSortShowDTO;
 import com.bosssoft.ecds.entity.dto.IncomeSubjectDTO;
 import com.bosssoft.ecds.entity.po.IncomeSortPO;
 import org.apache.ibatis.annotations.Many;
@@ -128,5 +129,40 @@ public interface IncomeSortDao extends BaseMapper<IncomeSortPO> {
      */
     @Select("select max(f_level) from fab_income_sort")
     int getMaxLevelFromIncome();
+
+    /**
+     * 根据收入种类id获取该种类的信息
+     *
+     * @param id
+     * @return
+     */
+    @Select("SELECT f_id as id,f_code as code,f_name as name,f_is_leaf as leaf,f_level as level,f_parent_id as parentId\n" +
+            "FROM fab_income_sort\n" +
+            "WHERE f_logic_delete=0 and f_id=#{id}\n"
+    )
+    IncomeSortDTO getOneById(Long id);
+
+    /**
+     * 获取全部收入种类
+     *
+     * @return
+     */
+    @Select("select f_code as code,f_name as name\n" +
+            "FROM fab_income_sort\n" +
+            "where f_logic_delete=0")
+    List<IncomeSortShowDTO> selectAll();
+
+    /**
+     * 对外提供收入类别信息
+     *
+     * @param subjectId
+     * @return
+     */
+    @Select("SELECT fis.f_code AS CODE,fis.f_name AS NAME\n" +
+            "FROM fab_income_sort fis,fab_income_sort_subject fiss\n" +
+            "WHERE fis.f_id=fiss.f_income_sort_id AND \n" +
+            "fis.f_logic_delete=0 AND fiss.f_logic_delete=0 AND\n" +
+            " f_subject_id=#{subjectId}")
+    IncomeSortShowDTO getBySubjectId(Long subjectId);
 
 }

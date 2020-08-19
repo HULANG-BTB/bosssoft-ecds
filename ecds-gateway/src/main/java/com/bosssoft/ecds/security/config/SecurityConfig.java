@@ -4,9 +4,7 @@ import com.bosssoft.ecds.security.auth.CustomReactiveAuthenticationManager;
 import com.bosssoft.ecds.security.auth.CustomServerSecurityContextRepository;
 import com.bosssoft.ecds.security.auth.CustomReactiveAuthorizationManager;
 import com.bosssoft.ecds.security.auth.CustomServerAuthenticationEntryPoint;
-import com.bosssoft.ecds.security.handler.CustomAuthenticationAccessDeniedHandler;
-import com.bosssoft.ecds.security.handler.CustomAuthenticationFailureHandler;
-import com.bosssoft.ecds.security.handler.CustomAuthenticationSuccessHandler;
+import com.bosssoft.ecds.security.handler.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
@@ -56,6 +54,9 @@ public class SecurityConfig {
     @Autowired
     CustomReactiveAuthorizationManager customReactiveAuthorizationManager;
 
+    @Autowired
+    CustomRedirectServerLogoutSuccessHandler customRedirectServerLogoutSuccessHandler;
+
     private static final String[] excludedAuthPages = {
             "/user/login",
             "/user/logout"
@@ -89,6 +90,8 @@ public class SecurityConfig {
         http.exceptionHandling()
                 .accessDeniedHandler(customAuthenticationAccessDeniedHandler)
                 .authenticationEntryPoint(customServerAuthenticationEntryPoint);
+
+        http.logout().logoutUrl("/user/logout").logoutSuccessHandler(customRedirectServerLogoutSuccessHandler);
 
         return http.build();
     }

@@ -1,11 +1,15 @@
 package com.bosssoft.ecds.controller;
 
 
-import com.bosssoft.ecds.entity.dto.ItemDTO;
+import com.bosssoft.ecds.entity.dto.itemdto.ItemDTO;
 import com.bosssoft.ecds.entity.vo.itemvo.ItemPageVO;
 import com.bosssoft.ecds.entity.vo.itemvo.ItemVO;
+import com.bosssoft.ecds.entity.vo.subjectvo.SubjectVO;
+import com.bosssoft.ecds.response.CommonCode;
+import com.bosssoft.ecds.response.QueryResponseResult;
 import com.bosssoft.ecds.response.ResponseResult;
 import com.bosssoft.ecds.service.ItemService;
+import com.bosssoft.ecds.service.SubjectService;
 import com.bosssoft.ecds.utils.MyBeanUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -31,6 +35,8 @@ public class ItemController {
     @Autowired
     private ItemService itemService;
 
+    @Autowired
+    private SubjectService subjectServicec;
     /**
      * 插入项目相关信息
      *
@@ -120,6 +126,29 @@ public class ItemController {
     @GetMapping("/getItemAll")
     public ResponseResult getItemAll() {
         return itemService.getItemAll();
+    }
+
+    /**
+     * 查询预算科目树
+     *
+     * @return 项目信息集合
+     */
+    @ApiOperation(value = "查询预算科目树")
+    @GetMapping("/getItemTree")
+    public ResponseResult getItemTree() {
+        List<SubjectVO> all = subjectServicec.getSecondTree("2020");
+        return new QueryResponseResult<>(CommonCode.SUCCESS,all);
+    }
+
+    /**
+     * 根据收入类别编码，查询收入类别名字
+     *
+     * @return 项目信息集合
+     */
+    @ApiOperation(value = "根据收入类别编码，查询收入类别名字")
+    @GetMapping("/getIncomSortName")
+    public ResponseResult getIncomSortName(String code) {
+        return itemService.getIncomSortName(code);
     }
 }
 

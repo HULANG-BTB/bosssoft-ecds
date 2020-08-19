@@ -2,12 +2,14 @@ package com.bosssoft.ecds.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.bosssoft.ecds.dao.IncomeSortDao;
+import com.bosssoft.ecds.entity.po.IncomeSortPO;
 import com.bosssoft.ecds.response.CommonCode;
 import com.bosssoft.ecds.response.QueryResponseResult;
 import com.bosssoft.ecds.response.ResponseResult;
 import com.bosssoft.ecds.dao.AgenItemDao;
 import com.bosssoft.ecds.dao.ItemStdDao;
-import com.bosssoft.ecds.entity.dto.ItemDTO;
+import com.bosssoft.ecds.entity.dto.itemdto.ItemDTO;
 import com.bosssoft.ecds.entity.po.AgenItemPO;
 import com.bosssoft.ecds.entity.po.ItemPO;
 import com.bosssoft.ecds.dao.ItemDao;
@@ -42,6 +44,8 @@ public class ItemServiceImpl extends ServiceImpl<ItemDao, ItemPO> implements Ite
     private AgenItemDao agenItemDao;
     @Autowired
     private ItemStdDao itemStdDao;
+    @Autowired
+    private IncomeSortDao incomeSortDao;
 
     /**
      * 插入项目，输入项目信息
@@ -137,9 +141,21 @@ public class ItemServiceImpl extends ServiceImpl<ItemDao, ItemPO> implements Ite
         itemDTOPage.setSize(itemPageVO.getLimit());
         // 读取分页数据
         QueryWrapper<ItemPO> queryWrapper = new QueryWrapper<>();
-        if (itemPageVO.getIsenable() == null) {
-            queryWrapper.like(ItemPO.F_ITEM_NAME, itemPageVO.getKeyword());
+        if (!itemPageVO.getSubjectCode().isEmpty()) {
+            // 预算科目编码不为空，表示在项目管理界面分页查询
+            // 判断审核状态是否存在，如果不存在，通过预算科目查询出全部信息，还可以通过名字模糊查询
+            if (itemPageVO.getIsenable() == null){
+                queryWrapper.eq(ItemPO.F_SUBJECT,itemPageVO.getSubjectCode())
+                        .and(wrapper -> wrapper.like(ItemPO.F_ITEM_NAME, itemPageVO.getKeyword()));
+            }else {
+                // 如果审核状态存在，通过预算科目和审核状态查询，还可以通过名字模糊查询
+                queryWrapper.eq(ItemPO.F_SUBJECT,itemPageVO.getSubjectCode())
+                        // 根据审核状态查询
+                        .and(wrapper->wrapper.eq(ItemPO.F_ISENABLE, itemPageVO.getIsenable()))
+                        .and(wrapper -> wrapper.like(ItemPO.F_ITEM_NAME, itemPageVO.getKeyword()));
+            }
         } else {
+            // 预算科目编码为空，审核界面的分页查询，先查询审核状态，然后可以通过名字模糊查询
             queryWrapper.eq(ItemPO.F_ISENABLE, itemPageVO.getIsenable())
                     .and(wrapper -> wrapper.like(ItemPO.F_ITEM_NAME, itemPageVO.getKeyword()));
         }
@@ -210,5 +226,13 @@ public class ItemServiceImpl extends ServiceImpl<ItemDao, ItemPO> implements Ite
             return new QueryResponseResult<>(CommonCode.SUCCESS, itemVOS);
         }
         return new ResponseResult(CommonCode.FAIL);
+    }
+
+    @Override
+    public ResponseResult getIncomSortName(String code) {
+        QueryWrapper<IncomeSortPO> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(IncomeSortPO.F_CODE,code);
+        IncomeSortPO incomeSortPO = incomeSortDao.selectOne(queryWrapper);
+        return new QueryResponseResult<>(CommonCode.SUCCESS,incomeSortPO);
     }
 }

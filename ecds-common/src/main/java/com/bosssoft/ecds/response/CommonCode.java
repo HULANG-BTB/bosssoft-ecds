@@ -20,6 +20,8 @@ public enum CommonCode implements ResultCode {
 
     SERVER_ERROR(false, 99999, "抱歉，系统繁忙，请稍后重试！"),
     DUPLICATE_ERROR(false, 21111, "该数据已存在"),
+    ENCRYPTION_ERROR(false, 21222, "加密参数缺失"),
+    EMAIL_NOTIFICATION(false, 29999, "邮件通知")
     ;
     //操作是否成功
     boolean success;

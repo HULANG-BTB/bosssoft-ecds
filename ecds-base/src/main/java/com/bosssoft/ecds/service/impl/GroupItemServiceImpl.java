@@ -43,7 +43,13 @@ public class GroupItemServiceImpl extends ServiceImpl<GroupItemDao, GroupItemPO>
     @Override
     public ResponseResult save(GroupItemDTO groupItemDTO) {
         // 将dto转化为po
-        GroupItemPO groupItemPO = MyBeanUtil.copyProperties(groupItemDTO, GroupItemPO.class);
+        QueryWrapper<GroupItemPO> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(GroupItemPO.F_GROUP_CODE,groupItemDTO.getGroupCode())
+                .and(wrapper->wrapper.eq(GroupItemPO.F_ITEM_CODE,groupItemDTO.getItemCode()));
+        if (groupItemDao.selectOne(queryWrapper) != null){
+            return new ResponseResult(ItemResultCode.ITEM_STD_EXISTS);
+        }
+        GroupItemPO groupItemPO =  MyBeanUtil.copyProperties(groupItemDTO,GroupItemPO.class);
         boolean save = super.save(groupItemPO);
         if (!save) {
             return new ResponseResult(CommonCode.FAIL);
@@ -68,11 +74,14 @@ public class GroupItemServiceImpl extends ServiceImpl<GroupItemDao, GroupItemPO>
 
     @Override
     public ResponseResult delete(GroupItemDTO groupItemDTO) {
-        GroupItemPO byId = super.getById(groupItemDTO.getId());
-        if (byId == null) {
+        QueryWrapper<GroupItemPO> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(GroupItemPO.F_GROUP_CODE,groupItemDTO.getGroupCode())
+                .and(wrapper->wrapper.eq(GroupItemPO.F_ITEM_CODE,groupItemDTO.getItemCode()));
+        GroupItemPO groupItemPO = groupItemDao.selectOne(queryWrapper);
+        if (groupItemPO == null) {
             return new ResponseResult(ItemResultCode.NOT_EXISTS);
         }
-        boolean remove = super.removeById(byId);
+        boolean remove = super.removeById(groupItemPO);
         if (!remove) {
             return new ResponseResult(CommonCode.FAIL);
         }
@@ -109,7 +118,6 @@ public class GroupItemServiceImpl extends ServiceImpl<GroupItemDao, GroupItemPO>
         List<ItemPO> itemPos = new ArrayList<>();
         for (GroupItemPO groupItemPO : groupItemPOS) {
             ItemPO itemInfo = groupItemDao.getItemInfo(groupItemPO.getItemCode());
-            System.out.println(itemInfo);
             itemPos.add(itemInfo);
         }
         List<ItemVO> itemVOS = MyBeanUtil.copyListProperties(itemPos, ItemVO::new);

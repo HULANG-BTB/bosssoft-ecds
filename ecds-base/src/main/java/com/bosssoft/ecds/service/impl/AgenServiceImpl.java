@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -46,6 +47,26 @@ public class AgenServiceImpl extends ServiceImpl<AgenDao, AgenPO> implements Age
     public AgenDTO save(AgenDTO fabAgenDTO) {
         AgenPO fabAgenPO = new AgenPO();
         MyBeanUtil.copyProperties(fabAgenDTO, fabAgenPO);
+        Date data = new Date();
+        fabAgenPO.setRgnId("1111111");
+        fabAgenPO.setAgenCode("123");
+        fabAgenPO.setPidCode("1");
+        fabAgenPO.setIsleaf(true);
+        fabAgenPO.setOrgCode("1");
+        fabAgenPO.setTypeCode("1");
+        fabAgenPO.setIsenable(false);
+        fabAgenPO.setIstickAgen(false);
+        fabAgenPO.setIsunpaid(false);
+        fabAgenPO.setIsalarmAgen(false);
+        fabAgenPO.setProvinceId("1");
+        fabAgenPO.setCityId("1");
+        fabAgenPO.setCountyId("1");
+        fabAgenPO.setOperator("123");
+        fabAgenPO.setOperatorId(123L);
+        fabAgenPO.setCreateTime(data);
+        fabAgenPO.setUpdateTime(data);
+        fabAgenPO.setLogicDelete(false);
+        fabAgenPO.setVersion(1);
         super.save(fabAgenPO);
         return fabAgenDTO;
     }
@@ -147,21 +168,6 @@ public class AgenServiceImpl extends ServiceImpl<AgenDao, AgenPO> implements Age
         fabAgenPOPage.setSize(pagesDTO.getLimit());
         // 读取分页数据
         QueryWrapper<AgenPO> queryWrapper = new QueryWrapper<>();
-        if(pagesDTO.getKeyword().get("deptName") != null && pagesDTO.getKeyword().get("deptName").equals("")){
-            queryWrapper.and(wrapper -> wrapper.like(AgenPO.F_DEPT_CODE, pagesDTO.getKeyword().get("deptName")));
-        }
-        if(pagesDTO.getKeyword().get("agenCode") != null && pagesDTO.getKeyword().get("agenCode").equals("")){
-            queryWrapper.and(wrapper -> wrapper.like(AgenPO.F_AGEN_CODE, pagesDTO.getKeyword().get("agenCode")));
-        }
-        if(pagesDTO.getKeyword().get("agenName") != null && pagesDTO.getKeyword().get("agenName").equals("")){
-            queryWrapper.and(wrapper -> wrapper.like(AgenPO.F_AGEN_NAME, pagesDTO.getKeyword().get("agenName")));
-        }
-        if(pagesDTO.getKeyword().get("sortCode") != null && pagesDTO.getKeyword().get("sortCode").equals("")){
-            queryWrapper.and(wrapper -> wrapper.like(AgenPO.F_SORT_CODE, pagesDTO.getKeyword().get("sortCode")));
-        }
-        if(pagesDTO.getKeyword().get("typeCode") != null && pagesDTO.getKeyword().get("typeCode").equals("")) {
-            queryWrapper.and(wrapper -> wrapper.like(AgenPO.F_TYPE_CODE, pagesDTO.getKeyword().get("typeCode")));
-        }
         if(pagesDTO.getKeyword().get("isenable") != null) {
             String s = (String) pagesDTO.getKeyword().get("isenable");
             if(s.equals("false")){
@@ -170,8 +176,16 @@ public class AgenServiceImpl extends ServiceImpl<AgenDao, AgenPO> implements Age
             if(s.equals("true")){
                 queryWrapper.eq(AgenPO.F_ISENABLE, true);
             }
-
         }
+
+        if(pagesDTO.getKeyword().get("deptName") != null && pagesDTO.getKeyword().get("deptName").equals("")==false){
+            queryWrapper.and(wrapper -> wrapper.like(AgenPO.F_DEPT_NAME, pagesDTO.getKeyword().get("deptName")));
+        }
+        if(pagesDTO.getKeyword().get("agenName") != null && pagesDTO.getKeyword().get("agenName").equals("")==false){
+            queryWrapper.and(wrapper -> wrapper.like(AgenPO.F_AGEN_NAME, pagesDTO.getKeyword().get("agenName")));
+        }
+
+
         queryWrapper.orderByAsc(AgenPO.F_CREATE_TIME);
         // 读取分页数据
         Page<AgenPO> fabAgenPOPage1 = super.page(fabAgenPOPage, queryWrapper);
@@ -198,20 +212,15 @@ public class AgenServiceImpl extends ServiceImpl<AgenDao, AgenPO> implements Age
         // 读取分页数据
         QueryWrapper<AgenPO> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(AgenPO.F_ISENABLE, false);
-        if(pagesDTO.getKeyword().get("deptName") != null && pagesDTO.getKeyword().get("deptName").equals("")){
-            queryWrapper.and(wrapper -> wrapper.like(AgenPO.F_DEPT_CODE, pagesDTO.getKeyword().get("deptName")));
+
+        if(pagesDTO.getKeyword().get("deptName") != null && pagesDTO.getKeyword().get("deptName").equals("")==false){
+            queryWrapper.and(wrapper -> wrapper.like(AgenPO.F_DEPT_NAME, pagesDTO.getKeyword().get("deptName")));
         }
-        if(pagesDTO.getKeyword().get("agenCode") != null && pagesDTO.getKeyword().get("agenCode").equals("")){
+        if(pagesDTO.getKeyword().get("agenCode") != null && pagesDTO.getKeyword().get("agenCode").equals("")==false){
             queryWrapper.and(wrapper -> wrapper.like(AgenPO.F_AGEN_CODE, pagesDTO.getKeyword().get("agenCode")));
         }
-        if(pagesDTO.getKeyword().get("agenName") != null && pagesDTO.getKeyword().get("agenName").equals("")){
+        if(pagesDTO.getKeyword().get("agenName") != null && pagesDTO.getKeyword().get("agenName").equals("")==false){
             queryWrapper.and(wrapper -> wrapper.like(AgenPO.F_AGEN_NAME, pagesDTO.getKeyword().get("agenName")));
-        }
-        if(pagesDTO.getKeyword().get("sortCode") != null && pagesDTO.getKeyword().get("sortCode").equals("")){
-            queryWrapper.and(wrapper -> wrapper.like(AgenPO.F_SORT_CODE, pagesDTO.getKeyword().get("sortCode")));
-        }
-        if(pagesDTO.getKeyword().get("typeCode") != null && pagesDTO.getKeyword().get("typeCode").equals("")) {
-            queryWrapper.and(wrapper -> wrapper.like(AgenPO.F_TYPE_CODE, pagesDTO.getKeyword().get("typeCode")));
         }
         queryWrapper.orderByAsc(AgenPO.F_CREATE_TIME);
         // 读取分页数据

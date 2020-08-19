@@ -1,7 +1,7 @@
 package com.bosssoft.ecds.service;
 
 
-import com.bosssoft.ecds.common.response.ResponseResult;
+import com.bosssoft.ecds.response.ResponseResult;
 import com.bosssoft.ecds.entity.vo.billtypevo.AddBillTypeVO;
 import com.bosssoft.ecds.entity.vo.billtypevo.BillTypeIdVo;
 import com.bosssoft.ecds.entity.vo.billtypevo.QueryTableVO;
