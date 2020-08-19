@@ -37,9 +37,9 @@
         <bootstrapServers>${bootstrapServers}</bootstrapServers>
         <logTopic>${logTopic}</logTopic>
     </appender>
-    <appender name="BUSINESSKAFKA" class="com.bosssoft.ecds.appender.KafkaBusinessAppender">
+    <appender name="BUSINESSKAFKA" class="com.bosssoft.ecds.appender.KafkaAppender">
         <bootstrapServers>${bootstrapServers}</bootstrapServers>
-        <businessTopic>${businessTopic}</businessTopic>
+        <logTopic>${businessTopic}</logTopic>
     </appender>
     <!--异步写入kafka，尽量不占用主程序的资源-->
     <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">

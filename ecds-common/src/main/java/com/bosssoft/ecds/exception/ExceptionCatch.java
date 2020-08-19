@@ -71,9 +71,15 @@ public class ExceptionCatch {
     @ExceptionHandler(CustomException.class)
     @ResponseBody
     public ResponseResult customException(CustomException e){
+        // 定义返回信息
         ResponseResult responseResult = new ResponseResult(e.getResultCode());
-        String expationType = CustomException.class.getSimpleName();
-        ExceptionDetail exceptionDetail = new ExceptionDetail(e.getResultCode(),e.getErrorMsg(),expationType);
+        // 异常名称
+        String exceptionType = CustomException.class.getSimpleName();
+        // 要写入日志的信息
+        String errMsg = e.getErrorMsg();
+        // 创建异常的详细信息,message不传则采用resultCode中的message
+        ExceptionDetail exceptionDetail = new ExceptionDetail(e.getResultCode(),errMsg,exceptionType);
+        // 将异常信息以JSON格式打印到日志
         String message = JSON.toJSONString(exceptionDetail);
         log.error(message);
         return responseResult;
