@@ -357,6 +357,23 @@ public class SubjectServiceImpl extends ServiceImpl<SubjectDao, SubjectPO> imple
         return subjectVOTree;
     }
 
+    @Override
+    public List<SubjectVO> getSecondTree(String year) {
+        QueryWrapper<SubjectPO> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(SubjectPO.F_PARENT_ID, SubjectConstant.INIT_PARENT_ID)
+                .and(wrapper->wrapper.eq("f_year", year));
+        List<SubjectPO> subjectPOS1 = baseMapper.selectList(queryWrapper);
+        List<SubjectVO> subjectVOS1 = MyBeanUtil.copyListProperties(subjectPOS1, SubjectVO::new);
+        subjectVOS1.forEach(subjectVO -> {
+            QueryWrapper<SubjectPO> queryWrapper2 = new QueryWrapper<>();
+            queryWrapper2.eq(SubjectPO.F_PARENT_ID,subjectVO.getId());
+            List<SubjectPO> subjectPOS2 = baseMapper.selectList(queryWrapper2);
+            List<SubjectVO> subjectVOS2 = MyBeanUtil.copyListProperties(subjectPOS2, SubjectVO::new);
+            subjectVO.setSubjectVOS(subjectVOS2);
+        });
+        return subjectVOS1;
+    }
+
 
     /**
      * 查看收入类别最大层级
