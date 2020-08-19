@@ -39,7 +39,7 @@ public class CommonUtil {
         UneCbill uneCbill = new UneCbill();
         //开票主表id
         long cbillId = generateID();
-        uneCbill.(cbillId);
+        uneCbill.setFId(cbillId);
         //单位
         uneCbill.setFAgenIdCode(unitName);
         uneCbill.setFPlaceCode("开票点代码");
