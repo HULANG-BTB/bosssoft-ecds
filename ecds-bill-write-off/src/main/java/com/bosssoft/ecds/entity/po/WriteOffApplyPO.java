@@ -21,8 +21,6 @@ import java.util.Date;
 @TableName("ube_writeoff_apply")
 @ApiModel(value="WriteoffApplyPO对象")
 public class WriteOffApplyPO {
-
-
     @ApiModelProperty(value = "主键")
     @TableId(value = "f_id", type = IdType.AUTO)
     private Long fId;
