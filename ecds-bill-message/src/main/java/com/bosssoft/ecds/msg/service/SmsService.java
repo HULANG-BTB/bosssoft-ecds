@@ -43,4 +43,12 @@ public interface SmsService extends IService<SmsPo> {
      * @return 更新成功与否
      */
     boolean updateStatus(SmsDto smsDto);
+
+
+    /**
+     * 调用短信发送接口后，自动保存短信记录
+     * @param smsDto 短信信息
+     */
+    void saveAutoSentSms(SmsDto smsDto);
+
 }

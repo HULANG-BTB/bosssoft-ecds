@@ -6,12 +6,14 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bosssoft.ecds.msg.entity.dto.MailDto;
 import com.bosssoft.ecds.msg.entity.po.MailPo;
 import com.bosssoft.ecds.msg.entity.vo.MailQueryVo;
+import com.bosssoft.ecds.msg.exception.MsgException;
 import com.bosssoft.ecds.msg.mapper.MailMapper;
 import com.bosssoft.ecds.msg.service.MailService;
 import com.bosssoft.ecds.msg.util.DozerUtils;
 import com.bosssoft.ecds.msg.util.SnowflakeUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -66,12 +68,22 @@ public class MailServiceImpl extends ServiceImpl<MailMapper, MailPo> implements 
     }
 
     @Override
-    public boolean saveMail(MailDto mailDto) {
+    public boolean saveMailManually(MailDto mailDto) {
+        MailPo mail = DozerUtils.map(mailDto, MailPo.class);
+        return mailMapper.insert(mail) > 0;
+    }
+
+    @Override
+    @Async
+    public void saveAutoSentMail(MailDto mailDto) {
         MailPo mail = DozerUtils.map(mailDto, MailPo.class);
         mail.setId(SnowflakeUtil.genId());
         mail.setIsSent(true);
         mail.setSentDate(new Date());
-        return mailMapper.insert(mail) > 0;
+        boolean b = mailMapper.insert(mail) > 0;
+        if (!b) {
+            throw new MsgException("邮件保存失败");
+        }
     }
 
 

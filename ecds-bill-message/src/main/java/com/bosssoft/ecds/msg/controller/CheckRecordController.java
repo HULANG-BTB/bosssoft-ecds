@@ -38,7 +38,6 @@ public class CheckRecordController {
     @ApiOperation("查询票据查验记录")
     @PostMapping("/list")
     public String listByPage(@RequestBody CheckRecordQueryVo recordQuery){
-        log.info(recordQuery.toString());
         // 获取匹配记录数
         Long total = checkRecordService.getTotal(recordQuery);
         // 查询匹配记录

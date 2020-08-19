@@ -2,12 +2,9 @@ package com.bosssoft.ecds.msg.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.aliyuncs.utils.StringUtils;
-import com.bosssoft.ecds.msg.entity.po.MailPo;
 import com.bosssoft.ecds.msg.exception.MsgException;
-import com.bosssoft.ecds.msg.mapper.MailMapper;
 import com.bosssoft.ecds.msg.entity.dto.MailDto;
 import com.bosssoft.ecds.msg.service.SendMailService;
-import com.bosssoft.ecds.msg.util.DozerUtils;
 import com.bosssoft.ecds.msg.util.SnowflakeUtil;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -40,8 +37,7 @@ public class SendMailServiceImpl implements SendMailService {
     @Resource
     private FreeMarkerConfigurer freeMarkerConfigurer;
 
-    @Resource
-    private MailMapper mailMapper;
+
 
     private static final String SPLIT_SYMBOL = ",";
 
@@ -62,11 +58,7 @@ public class SendMailServiceImpl implements SendMailService {
         } catch (Exception e) {
             mailDto.setIsSent(false);
             mailDto.setError(e.getMessage());
-            throw new MsgException("发件错误" + e);
-
-        } finally {
-            //3.保存邮件
-            saveMail(mailDto);
+            return new AsyncResult<>(mailDto);
         }
     }
 
@@ -119,15 +111,6 @@ public class SendMailServiceImpl implements SendMailService {
         } catch (Exception e) {
             throw new MsgException("发件错误：" + e);
         }
-    }
-
-    /**
-     * 保存邮件
-     */
-    private void saveMail(MailDto mailDto) {
-        // 将邮件保存到数据库..
-        MailPo mail = DozerUtils.map(mailDto, MailPo.class);
-        mailMapper.insert(mail);
     }
 
     /**

@@ -22,6 +22,7 @@ import java.util.List;
 @Service
 public class CheckRecordServiceImpl extends ServiceImpl<CheckRecordMapper, CheckRecordPo> implements CheckRecordService {
 
+
     @Override
     public List<CheckRecordDto> listPage(CheckRecordQueryVo recordQuery, Long page, Long limit) {
         Page<CheckRecordPo> pageQuery = new Page<>(page, limit);
@@ -38,8 +39,9 @@ public class CheckRecordServiceImpl extends ServiceImpl<CheckRecordMapper, Check
     }
 
     @Override
-    public void saveRecord(String billId, int res) {
+    public void saveRecord(String billId, int res, String oper) {
         CheckRecordPo record = new CheckRecordPo();
+        record.setOperator(oper);
         record.setResult(res);
         record.setBillCode(billId);
         record.setCheckType("COMMON");
