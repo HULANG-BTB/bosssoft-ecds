@@ -20,6 +20,13 @@ public class FallbackController {
 
     @Autowired
     FallbackService fallbackService;
+
+    /**
+     * 处理Hystrix 调用异常
+     * @param exchange
+     * @param throwable
+     * @return
+     */
     @RequestMapping(value = "/fallback")
     @ResponseStatus
     public Mono<ResponseResult> fallback(ServerWebExchange exchange, Throwable throwable) {
