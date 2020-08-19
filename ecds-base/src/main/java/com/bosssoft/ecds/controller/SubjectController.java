@@ -69,7 +69,7 @@ public class SubjectController {
     public void download(@RequestBody @Validated SubjectQueryVO subjectQueryVO, HttpServletResponse response) throws IOException {
         response.setContentType("application/vnd.ms-excel");
         response.setCharacterEncoding("utf-8");
-        // 这里URLEncoder.encode可以防止中文乱码 当然和easyexcel没有关系
+        // 这里URLEncoder.encode可以防止中文乱码
         String fileName = URLEncoder.encode(subjectService.getFileName(subjectQueryVO.getId()), "UTF-8");
         response.setHeader("Content-disposition", "attachment;filename=" + fileName + ".xlsx");
         EasyExcel.write(response.getOutputStream(), SubjectExcelData.class).sheet("预算科目").doWrite(subjectService.selectExcel(subjectQueryVO))
