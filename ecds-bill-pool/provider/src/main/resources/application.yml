@@ -1,14 +1,14 @@
 spring:
   application:
-    name: service-provider
+    name: ecds-billpool
   cloud:
     nacos:
       discovery:
-        server-addr: 39.98.134.125:8848
+        server-addr: 49.234.75.113:8848
   datasource:
     username: root
     password: ubuntumysql
-    url: jdbc:mysql://39.98.134.125:3306/bill_source?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC
+    url: jdbc:mysql://39.98.134.125:3306/bill_source?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=UTC
     driver-class-name: com.mysql.cj.jdbc.Driver
   redis:
     timeout: 6000
@@ -43,7 +43,11 @@ spring:
     password: fnvwcrwczbpqegfc
 
 server:
-  port: 8088
+  port: 8083
+
 mybatis:
   mapper-locations: classpath:mybatis/mapper/*.xml
   type-aliases-package: com.bosssoft.ecds.entity
+
+logging:
+  config: classpath:log/log4j2.xml

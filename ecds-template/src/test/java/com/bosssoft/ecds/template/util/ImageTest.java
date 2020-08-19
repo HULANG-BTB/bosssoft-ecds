@@ -1,5 +1,6 @@
 package com.bosssoft.ecds.template.util;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
 import javax.imageio.ImageIO;
@@ -9,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 
+@Slf4j
 public class ImageTest {
 
     @Test
@@ -19,7 +21,7 @@ public class ImageTest {
         Color color = new Color(5, 0, 0, 255);
         String mark = "xiaoming";
 
-        addMark(sourceImg, destImg, mark, color, font);
+        //addMark(sourceImg, destImg, mark, color, font);
     }
 
     public void addMark(String srcImgName, String destImgName, String mark,  Color color, Font font)

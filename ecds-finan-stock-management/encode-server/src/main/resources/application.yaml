@@ -2,15 +2,11 @@ spring:
   redis:
     #redis数据库索引(默认为0)
     database: 0
-    #redis服务器IP地址
-    host: 39.108.14.141
-    #redis端口号
-    port: 6382
     #redis密码
     password: 123456
     #连接redis超时时间（毫秒）
 #    timeout:
-    #jedis连接池
+    #redis集群
     cluster:
       nodes:
         - 39.108.14.141:7000
@@ -21,17 +17,30 @@ spring:
         - 39.108.14.141:7005
     lettuce:
       pool:
-        max-active: 1000  #连接池最大连接数（使用负值表示没有限制）
-        max-idle: 10 # 连接池中的最大空闲连接
-        min-idle: 5 # 连接池中的最小空闲连接
-        max-wait: -1ms # 连接池最大阻塞等待时间（使用负值表示没有限制）
+        #连接池最大连接数（使用负值表示没有限制）
+        max-active: 1000
+        # 连接池中的最大空闲连接
+        max-idle: 10
+        # 连接池中的最小空闲连接
+        min-idle: 5
+        # 连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-wait: -1ms
 
   # MySQL配置
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/non_tax?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=GMT%2B8
+    url: jdbc:mysql://39.97.123.56:3306/ecds_financial?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=GMT%2B8
     username: root
-    password: password
+    password: root
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      # 下面为连接池的补充设置，应用到上面所有数据源中
+      # 初始化大小，最小，最大
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+      # 配置获取连接等待超时的时间
+      max-wait: 60000
 
 mybatis-plus:
   global-config:
@@ -47,4 +56,3 @@ mybatis-plus:
 redis:
   # 每次从关系型数据库中获取的号码数量
   getNumEveryTime: 5000
-

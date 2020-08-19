@@ -7,6 +7,14 @@ import org.springframework.amqp.core.Queue;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * @author lixin
+ * @version 1.0
+ * @date 2020/8/18 10:43
+ */
 @Configuration
 public class FanoutRabbitConfig {
 
@@ -31,6 +39,14 @@ public class FanoutRabbitConfig {
     }
 
     @Bean
+    public Queue errorQueue() {
+        Map<String, Object> map = new HashMap<>(4);
+        map.put("x-dead-letter-exchange", "deadLetterExchange");
+        map.put("x-dead-letter-routing-key", "deadLetterQueue");
+        return new Queue("errorQueue", true, false, false, map);
+    }
+
+    @Bean
     FanoutExchange fanoutWarnExchange() {
         return new FanoutExchange("fanoutWarnExchange");
     }
@@ -41,6 +57,11 @@ public class FanoutRabbitConfig {
     }
 
     @Bean
+    FanoutExchange fanoutErrorExchange() {
+        return new FanoutExchange("fanoutErrorExchange");
+    }
+
+    @Bean
     Binding bindingBillWarnFirst() {
         return BindingBuilder.bind(billWarnFirst()).to(fanoutWarnExchange());
     }
@@ -48,5 +69,10 @@ public class FanoutRabbitConfig {
     @Bean
     Binding bindingBillExhaustFirst() {
         return BindingBuilder.bind(billExhaustFirst()).to(fanoutExhaustExchange());
+    }
+
+    @Bean
+    Binding bindingErrorQueue() {
+        return BindingBuilder.bind(errorQueue()).to(fanoutErrorExchange());
     }
 }
