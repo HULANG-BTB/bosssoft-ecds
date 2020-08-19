@@ -1,9 +1,8 @@
 package com.bosssoft.ecds.template.service.impl;
 
-import cn.hutool.core.convert.Convert;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.bosssoft.ecds.template.entity.dto.PrintTemplateDTO;
-import com.bosssoft.ecds.template.entity.po.PrintTemplatePO;
+import com.bosssoft.ecds.template.entity.dto.PrintTemplateDto;
+import com.bosssoft.ecds.template.entity.po.PrintTemplatePo;
 import com.bosssoft.ecds.template.mapper.PrintTemplateMapper;
 import com.bosssoft.ecds.template.service.PrintTemplateService;
 import com.bosssoft.ecds.template.util.BeanCopyUtil;
@@ -11,8 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -25,20 +22,20 @@ import java.util.List;
  */
 @Slf4j
 @Service
-public class PrintTemplateServiceImpl extends ServiceImpl<PrintTemplateMapper, PrintTemplatePO> implements PrintTemplateService {
+public class PrintTemplateServiceImpl extends ServiceImpl<PrintTemplateMapper, PrintTemplatePo> implements PrintTemplateService {
 
 //    @Resource
 //    PrintTemplateMapper printTemplateMapper;
 
     @Override
-    public List<PrintTemplateDTO> listAll() {
-        List<PrintTemplatePO> templatePOs = this.list();
-        return BeanCopyUtil.copyListProperties(templatePOs, PrintTemplateDTO::new);
+    public List<PrintTemplateDto> listAll() {
+        List<PrintTemplatePo> templatePOs = this.list();
+        return BeanCopyUtil.copyListProperties(templatePOs, PrintTemplateDto::new);
     }
 
     @Override
-    public boolean add(PrintTemplateDTO templateDTO) {
-        PrintTemplatePO templatePO = new PrintTemplatePO();
+    public boolean add(PrintTemplateDto templateDTO) {
+        PrintTemplatePo templatePO = new PrintTemplatePo();
         BeanUtils.copyProperties(templateDTO, templatePO);
         return this.save(templatePO);
     }
@@ -49,9 +46,9 @@ public class PrintTemplateServiceImpl extends ServiceImpl<PrintTemplateMapper, P
     }
 
     @Override
-    public PrintTemplateDTO getDtoById(Long id) {
-        PrintTemplatePO printTemplatePO = this.getById(id);
-        PrintTemplateDTO printTemplateDTO = new PrintTemplateDTO();
+    public PrintTemplateDto getDtoById(Long id) {
+        PrintTemplatePo printTemplatePO = this.getById(id);
+        PrintTemplateDto printTemplateDTO = new PrintTemplateDto();
         BeanUtils.copyProperties(printTemplatePO, printTemplateDTO);
         return printTemplateDTO;
     }

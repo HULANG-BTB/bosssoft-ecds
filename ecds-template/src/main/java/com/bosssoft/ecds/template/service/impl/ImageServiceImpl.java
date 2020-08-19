@@ -1,7 +1,7 @@
 package com.bosssoft.ecds.template.service.impl;
 
-import com.bosssoft.ecds.template.entity.dto.BillItemDTO;
-import com.bosssoft.ecds.template.entity.dto.NontaxBillDTO;
+import com.bosssoft.ecds.template.entity.dto.BillItemDto;
+import com.bosssoft.ecds.template.entity.dto.NontaxBillDto;
 import com.bosssoft.ecds.template.service.ImageService;
 import com.bosssoft.ecds.template.util.AliyunOSSUtil;
 import com.bosssoft.ecds.template.util.TextValue;
@@ -10,10 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ResourceUtils;
 
 import javax.imageio.ImageIO;
-import javax.imageio.stream.FileImageInputStream;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
@@ -31,12 +29,14 @@ public class ImageServiceImpl implements ImageService {
     @Autowired
     AliyunOSSUtil ossUtil;
 
-    /** 字体文件名，会从 Resources 中查找 */
+    /**
+     * 字体文件名，会从 Resources 中查找
+     */
     @Value("${fontType}")
     private String fontType;
 
     @Override
-    public byte[] generateImage(NontaxBillDTO billDTO) {
+    public byte[] generateImage(NontaxBillDto billDTO) {
         List<TextValue> billValues = new ArrayList<>();
         billValues.add(new TextValue("billCode", 89, 60));
         billValues.add(new TextValue("serialCode", 631, 62));
@@ -56,7 +56,7 @@ public class ImageServiceImpl implements ImageService {
         int[] itemY = {156, 186, 218, 248};
 
         Map<String, TextValue> valueMap = new HashMap<>();
-        for (TextValue billValue : billValues){
+        for (TextValue billValue : billValues) {
             String fieldName = billValue.getFieldName();
 
             // 给dto填充票据数据
@@ -68,12 +68,12 @@ public class ImageServiceImpl implements ImageService {
         }
 
         // 填充收费项目的内容
-        List<BillItemDTO> items = billDTO.getItems();
+        List<BillItemDto> items = billDTO.getItems();
         // 图片里面最多只能有4个项目
-        for (int i=0; i<items.size() && i<4; i++){
-            BillItemDTO item = items.get(i);
+        for (int i = 0; i < items.size() && i < 4; i++) {
+            BillItemDto item = items.get(i);
             billValues.add(new TextValue("itemCode" + i, item.getItemCode(), itemX[0], itemY[i]));
-            billValues.add(new TextValue("itemName" + i,item.getItemName(), itemX[1], itemY[i]));
+            billValues.add(new TextValue("itemName" + i, item.getItemName(), itemX[1], itemY[i]));
             billValues.add(new TextValue("units" + i, item.getUnits(), itemX[2], itemY[i]));
             billValues.add(new TextValue("quantity" + i, item.getQuantity(), itemX[3], itemY[i]));
             billValues.add(new TextValue("standardName" + i, item.getStandardName(), itemX[4], itemY[i]));
@@ -88,11 +88,12 @@ public class ImageServiceImpl implements ImageService {
     /**
      * 根据传入的票据信息生成图片，并返回图片的位置
      * 如果图片已经生成过，就直接返回地址
+     *
      * @param billDTO 非税票据DTO
      * @return 图片URL
      */
     @Override
-    public String getImage(NontaxBillDTO billDTO) {
+    public String getImage(NontaxBillDto billDTO) {
         String fileName = billDTO.getBillCode() + billDTO.getSerialCode() + ".png";
         String path = "output/" + fileName;
         File dir = new File("output");
@@ -102,10 +103,10 @@ public class ImageServiceImpl implements ImageService {
         File file = new File(path);
 
         // 如果文件不存在，就生成一个
-        if (!file.exists()){
+        if (!file.exists()) {
             log.info("{}文件不存在，生成。", fileName);
             byte[] bytes = generateImage(billDTO);
-            try(FileOutputStream outputStream = new FileOutputStream(file)) {
+            try (FileOutputStream outputStream = new FileOutputStream(file)) {
                 outputStream.write(bytes);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -116,7 +117,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public String getRemoteImage(NontaxBillDTO billDTO) {
+    public String getRemoteImage(NontaxBillDto billDTO) {
         String fileName = billDTO.getBillCode() + billDTO.getSerialCode() + ".png";
         String path = "boss-bill/" + fileName;
 
@@ -138,6 +139,7 @@ public class ImageServiceImpl implements ImageService {
 
     /**
      * 获取模板图片的输入流
+     *
      * @return 模板图片输入流
      */
     @Override
@@ -154,11 +156,12 @@ public class ImageServiceImpl implements ImageService {
 
     /**
      * 使用 Graphics2D 在图片上绘制文字
+     *
      * @param billValues 包含文字内容，坐标
      * @param srcImgFile 图片文件输入流
      * @return 图片字节数组
      */
-    private byte[] addMark(List<TextValue> billValues, InputStream srcImgFile){
+    private byte[] addMark(List<TextValue> billValues, InputStream srcImgFile) {
 
 //        Font font = new Font("宋体", Font.PLAIN, 16);
         Font font = getFileFont();
@@ -181,7 +184,7 @@ public class ImageServiceImpl implements ImageService {
         g.setFont(font);
 
         // 绘制文本
-        for (TextValue value : billValues){
+        for (TextValue value : billValues) {
             g.drawString(value.getValue(), value.getX(), value.getY());
         }
 
@@ -201,10 +204,11 @@ public class ImageServiceImpl implements ImageService {
 
     /**
      * 通过反射获取票据对象的字段的值
+     *
      * @param billDTO
      * @return
      */
-    private String getValueByField(NontaxBillDTO billDTO, String fieldName){
+    private String getValueByField(NontaxBillDto billDTO, String fieldName) {
         Class stdClass = billDTO.getClass();
         String value = "";
         // 获取对象的字段
@@ -212,7 +216,7 @@ public class ImageServiceImpl implements ImageService {
             Field priField = stdClass.getDeclaredField(fieldName);
             try {
                 priField.setAccessible(true);
-                value = (String)priField.get(billDTO);
+                value = (String) priField.get(billDTO);
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
@@ -225,6 +229,7 @@ public class ImageServiceImpl implements ImageService {
 
     /**
      * 从 resources 中读取宋体 simsun.ttc 字体文件
+     *
      * @return
      */
     private Font getFileFont() {

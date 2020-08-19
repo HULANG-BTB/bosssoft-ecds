@@ -1,7 +1,7 @@
 package com.bosssoft.ecds.template.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.bosssoft.ecds.template.entity.po.PrintTemplatePO;
+import com.bosssoft.ecds.template.entity.po.PrintTemplatePo;
 
 /**
  * <p>
@@ -11,6 +11,6 @@ import com.bosssoft.ecds.template.entity.po.PrintTemplatePO;
  * @author Lazyb0x
  * @since 2020-08-17
  */
-public interface PrintTemplateMapper extends BaseMapper<PrintTemplatePO> {
+public interface PrintTemplateMapper extends BaseMapper<PrintTemplatePo> {
 
 }

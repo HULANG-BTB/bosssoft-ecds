@@ -3,7 +3,7 @@
 <mapper namespace="com.bosssoft.gen.mapper.PrintTemplateMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.bosssoft.ecds.template.entity.po.PrintTemplatePO">
+    <resultMap id="BaseResultMap" type="com.bosssoft.ecds.template.entity.po.PrintTemplatePo">
         <id column="f_id" property="id" />
         <result column="f_rgn_code" property="rgnCode" />
         <result column="f_sort_id" property="sortId" />

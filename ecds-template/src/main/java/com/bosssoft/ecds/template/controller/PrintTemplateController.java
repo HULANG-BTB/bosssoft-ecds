@@ -1,9 +1,9 @@
 package com.bosssoft.ecds.template.controller;
 
 
-import com.bosssoft.ecds.template.entity.dto.NontaxBillDTO;
-import com.bosssoft.ecds.template.entity.dto.PrintTemplateDTO;
-import com.bosssoft.ecds.template.entity.vo.PrintTemplateVO;
+import com.bosssoft.ecds.template.entity.dto.NontaxBillDto;
+import com.bosssoft.ecds.template.entity.dto.PrintTemplateDto;
+import com.bosssoft.ecds.template.entity.vo.PrintTemplateVo;
 import com.bosssoft.ecds.template.service.HtmlService;
 import com.bosssoft.ecds.template.service.PrintTemplateService;
 import com.bosssoft.ecds.template.util.BeanCopyUtil;
@@ -46,9 +46,9 @@ public class PrintTemplateController {
     @ApiOperation("列出所有的打印模板")
     @GetMapping("/list")
     public ResponseResult listTemplate() {
-        List<PrintTemplateDTO> templateDTOs = printTemplateService.listAll();
-        List<PrintTemplateVO> templateVOs =
-                BeanCopyUtil.copyListProperties(templateDTOs, PrintTemplateVO::new);
+        List<PrintTemplateDto> templateDTOs = printTemplateService.listAll();
+        List<PrintTemplateVo> templateVOs =
+                BeanCopyUtil.copyListProperties(templateDTOs, PrintTemplateVo::new);
         return new QueryResponseResult<>(CommonCode.SUCCESS, templateVOs);
     }
 
@@ -75,7 +75,7 @@ public class PrintTemplateController {
         }
 
         String content = new String(file.getBytes());
-        PrintTemplateDTO templateDTO = new PrintTemplateDTO();
+        PrintTemplateDto templateDTO = new PrintTemplateDto();
         templateDTO.setRgnCode(billCode.substring(0, 2));
         templateDTO.setTypeId(billCode.substring(2, 4));
         templateDTO.setSortId(billCode.substring(4, 6));
@@ -110,9 +110,9 @@ public class PrintTemplateController {
     @ApiOperation("根据模板id获取模板票样")
     @GetMapping(value = "/content/{id}.html", produces = MediaType.TEXT_HTML_VALUE)
     public byte[] getHtml(@PathVariable Long id) {
-        PrintTemplateDTO templateDTO = printTemplateService.getDtoById(id);
+        PrintTemplateDto templateDTO = printTemplateService.getDtoById(id);
         // 空白票据
-        NontaxBillDTO billDTO = new NontaxBillDTO();
+        NontaxBillDto billDTO = new NontaxBillDto();
         billDTO.setItems(new ArrayList<>());
         String htmlTemplate = htmlService.genBillHtml(billDTO, templateDTO.getTemplate());
         return htmlTemplate.getBytes();
@@ -120,7 +120,7 @@ public class PrintTemplateController {
 
     @GetMapping(value = "/content/{id}.ftl", produces = MediaType.TEXT_PLAIN_VALUE)
     public byte[] getTemplate(@PathVariable Long id) {
-        PrintTemplateDTO templateDTO = printTemplateService.getDtoById(id);
+        PrintTemplateDto templateDTO = printTemplateService.getDtoById(id);
         return templateDTO.getTemplate().getBytes();
     }
 }

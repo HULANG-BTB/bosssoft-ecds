@@ -1,6 +1,6 @@
 package com.bosssoft.ecds.template.service;
 
-import com.bosssoft.ecds.template.entity.dto.NontaxBillDTO;
+import com.bosssoft.ecds.template.entity.dto.NontaxBillDto;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -14,5 +14,5 @@ public interface HtmlService {
 
     String genHtml(Map<String, Object> data, String templateString);
 
-    String genBillHtml(NontaxBillDTO billDTO, String templateString);
+    String genBillHtml(NontaxBillDto billDTO, String templateString);
 }
