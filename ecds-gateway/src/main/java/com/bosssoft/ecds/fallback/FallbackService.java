@@ -1,6 +1,8 @@
 package com.bosssoft.ecds.fallback;
 
 import com.bosssoft.ecds.code.GatewayCode;
+import com.bosssoft.ecds.exception.CustomException;
+import com.bosssoft.ecds.exception.ExceptionDetail;
 import com.bosssoft.ecds.response.CommonCode;
 import com.bosssoft.ecds.response.ResponseResult;
 import com.netflix.hystrix.exception.HystrixBadRequestException;
@@ -22,6 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
+
 
 /**
  * @ClassName :  FallbackService
@@ -76,21 +79,21 @@ public class FallbackService {
             Long newTime = date.getTime();
             Long expectTime = oldTime + 10 * 60 * 1000L;
             if (newTime > expectTime) {
-                log.error("找不到运行的服务{}，URL={}",serviceId, url, exception);
+                String msg="找不到运行的服务"+serviceId+"url: "+url;
+                notFoundMap.put(serviceId, date.getTime());
+               throw new CustomException(GatewayCode.EMAIL_NOTIFICATION, msg);
+            }else {
+                notFoundMap.put(serviceId, date.getTime());
             }
-            notFoundMap.put(serviceId, date.getTime());
         } else {
+            String msg="找不到运行的服务"+serviceId+"url: "+url;
             notFoundMap.put(serviceId, date.getTime());
-            log.error("找不到运行的服务{}，URL={}",serviceId, url, exception);
+            throw new CustomException(GatewayCode.EMAIL_NOTIFICATION, msg);
         }
-
         return new ResponseResult(GatewayCode.NOT_FOUND_SERVICE);
 
     }
-
     static {
         notFoundMap = new HashMap<>();
     }
-
-
 }
