@@ -20,13 +20,18 @@ import javax.annotation.Resource;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * @author lixin
+ * @version 1.0
+ * @date 2020/8/18 10:43
+ */
 @Service
-public class BillServiceImp implements BillService {
+public class BillServiceImpl implements BillService {
 
     private final String LOCK_KEY = "lock_key";
     private final Integer THRESHOLD = 3000;
 
-    private static final Logger logger = LoggerFactory.getLogger(BillServiceImp.class);
+    private static final Logger logger = LoggerFactory.getLogger(BillServiceImpl.class);
 
     @Resource
     BillDao billDao;
@@ -98,7 +103,8 @@ public class BillServiceImp implements BillService {
         int remainderBill;
         boolean isLock;
         String table;
-        Map map = new HashMap();
+        String remainderBillKey = "remainderBill";
+        Map map = new HashMap(64);
         List<BillPo> billPoList = new ArrayList<>();
 
         table = (String) redisTemplate.opsForHash().get(billDto.getBillTypeCode(), "table");
@@ -119,13 +125,13 @@ public class BillServiceImp implements BillService {
                 createNumber = billDao.insertBill(table, billPoList);
 
                 remainderBill = billDao.retrieveNumber(table);
-                if (redisTemplate.hasKey("remainderBill")) {
-                    map = redisTemplate.opsForHash().entries("remainderBill");
+                if (redisTemplate.hasKey(remainderBillKey)) {
+                    map = redisTemplate.opsForHash().entries(remainderBillKey);
                 }
 
                 map.put(billDto.getBillTypeCode(), remainderBill);
 
-                redisTemplate.opsForHash().putAll("remainderBill", map);
+                redisTemplate.opsForHash().putAll(remainderBillKey, map);
             }
         } catch (Exception e) {
             e.printStackTrace();

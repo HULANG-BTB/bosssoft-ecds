@@ -4,6 +4,7 @@ import com.bosssoft.ecds.entity.dto.SourceSetDto;
 import com.bosssoft.ecds.entity.vo.SourceSetVo;
 import com.bosssoft.ecds.service.SourceSetService;
 import com.bosssoft.ecds.utils.BeanUtils;
+import org.hibernate.validator.constraints.Length;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,8 +13,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
 import java.util.List;
 
+/**
+ * @author lixin
+ * @version 1.0
+ * @date 2020/8/18 10:43
+ */
 @RestController
 public class SourceSetController {
 
@@ -22,18 +29,8 @@ public class SourceSetController {
     @Resource
     SourceSetService sourceSetService;
 
-    /*@RequestMapping("/setMin")
-    public int setMin(@RequestBody SourceSetDto sourceSetDto) {
-        return sourceSetService.updateMin(sourceSetDto);
-    }
-
-    @RequestMapping("/setPushNumber")
-    public int setPushNumber(@RequestBody SourceSetDto sourceSetDto) {
-        return sourceSetService.updatePushNumber(sourceSetDto);
-    }*/
-
     @RequestMapping("/setSource")
-    public int setSource(@RequestBody SourceSetDto sourceSetDto) {
+    public int setSource(@RequestBody @Valid SourceSetDto sourceSetDto) {
         return sourceSetService.updateSet(sourceSetDto);
     }
 
@@ -44,7 +41,7 @@ public class SourceSetController {
     }
 
     @RequestMapping("/retrieveSetByCode")
-    public SourceSetVo retrieveSetByCode(@RequestParam String billTypeCode) {
+    public SourceSetVo retrieveSetByCode(@RequestParam @Valid @Length(min = 8, max = 8, message = "票号编码不规范") String billTypeCode) {
         SourceSetVo sourceSetVo = BeanUtils.convertObject(sourceSetService.retrieveSetByCode(billTypeCode), SourceSetVo.class);
         return sourceSetVo;
     }

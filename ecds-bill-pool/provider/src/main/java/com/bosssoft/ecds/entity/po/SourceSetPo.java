@@ -2,6 +2,11 @@ package com.bosssoft.ecds.entity.po;
 
 import java.util.Date;
 
+/**
+ * @author lixin
+ * @version 1.0
+ * @date 2020/8/18 10:43
+ */
 public class SourceSetPo {
 
     int id;
@@ -12,7 +17,7 @@ public class SourceSetPo {
     int enable;
     int version;
     String operator;
-    int operatorID;
+    int operatorId;
     Date createDate;
     Date updateDate;
 
@@ -80,12 +85,12 @@ public class SourceSetPo {
         this.operator = operator;
     }
 
-    public int getOperatorID() {
-        return operatorID;
+    public int getOperatorId() {
+        return operatorId;
     }
 
-    public void setOperatorID(int operatorID) {
-        this.operatorID = operatorID;
+    public void setOperatorId(int operatorId) {
+        this.operatorId = operatorId;
     }
 
     public Date getCreateDate() {
@@ -115,7 +120,7 @@ public class SourceSetPo {
                 ", enable=" + enable +
                 ", version=" + version +
                 ", operator='" + operator + '\'' +
-                ", operatorID=" + operatorID +
+                ", operatorId=" + operatorId +
                 ", createDate=" + createDate +
                 ", updateDate=" + updateDate +
                 '}';

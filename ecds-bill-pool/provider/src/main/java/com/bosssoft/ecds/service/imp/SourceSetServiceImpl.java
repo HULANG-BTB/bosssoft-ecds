@@ -14,10 +14,15 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.List;
 
+/**
+ * @author lixin
+ * @version 1.0
+ * @date 2020/8/18 10:43
+ */
 @Service
-public class SourceSetServiceImp implements SourceSetService {
+public class SourceSetServiceImpl implements SourceSetService {
 
-    private static final Logger logger = LoggerFactory.getLogger(SourceSetServiceImp.class);
+    private static final Logger logger = LoggerFactory.getLogger(SourceSetServiceImpl.class);
 
     @Resource
     SourceSetDao sourceSetDao;

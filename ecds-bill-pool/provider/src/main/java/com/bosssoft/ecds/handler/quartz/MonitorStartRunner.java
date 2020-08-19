@@ -10,6 +10,11 @@ import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * @author lixin
+ * @version 1.0
+ * @date 2020/8/18 10:43
+ */
 @Component
 public class MonitorStartRunner implements CommandLineRunner {
 
