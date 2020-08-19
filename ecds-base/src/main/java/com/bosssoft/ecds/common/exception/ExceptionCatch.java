@@ -70,20 +70,6 @@ public class ExceptionCatch {
         return responseResult;
     }
 
-    /**
-     * 处理重复插入数据异常
-     *
-     * @param e
-     * @return
-     */
-    @ExceptionHandler(DuplicateKeyException.class)
-    @ResponseBody
-    public ResponseResult duplicateKeyError(DuplicateKeyException e) {
-        log.error("重复插入数据错误", e);
-        return new ResponseResult(CommonCode.DUPLICATE_ERROR);
-    }
-
-
     static{
         //处理非法参数异常
         builder.put(org.springframework.http.converter.HttpMessageNotReadableException.class, CommonCode.INVLIDATE);

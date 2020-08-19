@@ -1,5 +1,6 @@
 package com.bosssoft.ecds.service.impl;
 
+import com.alibaba.excel.EasyExcel;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -8,25 +9,27 @@ import com.bosssoft.ecds.common.response.CommonCode;
 import com.bosssoft.ecds.common.response.QueryResponseResult;
 import com.bosssoft.ecds.constant.SubjectConstant;
 import com.bosssoft.ecds.dao.IncomeSortDao;
+import com.bosssoft.ecds.dao.ItemDao;
 import com.bosssoft.ecds.entity.dto.SubjectDTO;
 import com.bosssoft.ecds.entity.po.IncomeSortPO;
 import com.bosssoft.ecds.entity.po.IncomeSortSubjectPO;
+import com.bosssoft.ecds.entity.po.ItemPO;
 import com.bosssoft.ecds.entity.po.SubjectPO;
 import com.bosssoft.ecds.dao.SubjectDao;
-import com.bosssoft.ecds.entity.vo.subjectvo.SubjectQueryVO;
-import com.bosssoft.ecds.entity.vo.subjectvo.SubjectVO;
-import com.bosssoft.ecds.entity.vo.subjectvo.UpdateSubjectVO;
+import com.bosssoft.ecds.entity.vo.subjectvo.*;
 import com.bosssoft.ecds.enums.SubjectResultCode;
 import com.bosssoft.ecds.service.IncomeSortSubjectService;
 import com.bosssoft.ecds.service.SubjectService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bosssoft.ecds.utils.CharacterCheckUtil;
 import com.bosssoft.ecds.utils.MyBeanUtil;
+import com.bosssoft.ecds.utils.SubjectDataListener;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import org.springframework.web.multipart.MultipartFile;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -47,6 +50,8 @@ public class SubjectServiceImpl extends ServiceImpl<SubjectDao, SubjectPO> imple
     private IncomeSortSubjectService incomeSortSubjectService;
     @Autowired
     private IncomeSortDao incomeSortDao;
+    @Autowired
+    private ItemDao itemDao;
 
     /**
      * 分页条件查询接口
@@ -55,7 +60,26 @@ public class SubjectServiceImpl extends ServiceImpl<SubjectDao, SubjectPO> imple
      * @return
      */
     @Override
-    public QueryResponseResult<Map<String, SubjectVO>> listPage(SubjectQueryVO subjectQueryVO) {
+    public QueryResponseResult listPage(SubjectQueryVO subjectQueryVO) {
+        Map map = new HashMap();
+//        拿到右侧数据，转为vo
+        Map mapRight = listPageRight(subjectQueryVO);
+        List<SubjectPO> list = (List<SubjectPO>) mapRight.get("rightList");
+        List<SubjectVO> rightList = MyBeanUtil.copyListProperties(list, SubjectVO::new);
+        map.put("rightList", rightList);
+        map.put("total", mapRight.get("total"));
+        List<SubjectVO> leftList = getAll(subjectQueryVO.getYear());
+        map.put("leftList", leftList);
+        return new QueryResponseResult(CommonCode.SUCCESS, map);
+    }
+
+    /**
+     * 分页条件查询接口,返回右侧数据
+     *
+     * @param subjectQueryVO
+     * @return
+     */
+    public Map listPageRight(SubjectQueryVO subjectQueryVO) {
 //        父id不存在则抛异常
         SubjectPO parentPO = null;
         if (subjectQueryVO.getId() != 0) {
@@ -68,37 +92,45 @@ public class SubjectServiceImpl extends ServiceImpl<SubjectDao, SubjectPO> imple
         Page<SubjectPO> page = new Page<>(subjectQueryVO.getPage(), subjectQueryVO.getLimit());
 //        1.排序
         QueryWrapper<SubjectPO> queryWrapper = new QueryWrapper<>();
-        queryWrapper.orderByAsc("f_sub_code");
+        queryWrapper.orderByAsc(SubjectPO.F_SUB_CODE);
 //        2.条件查询
         Long id = subjectQueryVO.getId();
         String name = subjectQueryVO.getName();
         String year = subjectQueryVO.getYear();
-        queryWrapper.eq("f_year", year);
+        queryWrapper.eq(SubjectPO.F_YEAR, year);
         if (!StringUtils.isBlank(name)) {
-            queryWrapper.like("f_sub_name", name);
+            queryWrapper.like(SubjectPO.F_SUB_NAME, name);
         }
         if (id != 0) {
-            queryWrapper.eq("f_parent_id", id);
+            queryWrapper.eq(SubjectPO.F_PARENT_ID, id);
         }
-//        3.左侧菜单和右侧主体数据（其中id==0则返回某年所有数据,否则返回某年某级科目和其子科目）
+//        3.右侧主体数据（其中id=0则返回某年所有数据）
         IPage<SubjectPO> subjectPOPage = baseMapper.selectPage(page, queryWrapper);
         List<SubjectPO> records = subjectPOPage.getRecords();
-        List<SubjectVO> subjectVOS = MyBeanUtil.copyListProperties(records, SubjectVO::new);
         long total = subjectPOPage.getTotal();
-        List<SubjectVO> leftList = getAll(year);
         Map map = new HashMap();
-        map.put("leftList", leftList);
         if (id != 0) {
-            List<SubjectVO> rightList = new ArrayList<>();
-            SubjectVO parentVO = MyBeanUtil.copyProperties(parentPO, SubjectVO.class);
-            rightList.add(parentVO);
-            rightList.addAll(1, subjectVOS);
-            map.put("rightList", rightList);
+//            if:普通查询和模糊查询包含父科科目
+            if ((StringUtils.isBlank(name) || parentPO.getName().contains(name))) {
+                if (subjectQueryVO.getPage() == 1) {
+                    List<SubjectPO> rightList = new ArrayList<>();
+                    rightList.add(parentPO);
+                    rightList.addAll(1, records);
+                    map.put("rightList", rightList);
+                    map.put("total", total + 1);
+                } else {
+                    map.put("rightList", records);
+                    map.put("total", total + 1);
+                }
+            } else {
+                map.put("rightList", records);
+                map.put("total", total);
+            }
         } else {
-            map.put("rightList", subjectVOS);
+            map.put("rightList", records);
+            map.put("total", total);
         }
-        map.put("total", total);
-        return new QueryResponseResult<Map<String, SubjectVO>>(CommonCode.SUCCESS, map);
+        return map;
     }
 
     /**
@@ -119,7 +151,7 @@ public class SubjectServiceImpl extends ServiceImpl<SubjectDao, SubjectPO> imple
                 throw new CustomException(SubjectResultCode.PARENT_ERROR);
             }
             if (CharacterCheckUtil.characterComparison(parentPO.getCode(), subjectPO.getCode()) == false) {
-                return new QueryResponseResult(SubjectResultCode.CODE_ERROR, null);
+                throw new CustomException(SubjectResultCode.CODE_ERROR);
             }
             if (parentPO.getLeaf()) {
                 return new QueryResponseResult(SubjectResultCode.LEVEL_ERROR, null);
@@ -130,7 +162,7 @@ public class SubjectServiceImpl extends ServiceImpl<SubjectDao, SubjectPO> imple
         }
 //        只能添加当年科目
         if (!subjectPO.getYear().equals(getCurrentYear())) {
-            return new QueryResponseResult(SubjectResultCode.INSERT_ERROR, null);
+            throw new CustomException(SubjectResultCode.INSERT_ERROR);
         }
         int maxLevel = getMaxLevelFromIncome();
 //        添加的科目有对应收入类别
@@ -138,6 +170,9 @@ public class SubjectServiceImpl extends ServiceImpl<SubjectDao, SubjectPO> imple
             return addExists(subjectPO);
         }
 //        添加的科目无对应收入类别
+        if (subjectPO.getLevel() == 4) {
+            subjectPO.setLeaf(true);
+        }
         this.save(subjectPO);
         return new QueryResponseResult(CommonCode.SUCCESS, null);
     }
@@ -152,23 +187,24 @@ public class SubjectServiceImpl extends ServiceImpl<SubjectDao, SubjectPO> imple
     public QueryResponseResult addExists(SubjectPO subjectPO) {
 //        查询是否有对应的收入类别
         QueryWrapper<IncomeSortPO> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("f_level", subjectPO.getLevel());
-        queryWrapper.eq("f_name", subjectPO.getName());
+        queryWrapper.eq(IncomeSortPO.F_LEVEL, subjectPO.getLevel());
+        queryWrapper.eq(IncomeSortPO.F_NAME, subjectPO.getName());
         IncomeSortPO incomeSortPO = incomeSortDao.selectOne(queryWrapper);
         if (incomeSortPO == null) {
-            return new QueryResponseResult(SubjectResultCode.INCOMESORT_NOTEXISTS, null);
+            throw new CustomException(SubjectResultCode.INCOMESORT_NOTEXISTS);
         }
+//        2级科目还需要判断添加位置是否正确，即2级科目的父科目与2级收入的父科目对应
         boolean result = true;
         if (subjectPO.getLevel() == 1) {
             this.save(subjectPO);
             result = incomeSortSubjectService.add(incomeSortPO.getId(), subjectPO.getId());
         } else {
             QueryWrapper<IncomeSortSubjectPO> queryWrapper1 = new QueryWrapper<>();
-            queryWrapper1.eq("f_income_sort_id", incomeSortPO.getParentId());
-            queryWrapper1.eq("f_subject_id", subjectPO.getParentId());
+            queryWrapper1.eq(IncomeSortSubjectPO.F_INCOME_SORT_ID, incomeSortPO.getParentId());
+            queryWrapper1.eq(IncomeSortSubjectPO.F_SUBJECT_ID, subjectPO.getParentId());
             IncomeSortSubjectPO incomeSortSubjectPO = incomeSortSubjectService.getOne(queryWrapper1);
             if (incomeSortSubjectPO == null) {
-                return new QueryResponseResult(SubjectResultCode.INCOMESORT_NOTEXISTS, null);
+                throw new CustomException(SubjectResultCode.INCOMESORT_NOTEXISTS);
             } else {
                 this.save(subjectPO);
                 result = incomeSortSubjectService.add(incomeSortPO.getId(), subjectPO.getId());
@@ -177,7 +213,7 @@ public class SubjectServiceImpl extends ServiceImpl<SubjectDao, SubjectPO> imple
         if (result == true) {
             return new QueryResponseResult(CommonCode.SUCCESS, null);
         } else {
-            return new QueryResponseResult(CommonCode.FAIL, null);
+            throw new CustomException(CommonCode.FAIL);
         }
     }
 
@@ -199,12 +235,8 @@ public class SubjectServiceImpl extends ServiceImpl<SubjectDao, SubjectPO> imple
             return new QueryResponseResult(SubjectResultCode.UPDATE_DATE_ERROR, null);
         }
 //        不允许修改被禁用的预算科目
-        if (updateSubjectVO.getEnable() == false && updateSubjectVO.getEnable() == oldSubjectPO.getEnable()) {
+        if (updateSubjectVO.getEnable().equals(false) && updateSubjectVO.getEnable().equals(oldSubjectPO.getEnable())) {
             return new QueryResponseResult(SubjectResultCode.ENABLE_ERROR, null);
-        }
-//        不允许直接修改存在收入类别的科目的名称
-        if (!updateSubjectVO.getName().equals(oldSubjectPO.getName()) && oldSubjectPO.getLevel() <= getMaxLevelFromIncome()) {
-            return new QueryResponseResult(SubjectResultCode.UPDATE_ERROR, null);
         }
         MyBeanUtil.copyProperties(updateSubjectVO, oldSubjectPO);
         int result = baseMapper.updateById(oldSubjectPO);
@@ -244,16 +276,27 @@ public class SubjectServiceImpl extends ServiceImpl<SubjectDao, SubjectPO> imple
      */
     @Transactional(rollbackFor = Exception.class)
     public Boolean deleteRec(SubjectPO subjectPO) {
+//        判断item表中是否有相应科目
+        QueryWrapper<ItemPO> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(ItemPO.F_SUBJECT, subjectPO.getCode());
+        ItemPO itemPO = itemDao.selectOne(queryWrapper);
+        if (itemPO != null) {
+            throw new CustomException(CommonCode.FAIL);
+        }
+//        先递归删除子科目
         List<SubjectPO> subjectPOS = selectByPid(subjectPO.getId());
         if (subjectPOS != null) {
             subjectPOS.forEach(childrenPO -> {
-                deleteRec(childrenPO);
+                boolean result = deleteRec(childrenPO);
+                if (result == false) {
+                    throw new CustomException(CommonCode.FAIL);
+                }
             });
         }
         if (subjectPO.getLevel() <= getMaxLevelFromIncome()) {
             incomeSortSubjectService.deleteBySid(subjectPO.getId());
         }
-        return baseMapper.deleteById(subjectPO.getId())==1?true:false;
+        return baseMapper.deleteById(subjectPO.getId()) == 1 ? true : false;
 
     }
 
@@ -291,10 +334,14 @@ public class SubjectServiceImpl extends ServiceImpl<SubjectDao, SubjectPO> imple
         subjectPO.setYear(getCurrentYear());
         subjectPO.setId(null);
         subjectPO.setParentId(pid);
+        subjectPO.setLeaf(false);
         SubjectDTO subjectDTO = MyBeanUtil.copyProperties(subjectPO, SubjectDTO.class);
         add(subjectDTO);
 //        获取当前subjectPO的id
         SubjectPO newSubjectPO = selectByYearAndCode(getCurrentYear(), subjectPO.getCode());
+        if (childrenPOS == null || childrenPOS.size() == 0 || childrenPOS.get(0) == null) {
+            return true;
+        }
         childrenPOS.forEach(childrenPO -> {
             copyRec(childrenPO, newSubjectPO.getId());
         });
@@ -309,8 +356,53 @@ public class SubjectServiceImpl extends ServiceImpl<SubjectDao, SubjectPO> imple
      */
     public List<SubjectPO> selectByPid(Long pid) {
         QueryWrapper<SubjectPO> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("f_parent_id", pid);
+        queryWrapper.eq(SubjectPO.F_PARENT_ID, pid);
         return baseMapper.selectList(queryWrapper);
+    }
+
+    /**
+     * 根据subjectQueryVO返回要导出的数据
+     *
+     * @param
+     * @return
+     */
+    @Override
+    public List<SubjectExcelData> selectExcel(SubjectQueryVO subjectQueryVO) {
+        Map map = listPageRight(subjectQueryVO);
+        List<SubjectPO> list = (List<SubjectPO>) map.get("rightList");
+        List<SubjectExcelData> excelList = MyBeanUtil.copyListProperties(list, SubjectExcelData::new);
+        for (int i = 0; i <list.size() ; i++) {
+            SubjectPO subjectPO = list.get(i);
+            String enable = subjectPO.getEnable().equals(true)?"是":"否";
+            String leaf = subjectPO.getLeaf().equals(true)?"是":"否";
+            excelList.get(i).setEnable(enable);
+            excelList.get(i).setLeaf(leaf);
+        }
+        return excelList;
+    }
+
+    /**
+     * 导入数据
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public QueryResponseResult upload(MultipartFile file, Long id) throws IOException {
+        EasyExcel.read(file.getInputStream(), SubjectImportData.class, new SubjectDataListener(this, id)).sheet().doRead();
+        return new QueryResponseResult(CommonCode.SUCCESS, null);
+    }
+
+    /**
+     * 导入数据
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public QueryResponseResult upload(List<SubjectImportData> list, Long id) {
+        List<SubjectDTO> subjectDTOS = MyBeanUtil.copyListProperties(list, SubjectDTO::new);
+        subjectDTOS.forEach(subjectDTO -> {
+            subjectDTO.setParentId(id);
+            add(subjectDTO);
+        });
+        return new QueryResponseResult(CommonCode.SUCCESS, null);
     }
 
     /**
@@ -318,8 +410,8 @@ public class SubjectServiceImpl extends ServiceImpl<SubjectDao, SubjectPO> imple
      */
     public SubjectPO selectByYearAndCode(String year, String code) {
         QueryWrapper<SubjectPO> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq(SubjectPO.F_YEAR,year);
-        queryWrapper.eq(SubjectPO.F_SUB_CODE,code);
+        queryWrapper.eq(SubjectPO.F_YEAR, year);
+        queryWrapper.eq(SubjectPO.F_SUB_CODE, code);
         return baseMapper.selectOne(queryWrapper);
     }
 
@@ -330,7 +422,7 @@ public class SubjectServiceImpl extends ServiceImpl<SubjectDao, SubjectPO> imple
      * @param pid
      * @return
      */
-    private List<SubjectVO> buildSubjectVOTree(List<SubjectVO> subjectVOList, Long pid) {
+    public List<SubjectVO> buildSubjectVOTree(List<SubjectVO> subjectVOList, Long pid) {
         List<SubjectVO> treeList = new ArrayList<>();
         subjectVOList.forEach(SubjectVO -> {
             if (pid.equals(SubjectVO.getParentId())) {
@@ -347,13 +439,37 @@ public class SubjectServiceImpl extends ServiceImpl<SubjectDao, SubjectPO> imple
      * @param year
      * @return
      */
-    private List<SubjectVO> getAll(String year) {
+    public List<SubjectVO> getAll(String year) {
         QueryWrapper<SubjectPO> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("f_year", year);
         List<SubjectPO> subjectPOS = subjectDao.selectList(queryWrapper);
         List<SubjectVO> subjectVOS = MyBeanUtil.copyListProperties(subjectPOS, SubjectVO::new);
         List<SubjectVO> subjectVOTree = buildSubjectVOTree(subjectVOS, SubjectConstant.INIT_PARENT_ID);
         return subjectVOTree;
+    }
+
+
+    /**
+     * 返回前两级预算科目树
+     *
+     * @param year
+     * @return
+     */
+    public List<SubjectVO> getSecondTree(String year) {
+        QueryWrapper<SubjectPO> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(SubjectPO.F_PARENT_ID, SubjectConstant.INIT_PARENT_ID);
+//        第一级list
+        List<SubjectPO> subjectPOS1 = baseMapper.selectList(queryWrapper);
+        List<SubjectVO> subjectVOS1 = MyBeanUtil.copyListProperties(subjectPOS1, SubjectVO::new);
+        subjectVOS1.forEach(subjectVO -> {
+            QueryWrapper<SubjectPO> queryWrapper2 = new QueryWrapper<>();
+            queryWrapper2.eq(SubjectPO.F_PARENT_ID, subjectVO.getId());
+//        第二级list
+            List<SubjectPO> subjectPOS2 = baseMapper.selectList(queryWrapper2);
+            List<SubjectVO> subjectVOS2 = MyBeanUtil.copyListProperties(subjectPOS2, SubjectVO::new);
+            subjectVO.setSubjectVOS(subjectVOS2);
+        });
+        return subjectVOS1;
     }
 
 
@@ -367,41 +483,36 @@ public class SubjectServiceImpl extends ServiceImpl<SubjectDao, SubjectPO> imple
     /**
      * 返回当下年份
      */
-    public static String getCurrentYear() {
+    public String getCurrentYear() {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy");
         return simpleDateFormat.format(new Date());
     }
 
     /**
-     * 对外接口，更新预算科目编码,更新成功或无须更新都返回true
+     * 返回当前时间
      */
-    @Transactional(rollbackFor = Exception.class)
-    public boolean updateFromInconme(Long incomeId, String name) {
-        IncomeSortSubjectPO incomeSortSubjectPO = incomeSortSubjectService.selectByIncomeId(incomeId);
-        if (incomeSortSubjectPO == null) {
-            return true;
-        }
-        SubjectPO subjectPO = baseMapper.selectById(incomeSortSubjectPO.getSubjectId());
-        if (!subjectPO.getYear().equals(getCurrentYear())) {
-            return true;
-        }
-        subjectPO.setCode(name);
-        return baseMapper.updateById(subjectPO) == 1 ? true : false;
+    public String getCurrentDateTime() {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日HH时mm分ss秒");
+        return simpleDateFormat.format(new Date());
     }
 
     /**
-     * 对外接口，删除预算科目,删除成功或无须删除都返回true
+     * 返回导出文件名
      */
-    @Transactional(rollbackFor = Exception.class)
-    public boolean deleteFromImcome(Long incomeId) {
-        IncomeSortSubjectPO incomeSortSubjectPO = incomeSortSubjectService.selectByIncomeId(incomeId);
-        if (incomeSortSubjectPO == null) {
-            return true;
+    @Override
+    public String getFileName(Long id) {
+        String name = "";
+        if (id == 0) {
+            name += "全部预算科目" + getCurrentDateTime();
+            return name;
         }
-        SubjectPO subjectPO = baseMapper.selectById(incomeSortSubjectPO.getSubjectId());
-        if (!subjectPO.getYear().equals(getCurrentYear())) {
-            return true;
+        SubjectPO subjectPO = baseMapper.selectById(id);
+        if (subjectPO == null) {
+            name += "不存在预算科目" + getCurrentDateTime();
+            return name;
         }
-        return deleteRec(subjectPO);
+        return subjectPO.getName() + getCurrentDateTime();
     }
 }
+
+
