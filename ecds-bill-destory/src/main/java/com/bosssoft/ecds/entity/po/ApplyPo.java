@@ -1,10 +1,10 @@
 package com.bosssoft.ecds.entity.po;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.time.LocalDateTime;
 import java.io.Serializable;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -58,6 +58,8 @@ public class ApplyPo{
     /**
      * 版本号
      */
+    @Version
+    @TableField(fill = FieldFill.INSERT)
     private Integer fVersion;
 
     /**

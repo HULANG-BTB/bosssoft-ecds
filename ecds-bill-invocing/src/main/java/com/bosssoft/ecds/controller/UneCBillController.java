@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bosssoft.ecds.entity.dto.*;
+import com.bosssoft.ecds.entity.po.MessageUneCbill;
+import com.bosssoft.ecds.entity.po.Template;
 import com.bosssoft.ecds.entity.po.UneCbill;
 import com.bosssoft.ecds.entity.po.UneCbillItem;
 import com.bosssoft.ecds.entity.pojo.BatchPojo;
@@ -22,15 +24,14 @@ import com.bosssoft.ecds.util.CommonUtil;
 import com.bosssoft.ecds.util.ResponseUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 import java.text.DateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -100,13 +101,21 @@ public class UneCBillController {
      * @return
      */
     @RequestMapping(value = "/getBillByIdAndCheckCode", method = RequestMethod.GET)
-    public String getBillByIdAndCheckCode(String billId, String checkCode) {
+        public String getBillByIdAndCheckCode(String billId, String checkCode) throws ExecutionException, InterruptedException {
         QueryWrapper<UneCbill> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("f_bill_id", billId)
                 .eq("f_check_code", checkCode);
         UneCbill uneCbill = uneCbillService.getBillByIdAndCheckCode(queryWrapper);
         log.info("success");
         if (uneCbill != null) {
+            MessageUneCbill messageUneCbill = new MessageUneCbill();
+            BeanUtil.copyProperties(uneCbill, messageUneCbill);
+            log.info(messageUneCbill.getFBillId() +" :"+ messageUneCbill.getFBillNo());
+            NontaxBillDTO nontaxBillDTO = new NontaxBillDTO();
+            nontaxBillDTO.setBillCode(messageUneCbill.getFBillId());
+            nontaxBillDTO.setSerialCode(messageUneCbill.getFBillNo());
+            String url = templateService.getTemplate(nontaxBillDTO);
+            messageUneCbill.setImgUrl(url);
             return ResponseUtils.getResponse(uneCbill, ResponseUtils.ResultType.OK);
         }
         return ResponseUtils.getResponse(404, "票据不存在");
@@ -277,7 +286,7 @@ public class UneCBillController {
             if (jsonObject.getString("status").equals(200)) {
                 return ResponseUtils.getResponse(res, ResponseUtils.ResultType.OK);
             }
-            return ResponseUtils.getResponse(404, "消息发送失败");
+            return ResponseUtils.getResponse(404, "邮件发送失败");
         }
         return ResponseUtils.getResponse(404, "票据不存在");
     }
@@ -290,14 +299,43 @@ public class UneCBillController {
     @RequestMapping(path = "/sendSms", method = RequestMethod.GET)
     public String sendSms(String billId)  throws ExecutionException, InterruptedException{
         UneCbill uneCbill = uneCbillService.getUneCBillById(billId);
-        MessageDto messageDto = new MessageDto();
-        BeanUtil.copyProperties(uneCbill, messageDto);
-        messageDto.setFBillImgUrl("url");
-        SendSmsVo sendSmsVo = new SendSmsVo();
-        sendSmsVo.setSmsFrom("开票单位：boss");
-        sendSmsVo.setSmsTo(uneCbill.getFPayerTel());
-        sendSmsVo.setContent(JSON.toJSONString(messageDto));
-        String res = messageService.send(sendSmsVo);
-        return res;
+        if (uneCbill != null) {
+            MessageDto messageDto = new MessageDto();
+            BeanUtil.copyProperties(uneCbill, messageDto);
+            messageDto.setFBillImgUrl("url");
+            SendSmsVo sendSmsVo = new SendSmsVo();
+            sendSmsVo.setSmsFrom("开票单位：boss");
+            sendSmsVo.setSmsTo(uneCbill.getFPayerTel());
+            sendSmsVo.setContent(JSON.toJSONString(messageDto));
+            String res = messageService.send(sendSmsVo);
+            JSONObject jsonObject = JSONObject.parseObject(res);
+            if (jsonObject.getString("status").equals(200)) {
+                return ResponseUtils.getResponse(res, ResponseUtils.ResultType.OK);
+            }
+            return ResponseUtils.getResponse(404, "短信发送失败");
+        }
+        return ResponseUtils.getResponse(404, "票据不存在");
+    }
+
+    /**
+     *查询票据
+     * @param start
+     * @param end
+     * @return
+     */
+    @GetMapping("/writeOffInfo")
+    public String writeOffInfo(String start, String end) {
+        List<UneCbill> list = uneCbillService.writeOff(start, end);
+        List<WriteOffDto> writeOffDtos = new ArrayList<>();
+        if (list.size() != 0) {
+            for (UneCbill uneCbill : list) {
+                WriteOffDto writeOffDto = new WriteOffDto();
+                BeanUtil.copyProperties(uneCbill, writeOffDto);
+                writeOffDto.setUneCbillItems(uneCbillService.getItems(String.valueOf(uneCbill.getFId())));
+                writeOffDtos.add(writeOffDto);
+            }
+            return ResponseUtils.getResponse(writeOffDtos, ResponseUtils.ResultType.OK);
+        }
+        return ResponseUtils.getResponse(404, "需要核销票据不存在");
     }
 }

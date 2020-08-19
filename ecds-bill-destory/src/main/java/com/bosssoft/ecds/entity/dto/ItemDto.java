@@ -14,6 +14,11 @@ public class ItemDto implements Serializable {
      */
     private String fBillBatchCode;
 
+    /*
+     *票据名称
+     */
+    private String fBillName;
+
     /**
      * 仓库ID
      */
@@ -41,6 +46,14 @@ public class ItemDto implements Serializable {
 
     public String getfBillBatchCode() {
         return fBillBatchCode;
+    }
+
+    public String getfBillName() {
+        return fBillName;
+    }
+
+    public void setfBillName(String fBillName) {
+        this.fBillName = fBillName;
     }
 
     public void setfBillBatchCode(String fBillBatchCode) {
