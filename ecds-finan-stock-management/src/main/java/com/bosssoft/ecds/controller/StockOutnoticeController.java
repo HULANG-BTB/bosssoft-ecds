@@ -1,23 +1,17 @@
 package com.bosssoft.ecds.controller;
 
 
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.convert.Convert;
-import cn.hutool.json.JSONArray;
-import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.bosssoft.ecds.entity.PageResult;
-import com.bosssoft.ecds.entity.dto.StockOutChangeDto;
 import com.bosssoft.ecds.entity.dto.StockOutDto;
 import com.bosssoft.ecds.entity.dto.StockOutItemDto;
 import com.bosssoft.ecds.entity.po.StockOutnoticeChangePo;
 import com.bosssoft.ecds.entity.po.StockOutnoticeItemPo;
 import com.bosssoft.ecds.entity.po.StockOutnoticePo;
-import com.bosssoft.ecds.entity.vo.StockOutCheckResultVo;
-import com.bosssoft.ecds.entity.vo.StockOutItemVo;
 import com.bosssoft.ecds.entity.vo.StockOutPageVo;
 import com.bosssoft.ecds.entity.vo.StockOutVo;
+//import com.bosssoft.ecds.service.StockOutnoticeChangeService;
 import com.bosssoft.ecds.service.StockOutnoticeChangeService;
 import com.bosssoft.ecds.service.StockOutnoticeItemService;
 import com.bosssoft.ecds.service.StockOutnoticeService;
@@ -27,10 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static com.bosssoft.ecds.entity.constant.StockOutChangeConstant.UN_CHANGE;
 
@@ -183,6 +174,10 @@ public class StockOutnoticeController {
              * 记录变动到出库变动表
              * 通过altercode 确定新增的变动表的altercode变动状态属性
              */
+            log.info("------------------change的dto：{}",ConverUtil.outVoToChangeDto(outVo));
+            log.info("------------------change的po：{}",Convert.convert(
+                    StockOutnoticeChangePo.class,
+                    ConverUtil.outVoToChangeDto(outVo)));
             changeService.save(Convert.convert(
                     StockOutnoticeChangePo.class,
                     ConverUtil.outVoToChangeDto(outVo)));
@@ -190,7 +185,7 @@ public class StockOutnoticeController {
             /**
              * 通过pid，新增or更新出库明细表
              */
-            log.info("进入了save,dto:{}", outItemDtos.toString());
+            log.info("进入了saveitem,dto:{}", outItemDtos.toString());
             log.info(ConverUtil.converList(StockOutnoticeItemPo.class, outItemDtos).toString());
             itemService.saveChange(ConverUtil.converList(StockOutnoticeItemPo.class, outItemDtos), outDto.getId());
             /**

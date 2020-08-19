@@ -21,7 +21,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author misheep
- * @since 2020-08-11
+ * @since 2020-08-19
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -69,17 +69,17 @@ public class StockOutnoticeChangePo extends Model<StockOutnoticeChangePo> {
     private Date updateTime;
 
     @ApiModelProperty(value = "操作者id")
-    @TableField(value = "f_operator_id", fill = FieldFill.INSERT_UPDATE)
+    @TableField(value = "f_operator_id")
     private Long operatorId;
 
     @ApiModelProperty(value = "操作者name")
-    @TableField(value = "f_operator", fill = FieldFill.INSERT_UPDATE)
+    @TableField(value = "f_operator")
     private String operator;
 
 
     public static final String F_ID = "f_id";
 
-    public static final String F_BUSS_ID = "f_buss_id";
+    public static final String F_PID = "f_pid";
 
     public static final String F_CHANGE_STATE = "f_change_state";
 

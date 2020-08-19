@@ -1,7 +1,7 @@
 package com.bosssoft.ecds.mapper;
 
-import com.bosssoft.ecds.entity.po.StockOutnoticeChangePo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.bosssoft.ecds.entity.po.StockOutnoticeChangePo;
 
 /**
  * <p>
