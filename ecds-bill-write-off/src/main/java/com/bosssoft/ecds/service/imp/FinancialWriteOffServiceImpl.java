@@ -4,13 +4,11 @@ import com.bosssoft.ecds.dao.financial.MonitorRecordMapper;
 import com.bosssoft.ecds.dao.financial.WriteOffBillItemMapper;
 import com.bosssoft.ecds.dao.financial.WriteOffBillSummaryMapper;
 import com.bosssoft.ecds.dao.financial.WriteOffMapper;
+import com.bosssoft.ecds.dao.unit.WriteOffApplyIncomeMapper;
+import com.bosssoft.ecds.dao.unit.WriteOffApplyItemMapper;
 import com.bosssoft.ecds.dao.unit.WriteOffApplyMapper;
-import com.bosssoft.ecds.entity.dto.WriteOffDetailDTO;
-import com.bosssoft.ecds.entity.dto.WriteOffReceiveDTO;
-import com.bosssoft.ecds.entity.dto.WriteOffResultDTO;
-import com.bosssoft.ecds.entity.po.WriteOffApplyPO;
-import com.bosssoft.ecds.entity.po.WriteOffBillItemPO;
-import com.bosssoft.ecds.entity.po.WriteOffBillSummaryPO;
+import com.bosssoft.ecds.entity.dto.*;
+import com.bosssoft.ecds.entity.po.*;
 import com.bosssoft.ecds.service.FinancialWriteOffService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +21,12 @@ public class FinancialWriteOffServiceImpl implements FinancialWriteOffService {
 
     @Autowired(required = false)
     private WriteOffApplyMapper writeOffApplyMapper;
+
+    @Autowired(required = false)
+    private WriteOffApplyItemMapper writeOffApplyItemMapper;
+
+    @Autowired(required = false)
+    private WriteOffApplyIncomeMapper writeOffApplyIncomeMapper;
 
     @Autowired(required = false)
     private WriteOffMapper writeOffMapper;
@@ -89,10 +93,56 @@ public class FinancialWriteOffServiceImpl implements FinancialWriteOffService {
     public boolean setResult(WriteOffDetailDTO writeOffDetailDTO ,WriteOffResultDTO writeOffResultDTO) {
         // 点击审验后， 对审验结果进行保存
         // 保存审验结果
-        setDetails(writeOffDetailDTO);
-        // 又是Update 操作
-        writeOffApplyMapper.update(null, null);
+//        setDetails(writeOffDetailDTO);
+        // 跟新审核结果
+        if (writeOffResultDTO.getRes().equals("pass")){
+            writeOffApplyMapper.setResult(writeOffResultDTO.getFNo(), 2);
+        } else {
+            writeOffApplyMapper.setResult(writeOffResultDTO.getFNo(), 3);
+        }
         return false;
+    }
+
+    @Override
+    public WriteOffDetailDTO getDetail(String fPid) {
+        WriteOffDetailDTO writeOffDetailDTO = new WriteOffDetailDTO();
+        // 开票总览 & 收入情况 & 开票明细
+        List<WriteOffInvoceDetailDTO> writeOffInvoceDetailDTOList = new ArrayList<>();
+        List<WriteOffIncomeDetailDTO> writeOffIncomeDetailDTOList = new ArrayList<>();
+        List<WriteOffBillInvDetailDTO> writeOffBillInvDetailDTOList = new ArrayList<>();
+
+        List<WriteOffApplyItemPO> writeOffApplyItemPOList = writeOffApplyItemMapper.getWriteOffApplyItemList(fPid);
+        for (WriteOffApplyItemPO writeOffApplyItemPO : writeOffApplyItemPOList){
+            WriteOffInvoceDetailDTO writeOffInvoceDetailDTO = new WriteOffInvoceDetailDTO();
+            writeOffInvoceDetailDTO.setFBillCode(writeOffApplyItemPO.getFBillCode());
+            writeOffInvoceDetailDTO.setFBillName(writeOffApplyItemPO.getFBillName());
+            writeOffInvoceDetailDTO.setFNumber(writeOffApplyItemPO.getFNumber());
+            writeOffInvoceDetailDTO.setFAmt(writeOffApplyItemPO.getFAmt());
+            writeOffInvoceDetailDTOList.add(writeOffInvoceDetailDTO);
+
+            WriteOffBillInvDetailDTO writeOffBillInvDetailDTO = new WriteOffBillInvDetailDTO();
+            writeOffBillInvDetailDTO.setFBatchNo(writeOffApplyItemPO.getFBatchNo());
+            writeOffBillInvDetailDTO.setFNumber(writeOffApplyItemPO.getFNumber());
+            writeOffBillInvDetailDTO.setFBillNo1(writeOffApplyItemPO.getFBillNo1());
+            writeOffBillInvDetailDTO.setFBillNo2(writeOffApplyItemPO.getFBillNo2());
+            writeOffBillInvDetailDTO.setFAmt(writeOffApplyItemPO.getFAmt());
+            writeOffBillInvDetailDTOList.add(writeOffBillInvDetailDTO);
+        }
+        List<WriteOffApplyIncomePO> writeOffApplyIncomePOList = writeOffApplyIncomeMapper.getWriteOffApplyIncomeList(fPid);
+        for (WriteOffApplyIncomePO writeOffApplyIncomePO: writeOffApplyIncomePOList){
+            WriteOffIncomeDetailDTO writeOffIncomeDetailDTO = new WriteOffIncomeDetailDTO();
+            writeOffIncomeDetailDTO.setFItemCode(writeOffApplyIncomePO.getFItemCode());
+            writeOffIncomeDetailDTO.setFItemName(writeOffApplyIncomePO.getFItemName());
+            writeOffIncomeDetailDTO.setFUnits(writeOffApplyIncomePO.getFUnits());
+            writeOffIncomeDetailDTO.setFAmt(writeOffApplyIncomePO.getFAmt());
+            writeOffIncomeDetailDTOList.add(writeOffIncomeDetailDTO);
+        }
+
+        writeOffDetailDTO.setWriteOffInvoceDetailDTOList(writeOffInvoceDetailDTOList);
+        writeOffDetailDTO.setWriteOffBillInvDetailDTOList(writeOffBillInvDetailDTOList);
+        writeOffDetailDTO.setWriteOffIncomeDetailDTOList(writeOffIncomeDetailDTOList);
+
+        return writeOffDetailDTO;
     }
 
     /**
@@ -103,42 +153,6 @@ public class FinancialWriteOffServiceImpl implements FinancialWriteOffService {
      */
     public boolean setDetails(WriteOffDetailDTO writeOffDetailDTO) {
         // 获取票据详细信息
-        // 将writeOffDetailDTO细化成 writeOffBillItemPo以及WriteOff
-        WriteOffBillItemPO writeOffBillItemPO = new WriteOffBillItemPO();
-        writeOffBillItemPO.setFPid(writeOffDetailDTO.getFPid());
-        writeOffBillItemPO.setFSortNo(writeOffDetailDTO.getFSortNo());
-        writeOffBillItemPO.setFBillCode(writeOffDetailDTO.getFBillCode());
-        writeOffBillItemPO.setFBillName(writeOffDetailDTO.getFBillName());
-        writeOffBillItemPO.setFBillId(writeOffDetailDTO.getFBillId());
-        writeOffBillItemPO.setFBatchCode(writeOffDetailDTO.getFBatchCode());
-        writeOffBillItemPO.setFNumber(writeOffDetailDTO.getFNumber());
-        writeOffBillItemPO.setFBillNo1(writeOffDetailDTO.getFBillNo1());
-        writeOffBillItemPO.setFBillNo2(writeOffDetailDTO.getFBillNo2());
-        writeOffBillItemPO.setFAmt(writeOffDetailDTO.getFAmt());
-        writeOffBillItemPO.setFInvNum(writeOffDetailDTO.getFInvNum());
-        writeOffBillItemPO.setFVersion(writeOffDetailDTO.getFVersion());
-        writeOffBillItemPO.setFCreateTime(writeOffDetailDTO.getFCreateTime());
-        writeOffBillItemPO.setFUpdateTime(writeOffDetailDTO.getFUpdateTime());
-        writeOffBillItemPO.setFOperatorId(writeOffDetailDTO.getFOperatorId());
-        writeOffBillItemPO.setFOperator(writeOffDetailDTO.getFOperator());
-        writeOffBillItemMapper.insert(writeOffBillItemPO);
-
-        WriteOffBillSummaryPO writeOffBillSummaryPO = new WriteOffBillSummaryPO();
-        writeOffBillSummaryPO.setFPid(writeOffDetailDTO.getFPid());
-        writeOffBillSummaryPO.setFSortNo(writeOffDetailDTO.getFSortNo());
-        writeOffBillSummaryPO.setFBillCode(writeOffDetailDTO.getFBillCode());
-        writeOffBillSummaryPO.setFBillName(writeOffDetailDTO.getFBillName());
-        writeOffBillSummaryPO.setFBillId(writeOffDetailDTO.getFBillId());
-        writeOffBillSummaryPO.setFBatchCode(writeOffDetailDTO.getFBatchCode());
-        writeOffBillSummaryPO.setFNumber(writeOffDetailDTO.getFNumber());
-        writeOffBillSummaryPO.setFAmt(writeOffDetailDTO.getFAmt());
-        writeOffBillSummaryPO.setFInvNum(writeOffDetailDTO.getFInvNum());
-        writeOffBillSummaryPO.setFVersion(writeOffDetailDTO.getFVersion());
-        writeOffBillSummaryPO.setFCreateTime(writeOffDetailDTO.getFCreateTime());
-        writeOffBillSummaryPO.setFUpdateTime(writeOffDetailDTO.getFUpdateTime());
-        writeOffBillSummaryPO.setFOperatorId(writeOffDetailDTO.getFOperatorId());
-        writeOffBillSummaryPO.setFOperator(writeOffDetailDTO.getFOperator());
-        writeOffBillSummaryMapper.insert(writeOffBillSummaryPO);
 
         return true;
     }

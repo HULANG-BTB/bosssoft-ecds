@@ -76,9 +76,14 @@ public class FinancialWriteOffController {
      */
     @ResponseBody
     @RequestMapping(value = "/getDetails", method = RequestMethod.POST)
-    public String getDetails(@RequestBody WriteOffDetailRequestVO writeOffDetailRequestVO) {
+    public WriteOffDetailVO getDetails(@RequestBody WriteOffDetailRequestVO writeOffDetailRequestVO) {
         // 根据业务单号获取详细
-        return writeOffDetailRequestVO.getfNo();
+        WriteOffDetailDTO writeOffDetailDTO = financialWriteOffService.getDetail(writeOffDetailRequestVO.getfNo());
+        WriteOffDetailVO writeOffDetailVO = new WriteOffDetailVO();
+        writeOffDetailVO.setWriteOffBillInvDetailDTOList(writeOffDetailDTO.getWriteOffBillInvDetailDTOList());
+        writeOffDetailVO.setWriteOffIncomeDetailDTOList(writeOffDetailDTO.getWriteOffIncomeDetailDTOList());
+        writeOffDetailVO.setWriteOffInvoceDetailDTOList(writeOffDetailDTO.getWriteOffInvoceDetailDTOList());
+        return writeOffDetailVO;
     }
 
     /**
