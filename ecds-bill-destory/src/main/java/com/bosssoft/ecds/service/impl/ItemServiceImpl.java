@@ -1,5 +1,6 @@
 package com.bosssoft.ecds.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.bosssoft.ecds.entity.dto.ItemDto;
 import com.bosssoft.ecds.entity.po.ItemPo;
 import com.bosssoft.ecds.dao.ItemMapper;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -30,7 +32,6 @@ public class ItemServiceImpl extends ServiceImpl<ItemMapper, ItemPo> implements 
      * @description: 插入票据销毁申请明细表信息，此时需将dto转为po
      * @param: [itemDtoList]
      * @return: boolean
-     * @author: qiuheng
      * @date: 2020/8/13
      */
     @Override
@@ -64,5 +65,30 @@ public class ItemServiceImpl extends ServiceImpl<ItemMapper, ItemPo> implements 
         itemPo.setfBillNo2(itemDto.getfBillNo2());
         itemMapper.insert(itemPo);
         return false;
+    }
+
+    @Override
+    public List<ItemPo> getItemListByDestroyNo(String fDestroyNo) {
+        QueryWrapper<ItemPo> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("f_pid", fDestroyNo);
+        List<ItemPo> ItemPos = itemMapper.selectList(queryWrapper);
+        return ItemPos;
+    }
+
+    @Override
+    public int updateItemInfo(List<ItemDto> itemDtoList) {
+       for(int i = 0; i < itemDtoList.size(); i++){
+           ItemPo itemPo = new ItemPo();
+           BeanUtils.copyProperties(itemDtoList.get(i),itemPo);
+           itemMapper.updateById(itemPo);
+       }
+       return 0;
+    }
+
+    @Override
+    public int deleteItemInfoByDestroyNo(String fPid) {
+        HashMap<String,Object> map = new HashMap<>();
+        map.put("f_pid",fPid);
+        return itemMapper.deleteByMap(map);
     }
 }

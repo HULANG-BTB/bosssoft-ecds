@@ -1,14 +1,18 @@
 package com.bosssoft.ecds;
 
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.openfeign.EnableFeignClients;
+//import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 /**
  * @author: qiuheng
  * @create: 2020-08-11 16:47
  **/
 @SpringBootApplication
+@EnableDiscoveryClient
+@EnableFeignClients(basePackages = "com.bosssoft.ecds.service.feign")
 public class billDestroyApplication {
     public static void main(String[] args) {
         SpringApplication.run(billDestroyApplication.class,args);
