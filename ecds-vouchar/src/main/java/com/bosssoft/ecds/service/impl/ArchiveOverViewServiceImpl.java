@@ -47,11 +47,8 @@ public class ArchiveOverViewServiceImpl extends ServiceImpl<ArchiveOverViewDao, 
      * @return
      */
     @Override
-    public List<ArchiveOverViewDTO> queryOverViewArchiveAllInfo() {
-        /*
-         * 查询出所有公司的信息,并且转换参数类型
-         */
-        return archiveDao.queryOverViewArchiveAllInfo();
+    public List<ArchiveOverViewDTO> queryOverViewArchiveInfos(ArchiveOverViewQuery archiveOverViewQuery) {
+        return archiveDao.queryOverViewArchiveAllInfo(archiveOverViewQuery);
     }
 
     /**

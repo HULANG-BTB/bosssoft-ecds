@@ -26,6 +26,8 @@ public class MyTest {
     BillPayArchiveService billPayArchiveService;
     @Autowired
     ArchiveOverViewService archiveOverViewService;
+    @Autowired
+    ArchiveCycleService archiveCycleService;
 
     @Test
     public void testBillAvailable() {
@@ -62,5 +64,10 @@ public class MyTest {
         ArchiveOverViewQuery query = new ArchiveOverViewQuery();
         query.setAgenName("软件");
         log.info("" + archiveOverViewService.queryOverViewArchiveInfo(query));
+    }
+
+    @Test
+    public void testArchiveCycleService() {
+        archiveCycleService.exec();
     }
 }

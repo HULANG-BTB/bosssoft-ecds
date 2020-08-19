@@ -95,7 +95,8 @@ public class BillApplyArchiveServiceImpl extends ServiceImpl<BillApplyArchiveDao
         /*
          *获取归档总览表中所有的公司
          */
-        List<ArchiveOverViewDTO> archiveOverViewDTOS = archiveOverViewService.queryOverViewArchiveAllInfo();
+
+        List<ArchiveOverViewDTO> archiveOverViewDTOS = archiveOverViewService.queryOverViewArchiveInfos(null);
 
         /*
          * 更新归档总览表数量

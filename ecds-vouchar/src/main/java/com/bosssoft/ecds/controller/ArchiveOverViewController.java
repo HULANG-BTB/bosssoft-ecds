@@ -8,7 +8,10 @@ import com.bosssoft.ecds.service.ArchiveOverViewService;
 import com.bosssoft.ecds.utils.ResponseUtils;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,14 +48,15 @@ public class ArchiveOverViewController {
 
     /**
      * 获取所有单位的归档信息,并且展示给前台
+     *
      * @return
      */
-    @GetMapping("/fina/allInfo")
-    public String queryArchiveAllInfo(){
+    @PostMapping("/fina/allInfo")
+    public String queryArchiveAllInfo(@RequestBody ArchiveOverViewQuery query) {
         /**
          * 获取全部的单位信息
          */
-        List<ArchiveOverViewDTO> archiveOverViewDTOS = service.queryOverViewArchiveAllInfo();
+        List<ArchiveOverViewDTO> archiveOverViewDTOS = service.queryOverViewArchiveInfos(query);
         List<ArchiveOverViewVO> voList = new ArrayList<>();
 
         /**

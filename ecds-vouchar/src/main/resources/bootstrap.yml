@@ -7,4 +7,4 @@ spring:
         enabled: true
         server-addr: 49.234.75.113:8848
         file-extension: yml
-        name: archive-server
+        name: archive-server-dev

@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bosssoft.ecds.dao.ArchiveOverViewDao">
     <!--归档总览表-->
+    <!--实现精确查询-->
     <select id="queryOverViewArchiveInfo" resultType="com.bosssoft.ecds.entity.dto.ArchiveOverViewDTO">
         SELECT
             A.f_id as id,
@@ -11,18 +12,20 @@
             G.f_level as level,
             G.f_org_code as orgCode,
             A.f_kind_name as kindName,
-            A.f_link_addr as linkAddr,
-            G.f_link_man as linkMan,
-            G.f_dept_name as deptName,
-            A.f_apply_number as applyNumber,
-            A.f_use_number as useNumber,
-            A.f_author_number as authorNumber,
-            A.f_unauthor_number as unAuthorNumber,
-            A.f_create_time as createTime,
-            A.f_update_time as updateTime
+        A.f_link_addr as linkAddr,
+        G.f_link_man as linkMan,
+        G.f_dept_name as deptName,
+        A.f_apply_number as applyNumber,
+        A.f_use_number as useNumber,
+        A.f_author_number as authorNumber,
+        A.f_unauthor_number as unAuthorNumber,
+        A.f_create_time as createTime,
+        A.f_update_time as updateTime
         FROM fbr_archive A
-        LEFT JOIN fab_agen G ON  A.f_agen_code = G.f_agen_code
-        WHERE A.f_agen_name = #{query.agenName}
+        LEFT JOIN fab_agen G ON A.f_agen_code = G.f_agen_code
+        <where>
+            A.f_agen_code = #{query.agenCode}
+        </where>
     </select>
 
     <select id="queryOverViewArchiveAllInfo" resultType="com.bosssoft.ecds.entity.dto.ArchiveOverViewDTO">
@@ -34,17 +37,25 @@
             G.f_level as level,
             G.f_org_code as orgCode,
             A.f_kind_name as kindName,
-            A.f_link_addr as linkAddr,
-            G.f_link_man as linkMan,
-            G.f_dept_name as deptName,
-            A.f_apply_number as applyNumber,
-            A.f_use_number as useNumber,
-            A.f_author_number as authorNumber,
-            A.f_unauthor_number as unAuthorNumber,
-            A.f_create_time as createTime,
-            A.f_update_time as updateTime
+        A.f_link_addr as linkAddr,
+        G.f_link_man as linkMan,
+        G.f_dept_name as deptName,
+        A.f_apply_number as applyNumber,
+        A.f_use_number as useNumber,
+        A.f_author_number as authorNumber,
+        A.f_unauthor_number as unAuthorNumber,
+        A.f_create_time as createTime,
+        A.f_update_time as updateTime
         FROM fbr_archive A
-        LEFT JOIN fab_agen G ON  A.f_agen_code = G.f_agen_code
+        LEFT JOIN fab_agen G ON A.f_agen_code = G.f_agen_code
+        <where>
+            <if test="query.agenCode != null">
+                and A.f_agen_code LIKE concat('%',#{query.agenCode},'%')
+            </if>
+            <if test="query.agenName != null">
+                and A.f_agen_name LIKE concat('%',#{query.agenName},'%')
+            </if>
+        </where>
     </select>
 
     <!-- 通用查询映射结果 -->

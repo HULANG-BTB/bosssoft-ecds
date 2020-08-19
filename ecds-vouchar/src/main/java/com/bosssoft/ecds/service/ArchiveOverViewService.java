@@ -18,7 +18,7 @@ import java.util.List;
  */
 public interface ArchiveOverViewService extends IService<ArchivePO> {
     /**
-     * 根据传来的查询信息，查询出归档总览表中信息  （已归档状态下）
+     * 根据传来的查询信息，查询出归档总览表中信息
      *
      * @param archiveOverViewQuery
      * @return OverViewArchiveDto
@@ -26,11 +26,12 @@ public interface ArchiveOverViewService extends IService<ArchivePO> {
     ArchiveOverViewDTO queryOverViewArchiveInfo(ArchiveOverViewQuery archiveOverViewQuery);
 
     /**
-     * 查询所有单位的信息，以及票据使用情况。
+     * 根据传来的查询信息，查询出归档总览表中信息 (模糊查询)
      *
-     * @return List<ArchiveOverViewDto>
+     * @param archiveOverViewQuery
+     * @return OverViewArchiveDto
      */
-    List<ArchiveOverViewDTO> queryOverViewArchiveAllInfo();
+    List<ArchiveOverViewDTO> queryOverViewArchiveInfos(ArchiveOverViewQuery archiveOverViewQuery);
 
     /**
      * 批量更新归档信息

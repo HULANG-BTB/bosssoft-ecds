@@ -25,7 +25,7 @@ import java.util.List;
  */
 @Api("归档可用")
 @RestController
-@RequestMapping("/item-voucher-po")
+@RequestMapping("/item")
 public class ItemAvailableArchiveController {
 
     @Autowired

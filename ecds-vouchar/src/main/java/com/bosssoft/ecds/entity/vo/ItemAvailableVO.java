@@ -16,7 +16,7 @@ public class ItemAvailableVO implements Serializable {
     @ApiModelProperty(value = "单位编码")
     private String agenCode;
 
-    @ApiModelProperty(value = "项目名称")
+    @ApiModelProperty(value = "项目编码")
     private String itemCode;
 
     @ApiModelProperty(value = "项目名称")
