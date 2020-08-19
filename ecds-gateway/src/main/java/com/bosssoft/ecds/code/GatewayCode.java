@@ -6,13 +6,13 @@ import com.bosssoft.ecds.response.ResultCode;
  * @author: lpb
  * @create: 2020-08-18 15:59
  */
-public enum  GatewayCode implements ResultCode {
+public enum GatewayCode implements ResultCode {
 
-    TOO_MANY_REQUESTS(false,11001,"当前请求过多，请稍后再试"),
-    BAD_REQUEST(false,401001,"错误请求"),
-    NOT_FOUND_SERVICE(false,401002,"找不到存在的实例"),
-    REQUEST_REMOTE_FAIL(false,401002,"远程调用失败"),
-    ;
+    TOO_MANY_REQUESTS(false, 11001, "当前请求过多，请稍后再试"),
+    BAD_REQUEST(false, 401001, "错误请求"),
+    NOT_FOUND_SERVICE(false, 39999, "找不到存在的实例"),
+    REQUEST_REMOTE_FAIL(false, 39999, "远程调用失败"),
+    EMAIL_NOTIFICATION(false, 29999, "邮件通知");
 
     //操作是否成功
     boolean success;

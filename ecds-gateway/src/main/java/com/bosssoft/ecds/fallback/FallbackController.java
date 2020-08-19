@@ -10,17 +10,23 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 /**
- * @Description :
+ * @Description : 处理
  * @Author : wuliming
  * @Date: 2020-08-17 17:26
  */
 
 @RestController
-@Slf4j
 public class FallbackController {
 
     @Autowired
     FallbackService fallbackService;
+
+    /**
+     * 处理Hystrix 调用异常
+     * @param exchange
+     * @param throwable
+     * @return
+     */
     @RequestMapping(value = "/fallback")
     @ResponseStatus
     public Mono<ResponseResult> fallback(ServerWebExchange exchange, Throwable throwable) {
