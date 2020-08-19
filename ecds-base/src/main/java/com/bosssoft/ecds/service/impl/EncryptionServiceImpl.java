@@ -6,7 +6,7 @@ import com.bosssoft.ecds.response.QueryResponseResult;
 import com.bosssoft.ecds.response.ResponseResult;
 import com.bosssoft.ecds.service.EncryptionService;
 import com.bosssoft.ecds.util.RSAUtil;
-import com.bosssoft.ecds.util.RedisUtil;
+import com.bosssoft.ecds.util.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class EncryptionServiceImpl implements EncryptionService {
     @Autowired
-    private RedisUtil redisUtil;
+    private RedisUtils redisUtil;
 
     @Override
     public QueryResponseResult getRSAPublicKey() {

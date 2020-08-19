@@ -5,7 +5,7 @@ import com.bosssoft.ecds.response.CommonCode;
 import com.bosssoft.ecds.response.QueryResponseResult;
 import com.bosssoft.ecds.util.AESUtil;
 import com.bosssoft.ecds.util.RSAUtil;
-import com.bosssoft.ecds.util.RedisUtil;
+import com.bosssoft.ecds.util.RedisUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
@@ -29,7 +29,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 @RestControllerAdvice
 public class EncodeResponseBodyAdvice implements ResponseBodyAdvice {
     @Autowired
-    private RedisUtil redisUtil;
+    private RedisUtils redisUtil;
 
     @Override
     public boolean supports(MethodParameter methodParameter, Class aClass) {
