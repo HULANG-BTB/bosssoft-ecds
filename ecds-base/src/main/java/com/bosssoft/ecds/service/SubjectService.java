@@ -67,4 +67,11 @@ public interface SubjectService extends IService<SubjectPO> {
      * @return
      */
     List<SubjectVO> getAll(String year);
+
+    /**
+     * 返回出二级预算科目树
+     * @param year
+     * @return
+     */
+    List<SubjectVO> getSecondTree(String year);
 }

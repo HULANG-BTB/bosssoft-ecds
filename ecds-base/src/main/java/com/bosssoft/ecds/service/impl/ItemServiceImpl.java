@@ -2,6 +2,8 @@ package com.bosssoft.ecds.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.bosssoft.ecds.dao.IncomeSortDao;
+import com.bosssoft.ecds.entity.po.IncomeSortPO;
 import com.bosssoft.ecds.response.CommonCode;
 import com.bosssoft.ecds.response.QueryResponseResult;
 import com.bosssoft.ecds.response.ResponseResult;
@@ -42,6 +44,8 @@ public class ItemServiceImpl extends ServiceImpl<ItemDao, ItemPO> implements Ite
     private AgenItemDao agenItemDao;
     @Autowired
     private ItemStdDao itemStdDao;
+    @Autowired
+    private IncomeSortDao incomeSortDao;
 
     /**
      * 插入项目，输入项目信息
@@ -222,5 +226,13 @@ public class ItemServiceImpl extends ServiceImpl<ItemDao, ItemPO> implements Ite
             return new QueryResponseResult<>(CommonCode.SUCCESS, itemVOS);
         }
         return new ResponseResult(CommonCode.FAIL);
+    }
+
+    @Override
+    public ResponseResult getIncomSortName(String code) {
+        QueryWrapper<IncomeSortPO> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(IncomeSortPO.F_CODE,code);
+        IncomeSortPO incomeSortPO = incomeSortDao.selectOne(queryWrapper);
+        return new QueryResponseResult<>(CommonCode.SUCCESS,incomeSortPO);
     }
 }

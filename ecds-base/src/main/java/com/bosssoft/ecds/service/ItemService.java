@@ -77,4 +77,6 @@ public interface ItemService extends IService<ItemPO> {
      */
     ResponseResult getItemAll();
 
+    ResponseResult getIncomSortName(String code);
+
 }

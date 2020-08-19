@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -36,15 +37,19 @@ public class ItemVO {
     private String mnen;
 
     @ApiModelProperty(value = "项目生效日期")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date itemEffdate;
 
     @ApiModelProperty(value = "项目失效日期")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date itemExpdate;
 
     @ApiModelProperty(value = "记录生效日期")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date effdate;
 
     @ApiModelProperty(value = "记录截止日期")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date expdate;
 
     @ApiModelProperty(value = "是否启用")
