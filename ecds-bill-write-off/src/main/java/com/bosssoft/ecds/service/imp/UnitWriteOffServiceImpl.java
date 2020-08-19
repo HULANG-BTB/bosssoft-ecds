@@ -111,12 +111,4 @@ public class UnitWriteOffServiceImpl implements UnitWriteOffService {
         applyItemDTOIPage.setRecords(Convert.toList(WriteOffApplyItemDTO.class, writeOffApplyItemPOIPage.getRecords()));
         return applyItemDTOIPage;
     }
-
-    @Override
-    public List<WriteOffApplyItemDTO> selectItems(String no) {
-        QueryWrapper<WriteOffApplyItemPO> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(WriteOffApplyItemPO::getFPid, no);
-        List<WriteOffApplyItemPO> itemPOList = writeOffApplyItemMapper.selectList(queryWrapper);
-        return Convert.toList(WriteOffApplyItemDTO.class, itemPOList);
-    }
 }

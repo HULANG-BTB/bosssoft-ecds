@@ -1,6 +1,5 @@
 package com.bosssoft.ecds.entity.vo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -23,9 +22,13 @@ public class WriteOffApplyVO {
     private String fAuthor;
 
     /**
+     * 截止日期
+     */
+    private Date fEndDate;
+
+    /**
      * 编制日期
      */
-    @JsonFormat(pattern="yyyy-MM-dd", timezone = "GMT+8")
     private Date fDate;
 
     /**

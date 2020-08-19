@@ -78,12 +78,6 @@ public class UnitWriteOffController {
         data.setRecords(Convert.toList(WriteOffApplyItemVO.class, page.getRecords()));
         return ResponseUtils.getResponse(data, ResponseUtils.ResultType.OK);
     }
-
-    @GetMapping("selectItemList")
-    public String selectItemList(String no) {
-        List<WriteOffApplyItemDTO> list = unitWriteOffService.selectItems(no);
-        return ResponseUtils.getResponse(Convert.toList(WriteOffApplyItemVO.class, list), ResponseUtils.ResultType.OK);
-    }
     
     private void transformApplyDTOToVO(List<WriteOffApplyVO> list) {
         // 将对应的数字代码转换为字符串

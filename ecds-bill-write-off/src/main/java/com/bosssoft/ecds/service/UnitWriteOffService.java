@@ -47,11 +47,4 @@ public interface UnitWriteOffService {
      * @return 分页对象
      */
     IPage<WriteOffApplyItemDTO> selectItemPage(UnitWriteOffItemQueryInfoDTO queryInfoDTO);
-
-    /**
-     * 查询所有申请明细（新增和修改时）
-     * @param no 业务单号
-     * @return ItemDTO列表
-     */
-    List<WriteOffApplyItemDTO> selectItems(String no);
 }

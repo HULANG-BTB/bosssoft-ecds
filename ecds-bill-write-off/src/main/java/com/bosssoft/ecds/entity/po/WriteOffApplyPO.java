@@ -45,6 +45,10 @@ public class WriteOffApplyPO {
     @TableField("f_date")
     private Date fDate;
 
+    @ApiModelProperty(value = "截止日期")
+    @TableField("f_end_date")
+    private Date fEndDate;
+
     @ApiModelProperty(value = "合计份数")
     @TableField("f_number")
     private Integer fNumber;

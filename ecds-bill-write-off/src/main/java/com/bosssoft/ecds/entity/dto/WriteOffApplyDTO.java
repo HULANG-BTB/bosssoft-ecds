@@ -27,6 +27,11 @@ public class WriteOffApplyDTO {
     private Date fDate;
 
     /**
+     * 截止日期
+     */
+    private Date fEndDate;
+
+    /**
      * 合计份数
      */
     private Integer fNumber;
