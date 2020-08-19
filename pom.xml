@@ -62,7 +62,7 @@
         <mybatis.spring.boot.version>2.1.3</mybatis.spring.boot.version>
         <mybatis-plus.version>3.3.0</mybatis-plus.version>
         <hutool.version>5.3.10</hutool.version>
-        <swagger.version>2.6.0</swagger.version>
+        <swagger.version>2.9.2</swagger.version>
     </properties>
 
     <!-- 一般用在顶层的父pom中，maven会沿着父子层向上走，一直找的这个标签

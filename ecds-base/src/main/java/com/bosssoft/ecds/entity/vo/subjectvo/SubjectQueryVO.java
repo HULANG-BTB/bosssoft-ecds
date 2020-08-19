@@ -22,6 +22,7 @@ import javax.validation.constraints.NotNull;
 @ApiModel(value="SubjectQueryVO对象", description="")
 public class SubjectQueryVO {
 
+    @NotNull(message = SubjectConstant.Subject_ID_NOT_NULL)
     @ApiModelProperty(value = "左侧菜单预算科目的id，即父id")
     @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
@@ -35,12 +36,12 @@ public class SubjectQueryVO {
 
     @Min(value = 1L, message = "页码最小为1")
     @NotNull(message = SubjectConstant.PAGE_NUM_NOT_NULL)
-    @ApiModelProperty(value = "当前页码")
+    @ApiModelProperty(value = "当前页码",example = "1")
     private Integer page;
 
     @Min(value = 1L, message = "每页数量最小为1")
     @NotNull(message = SubjectConstant.PAGE_SIZE_NOT_NULL)
-    @ApiModelProperty(value = "每页数量")
+    @ApiModelProperty(value = "每页数量",example = "10")
     private Integer limit;
 
 
