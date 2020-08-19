@@ -13,8 +13,8 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableFeignClients(basePackages = "com.bosssoft.ecds.service.feign")
-public class billDestroyApplication {
+public class BillDestroyApplication {
     public static void main(String[] args) {
-        SpringApplication.run(billDestroyApplication.class,args);
+        SpringApplication.run(BillDestroyApplication.class,args);
     }
 }
