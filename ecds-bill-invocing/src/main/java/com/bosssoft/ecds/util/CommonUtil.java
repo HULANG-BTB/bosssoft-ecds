@@ -66,7 +66,7 @@ public class CommonUtil {
         uneCbill.setFUpdateTime(new Date());
         uneCbill.setFVersion(1);
         uneCbill.setFSignId(generateID());
-        uneCbill.setFState(0);
+        uneCbill.setFState(1);
         uneCbill.setFPayCode(generateID());
         uneCbill.setFCheckCode("85c6s");
         return uneCbill;

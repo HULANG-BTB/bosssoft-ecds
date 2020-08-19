@@ -163,4 +163,18 @@ public class UneCbillServiceImpl implements UneCbillService {
         billItemDTO.setStandardName("100");
         return billItemDTO;
     }
+
+    /**
+     * 查询需要进行核销的票据信息
+     * @param start
+     * @param end
+     * @return
+     */
+    @Override
+    public List<UneCbill> writeOff(String start, String end) {
+        QueryWrapper<UneCbill> queryWrapper = new QueryWrapper<>();
+        queryWrapper.between("f_create_time", start, end)
+                .eq("f_state", 4);
+        return uneCbillMapper.selectList(queryWrapper);
+    }
 }

@@ -1,10 +1,10 @@
 package com.bosssoft.ecds.entity.po;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.time.LocalDateTime;
 import java.io.Serializable;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -35,13 +35,10 @@ public class ItemPo{
     private Long fPid;
 
     /**
-     * 序号
-     */
-    private Integer fSortNo;
-
-    /**
      * 版本号
      */
+    @Version
+    @TableField(fill = FieldFill.INSERT)
     private Integer fVersion;
 
     /**
@@ -58,6 +55,11 @@ public class ItemPo{
      * 票据代码
      */
     private String fBillBatchCode;
+
+    /*
+     *票据名称
+     */
+    private String fBillName;
 
     /**
      * 起始号
@@ -100,14 +102,6 @@ public class ItemPo{
         this.fPid = fPid;
     }
 
-    public Integer getfSortNo() {
-        return fSortNo;
-    }
-
-    public void setfSortNo(Integer fSortNo) {
-        this.fSortNo = fSortNo;
-    }
-
     public Integer getfVersion() {
         return fVersion;
     }
@@ -134,6 +128,14 @@ public class ItemPo{
 
     public String getfBillBatchCode() {
         return fBillBatchCode;
+    }
+
+    public String getfBillName() {
+        return fBillName;
+    }
+
+    public void setfBillName(String fBillName) {
+        this.fBillName = fBillName;
     }
 
     public void setfBillBatchCode(String fBillBatchCode) {

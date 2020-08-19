@@ -9,6 +9,8 @@ import com.bosssoft.ecds.entity.dto.UneCbillItemDto;
 import com.bosssoft.ecds.entity.po.UneCbill;
 import com.bosssoft.ecds.entity.po.UneCbillItem;
 import com.bosssoft.ecds.entity.vo.UneCbillVo;
+
+import java.util.Date;
 import java.util.List;
 
 public interface UneCbillService {
@@ -74,4 +76,12 @@ public interface UneCbillService {
      * @return
      */
     BillItemDTO convertToItem(UneCbillItem uneCbillItem);
+
+    /**
+     * 查询需要核销的票据列表
+     * @param satrt
+     * @param end
+     * @return
+     */
+    List<UneCbill> writeOff(String satrt, String end);
 }
