@@ -26,6 +26,7 @@ import com.bosssoft.ecds.utils.MyBeanUtil;
 import com.bosssoft.ecds.utils.SubjectDataListener;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -173,7 +174,11 @@ public class SubjectServiceImpl extends ServiceImpl<SubjectDao, SubjectPO> imple
         if (subjectPO.getLevel() == 4) {
             subjectPO.setLeaf(true);
         }
-        this.save(subjectPO);
+        try{
+            this.save(subjectPO);
+        }catch (DuplicateKeyException e){
+            throw new CustomException(SubjectResultCode.DUPLICATE_ERROR);
+        }
         return new QueryResponseResult(CommonCode.SUCCESS, null);
     }
 
@@ -196,7 +201,11 @@ public class SubjectServiceImpl extends ServiceImpl<SubjectDao, SubjectPO> imple
 //        2级科目还需要判断添加位置是否正确，即2级科目的父科目与2级收入的父科目对应
         boolean result = true;
         if (subjectPO.getLevel() == 1) {
-            this.save(subjectPO);
+            try{
+                this.save(subjectPO);
+            }catch (DuplicateKeyException e){
+                throw new CustomException(SubjectResultCode.DUPLICATE_ERROR);
+            }
             result = incomeSortSubjectService.add(incomeSortPO.getId(), subjectPO.getId());
         } else {
             QueryWrapper<IncomeSortSubjectPO> queryWrapper1 = new QueryWrapper<>();
@@ -206,7 +215,11 @@ public class SubjectServiceImpl extends ServiceImpl<SubjectDao, SubjectPO> imple
             if (incomeSortSubjectPO == null) {
                 throw new CustomException(SubjectResultCode.INCOMESORT_NOTEXISTS);
             } else {
-                this.save(subjectPO);
+                try{
+                    this.save(subjectPO);
+                }catch (DuplicateKeyException e){
+                    throw new CustomException(SubjectResultCode.DUPLICATE_ERROR);
+                }
                 result = incomeSortSubjectService.add(incomeSortPO.getId(), subjectPO.getId());
             }
         }
