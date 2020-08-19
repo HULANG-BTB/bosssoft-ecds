@@ -1,6 +1,8 @@
 package com.bosssoft.ecds.entity.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -25,7 +27,12 @@ import java.util.Date;
 @ApiModel(value="CbillAccountingVO对象", description="入账基础数据")
 public class CbillAccountingVO {
 
+    @ApiModelProperty(value = "主键")
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Long id;
+
     @ApiModelProperty(value = "单位代码")
+    @JsonSerialize(using = ToStringSerializer.class)
     private String agenIdcode;
 
     @ApiModelProperty(value = "单位名称")
@@ -62,15 +69,8 @@ public class CbillAccountingVO {
     private BigDecimal account;
 
     @ApiModelProperty(value = "入账凭证号")
+    @JsonSerialize(using = ToStringSerializer.class)
     private long accountId;
-
-    @ApiModelProperty(value = "创建时间")
-    @JsonFormat(pattern = "yyyy-MM-dd  HH:mm:ss",timezone = "GMT+8",locale="zh")
-    private Date createTime;
-
-    @ApiModelProperty(value = "更新时间")
-    @JsonFormat(pattern = "yyyy-MM-dd  HH:mm:ss",timezone = "GMT+8",locale="zh")
-    private Date updateTime;
 
     @ApiModelProperty(value = "应缴金额")
     private BigDecimal waitAccount;

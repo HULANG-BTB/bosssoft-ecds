@@ -6,8 +6,6 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
-import java.math.BigDecimal;
-
 /**
  * <p>
  *  Mapper 接口
@@ -18,17 +16,9 @@ import java.math.BigDecimal;
  */
 @Mapper
 public interface CbillAccountingDao extends BaseMapper<CbillAccountingPO> {
-
-    /**
-     * 通过票据校验码查询待缴金额
-     *
-     * @return 待缴金额
-     */
-    @Select("select f_wait_account from fne_cbill_accounting where f_bill_serial_id = #{billSerialId} and f_logic_delete = 0 limit 1")
-    BigDecimal selectAccount(@Param("billSerialId") String billSerialId);
-
     /**
      * 通过票据校验码查询入账状态
+     * PS:(单独写出来便于进行后续的各类入账状态检测)
      *
      * @return 入账状态
      */

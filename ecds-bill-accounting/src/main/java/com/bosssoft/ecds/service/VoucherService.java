@@ -68,4 +68,11 @@ public interface VoucherService extends IService<VoucherPO> {
      * @return ResponseResult
      */
     ResponseResult batchDelete(List<VoucherDTO> voucherDTOList);
+
+    /**
+     * 更新入账凭证信息
+     *
+     * @return ResponseResult
+     */
+    ResponseResult updateVoucher(VoucherDTO voucherDTO);
 }

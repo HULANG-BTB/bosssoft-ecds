@@ -3,6 +3,8 @@ package com.bosssoft.ecds.entity.po;
 import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -30,6 +32,7 @@ import java.util.Date;
 public class CbillAccountingPO extends Model<CbillAccountingPO> {
 
     @ApiModelProperty(value = "主键")
+    @JsonSerialize(using = ToStringSerializer.class)
     @TableId(value = "f_id", type = IdType.ASSIGN_ID)
     private Long id;
 
@@ -78,6 +81,7 @@ public class CbillAccountingPO extends Model<CbillAccountingPO> {
     private BigDecimal account;
 
     @ApiModelProperty(value = "入账凭证号")
+    @JsonSerialize(using = ToStringSerializer.class)
     @TableField("f_account_id")
     private long accountId;
 

@@ -1,6 +1,8 @@
 package com.bosssoft.ecds.entity.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -26,6 +28,7 @@ import java.util.Date;
 public class VoucherVO {
 
     @NotNull(message = "入账凭证号不能为空")
+    @JsonSerialize(using = ToStringSerializer.class)
     @ApiModelProperty(value = "入账凭证号")
     private Long accountId;
 
@@ -58,6 +61,6 @@ public class VoucherVO {
     @ApiModelProperty(value = "入账方式(1.现金 2.电子 3.等等)")
     private Integer accountType;
 
-    @ApiModelProperty(value = "缴款人联系方式")
-    private String payerTel;
+    @ApiModelProperty(value = "操作人")
+    private String operator;
 }

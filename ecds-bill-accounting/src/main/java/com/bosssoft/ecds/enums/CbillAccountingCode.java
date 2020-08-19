@@ -12,7 +12,7 @@ import com.bosssoft.ecds.common.response.ResultCode;
 public enum  CbillAccountingCode implements ResultCode {
 
     //自定义错误类型及返回码
-    SUCCESS(true, 1000, "操作成功！"),
+    SUCCESS(true, 20000, "操作成功！"),
     //操作失败时返回的状态码
     INSERT_FAIL(false,1001,"插入失败"),
     UPDATE_FAIL(false,1002,"更新失败"),

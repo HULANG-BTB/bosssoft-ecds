@@ -77,6 +77,9 @@ public class VoucherServiceImpl extends ServiceImpl<VoucherDao, VoucherPO> imple
      */
     @Override
     public ResponseResult getByAccountId(VoucherDTO voucherDTO) {
+        if(voucherDTO.getAccountId()==null){
+            return new ResponseResult(VoucherCode.ACCOUNT_ID_NOT_EXIST);
+        }
         VoucherPO voucherPO = super.getById(voucherDTO.getAccountId());
         VoucherVO voucherVO = MyBeanUtil.copyProperties(voucherPO, VoucherVO.class);
         return new QueryResponseResult(SUCCESS,voucherVO);
@@ -96,16 +99,34 @@ public class VoucherServiceImpl extends ServiceImpl<VoucherDao, VoucherPO> imple
         voucherPOPage.setSize(pageDTO.getLimit());
         //读取分页数据
         QueryWrapper<VoucherPO> queryWrapper = new QueryWrapper<>();
-        //对单位代码进行模糊查询
-        queryWrapper.isNull(pageDTO.getKeyword())
-                .or()
-                .like(VoucherPO.F_ACCOUNT_ID,pageDTO.getKeyword())
-                .or()
-                .like(VoucherPO.F_ACCOUNT_TYPE,pageDTO.getKeyword())
-                .or()
-                .like(VoucherPO.F_AGEN_NAME,pageDTO.getKeyword());
-        //根据时间排序
-        queryWrapper.orderByAsc(VoucherPO.F_CREATE_TIME);
+        //若选择了accountType则添加accountType判断条件
+        if(pageDTO.getAccountType()!=null){
+            queryWrapper.eq(VoucherPO.F_ACCOUNT_TYPE,pageDTO.getAccountType());
+        }
+        //keyword为空代表查询全部
+        if(pageDTO.getKeyword()==""||pageDTO.getKeyword()=="null"||pageDTO.getKeyword()==null){
+            //不对queryWrapper进行任何修改
+        }else{
+            //模糊查询
+            queryWrapper
+                    .like(VoucherPO.F_ACCOUNT_ID,pageDTO.getKeyword())
+                    .or()
+                    .like(VoucherPO.F_BILL_NO,pageDTO.getKeyword())
+                    .or()
+                    .like(VoucherPO.F_AGEN_IDCODE,pageDTO.getKeyword())
+                    .or()
+                    .like(VoucherPO.F_OPERATOR,pageDTO.getKeyword())
+                    .or()
+                    .like(VoucherPO.F_BILL_SERIAL_ID,pageDTO.getKeyword())
+                    .or()
+                    .like(VoucherPO.F_AGEN_NAME,pageDTO.getKeyword());
+        }
+        //降序排序
+        if(pageDTO.getSort().equals("+accountId")){
+            queryWrapper.orderByAsc(VoucherPO.F_ACCOUNT_ID);
+        }else {
+            queryWrapper.orderByDesc(VoucherPO.F_ACCOUNT_ID);
+        }
         Page<VoucherPO> poPage = super.page(voucherPOPage,queryWrapper);
         List<VoucherPO> records = poPage.getRecords();
         //转换数据
@@ -124,6 +145,9 @@ public class VoucherServiceImpl extends ServiceImpl<VoucherDao, VoucherPO> imple
      */
     @Override
     public ResponseResult delete(VoucherDTO voucherDTO) {
+        if(voucherDTO.getAccountId()==null){
+            return new ResponseResult(VoucherCode.ACCOUNT_ID_NOT_EXIST);
+        }
         //执行删除操作
         boolean remove = super.removeById(voucherDTO.getAccountId());
         //删除失败返回操作错误
@@ -155,6 +179,27 @@ public class VoucherServiceImpl extends ServiceImpl<VoucherDao, VoucherPO> imple
         }
         // 删除成功返回操作成功
         return new ResponseResult(VoucherCode.SUCCESS);
+    }
+
+    /**
+     * 更新入账凭证信息（仅用作前端页面测试使用，实际应用意义不大）
+     *
+     * @param voucherDTO
+     * @return ResponseResult
+     */
+    @Override
+    public ResponseResult updateVoucher(VoucherDTO voucherDTO) {
+        //查询入账凭证id是否存在
+        if(voucherDTO.getAccountId()==null) {
+            return new ResponseResult(VoucherCode.ACCOUNT_ID_NOT_EXIST);
+        }
+        VoucherPO voucherPO = super.getById(voucherDTO.getAccountId());
+        MyBeanUtil.copyProperties(voucherDTO,voucherPO);
+        boolean result = super.updateById(voucherPO);
+        if(result){
+            return new ResponseResult(VoucherCode.SUCCESS);
+        }
+        return new ResponseResult(VoucherCode.UPDATE_FAIL);
     }
 
 }

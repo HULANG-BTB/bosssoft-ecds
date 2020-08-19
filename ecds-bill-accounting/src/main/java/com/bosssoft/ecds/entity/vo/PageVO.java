@@ -6,8 +6,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -38,16 +36,12 @@ public class PageVO<T> {
      * 每页显示条数，默认 10
      */
     @ApiModelProperty(value = "分页限制", example = "10")
-    @NotNull(message = "分页大小不能为空.")
-    @Min(value = 1L, message = "分页大小.")
     private long limit;
 
     /**
      * 当前页
      */
     @ApiModelProperty(value = "当前页码", example = "1")
-    @NotNull(message = "当前页不能为空.")
-    @Min(value = 1L, message = "页码范围错误.")
     private long page;
 
     /**
@@ -55,5 +49,18 @@ public class PageVO<T> {
      */
     @ApiModelProperty(value = "关键字", example = "")
     private String keyword;
+
+    /**
+     * 根据类型排序(不同页面可以有不同的应用)
+     */
+    @ApiModelProperty(value = "类型")
+    private Integer accountType;
+
+    /**
+     * 根据主键/升序降序
+     * 由于主键使用雪花算法，故按主键升降即按照时间先后顺序排序
+     */
+    @ApiModelProperty(value = "主键排序方式")
+    private String sort;
 
 }

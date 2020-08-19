@@ -11,6 +11,7 @@ import com.bosssoft.ecds.common.response.ResultCode;
 import com.bosssoft.ecds.dao.CbillAccountingDao;
 import com.bosssoft.ecds.entity.dto.*;
 import com.bosssoft.ecds.entity.po.CbillAccountingPO;
+import com.bosssoft.ecds.entity.vo.AccountInfoVO;
 import com.bosssoft.ecds.entity.vo.StatusVO;
 import com.bosssoft.ecds.entity.vo.WaitAccountVO;
 import com.bosssoft.ecds.enums.CbillAccountingCode;
@@ -22,7 +23,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -55,16 +55,22 @@ public class CbillAccountingServiceImpl extends ServiceImpl<CbillAccountingDao, 
     @Transactional(rollbackFor = {CustomException.class})
     @Override
     public ResponseResult selectAccount(CbillAccountingDTO cbillAccountingDTO){
+        String serial = cbillAccountingDTO.getBillSerialId();
         //检查票据校验码是否存在
-        ResultCode resultCode = checkBillSerialIdExist(cbillAccountingDTO.getBillSerialId());
+        ResultCode resultCode = checkBillSerialIdExist(serial);
         if(!resultCode.success()){
             return new ResponseResult(resultCode);
         }
-        BigDecimal waitAccount = cbillAccountingDao.selectAccount(cbillAccountingDTO.getBillSerialId());
+        //校验入账完成状态(防止重复入账)
+        ResultCode status = accountStatus(serial);
+        if(status==FINISHED){
+            return new ResponseResult(CbillAccountingCode.FINISHED);
+        }
+        QueryWrapper<CbillAccountingPO> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(CbillAccountingPO.F_BILL_SERIAL_ID,cbillAccountingDTO.getBillSerialId());
+        AccountInfoVO accountInfoVO = MyBeanUtil.copyProperties(super.getOne(queryWrapper), AccountInfoVO.class);
         //单独列出待缴金额方便以后进行判断
-        //cbillAccountingDTO.setWaitAccount(waitAccount);
-        //CbillAccountingVO cbillAccountingVO = MyBeanUtil.copyProperties(cbillAccountingDTO,CbillAccountingVO.class);
-        return new QueryResponseResult<>(SUCCESS,waitAccount);
+        return new QueryResponseResult<>(SUCCESS,accountInfoVO);
     }
 
     /**
@@ -126,30 +132,35 @@ public class CbillAccountingServiceImpl extends ServiceImpl<CbillAccountingDao, 
         if(resultCode!=SUCCESS){
             return new ResponseResult(resultCode);
         }
+        //校验入账完成状态(防止重复入账)
+        ResultCode status = accountStatus(serial);
+        if(status==FINISHED){
+            return new ResponseResult(CbillAccountingCode.FINISHED);
+        }
         //判断金额及联系方式是否正确
         QueryWrapper<CbillAccountingPO> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(CbillAccountingPO.F_BILL_SERIAL_ID,serial);
         CbillAccountingDTO cbillAccountingDTO = MyBeanUtil.copyProperties(super.getOne(queryWrapper), CbillAccountingDTO.class);
         if(!cbillAccountingDTO.getPayerTel().equals(accIntoInfoDTO.getPayerTel())){
-            return new ResponseResult(PAYER_TEL_ILLEGAL);
+            return new ResponseResult(CbillAccountingCode.PAYER_TEL_ILLEGAL);
         }
         if(cbillAccountingDTO.getWaitAccount().compareTo(accIntoInfoDTO.getAccount())!=0){
-            return new ResponseResult(ACCOUNT_ILLEGAL);
+            return new ResponseResult(CbillAccountingCode.ACCOUNT_ILLEGAL);
         }
         //赋值
         CbillAccountingPO cbillAccountingPO = new CbillAccountingPO();
         MyBeanUtil.copyProperties(accIntoInfoDTO,cbillAccountingDTO);
         //判断时间
         if(!checkDate(cbillAccountingDTO.getTime(),cbillAccountingDTO.getCreateTime())){
-            return new ResponseResult(ACCOUNT_TIME_ILLEGAL);
+            return new ResponseResult(CbillAccountingCode.ACCOUNT_TIME_ILLEGAL);
         }
         MyBeanUtil.copyProperties(cbillAccountingDTO,cbillAccountingPO);
         cbillAccountingPO.setAccountStatus(true);
         //更新数据
         if(super.updateById(cbillAccountingPO)){
-            return new ResponseResult(SUCCESS);
+            return new ResponseResult(CbillAccountingCode.SUCCESS);
         }else {
-            return new ResponseResult(UPDATE_FAIL);
+            return new ResponseResult(CbillAccountingCode.FINISHED);
         }
     }
 
@@ -197,7 +208,6 @@ public class CbillAccountingServiceImpl extends ServiceImpl<CbillAccountingDao, 
             return new ResponseResult(VOUCHER_FAIL);
         }
         CbillAccountingPO cbillAccountingPO = MyBeanUtil.copyProperties(cbillAccountingDTO, CbillAccountingPO.class);
-
         if(super.updateById(cbillAccountingPO)){
             return new ResponseResult(SUCCESS);
         }else {
@@ -431,7 +441,7 @@ public class CbillAccountingServiceImpl extends ServiceImpl<CbillAccountingDao, 
     }
 
     /**
-     * 检查票据校验码的存在性
+     * 批量检查票据校验码的存在性
      *
      * @return
      */
