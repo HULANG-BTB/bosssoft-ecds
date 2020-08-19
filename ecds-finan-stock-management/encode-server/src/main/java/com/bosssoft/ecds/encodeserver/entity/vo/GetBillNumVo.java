@@ -4,6 +4,7 @@ import cn.hutool.core.annotation.Alias;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 
 /**
  * @Author 黄杰峰
@@ -11,7 +12,7 @@ import javax.validation.constraints.NotBlank;
  * @Description
  */
 @Data
-public class GetBillNumVo {
+public class GetBillNumVo implements Serializable {
     /**
      * 区划编码
      */

@@ -71,10 +71,6 @@ public class GetCodeServiceImpl implements GetCodeService {
             boolean isLock = redLock.tryLock(100L, 10L, TimeUnit.SECONDS);
             if (isLock) {
                 // 红锁上锁，进行赋码
-                /*// 判断财政代码是否创建（体现在MySQL中是否有对应数据），若未创建，直接返回null，在控制器处理。会多查询一次MySQL？考虑在Redis操作
-                if (!isCodeCreated(getFinanceNumDto)) {
-                    return null;
-                }*/
 
                 // 财政代码已创建
                 // 若票据代码对应redis hash记录未创建，则需要创建，否则直接取即可。

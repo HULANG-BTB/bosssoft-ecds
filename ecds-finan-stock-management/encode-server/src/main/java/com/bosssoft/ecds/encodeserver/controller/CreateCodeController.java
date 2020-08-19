@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @CrossOrigin
 @RequestMapping("/create")
+@Log4j2
 public class CreateCodeController {
 
     private final CreateCodeService createCodeService;
@@ -40,6 +41,7 @@ public class CreateCodeController {
     @ApiOperation(value = "创建新的票据代码", notes = "传入区划编码、分类编码、种类编码、年度编码、创建人姓名和创建人Id创建")
     public ResponseResult createCode(
             @RequestBody @ApiParam("创建财政编码Vo") CreateBillCodeVo createBillCodeVo) {
+        log.info("test:" + createBillCodeVo);
         // Vo转换为Dto
         CreateBillCodeDto createBillCodeDto = new CreateBillCodeDto();
         BeanUtil.copyProperties(createBillCodeVo, createBillCodeDto);
@@ -65,9 +67,9 @@ public class CreateCodeController {
 
         boolean createdFlag = createCodeService.createBatchCode(createBatchBillCodeDto);
         if (createdFlag) {
-            return new ResponseResult(true, 200, "创建成功");
+            return new ResponseResult(true, 200, "批量创建成功");
         } else {
-            return new ResponseResult(false, 500, "创建失败，部分代码已创建");
+            return new ResponseResult(false, 500, "批量创建失败，部分代码已创建");
         }
     }
 }
