@@ -3,16 +3,23 @@ package com.bosssoft.ecds.util;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
 
+import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
+import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.HashMap;
@@ -36,7 +43,7 @@ public class RSAUtil {
      * 算法名称/加密模式/数据填充方式
      * 默认：RSA/ECB/PKCS1Padding
      */
-    private static final String ALGORITHMS = "RSA/ECB/PKCS1Padding";
+    private static final String ALGORITHMS = "RSA/None/OAEPWithSHA-1AndMGF1Padding";
 
     /**
      * Map获取公钥的key
@@ -67,6 +74,10 @@ public class RSAUtil {
      * 后端RSA的密钥对(公钥和私钥)Map，由静态代码块赋值
      */
     private static Map<String, Object> genKeyPair = new LinkedHashMap<>();
+
+    private RSAUtil() {
+        throw new IllegalStateException("RSAUtil");
+    }
 
     static {
         try {
@@ -117,7 +128,7 @@ public class RSAUtil {
      * @param key  密钥
      * @return byte[] 加密数据
      */
-    public static String encryptByPublicKey(byte[] data, byte[] key) throws Exception {
+    public static String encryptByPublicKey(byte[] data, byte[] key) throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPaddingException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
         //实例化密钥工厂
         KeyFactory keyFactory = KeyFactory.getInstance(KEY_ALGORITHM);
         //初始化公钥
@@ -138,8 +149,7 @@ public class RSAUtil {
      * @param key  密钥
      * @return byte[] 解密数据
      */
-    public static byte[] decryptByPrivateKey(byte[] data, byte[] key) throws Exception {
-        int len = data.length;
+    public static byte[] decryptByPrivateKey(byte[] data, byte[] key) throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPaddingException, BadPaddingException, IllegalBlockSizeException, InvalidKeyException {
         //取得私钥
         PKCS8EncodedKeySpec pkcs8KeySpec = new PKCS8EncodedKeySpec(key);
         KeyFactory keyFactory = KeyFactory.getInstance(KEY_ALGORITHM);
@@ -158,7 +168,7 @@ public class RSAUtil {
      * @param encryptedData 已加密数据
      * @param privateKey    私钥(BASE64编码)
      */
-    public static String decryptByPrivateKey(byte[] encryptedData, String privateKey) throws Exception {
+    public static String decryptByPrivateKey(byte[] encryptedData, String privateKey) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, IOException {
         //base64格式的key字符串转Key对象
         Key privateK = KeyFactory.getInstance(KEY_ALGORITHM).generatePrivate(new PKCS8EncodedKeySpec(Base64.decodeBase64(privateKey)));
 
@@ -175,7 +185,7 @@ public class RSAUtil {
      * @param data      源数据
      * @param publicKey 公钥(BASE64编码)
      */
-    public static String encryptByPublicKey(byte[] data, String publicKey) throws Exception {
+    public static String encryptByPublicKey(byte[] data, String publicKey) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, IOException {
         //base64格式的key字符串转Key对象
         Key publicK = KeyFactory.getInstance(KEY_ALGORITHM).generatePublic(new X509EncodedKeySpec(Base64.decodeBase64(publicKey)));
 
@@ -190,7 +200,7 @@ public class RSAUtil {
     /**
      * 分段进行加密、解密操作
      */
-    private static String encryptAndDecryptOfSubsection(byte[] data, Cipher cipher, int encryptBlock) throws Exception {
+    private static String encryptAndDecryptOfSubsection(byte[] data, Cipher cipher, int encryptBlock) throws BadPaddingException, IllegalBlockSizeException, IOException {
         int inputLen = data.length;
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         int offSet = 0;
@@ -208,8 +218,7 @@ public class RSAUtil {
             offSet = i * encryptBlock;
         }
         out.close();
-        String encodeToString = Base64.encodeBase64String(out.toByteArray());
-        return encodeToString;
+        return Base64.encodeBase64String(out.toByteArray());
     }
 
 }

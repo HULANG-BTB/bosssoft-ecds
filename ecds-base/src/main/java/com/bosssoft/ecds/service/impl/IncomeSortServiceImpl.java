@@ -26,7 +26,6 @@ import com.bosssoft.ecds.response.QueryResponseResult;
 import com.bosssoft.ecds.response.QueryResult;
 import com.bosssoft.ecds.service.IncomeSortService;
 import com.bosssoft.ecds.utils.CharacterCheckUtil;
-import com.bosssoft.ecds.utils.SnowflakeIdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -84,23 +83,23 @@ public class IncomeSortServiceImpl implements IncomeSortService {
      * @param fuzzyQueryIncomeSortVO 查询条件
      * @return
      */
-    private QueryWrapper wrapIncomeSortVO(FuzzyQueryIncomeSortVO fuzzyQueryIncomeSortVO) {
-        QueryWrapper<Object> queryWrapper = new QueryWrapper<>();
+    private QueryWrapper<IncomeSortPO> wrapIncomeSortVO(FuzzyQueryIncomeSortVO fuzzyQueryIncomeSortVO) {
+        QueryWrapper<IncomeSortPO> queryWrapper = new QueryWrapper<>();
         //只能查询没有删除的信息
-        queryWrapper.eq("f_logic_delete", IncomeSortConstant.LOGC_DELETE_NUM);
+        queryWrapper.eq(IncomeSortConstant.F_LOGIC_DELETE, IncomeSortConstant.LOGC_DELETE_NUM);
         if (fuzzyQueryIncomeSortVO.getId() != null) {
-            queryWrapper.eq("f_parent_id", fuzzyQueryIncomeSortVO.getId())
-                    .or().eq("f_id", fuzzyQueryIncomeSortVO.getId());
+            queryWrapper.eq(IncomeSortConstant.F_PARENT_ID, fuzzyQueryIncomeSortVO.getId())
+                    .or().eq(IncomeSortConstant.F_ID, fuzzyQueryIncomeSortVO.getId());
         } else {
             if (!org.springframework.util.StringUtils.isEmpty(fuzzyQueryIncomeSortVO.getName())) {
-                queryWrapper.like("f_name", fuzzyQueryIncomeSortVO.getName());
+                queryWrapper.like(IncomeSortConstant.F_NAME, fuzzyQueryIncomeSortVO.getName());
             }
             if (!org.springframework.util.StringUtils.isEmpty(fuzzyQueryIncomeSortVO.getCode())) {
-                queryWrapper.like("f_code", fuzzyQueryIncomeSortVO.getCode());
+                queryWrapper.like(IncomeSortConstant.F_CODE, fuzzyQueryIncomeSortVO.getCode());
             }
         }
-        queryWrapper.orderByAsc("f_level");
-        queryWrapper.orderByAsc("f_code");
+        queryWrapper.orderByAsc(IncomeSortConstant.F_LEVEL);
+        queryWrapper.orderByAsc(IncomeSortConstant.F_CODE);
         return queryWrapper;
     }
 
@@ -126,7 +125,7 @@ public class IncomeSortServiceImpl implements IncomeSortService {
         Integer size = fuzzyQueryIncomeSortVO.getPageSize();
         Page<IncomeSortPO> pageTemp = new Page<>();
         Page<IncomeSortPO> pageInfo = getPage(page, size, pageTemp);
-        QueryWrapper queryWrapper = wrapIncomeSortVO(fuzzyQueryIncomeSortVO);
+        QueryWrapper<IncomeSortPO> queryWrapper = wrapIncomeSortVO(fuzzyQueryIncomeSortVO);
         IPage<IncomeSortPO> iPage = incomeSortDao.selectPage(pageInfo, queryWrapper);
         QueryResult<IncomeSortPO> queryResult = new QueryResult<>();
         queryResult.setList(iPage.getRecords());
@@ -143,8 +142,8 @@ public class IncomeSortServiceImpl implements IncomeSortService {
         Page<IncomeSortPO> pageInfo = getPage(page, size, pageTemp);
         QueryWrapper<IncomeSortPO> queryWrapper = new QueryWrapper<>();
         if (pageIncomeSortVO.getId() != null) {
-            queryWrapper.eq("f_logic_delete", IncomeSortConstant.LOGC_DELETE_NUM);
-            queryWrapper.eq("f_parent_id", pageIncomeSortVO.getId());
+            queryWrapper.eq(IncomeSortConstant.F_LOGIC_DELETE, IncomeSortConstant.LOGC_DELETE_NUM);
+            queryWrapper.eq(IncomeSortConstant.F_PARENT_ID, pageIncomeSortVO.getId());
         }
         IPage<IncomeSortPO> iPage = incomeSortDao.selectPage(pageInfo, queryWrapper);
         QueryResult<IncomeSortPO> queryResult = new QueryResult<>();
@@ -156,8 +155,8 @@ public class IncomeSortServiceImpl implements IncomeSortService {
     @Override
     public Boolean checkByName(String name) {
         QueryWrapper<IncomeSortPO> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("f_logic_delete", IncomeSortConstant.LOGC_DELETE_NUM);
-        queryWrapper.eq("f_name", name);
+        queryWrapper.eq(IncomeSortConstant.F_LOGIC_DELETE, IncomeSortConstant.LOGC_DELETE_NUM);
+        queryWrapper.eq(IncomeSortConstant.F_NAME, name);
         if (incomeSortDao.selectOne(queryWrapper) != null) {
             throw new CustomException(InComeResultCode.INCOME_NAME_EXISTS);
         }
@@ -167,19 +166,15 @@ public class IncomeSortServiceImpl implements IncomeSortService {
     @Override
     public Boolean checkByCode(String code, Long parentId) {
         QueryWrapper<IncomeSortPO> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("f_logic_delete", IncomeSortConstant.LOGC_DELETE_NUM);
-        queryWrapper.eq("f_code", code);
+        queryWrapper.eq(IncomeSortConstant.F_LOGIC_DELETE, IncomeSortConstant.LOGC_DELETE_NUM);
+        queryWrapper.eq(IncomeSortConstant.F_CODE, code);
         if (incomeSortDao.selectOne(queryWrapper) != null) {
             throw new CustomException(InComeResultCode.INCOME_CODE_EXISTS);
         }
-        //如果是父级id为0
-        if (parentId.equals(IncomeSortConstant.INIT_ALL_NUM)) {
-            //则编码长度只能为1位
-            if (code.length() == 1) {
-                return true;
-            } else {
-                throw new CustomException(InComeResultCode.INCOME_CODE_NUM_ERROR);
-            }
+
+        //如果是父级id为0,则编码长度只能为1位
+        if (parentId.equals(IncomeSortConstant.INIT_ALL_NUM) && (code.length() != 1)) {
+            throw new CustomException(InComeResultCode.INCOME_CODE_NUM_ERROR);
         }
         String cTemp = incomeSortDao.getCode(parentId);
         if (!CharacterCheckUtil.characterComparison(cTemp, code)) {
@@ -192,7 +187,7 @@ public class IncomeSortServiceImpl implements IncomeSortService {
     @Transactional(rollbackFor = Exception.class)
     public Boolean update(UpdateIncomeSortVO updateIncomeSortVO) {
         UpdateWrapper<IncomeSortPO> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.eq("f_id", updateIncomeSortVO.getId());
+        updateWrapper.eq(IncomeSortConstant.F_ID, updateIncomeSortVO.getId());
         //获取原信息版本号
         IncomeSortPO temp = incomeSortDao.selectById(updateIncomeSortVO.getId());
         IncomeSortPO incomeSort = new IncomeSortPO();
@@ -216,8 +211,6 @@ public class IncomeSortServiceImpl implements IncomeSortService {
         }
         checkByCode(addIncomeSortVO.getCode(), parentId);
         IncomeSortPO incomeSort = new IncomeSortPO();
-        //ID
-        incomeSort.setId(SnowflakeIdWorker.generateId());
         //编码
         incomeSort.setCode(addIncomeSortVO.getCode());
         //名称
@@ -251,12 +244,11 @@ public class IncomeSortServiceImpl implements IncomeSortService {
     }
 
     @Override
-    public QueryResponseResult getFirstIncomeSort() {
+    public QueryResponseResult<QueryResult<IncomeSortDTO>> getFirstIncomeSort() {
         List<IncomeSortDTO> incomeSortDTOList = incomeSortDao.getFirst();
         QueryResult<IncomeSortDTO> queryResult = new QueryResult<>();
         queryResult.setList(incomeSortDTOList);
-        QueryResponseResult queryResponseResult = new QueryResponseResult(CommonCode.SUCCESS, queryResult);
-        return queryResponseResult;
+        return new QueryResponseResult<>(CommonCode.SUCCESS, queryResult);
     }
 
     @Override
@@ -294,22 +286,20 @@ public class IncomeSortServiceImpl implements IncomeSortService {
     }
 
     @Override
-    public QueryResponseResult selectAll() {
+    public QueryResponseResult<QueryResult<IncomeSortShowDTO>> selectAll() {
         List<IncomeSortShowDTO> incomeSortDTOList = incomeSortDao.selectAll();
         QueryResult<IncomeSortShowDTO> queryResult = new QueryResult<>();
         queryResult.setList(incomeSortDTOList);
-        QueryResponseResult queryResponseResult = new QueryResponseResult(CommonCode.SUCCESS, queryResult);
-        return queryResponseResult;
+        return new QueryResponseResult<>(CommonCode.SUCCESS, queryResult);
     }
 
     @Override
-    public QueryResponseResult getBySubjectId(Long subjectId) {
+    public QueryResponseResult<IncomeSortShowDTO> getBySubjectId(Long subjectId) {
         if (subjectId == null) {
             throw new CustomException(InComeResultCode.SUBJECT_ID_IS_NULL);
         }
         IncomeSortShowDTO incomeSortDTO = incomeSortDao.getBySubjectId(subjectId);
-        QueryResponseResult queryResponseResult = new QueryResponseResult(CommonCode.SUCCESS, incomeSortDTO);
-        return queryResponseResult;
+        return new QueryResponseResult<>(CommonCode.SUCCESS, incomeSortDTO);
     }
 
 

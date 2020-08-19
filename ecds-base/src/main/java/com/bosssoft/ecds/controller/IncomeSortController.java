@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 /**
+ * 收入类别前端控制器
+ *
  * @author: Jianbinbing
  * @Date: 2020/8/5 19:09
  */

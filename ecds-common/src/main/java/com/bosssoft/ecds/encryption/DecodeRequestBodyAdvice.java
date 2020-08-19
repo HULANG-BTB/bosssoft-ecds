@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
 
 
 /**
@@ -107,7 +108,7 @@ public class DecodeRequestBodyAdvice implements RequestBodyAdvice {
 
         public MyHttpInputMessage(HttpHeaders headers, String data) throws Exception {
             this.headers = headers;
-            body = new ByteArrayInputStream(getData(data).getBytes("UTF-8"));
+            body = new ByteArrayInputStream(getData(data).getBytes(StandardCharsets.UTF_8));
         }
 
         public MyHttpInputMessage(HttpHeaders headers, InputStream body) {
@@ -116,7 +117,7 @@ public class DecodeRequestBodyAdvice implements RequestBodyAdvice {
         }
 
         @Override
-        public InputStream getBody() throws IOException {
+        public InputStream getBody() {
             return body;
         }
 
