@@ -3,28 +3,29 @@ package com.bosssoft.ecds.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.bosssoft.ecds.common.response.CommonCode;
-import com.bosssoft.ecds.common.response.QueryResponseResult;
-import com.bosssoft.ecds.common.response.ResponseResult;
+import com.bosssoft.ecds.dao.AgenDao;
+import com.bosssoft.ecds.dao.ItemStdDao;
+import com.bosssoft.ecds.entity.dto.itemdto.ItemInfoDTO;
+import com.bosssoft.ecds.entity.po.AgenPO;
+import com.bosssoft.ecds.entity.po.ItemStdPO;
+import com.bosssoft.ecds.response.CommonCode;
+import com.bosssoft.ecds.response.QueryResponseResult;
+import com.bosssoft.ecds.response.ResponseResult;
 import com.bosssoft.ecds.dao.AgenItemDao;
 import com.bosssoft.ecds.dao.ItemDao;
-import com.bosssoft.ecds.entity.dto.AgenBillDTO;
-import com.bosssoft.ecds.entity.dto.AgenItemDTO;
-import com.bosssoft.ecds.entity.dto.ItemDTO;
+import com.bosssoft.ecds.entity.dto.agendto.AgenItemDTO;
+import com.bosssoft.ecds.entity.dto.itemdto.ItemDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
-import com.bosssoft.ecds.entity.po.AgenBillPO;
 import com.bosssoft.ecds.entity.po.AgenItemPO;
 import com.bosssoft.ecds.entity.po.ItemPO;
 import com.bosssoft.ecds.entity.vo.itemvo.ItemVO;
 import com.bosssoft.ecds.entity.vo.PageVO;
-import com.bosssoft.ecds.enums.ItemResultCode;
 import com.bosssoft.ecds.service.AgenItemService;
 import com.bosssoft.ecds.utils.MyBeanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -42,6 +43,10 @@ public class AgenItemServiceImpl extends ServiceImpl<AgenItemDao, AgenItemPO> im
     private ItemDao itemDao;
     @Autowired
     private AgenItemDao agenItemDao;
+    @Autowired
+    private AgenDao agenDao;
+    @Autowired
+    private ItemStdDao itemStdDao;
 
     /**
      * 分页查询单位可用项目
@@ -80,7 +85,7 @@ public class AgenItemServiceImpl extends ServiceImpl<AgenItemDao, AgenItemPO> im
 
     @Override
     public QueryResponseResult<List<ItemVO>> getItemAll(AgenItemDTO agenItemDTO) {
-        //构造条件查询器，通过单位编码查询单位所有可用票据
+        //构造条件查询器，通过单位编码查询单位所有可用项目
         QueryWrapper<AgenItemPO> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(AgenItemPO.F_AGEN_IDCODE, agenItemDTO.getAgenIdcode());
         List<AgenItemPO> agenItemPOS = agenItemDao.selectList(queryWrapper);
@@ -103,7 +108,7 @@ public class AgenItemServiceImpl extends ServiceImpl<AgenItemDao, AgenItemPO> im
         List<AgenItemPO> agenItemPOS = agenItemDao.selectList(queryWrapper);
         boolean remove = true;
         if (!agenItemPOS.isEmpty()) {
-            // 将原来的单位可用票据关系删除
+            // 将原来的单位可用项目关系删除
             remove = super.remove(queryWrapper);
         }
         if (remove) {
@@ -122,5 +127,34 @@ public class AgenItemServiceImpl extends ServiceImpl<AgenItemDao, AgenItemPO> im
             return new ResponseResult(CommonCode.FAIL);
         }
         return new ResponseResult(CommonCode.SUCCESS);
+    }
+
+    @Override
+    public List<ItemInfoDTO> getItemInfo(String agenName) {
+        // 通过单位名字，查询出单位信息，为了获得单位编码
+        QueryWrapper<AgenPO> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(AgenPO.F_AGEN_NAME, agenName);
+        AgenPO agenPO = agenDao.selectOne(queryWrapper);
+        //通过单位编码查询出单位的可用项目
+        QueryWrapper<AgenItemPO> wrapper = new QueryWrapper<>();
+        wrapper.eq(AgenItemPO.F_AGEN_IDCODE, agenPO.getAgenCode());
+        List<AgenItemPO> agenItemPOS = agenItemDao.selectList(wrapper);
+        //通过项目编码，查询出项目的收费标准
+        List<ItemInfoDTO> itemInfoDTOS = new ArrayList<>();
+        for (AgenItemPO agenItemPO : agenItemPOS) {
+            ItemInfoDTO itemInfoDTO = new ItemInfoDTO();
+            //通过项目id查询出项目名称
+            QueryWrapper<ItemPO> itemPOWrapper = new QueryWrapper<>();
+            itemPOWrapper.eq(ItemPO.F_ITEM_ID,agenItemPO.getItemCode());
+            ItemPO itemPO = itemDao.selectOne(itemPOWrapper);
+            MyBeanUtil.copyProperties(itemPO,itemInfoDTO);
+            //根据项目编码，查询出项目标准
+            QueryWrapper<ItemStdPO> itemStdWrapper = new QueryWrapper<>();
+            itemStdWrapper.eq(ItemStdPO.F_ITEM_CODE,agenItemPO.getItemCode());
+            ItemStdPO itemStdPO = itemStdDao.selectOne(itemStdWrapper);
+            MyBeanUtil.copyProperties(itemStdPO,itemInfoDTO);
+            itemInfoDTOS.add(itemInfoDTO);
+        }
+        return itemInfoDTOS;
     }
 }

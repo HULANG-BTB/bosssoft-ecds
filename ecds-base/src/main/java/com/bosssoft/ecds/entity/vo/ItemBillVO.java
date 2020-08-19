@@ -4,6 +4,9 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
+import java.util.Date;
+
+
 /**
  * @ClassName :  ItemBillVo
  * @Description : 票据种类关系
@@ -44,6 +47,12 @@ public class ItemBillVO {
      * 项目是否启用
      */
     private Boolean itemIsEnabled;
-
-
+    /**
+     *  关系创建时间
+     */
+    private Date createTime;
+    /**
+     * 关系修改时间
+     */
+    private Date updateTime;
 }

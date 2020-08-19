@@ -4,9 +4,9 @@ import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.bosssoft.ecds.common.response.CommonCode;
-import com.bosssoft.ecds.common.response.QueryResponseResult;
-import com.bosssoft.ecds.common.response.ResponseResult;
+import com.bosssoft.ecds.response.CommonCode;
+import com.bosssoft.ecds.response.QueryResponseResult;
+import com.bosssoft.ecds.response.ResponseResult;
 import com.bosssoft.ecds.dao.GroupItemDao;
 import com.bosssoft.ecds.entity.dto.GroupItemDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
@@ -15,12 +15,10 @@ import com.bosssoft.ecds.entity.po.GroupPO;
 import com.bosssoft.ecds.entity.po.ItemPO;
 import com.bosssoft.ecds.entity.vo.PageVO;
 import com.bosssoft.ecds.entity.vo.groupvo.GroupItemVO;
-import com.bosssoft.ecds.entity.vo.groupvo.GroupVO;
 import com.bosssoft.ecds.entity.vo.itemvo.ItemVO;
 import com.bosssoft.ecds.enums.ItemResultCode;
 import com.bosssoft.ecds.service.GroupItemService;
 import com.bosssoft.ecds.utils.MyBeanUtil;
-import io.swagger.annotations.ApiImplicitParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,7 +43,13 @@ public class GroupItemServiceImpl extends ServiceImpl<GroupItemDao, GroupItemPO>
     @Override
     public ResponseResult save(GroupItemDTO groupItemDTO) {
         // 将dto转化为po
-        GroupItemPO groupItemPO = MyBeanUtil.copyProperties(groupItemDTO, GroupItemPO.class);
+        QueryWrapper<GroupItemPO> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(GroupItemPO.F_GROUP_CODE,groupItemDTO.getGroupCode())
+                .and(wrapper->wrapper.eq(GroupItemPO.F_ITEM_CODE,groupItemDTO.getItemCode()));
+        if (groupItemDao.selectOne(queryWrapper) != null){
+            return new ResponseResult(ItemResultCode.ITEM_STD_EXISTS);
+        }
+        GroupItemPO groupItemPO =  MyBeanUtil.copyProperties(groupItemDTO,GroupItemPO.class);
         boolean save = super.save(groupItemPO);
         if (!save) {
             return new ResponseResult(CommonCode.FAIL);
@@ -70,11 +74,14 @@ public class GroupItemServiceImpl extends ServiceImpl<GroupItemDao, GroupItemPO>
 
     @Override
     public ResponseResult delete(GroupItemDTO groupItemDTO) {
-        GroupItemPO byId = super.getById(groupItemDTO.getId());
-        if (byId == null) {
+        QueryWrapper<GroupItemPO> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(GroupItemPO.F_GROUP_CODE,groupItemDTO.getGroupCode())
+                .and(wrapper->wrapper.eq(GroupItemPO.F_ITEM_CODE,groupItemDTO.getItemCode()));
+        GroupItemPO groupItemPO = groupItemDao.selectOne(queryWrapper);
+        if (groupItemPO == null) {
             return new ResponseResult(ItemResultCode.NOT_EXISTS);
         }
-        boolean remove = super.removeById(byId);
+        boolean remove = super.removeById(groupItemPO);
         if (!remove) {
             return new ResponseResult(CommonCode.FAIL);
         }
@@ -111,7 +118,6 @@ public class GroupItemServiceImpl extends ServiceImpl<GroupItemDao, GroupItemPO>
         List<ItemPO> itemPos = new ArrayList<>();
         for (GroupItemPO groupItemPO : groupItemPOS) {
             ItemPO itemInfo = groupItemDao.getItemInfo(groupItemPO.getItemCode());
-            System.out.println(itemInfo);
             itemPos.add(itemInfo);
         }
         List<ItemVO> itemVOS = MyBeanUtil.copyListProperties(itemPos, ItemVO::new);

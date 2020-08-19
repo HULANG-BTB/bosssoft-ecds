@@ -1,8 +1,8 @@
 package com.bosssoft.ecds.controller;
 
 
-import com.bosssoft.ecds.common.response.CommonCode;
-import com.bosssoft.ecds.common.response.QueryResponseResult;
+import com.bosssoft.ecds.response.CommonCode;
+import com.bosssoft.ecds.response.QueryResponseResult;
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.dto.RoleDTO;
 import com.bosssoft.ecds.entity.dto.UserDTO;
@@ -128,6 +128,14 @@ public class UserController {
         UserDTO userDTO = MyBeanUtil.copyProperties(userVO, UserDTO.class);
         Boolean resetResult = userService.resetPassword(userDTO);
         return new QueryResponseResult<>(CommonCode.SUCCESS, resetResult);
+    }
+
+    @GetMapping("info")
+    @ApiOperation(value = "获取用户信息")
+    public QueryResponseResult<UserVO> getInfo() {
+        UserDTO userDTO = userService.getById();
+        UserVO userVO = MyBeanUtil.copyProperties(userDTO, UserVO.class);
+        return new QueryResponseResult<>(CommonCode.SUCCESS, userVO);
     }
 
 }

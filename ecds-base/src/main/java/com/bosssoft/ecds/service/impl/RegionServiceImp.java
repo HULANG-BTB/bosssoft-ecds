@@ -3,10 +3,10 @@ package com.bosssoft.ecds.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.bosssoft.ecds.common.response.CommonCode;
-import com.bosssoft.ecds.common.response.QueryResponseResult;
-import com.bosssoft.ecds.common.response.QueryResult;
-import com.bosssoft.ecds.common.response.ResponseResult;
+import com.bosssoft.ecds.response.CommonCode;
+import com.bosssoft.ecds.response.QueryResult;
+import com.bosssoft.ecds.response.QueryResponseResult;
+import com.bosssoft.ecds.response.ResponseResult;
 import com.bosssoft.ecds.dao.RegionMapper;
 import com.bosssoft.ecds.entity.po.AuthRegion;
 import com.bosssoft.ecds.entity.vo.AddRegionVO;
@@ -53,7 +53,6 @@ public class RegionServiceImp implements RegionService {
             }else{
                 ext.setChildren(null);
             }
-
         }
         return new QueryResponseResult(CommonCode.SUCCESS,allRegion);
     }

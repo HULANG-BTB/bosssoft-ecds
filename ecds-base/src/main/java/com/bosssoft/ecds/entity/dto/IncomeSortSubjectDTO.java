@@ -2,6 +2,8 @@ package com.bosssoft.ecds.entity.dto;
 
 import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -21,18 +23,22 @@ import java.util.Date;
 @ApiModel(value="IncomeSortSubjectDTO对象", description="")
 public class IncomeSortSubjectDTO extends Model<IncomeSortSubjectDTO> {
     @ApiModelProperty(value = "主键")
+    @JsonSerialize(using = ToStringSerializer.class)
     @TableId(value = "f_id", type = IdType.AUTO)
     private Long id;
 
     @ApiModelProperty(value = "收入类别id")
+    @JsonSerialize(using = ToStringSerializer.class)
     @TableField("f_income_sort_id")
     private Long incomeSortId;
 
     @ApiModelProperty(value = "预算科目id")
+    @JsonSerialize(using = ToStringSerializer.class)
     @TableField("f_subject_id")
     private Long subjectId;
 
     @ApiModelProperty(value = "操作人id")
+    @JsonSerialize(using = ToStringSerializer.class)
     @TableField(value = "f_operator_id", fill = FieldFill.INSERT_UPDATE)
     private Long operatorId;
 

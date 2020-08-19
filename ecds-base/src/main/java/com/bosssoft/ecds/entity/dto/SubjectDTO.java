@@ -1,6 +1,8 @@
 package com.bosssoft.ecds.entity.dto;
 
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -22,6 +24,7 @@ import java.util.List;
 public class SubjectDTO extends Model<SubjectDTO> {
 
     @ApiModelProperty(value = "科目id")
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
     @ApiModelProperty(value = "年度")
@@ -41,6 +44,7 @@ public class SubjectDTO extends Model<SubjectDTO> {
     private Boolean leaf;
 
     @ApiModelProperty(value = "父级ID")
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long parentId;
 
     @Value("true")
