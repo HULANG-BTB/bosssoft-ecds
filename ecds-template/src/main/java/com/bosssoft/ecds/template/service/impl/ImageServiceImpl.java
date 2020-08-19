@@ -61,7 +61,7 @@ public class ImageServiceImpl implements ImageService {
 
             // 给dto填充票据数据
             String value = getValueByField(billDTO, fieldName);
-            billValue.setValue(value);
+            billValue.setValue(value!=null ? value : "");
 
             valueMap.put(fieldName, billValue);
             log.info(billValue.toString());
@@ -117,7 +117,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public String getRemoteImage(NontaxBillDto billDTO) {
+    public String getRemoteImage(NontaxBillDto billDTO, Long expireTime) {
         String fileName = billDTO.getBillCode() + billDTO.getSerialCode() + ".png";
         String path = "boss-bill/" + fileName;
 
@@ -131,8 +131,11 @@ public class ImageServiceImpl implements ImageService {
             ossUtil.upload(path, inputStream);
         }
 
-        // 5 分钟的图片访问时间
-        URL url = ossUtil.temporaryUrl(path, 5 * 60 * 1000);
+        // 5 年的图片访问时间
+        if (expireTime == null) {
+            expireTime = 15 * 24 * 60 * 60 * 1000L;
+        }
+        URL url = ossUtil.temporaryUrl(path, expireTime);
 
         return url.toString();
     }

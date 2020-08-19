@@ -75,8 +75,14 @@ public class ImageController {
      */
     @ApiOperation("根据传入的信息生成图片，返回图片的阿里云OSS地址")
     @PostMapping("/getRemoteAddress")
-    public ResponseBody getRemoteAddress(@RequestBody NontaxBillDto billDTO) {
-        return ResponseBody.ok(imageService.getRemoteImage(billDTO));
+    public ResponseBody getRemoteAddress(
+            @RequestBody
+                    NontaxBillDto billDTO,
+            @RequestParam(defaultValue = "2592000000")
+            @ApiParam(value = "过期时间，默认是1个月", example = "0")
+                    Long expireTime
+    ) {
+        return ResponseBody.ok(imageService.getRemoteImage(billDTO, expireTime));
     }
 
     /**

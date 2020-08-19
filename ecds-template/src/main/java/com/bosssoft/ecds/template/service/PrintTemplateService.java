@@ -1,8 +1,11 @@
 package com.bosssoft.ecds.template.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.bosssoft.ecds.template.entity.dto.PrintTemplateDto;
 import com.bosssoft.ecds.template.entity.po.PrintTemplatePo;
+import com.bosssoft.ecds.template.entity.vo.PrintTemplateVo;
 
 import java.util.List;
 
@@ -22,4 +25,6 @@ public interface PrintTemplateService extends IService<PrintTemplatePo> {
     boolean remove(Long id);
 
     PrintTemplateDto getDtoById(Long id);
+
+    IPage<PrintTemplateVo> getPageVO(Page<?> page);
 }

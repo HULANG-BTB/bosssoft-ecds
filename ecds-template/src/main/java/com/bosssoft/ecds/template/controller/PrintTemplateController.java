@@ -1,6 +1,8 @@
 package com.bosssoft.ecds.template.controller;
 
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bosssoft.ecds.template.entity.dto.NontaxBillDto;
 import com.bosssoft.ecds.template.entity.dto.PrintTemplateDto;
 import com.bosssoft.ecds.template.entity.vo.PrintTemplateVo;
@@ -105,22 +107,49 @@ public class PrintTemplateController {
      * 根据模板id获取模板样板，即返回空的票样
      *
      * @param id 模板主键
-     * @return 模板文本文件
+     * @return 空白票据html
      */
     @ApiOperation("根据模板id获取模板票样")
     @GetMapping(value = "/content/{id}.html", produces = MediaType.TEXT_HTML_VALUE)
     public byte[] getHtml(@PathVariable Long id) {
         PrintTemplateDto templateDTO = printTemplateService.getDtoById(id);
-        // 空白票据
+        // 渲染空白票据
         NontaxBillDto billDTO = new NontaxBillDto();
         billDTO.setItems(new ArrayList<>());
         String htmlTemplate = htmlService.genBillHtml(billDTO, templateDTO.getTemplate());
         return htmlTemplate.getBytes();
     }
 
+    /**
+     * 根据模板id下载模板文件
+     *
+     * @param id 模板主键
+     * @return 票据模板ftl文件
+     */
+    @ApiOperation("根据模板id下载模板文件")
     @GetMapping(value = "/content/{id}.ftl", produces = MediaType.TEXT_PLAIN_VALUE)
     public byte[] getTemplate(@PathVariable Long id) {
         PrintTemplateDto templateDTO = printTemplateService.getDtoById(id);
         return templateDTO.getTemplate().getBytes();
+    }
+
+    /**
+     * 模板列表分页查询
+     *
+     * @param current   第几页
+     * @param size 每页多少项
+     */
+    @ApiOperation("模板列表分页查询")
+    @GetMapping("/listPage")
+    public ResponseResult listPage(
+            @RequestParam
+            @ApiParam(value = "页码", example = "1")
+                    Long current,
+            @RequestParam(defaultValue = "10", required = false)
+            @ApiParam(value = "每页几项", example = "10")
+                    Long size
+    ) {
+        IPage<PrintTemplateVo> page = printTemplateService.getPageVO(new Page<>(current, size));
+        return new QueryResponseResult<>(CommonCode.SUCCESS, page);
     }
 }

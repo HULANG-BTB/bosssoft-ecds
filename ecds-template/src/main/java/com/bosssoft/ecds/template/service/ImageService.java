@@ -34,7 +34,7 @@ public interface ImageService {
      * @param billDTO
      * @return png图片url
      */
-    String getRemoteImage(NontaxBillDto billDTO);
+    String getRemoteImage(NontaxBillDto billDTO, Long expireTime);
 
     /**
      * 获取模板图片的输入流
