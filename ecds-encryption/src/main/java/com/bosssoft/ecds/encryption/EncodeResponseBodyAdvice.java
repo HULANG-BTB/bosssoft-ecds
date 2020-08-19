@@ -1,7 +1,6 @@
 package com.bosssoft.ecds.encryption;
 
 
-import com.bosssoft.ecds.exception.CustomException;
 import com.bosssoft.ecds.response.CommonCode;
 import com.bosssoft.ecds.response.QueryResponseResult;
 import com.bosssoft.ecds.util.AESUtil;
@@ -40,6 +39,10 @@ public class EncodeResponseBodyAdvice implements ResponseBodyAdvice {
 
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter methodParameter, MediaType mediaType, Class aClass, ServerHttpRequest serverHttpRequest, ServerHttpResponse serverHttpResponse) {
+
+        /**
+         * 加密开始
+         */
         ObjectMapper objectMapper = new ObjectMapper();
         //request对象
         try {
@@ -50,15 +53,13 @@ public class EncodeResponseBodyAdvice implements ResponseBodyAdvice {
             //ase加密
             String data = AESUtil.encrypt(result, key);
             String publicKey = (String) redisUtil.get("publicKey");
-            if (publicKey == null) {
-                throw new CustomException(CommonCode.PUBLIC_KEY_IS_NULL);
-            }
             //用前端的公钥来加密AES的key，并转成Base64
             String aesKey = RSAUtil.encryptByPublicKey(key.getBytes(), Base64.decodeBase64(publicKey));
             return new QueryResponseResult(CommonCode.SUCCESS, data, aesKey);
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         return body;
     }
 
