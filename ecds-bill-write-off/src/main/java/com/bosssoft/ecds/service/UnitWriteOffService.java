@@ -2,7 +2,9 @@ package com.bosssoft.ecds.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.bosssoft.ecds.entity.dto.UnitWriteOffApplyQueryInfoDTO;
+import com.bosssoft.ecds.entity.dto.UnitWriteOffItemQueryInfoDTO;
 import com.bosssoft.ecds.entity.dto.WriteOffApplyDTO;
+import com.bosssoft.ecds.entity.dto.WriteOffApplyItemDTO;
 
 import java.util.List;
 
@@ -26,8 +28,30 @@ public interface UnitWriteOffService {
     boolean deleteApply(String no);
 
     /**
-     * @param applyDTOList 上传的申请DTO列表
+     * 上报核销申请
+     * @param noList 上报的申请业务单号列表
      * @return 是否成功
      */
-    boolean uploadApply(List<WriteOffApplyDTO> applyDTOList);
+    boolean uploadApply(List<String> noList);
+
+    /**
+     * 撤销核销申请
+     * @param noList 撤销的申请业务单号列表
+     * @return 是否成功
+     */
+    boolean rescindApply(List<String> noList);
+
+    /**
+     * 查询申请明细（已经上报无法更改的情况）
+     * @param queryInfoDTO 明细查询DTO
+     * @return 分页对象
+     */
+    IPage<WriteOffApplyItemDTO> selectItemPage(UnitWriteOffItemQueryInfoDTO queryInfoDTO);
+
+    /**
+     * 查询所有申请明细（新增和修改时）
+     * @param no 业务单号
+     * @return ItemDTO列表
+     */
+    List<WriteOffApplyItemDTO> selectItems(String no);
 }

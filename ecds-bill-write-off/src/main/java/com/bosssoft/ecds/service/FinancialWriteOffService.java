@@ -1,5 +1,6 @@
 package com.bosssoft.ecds.service;
 
+import com.bosssoft.ecds.entity.dto.WriteOffDetailDTO;
 import com.bosssoft.ecds.entity.dto.WriteOffReceiveDTO;
 import com.bosssoft.ecds.entity.dto.WriteOffResultDTO;
 
@@ -18,10 +19,7 @@ public interface FinancialWriteOffService {
     // 将核销申请退回单位端
     boolean sendBack(List<WriteOffReceiveDTO> list);
 
-    // 获取核销申请的详情
-    Object getDetails(Object object);
-
     // 存入审验结果
-    boolean setResult(WriteOffResultDTO writeOffResultDTO);
+    boolean setResult(WriteOffDetailDTO writeOffDetailDTO, WriteOffResultDTO writeOffResultDTO);
 
 }

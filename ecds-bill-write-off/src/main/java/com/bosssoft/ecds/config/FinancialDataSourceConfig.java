@@ -2,6 +2,7 @@ package com.bosssoft.ecds.config;
 
 import com.baomidou.mybatisplus.core.MybatisConfiguration;
 import com.baomidou.mybatisplus.core.MybatisXMLLanguageDriver;
+import com.baomidou.mybatisplus.core.config.GlobalConfig;
 import com.baomidou.mybatisplus.extension.plugins.OptimisticLockerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean;
@@ -41,6 +42,10 @@ public class FinancialDataSourceConfig {
         configuration.addInterceptor(new PaginationInterceptor());
         configuration.addInterceptor(new OptimisticLockerInterceptor());
         factoryBean.setConfiguration(configuration);
+
+        GlobalConfig globalConfig = new GlobalConfig();
+        globalConfig.setMetaObjectHandler(new MetaObjectHandlerConfig());
+        factoryBean.setGlobalConfig(globalConfig);
 
         return factoryBean.getObject();
     }
