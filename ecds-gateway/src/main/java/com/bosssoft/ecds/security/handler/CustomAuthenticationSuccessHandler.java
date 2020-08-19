@@ -2,9 +2,7 @@ package com.bosssoft.ecds.security.handler;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.crypto.asymmetric.RSA;
-import cn.hutool.json.JSONUtil;
 import com.bosssoft.ecds.security.config.RsaKeyProperties;
-import com.bosssoft.ecds.security.entity.domain.AuthRoleGrantedAuthority;
 import com.bosssoft.ecds.security.entity.domain.AuthUserDetails;
 import com.bosssoft.ecds.security.entity.vo.RoleVO;
 import com.bosssoft.ecds.security.entity.vo.UserVO;
@@ -18,14 +16,13 @@ import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.server.WebFilterExchange;
 import org.springframework.security.web.server.authentication.WebFilterChainServerAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 /**
@@ -60,6 +57,8 @@ public class CustomAuthenticationSuccessHandler extends WebFilterChainServerAuth
         HttpHeaders httpHeaders = response.getHeaders();
         httpHeaders.add("Content-Type", "application/json; charset=UTF-8");
         httpHeaders.add("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
+        // Todo 上线删除本行
+        httpHeaders.setAccessControlAllowOrigin("http://localhost:9528");
         // 设置body
         byte[] dataBytes = {};
         try {
@@ -85,7 +84,7 @@ public class CustomAuthenticationSuccessHandler extends WebFilterChainServerAuth
             userDetails.setPassword(null);
             String token = JwtUtils.generateTokenExpireInMinutes(userDetails, rsa.getPrivateKey(), 60 * 24 * 30);
             userVO.setToken(token);
-            dataBytes = ResponseUtils.getResponse(userVO, ResponseUtils.ResultType.OK).getBytes();
+            dataBytes = ResponseUtils.getResponse(userVO, ResponseUtils.ResultType.OK).getBytes(StandardCharsets.UTF_8);
         } catch (Exception ex) {
             ex.printStackTrace();
             dataBytes = ResponseUtils.getResponse(ex.getMessage(), ResponseUtils.ResultType.UNAUTHORIZED).getBytes();

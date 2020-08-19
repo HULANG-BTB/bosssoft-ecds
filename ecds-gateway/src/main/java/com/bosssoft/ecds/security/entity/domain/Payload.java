@@ -8,7 +8,8 @@ import java.util.Date;
  * @ClassName Payload
  * @Author AloneH
  * @Date 2020/8/5 20:53
- * @Description TODO
+ * @Description
+ *      JWT Payload 实体类
  **/
 @Data
 public class Payload <T> {

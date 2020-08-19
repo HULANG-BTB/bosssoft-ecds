@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
  * <p>
- *  服务类
+ * 服务类
  * </p>
  *
  * @author wy
@@ -13,4 +13,26 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IncomeSortSubjectService extends IService<IncomeSortSubjectPO> {
 
+    /**
+     * 添加incomeSortSubjectPO
+     *
+     * @param incomeSortSubjectPO
+     * @return
+     */
+    boolean add(IncomeSortSubjectPO incomeSortSubjectPO);
+
+    /**
+     * 添加或更新incomeSortSubjectPO
+     */
+    boolean add(Long incomeId, Long subjectId);
+
+    /**
+     * 根据科目id删除表中数据
+     */
+    boolean deleteBySid(Long id);
+
+    /**
+     * 根据收入类别id返回对象
+     */
+    IncomeSortSubjectPO selectByIncomeId(Long incomeId);
 }

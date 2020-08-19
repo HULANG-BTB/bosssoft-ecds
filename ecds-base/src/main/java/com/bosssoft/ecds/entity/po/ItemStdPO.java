@@ -13,6 +13,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.models.auth.In;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -67,7 +68,7 @@ public class ItemStdPO extends Model<ItemStdPO> {
 
     @ApiModelProperty(value = "是否启用")
     @TableField("f_isenable")
-    private Boolean isenable;
+    private Integer isenable;
 
     @ApiModelProperty(value = "标准生效日期")
     @TableField("f_itemstd_effdate")

@@ -116,6 +116,10 @@ public class CrtPO extends Model<CrtPO> {
     @TableField("f_note")
     private String note;
 
+    @ApiModelProperty(value = "是否启用")
+    @TableField("f_isenable")
+    private Boolean isenable;
+
 
     public static final String F_ID = "f_id";
 
@@ -158,6 +162,8 @@ public class CrtPO extends Model<CrtPO> {
     public static final String F_VERSION = "f_version";
 
     public static final String F_NOTE = "f_note";
+
+    public static final String F_ISENABLE = "f_isenable";
 
     @Override
     protected Serializable pkVal() {

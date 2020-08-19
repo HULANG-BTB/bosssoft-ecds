@@ -8,7 +8,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @ClassName GatewayApplication
  * @Author AloneH
  * @Date 2020/8/9 10:28
- * @Description TODO
+ * @Description
+ *      网关主启动类
  **/
 @SpringBootApplication
 @MapperScan(basePackages = {"com.bosssoft.ecds.security.dao"})

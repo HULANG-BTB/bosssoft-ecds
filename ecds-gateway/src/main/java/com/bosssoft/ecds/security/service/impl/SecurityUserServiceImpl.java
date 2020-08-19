@@ -1,6 +1,5 @@
 package com.bosssoft.ecds.security.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bosssoft.ecds.security.dao.UserDao;
 import com.bosssoft.ecds.security.entity.domain.AuthRoleGrantedAuthority;
@@ -23,7 +22,8 @@ import java.util.List;
  * @ClassName UserServiceImpl
  * @Author AloneH
  * @Date 2020/8/9 16:56
- * @Description TODO
+ * @Description
+ *      Security service impl
  **/
 
 @Service

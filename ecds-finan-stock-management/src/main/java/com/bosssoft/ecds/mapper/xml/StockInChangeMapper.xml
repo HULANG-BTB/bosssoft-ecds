@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bosssoft.nontax.dao.StockInChangeDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.bosssoft.nontax.entity.po.StockInChangePO">
+        <id column="f_id" property="id"/>
+        <result column="f_buss_id" property="bussId"/>
+        <result column="f_change_state" property="changeState"/>
+        <result column="f_change_date" property="changeDate"/>
+        <result column="f_change_man" property="changeMan"/>
+        <result column="f_change_situ" property="changeSitu"/>
+        <result column="f_version" property="version"/>
+        <result column="f_altercode" property="altercode"/>
+        <result column="f_create_time" property="createTime"/>
+        <result column="f_update_time" property="updateTime"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        f_id, f_buss_id, f_change_state, f_change_date, f_change_man, f_change_situ, f_version, f_altercode, f_create_time, f_update_time
+    </sql>
+
+</mapper>
