@@ -12,6 +12,11 @@ import org.springframework.data.redis.core.RedisTemplate;
 import javax.annotation.Resource;
 import java.util.List;
 
+/**
+ * @author lixin
+ * @version 1.0
+ * @date 2020/8/18 10:43
+ */
 public class SourceMonitorJob implements Job {
 
     private static final Logger logger = LoggerFactory.getLogger(SourceMonitorJob.class);

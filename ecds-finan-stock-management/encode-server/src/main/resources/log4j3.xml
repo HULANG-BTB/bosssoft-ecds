@@ -7,6 +7,7 @@
     <Properties>
         <Property name="APP_NAME">encode</Property>
         <Property name="LOG_FILE_PATH">ecds-finan-stock-management/encode-server/src/main/resources/logs/${APP_NAME}</Property>
+<!--        <Property name="PATTERN_FORMAT">%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %class{36} %L %M - %msg%xEx%n</Property>-->
         <Property name="PATTERN_FORMAT">%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %class{36} %L %M - %msg%xEx%n</Property>
     </Properties>
 

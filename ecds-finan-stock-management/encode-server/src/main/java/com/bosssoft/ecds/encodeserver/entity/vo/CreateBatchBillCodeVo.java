@@ -4,7 +4,7 @@ import cn.hutool.core.annotation.Alias;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
-import java.sql.Timestamp;
+import java.io.Serializable;
 
 /**
  * @Author 黄杰峰
@@ -12,7 +12,7 @@ import java.sql.Timestamp;
  * @Description
  */
 @Data
-public class CreateBatchBillCodeVo {
+public class CreateBatchBillCodeVo implements Serializable {
     /**
      * 区划编码
      */

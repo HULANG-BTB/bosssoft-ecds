@@ -8,6 +8,11 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 
+/**
+ * @author lixin
+ * @version 1.0
+ * @date 2020/8/18 10:43
+ */
 @Component
 public class ScheduleJob {
 

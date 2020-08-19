@@ -13,7 +13,11 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  * @Author 黄杰峰
@@ -38,7 +42,7 @@ public class GetCodeController {
      * @param getBillNumVo
      * @return
      */
-    @PostMapping("/getBatchCode")
+    @PostMapping("/batch")
     @ApiOperation(value = "批量获取票据号码", notes = "传入区划编码、分类编码、种类编码、年度编码和取号数量获取，返回票据号码段")
     public ResponseResult getBatchCode(
             @RequestBody @ApiParam(value = "获取财政号码Vo")
@@ -50,11 +54,8 @@ public class GetCodeController {
         FillZeroUtil.fillZero(getBillNumDto);
         log.info("=====获取财政编码：");
         NumSegDto batchCode = getCodeService.getBatchCode(getBillNumDto);
-        if (batchCode != null) {
-            return new QueryResponseResult<>(CommonCode.addEnum("CREATE_SUCCESS",
-                    true, 200, "-----获取财政代码成功"), batchCode);
-        } else {
-            return new ResponseResult(false, 500, "-----财政代码可能未创建，请创建后再赋码");
-        }
+        return batchCode != null ?
+                new QueryResponseResult<>(CommonCode.GET_CODE_SUCCESS, batchCode) :
+                new ResponseResult(false, 500, "财政代码可能未创建，请创建后再赋码");
     }
 }

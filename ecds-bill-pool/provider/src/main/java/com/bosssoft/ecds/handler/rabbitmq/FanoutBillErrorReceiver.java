@@ -12,6 +12,11 @@ import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * @author lixin
+ * @version 1.0
+ * @date 2020/8/18 10:43
+ */
 @Component
 public class FanoutBillErrorReceiver {
 
@@ -28,6 +33,10 @@ public class FanoutBillErrorReceiver {
     @RabbitListener(queues = "deadLetterQueue")
     @RabbitHandler
     public void handle(String billTypeCode) {
+        if (!redisTemplate.hasKey(billTypeCode)){
+            logger.error(billTypeCode + "不存在");
+            return;
+        }
         int threshold = (int) redisTemplate.opsForHash().get(billTypeCode, "threshold");
         String table = (String) redisTemplate.opsForHash().get(billTypeCode, "table");
         int remainderBill = billDao.retrieveNumber(table);

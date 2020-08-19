@@ -12,7 +12,7 @@ import java.sql.Timestamp;
  * @Description 赋码表实体类
  */
 @Data
-@TableName("FAB_CODE")
+@TableName("fab_create_code")
 public class CodePo {
     /**
      * 主键

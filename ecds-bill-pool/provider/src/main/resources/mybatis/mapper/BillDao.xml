@@ -6,7 +6,7 @@
         values
         <foreach collection="list" item="item" index="index" separator=",">
             (#{item.regionCode}, #{item.type}, #{item.sort}, #{item.batch}, #{item.billCode}, #{item.operator},
-            #{item.operatorID})
+            #{item.operatorId})
         </foreach>
     </insert>
 
@@ -18,7 +18,7 @@
         <result column="f_batch" property="batch"/>
         <result column="f_bill_code" property="billCode"/>
         <result column="f_operator" property="operator"/>
-        <result column="f_operator_id" property="operatorID"/>
+        <result column="f_operator_id" property="operatorId"/>
         <result column="f_create_time" property="createTime"/>
         <result column="f_update_time" property="updateTime"/>
     </resultMap>

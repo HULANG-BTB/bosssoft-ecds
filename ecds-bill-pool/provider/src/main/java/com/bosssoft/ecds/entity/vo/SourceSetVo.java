@@ -1,5 +1,10 @@
 package com.bosssoft.ecds.entity.vo;
 
+/**
+ * @author lixin
+ * @version 1.0
+ * @date 2020/8/18 10:43
+ */
 public class SourceSetVo {
 
     String billTypeCode;
@@ -8,7 +13,7 @@ public class SourceSetVo {
     int enable;
     int alterCode;
     String operator;
-    int operatorID;
+    int operatorId;
 
     public String getBillTypeCode() {
         return billTypeCode;
@@ -58,12 +63,12 @@ public class SourceSetVo {
         this.operator = operator;
     }
 
-    public int getOperatorID() {
-        return operatorID;
+    public int getOperatorId() {
+        return operatorId;
     }
 
-    public void setOperatorID(int operatorID) {
-        this.operatorID = operatorID;
+    public void setOperatorId(int operatorId) {
+        this.operatorId = operatorId;
     }
 
     @Override
@@ -75,7 +80,7 @@ public class SourceSetVo {
                 ", enable=" + enable +
                 ", alterCode=" + alterCode +
                 ", operator='" + operator + '\'' +
-                ", operatorID=" + operatorID +
+                ", operatorId=" + operatorId +
                 '}';
     }
 }
