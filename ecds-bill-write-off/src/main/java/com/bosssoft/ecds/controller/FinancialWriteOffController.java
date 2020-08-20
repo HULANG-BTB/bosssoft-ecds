@@ -4,7 +4,12 @@ import com.bosssoft.ecds.entity.dto.WriteOffDetailDTO;
 import com.bosssoft.ecds.entity.dto.WriteOffReceiveDTO;
 import com.bosssoft.ecds.entity.dto.WriteOffResultDTO;
 import com.bosssoft.ecds.entity.vo.*;
+import com.bosssoft.ecds.response.CommonCode;
+import com.bosssoft.ecds.response.QueryResponseResult;
+import com.bosssoft.ecds.response.ResponseResult;
 import com.bosssoft.ecds.service.FinancialWriteOffService;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,7 +36,9 @@ public class FinancialWriteOffController {
      */
     @ResponseBody
     @RequestMapping(value = "/receive", method = RequestMethod.POST)
-    public List<WriteOffReceiveVO> receive(@RequestBody WriteOffReceiveUnitInfoVO writeOffReceiveUnitInfoVO) {
+    @ApiOperation(value = "获取核销请求", notes = "根据单位Id获取该单位上报的核销请求")
+    @ApiImplicitParam(name = "writeOffReceiveUnitInfoVO", dataType = "WriteOffReceiveUnitInfoVO", value = "需要核销的单位信息")
+    public QueryResponseResult receive(@RequestBody WriteOffReceiveUnitInfoVO writeOffReceiveUnitInfoVO) {
         // 这里DTO要修改成VO， 为了方便测试所以没改，以下的一样
         List<WriteOffReceiveVO> list = new ArrayList<>();
         for (WriteOffReceiveDTO writeOffReceiveDTO : financialWriteOffService.receive(writeOffReceiveUnitInfoVO.getfAgenIdCode())){
@@ -42,7 +49,7 @@ public class FinancialWriteOffController {
             writeOffReceiveVO.setAuthor(writeOffReceiveDTO.getFAuthor());
             list.add(writeOffReceiveVO);
         }
-        return list;
+        return new QueryResponseResult(CommonCode.SUCCESS, list);
     }
 
     /**
@@ -54,7 +61,9 @@ public class FinancialWriteOffController {
      */
     @ResponseBody
     @RequestMapping(value = "/sendBack", method = RequestMethod.POST)
-    public boolean sendBack(@RequestBody List<WriteOffReceiveVO> writeOffReceiveVOList) {
+    @ApiOperation(value = "退还核销请求", notes = "根据需要将核销请求退还给单位段")
+    @ApiImplicitParam(name = "writeOffReceiveVOList", dataType = "List", value = "退还的核销请求信息")
+    public ResponseResult sendBack(@RequestBody List<WriteOffReceiveVO> writeOffReceiveVOList) {
         List<WriteOffReceiveDTO> list = new ArrayList<>(writeOffReceiveVOList.size());
         for (WriteOffReceiveVO writeOffReceiveVO : writeOffReceiveVOList){
             WriteOffReceiveDTO writeOffReceiveDTO = new WriteOffReceiveDTO();
@@ -65,7 +74,7 @@ public class FinancialWriteOffController {
             list.add(writeOffReceiveDTO);
         }
         financialWriteOffService.sendBack(list);
-        return true;
+        return new ResponseResult(CommonCode.SUCCESS);
     }
 
     /**
@@ -76,44 +85,18 @@ public class FinancialWriteOffController {
      */
     @ResponseBody
     @RequestMapping(value = "/getDetails", method = RequestMethod.POST)
-    public WriteOffDetailVO getDetails(@RequestBody WriteOffDetailRequestVO writeOffDetailRequestVO) {
+    @ApiOperation(value = "获取核销详情", notes = "根据核销单号获取核销详情")
+    @ApiImplicitParam(name = "writeOffDetailRequestVO", dataType = "WriteOffDetailRequestVO", value = "核销详情的请求")
+    public QueryResponseResult getDetails(@RequestBody WriteOffDetailRequestVO writeOffDetailRequestVO) {
         // 根据业务单号获取详细
         WriteOffDetailDTO writeOffDetailDTO = financialWriteOffService.getDetail(writeOffDetailRequestVO.getfNo());
         WriteOffDetailVO writeOffDetailVO = new WriteOffDetailVO();
         writeOffDetailVO.setWriteOffBillInvDetailDTOList(writeOffDetailDTO.getWriteOffBillInvDetailDTOList());
         writeOffDetailVO.setWriteOffIncomeDetailDTOList(writeOffDetailDTO.getWriteOffIncomeDetailDTOList());
         writeOffDetailVO.setWriteOffInvoceDetailDTOList(writeOffDetailDTO.getWriteOffInvoceDetailDTOList());
-        return writeOffDetailVO;
+        return new QueryResponseResult(CommonCode.SUCCESS, writeOffDetailVO);
     }
 
-    /**
-     * 获取单位电子档案
-     *
-     * @param object
-     * @return java.lang.Object
-     */
-    @ResponseBody
-    @RequestMapping(value = "/getUnitDetails", method = RequestMethod.POST)
-    public Object getUnitDetails(Object object) {
-        // 这里直接调用接口 用Service
-        return null;
-    }
-
-    /**
-     * 存入核销结果
-     *
-     * @param writeOffResultDTO
-     * @return java.lang.Object
-     */
-    @ResponseBody
-    @RequestMapping(value = "/setResult", method = RequestMethod.POST)
-    public boolean setResult(WriteOffResultDTO writeOffResultDTO) {
-        // 修改 f_check_result 值
-        // writeOffDetailDTO 有接口直接获得
-        WriteOffDetailDTO writeOffDetailDTO = new WriteOffDetailDTO();
-        return financialWriteOffService.setResult(writeOffDetailDTO , writeOffResultDTO);
-    }
-    
     /**
      * 通过审核
      * 存储数据
@@ -123,8 +106,10 @@ public class FinancialWriteOffController {
      */
     @ResponseBody
     @RequestMapping(value = "/pass", method = RequestMethod.POST)
-    public String pass(@RequestBody WriteOffDetailVO writeOffDetailVO){
-        return "success";
+    @ApiOperation(value = "审核通过", notes = "审核通过")
+    public ResponseResult pass(@RequestBody WriteOffDetailVO writeOffDetailVO){
+
+        return new ResponseResult(CommonCode.SUCCESS);
     }
 
     /**
@@ -136,7 +121,9 @@ public class FinancialWriteOffController {
      */
     @ResponseBody
     @RequestMapping(value = "/unPass", method = RequestMethod.POST)
-    public String unPass(@RequestBody WriteOffDetailVO writeOffDetailVO){
-        return "not success";
+    @ApiOperation(value = "审核不通过", notes = "审核不通过")
+    public ResponseResult unPass(@RequestBody WriteOffDetailVO writeOffDetailVO){
+
+        return new ResponseResult(CommonCode.SUCCESS);
     }
 }

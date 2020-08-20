@@ -35,18 +35,18 @@ public enum CommonCode implements ResultCode {
         this.message = message;
     }
 
-    /**
-     * 动态创建枚举类方法
-     *
-     * @param enumName 枚举名称
-     * @param success  是否成功
-     * @param code     枚举编码
-     * @param message  枚举消息
-     * @return
-     */
-    public static CommonCode addEnum(String enumName, boolean success, int code, String message) {
-        return DynamicEnumUtil.addEnum(CommonCode.class, enumName, new Class[]{Boolean.class, Integer.class, String.class}, new Object[]{success, code, message});
-    }
+//    /**
+//     * 动态创建枚举类方法
+//     *
+//     * @param enumName 枚举名称
+//     * @param success  是否成功
+//     * @param code     枚举编码
+//     * @param message  枚举消息
+//     * @return
+//     */
+//    public static CommonCode addEnum(String enumName, boolean success, int code, String message) {
+//        return DynamicEnumUtil.addEnum(CommonCode.class, enumName, new Class[]{Boolean.class, Integer.class, String.class}, new Object[]{success, code, message});
+//    }
 
     @Override
     public boolean success() {
