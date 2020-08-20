@@ -20,7 +20,8 @@ public enum CommonCode implements ResultCode {
     DUPLICATE_ERROR(false, 21111, "该数据已存在"),
     ENCRYPTION_ERROR(false, 21222, "加密参数缺失"),
     EMAIL_NOTIFICATION(false, 29999, "邮件通知"),
-    PUBLIC_KEY_IS_NULL(false, 29229, "未获取前端公钥");
+    PUBLIC_KEY_IS_NULL(false, 29229, "未获取前端公钥"),
+    PRIVATE_KEY_IS_NULL(false, 29729, "后端私钥为空");
     //操作是否成功
     boolean success;
     //操作代码
