@@ -5,7 +5,9 @@ import com.bosssoft.ecds.msg.entity.vo.CheckRecordQueryVo;
 import com.bosssoft.ecds.msg.entity.vo.CheckRecordVo;
 import com.bosssoft.ecds.msg.entity.vo.PageResult;
 import com.bosssoft.ecds.msg.service.CheckRecordService;
-import com.bosssoft.ecds.msg.util.ResponseUtils;
+import com.bosssoft.ecds.response.CommonCode;
+import com.bosssoft.ecds.response.QueryResponseResult;
+import com.bosssoft.ecds.response.ResponseResult;
 import com.google.common.collect.Lists;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -24,7 +26,7 @@ import java.util.List;
 @RequestMapping("/checkRecord")
 @CrossOrigin
 @Slf4j
-public class CheckRecordController {
+public class CheckRecordController extends BaseController{
 
     @Resource
     private CheckRecordService checkRecordService;
@@ -37,7 +39,7 @@ public class CheckRecordController {
      */
     @ApiOperation("查询票据查验记录")
     @PostMapping("/list")
-    public String listByPage(@RequestBody CheckRecordQueryVo recordQuery){
+    public QueryResponseResult<PageResult> listByPage(@RequestBody CheckRecordQueryVo recordQuery){
         // 获取匹配记录数
         Long total = checkRecordService.getTotal(recordQuery);
         // 查询匹配记录
@@ -45,55 +47,33 @@ public class CheckRecordController {
         // 封装结果集，携带页面参数
         PageResult pageResult = new PageResult(total, recordQuery.getLimit(), recordQuery.getPage(), mails);
 
-        return ResponseUtils.getResponse(
-                ResponseUtils.ResultType.OK.getCode(),
-                ResponseUtils.ResultType.OK.getMsg(),
-                pageResult);
+        return new QueryResponseResult<>(CommonCode.SUCCESS,pageResult);
     }
 
     /**
      * 邮件删除功能
      * @param id 邮件id
+     * @return ResponseResult
      */
     @ApiOperation("根据Id删除查验记录")
     @DeleteMapping("/deleteCheckRecord")
-    public String delCheckRecord(String id) {
+    public ResponseResult delCheckRecord(String id) {
         boolean b = checkRecordService.removeById(id);
-        if (b) {
-            return ResponseUtils.getResponse(
-                    ResponseUtils.ResultType.OK.getCode(),
-                    ResponseUtils.ResultType.OK.getMsg(),
-                    true);
-        }
-
-        return ResponseUtils.getResponse(
-                ResponseUtils.ResultType.NOT_MODIFIED.getCode(),
-                ResponseUtils.ResultType.NOT_MODIFIED.getMsg(),
-                false);
-
+        return getRes(b);
     }
 
     /**
      * 查验记录批量删除功能
      * @param recordVos 邮件集合
+     * @return ResponseResult
      */
     @ApiOperation("批量删除查验记录")
     @DeleteMapping("/deleteCheckRecordBatch")
-    public String delCheckRecordBatch(@RequestBody List<CheckRecordVo> recordVos) {
+    public ResponseResult delCheckRecordBatch(@RequestBody List<CheckRecordVo> recordVos) {
         List<Long> ids = Lists.newArrayList();
         recordVos.forEach(recordVo -> ids.add(recordVo.getId()));
         boolean b = checkRecordService.removeByIds(ids);
-        if (b) {
-            return ResponseUtils.getResponse(
-                    ResponseUtils.ResultType.OK.getCode(),
-                    ResponseUtils.ResultType.OK.getMsg(),
-                    true);
-        }
-        return ResponseUtils.getResponse(
-                ResponseUtils.ResultType.NOT_MODIFIED.getCode(),
-                ResponseUtils.ResultType.NOT_MODIFIED.getMsg(),
-                false);
-
+        return getRes(b);
     }
 
 

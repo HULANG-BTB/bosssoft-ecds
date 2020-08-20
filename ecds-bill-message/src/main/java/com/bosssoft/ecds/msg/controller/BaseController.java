@@ -1,16 +1,24 @@
-package com.bosssoft.ecds.msg.util;
+package com.bosssoft.ecds.msg.controller;
+
+import com.bosssoft.ecds.response.ResponseResult;
 
 import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author zhangxiaohui
- * @create 2020/8/19 13:09
+ * @create 2020/8/19 19:34
  */
-    public class RequestUtil {
-    protected RequestUtil(){}
-
+public class BaseController {
     private static final String UNKNOWN = "unknown";
     private static final String SPLIT_SYMBOL = ",";
+
+    public ResponseResult getRes(boolean b) {
+        if (b) {
+            return ResponseResult.SUCCESS();
+        }
+        return ResponseResult.FAIL();
+    }
+
 
     /**
      * 获取真实IP
@@ -18,7 +26,7 @@ import javax.servlet.http.HttpServletRequest;
      * @param request 请求体
      * @return 真实IP
      */
-    public static String getRealIp(HttpServletRequest request) {
+    public String getRealIp(HttpServletRequest request) {
         // 这个一般是Nginx反向代理设置的参数
         String ip = request.getHeader("X-Real-IP");
         if (ip == null || ip.length() == 0 || UNKNOWN.equalsIgnoreCase(ip)) {

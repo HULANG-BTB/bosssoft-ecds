@@ -6,7 +6,9 @@ import com.bosssoft.ecds.msg.entity.vo.*;
 import com.bosssoft.ecds.msg.service.SendSmsService;
 import com.bosssoft.ecds.msg.service.SmsService;
 import com.bosssoft.ecds.msg.util.DozerUtils;
-import com.bosssoft.ecds.msg.util.ResponseUtils;
+import com.bosssoft.ecds.response.CommonCode;
+import com.bosssoft.ecds.response.QueryResponseResult;
+import com.bosssoft.ecds.response.ResponseResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +29,7 @@ import java.util.regex.Pattern;
 @RequestMapping("/sms")
 @CrossOrigin
 @Slf4j
-public class SmsController {
+public class SmsController extends BaseController{
 
 
     @Resource
@@ -44,22 +46,12 @@ public class SmsController {
      */
     @ApiOperation("发送短信")
     @PostMapping("/send")
-    public String sendSms(@RequestBody SendSmsVo smsVo) throws ClientException, ExecutionException, InterruptedException {
-
-
+    public ResponseResult sendSms(@RequestBody SendSmsVo smsVo) throws ClientException, ExecutionException, InterruptedException {
         SmsDto smsDto = DozerUtils.map(smsVo, SmsDto.class);
         SmsDto sentSms = sendsmsService.sendSms(smsDto).get();
         boolean isSent = sentSms.getIsSent();
         smsService.saveAutoSentSms(sentSms);
-        if (isSent) {
-            return ResponseUtils.getResponse(
-                    ResponseUtils.ResultType.OK.getCode(),
-                    ResponseUtils.ResultType.OK.getMsg(),
-                    true);
-        }
-        return ResponseUtils.getResponse(
-                ResponseUtils.ResultType.NOT_ACCEPTABLE.getCode(),
-                ResponseUtils.ResultType.NOT_ACCEPTABLE.getMsg(), false);
+        return getRes(isSent);
     }
 
     /**
@@ -71,38 +63,30 @@ public class SmsController {
      */
     @ApiOperation("通过手机号和校验码获取票据信息")
     @GetMapping("/getBill")
-    public String getBillByKey(String tel, String verifyCode) {
+    public ResponseResult getBillByKey(String tel, String verifyCode) {
         log.info("-- tel:" + tel + ";verifyCode:" + verifyCode);
 
         // 电话号码参数校验
         String telRegex = "^1\\d{10}$";
         if (tel == null || !Pattern.matches(telRegex, tel)) {
             // 电话号码格式有误
-            return ResponseUtils.getResponse(
-                    ResponseUtils.ResultType.METHOD_NOT_ALLOWED.getCode(),
-                    ResponseUtils.ResultType.METHOD_NOT_ALLOWED.getMsg());
+            return new ResponseResult(CommonCode.INVLIDATE);
         }
 
         // 校验码参数校验
         String verifyCodeRegex = "^[A-Za-z0-9]{6}$";
         if (verifyCode == null || !Pattern.matches(verifyCodeRegex, verifyCode)) {
             // 校验码参数有误
-            return ResponseUtils.getResponse(
-                    ResponseUtils.ResultType.METHOD_NOT_ALLOWED.getCode(),
-                    ResponseUtils.ResultType.METHOD_NOT_ALLOWED.getMsg(), null);
+            return new ResponseResult(CommonCode.INVLIDATE);
         }
 
         // 参数无误，查询票据
         String bill = smsService.getBillByKey(tel, verifyCode.toLowerCase());
         if (StringUtils.isNotBlank(bill)) {
-            return ResponseUtils.getResponse(
-                    ResponseUtils.ResultType.OK.getCode(),
-                    ResponseUtils.ResultType.OK.getMsg(),
-                    bill);
+            return new QueryResponseResult<>(CommonCode.SUCCESS, bill);
         }
-        return ResponseUtils.getResponse(
-                ResponseUtils.ResultType.NOT_FOUND.getCode(),
-                ResponseUtils.ResultType.NOT_FOUND.getMsg(), null);
+        return new ResponseResult(CommonCode.FAIL);
+
     }
 
 
@@ -115,7 +99,7 @@ public class SmsController {
      */
     @ApiOperation("查询短信发信记录")
     @PostMapping("/list")
-    public String listPage(@RequestBody SmsQueryVo smsQuery) {
+    public QueryResponseResult<PageResult> listPage(@RequestBody SmsQueryVo smsQuery) {
         // 获取匹配记录数
         Long total = smsService.getTotal(smsQuery);
         // 查询匹配记录
@@ -123,10 +107,7 @@ public class SmsController {
         // 封装结果集，携带页面参数
         PageResult pageResult = new PageResult(total, smsQuery.getLimit(), smsQuery.getPage(), mails);
 
-        return ResponseUtils.getResponse(
-                ResponseUtils.ResultType.OK.getCode(),
-                ResponseUtils.ResultType.OK.getMsg(),
-                pageResult);
+        return new QueryResponseResult<>(CommonCode.SUCCESS, pageResult);
     }
 
     /**
@@ -134,26 +115,16 @@ public class SmsController {
      * 实现未发件的邮件状态更新为已发件
      *
      * @param smsVo 分页查询对象
+     * @return ResponseResult
      */
     @ApiOperation("更新短信发信状态为已发送")
     @PutMapping("/updateStatus")
-    public String updateStatus(@RequestBody SmsVo smsVo) {
+    public ResponseResult updateStatus(@RequestBody SmsVo smsVo) {
         SmsDto smsDto = DozerUtils.map(smsVo, SmsDto.class);
-
         // 修改isSent
         boolean b = smsService.updateStatus(smsDto);
-
-        if (b) {
-            return ResponseUtils.getResponse(
-                    ResponseUtils.ResultType.OK.getCode(),
-                    ResponseUtils.ResultType.OK.getMsg(),
-                    true);
-        }
-
-        return ResponseUtils.getResponse(
-                ResponseUtils.ResultType.NOT_MODIFIED.getCode(),
-                ResponseUtils.ResultType.NOT_MODIFIED.getMsg(),
-                false);
+        return getRes(b);
 
     }
+
 }
