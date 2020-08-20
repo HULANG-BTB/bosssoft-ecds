@@ -74,16 +74,28 @@ public class PrintTemplateController {
         }
 
         String content = new String(file.getBytes());
-        PrintTemplateDto templateDTO = new PrintTemplateDto();
-        templateDTO.setRgnCode(billCode.substring(0, 2));
-        templateDTO.setTypeId(billCode.substring(2, 4));
-        templateDTO.setSortId(billCode.substring(4, 6));
-        templateDTO.setName(templateName);
-        templateDTO.setMemo(memo);
-        templateDTO.setTemplate(content);
-
+        PrintTemplateDto templateDTO =
+                fillTemplateDto(billCode, templateName, memo, content);
         printTemplateService.add(templateDTO);
 
+        return ResponseResult.SUCCESS();
+    }
+
+    @ApiOperation("新建打印模板，上传Excel文件")
+    @PostMapping("/uploadExcel")
+    public ResponseResult uploadExcel(
+            @RequestParam @ApiParam("模板名字") String templateName,
+            @RequestParam @ApiParam("票据代码（前6位，不包含年度）") String billCode,
+            @RequestParam @ApiParam("备注") String memo,
+            @RequestParam("file") @ApiParam("Excel 文件") MultipartFile file
+    ) throws IOException {
+
+        //从上传的Excel文件生成模板文件
+        String template = printTemplateService.convertExcel(file.getInputStream());
+
+        PrintTemplateDto templateDto =
+                fillTemplateDto(billCode, templateName, memo, template);
+        printTemplateService.add(templateDto);
         return ResponseResult.SUCCESS();
     }
 
@@ -158,12 +170,24 @@ public class PrintTemplateController {
                     String billCode,
             @RequestParam(required = false)
             @ApiParam("模糊查询：模板名字")
-                    String name)
-    {
-        if (billCode != null && !"".equals(billCode) && billCode.length()!=6) {
+                    String name) {
+        if (billCode != null && !"".equals(billCode) && billCode.length() != 6) {
             return new ResponseResult(CommonCode.INVLIDATE);
         }
         List<PrintTemplateVo> list = printTemplateService.searchList(billCode, name);
         return new QueryResponseResult<>(CommonCode.SUCCESS, list);
+    }
+
+    private PrintTemplateDto fillTemplateDto(
+            String billCode, String name, String memo, String template
+    ) {
+        PrintTemplateDto templateDTO = new PrintTemplateDto();
+        templateDTO.setRgnCode(billCode.substring(0, 2));
+        templateDTO.setTypeId(billCode.substring(2, 4));
+        templateDTO.setSortId(billCode.substring(4, 6));
+        templateDTO.setName(name);
+        templateDTO.setMemo(memo);
+        templateDTO.setTemplate(template);
+        return templateDTO;
     }
 }

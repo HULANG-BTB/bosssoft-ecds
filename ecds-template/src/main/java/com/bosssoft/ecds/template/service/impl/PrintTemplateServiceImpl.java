@@ -10,11 +10,18 @@ import com.bosssoft.ecds.template.entity.vo.PrintTemplateVo;
 import com.bosssoft.ecds.template.mapper.PrintTemplateMapper;
 import com.bosssoft.ecds.template.service.PrintTemplateService;
 import com.bosssoft.ecds.template.util.BeanCopyUtil;
+import com.bosssoft.ecds.template.util.excel.SampleUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.dom4j.DocumentException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.List;
 
 /**
@@ -88,5 +95,21 @@ public class PrintTemplateServiceImpl extends ServiceImpl<PrintTemplateMapper, P
         List<PrintTemplatePo> poList = printTemplateMapper.selectList(queryWrapper);
 
         return BeanCopyUtil.copyListProperties(poList, PrintTemplateVo::new);
+    }
+
+    @Override
+    public String convertExcel(InputStream inputStream) {
+        String ftlTemplate = "";
+
+        StringWriter writer = new StringWriter();
+        try {
+            SampleUtils.excelToXml(inputStream, writer);
+            StringReader reader = new StringReader(writer.toString());
+            ftlTemplate = SampleUtils.xmlToFtl(reader, "billDTO");
+        } catch (IOException | InvalidFormatException | DocumentException e) {
+            e.printStackTrace();
+        }
+
+        return ftlTemplate;
     }
 }

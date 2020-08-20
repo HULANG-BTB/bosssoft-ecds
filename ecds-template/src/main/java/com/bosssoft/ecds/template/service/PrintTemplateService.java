@@ -7,6 +7,7 @@ import com.bosssoft.ecds.template.entity.dto.PrintTemplateDto;
 import com.bosssoft.ecds.template.entity.po.PrintTemplatePo;
 import com.bosssoft.ecds.template.entity.vo.PrintTemplateVo;
 
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -29,4 +30,6 @@ public interface PrintTemplateService extends IService<PrintTemplatePo> {
     IPage<PrintTemplateVo> getPageVO(Long current, Long size);
 
     List<PrintTemplateVo> searchList(String billCode, String name);
+
+    String convertExcel(InputStream inputStream);
 }
