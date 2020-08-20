@@ -51,7 +51,7 @@ public class ApplyDto implements Serializable {
     /**
      * 审核状态：0.未审核；1.已审核
      */
-    private Boolean fStatus;
+    private int fStatus;
 
     /**
      * 操作人id
@@ -89,7 +89,7 @@ public class ApplyDto implements Serializable {
         return fApplyMan;
     }
 
-    public Boolean getfStatus() {
+    public int getfStatus() {
         return fStatus;
     }
 
@@ -141,7 +141,7 @@ public class ApplyDto implements Serializable {
         this.fApplyDate = fApplyDate;
     }
 
-    public void setfStatus(Boolean fStatus) {
+    public void setfStatus(int fStatus) {
         this.fStatus = fStatus;
     }
 

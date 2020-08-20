@@ -100,7 +100,7 @@ public class ApplyPo{
     /**
      * 审核状态：0.未审核；1.已审核
      */
-    private Boolean fStatus;
+    private int fStatus;
 
     public Long getfId() {
         return fId;
@@ -214,11 +214,11 @@ public class ApplyPo{
         this.fDestroyType = fDestroyType;
     }
 
-    public Boolean getfStatus() {
+    public int getfStatus() {
         return fStatus;
     }
 
-    public void setfStatus(Boolean fStatus) {
+    public void setfStatus(int fStatus) {
         this.fStatus = fStatus;
     }
 }
