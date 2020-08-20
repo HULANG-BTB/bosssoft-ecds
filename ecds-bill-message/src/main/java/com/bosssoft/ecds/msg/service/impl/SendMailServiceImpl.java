@@ -1,11 +1,11 @@
 package com.bosssoft.ecds.msg.service.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.aliyuncs.utils.StringUtils;
 import com.bosssoft.ecds.msg.exception.MsgException;
 import com.bosssoft.ecds.msg.entity.dto.MailDto;
 import com.bosssoft.ecds.msg.service.SendMailService;
 import com.bosssoft.ecds.msg.util.SnowflakeUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +37,8 @@ public class SendMailServiceImpl implements SendMailService {
     @Resource
     private FreeMarkerConfigurer freeMarkerConfigurer;
 
+    @Resource
+    private ObjectMapper mapper;
 
 
     private static final String SPLIT_SYMBOL = ",";
@@ -144,8 +146,8 @@ public class SendMailServiceImpl implements SendMailService {
 
             log.info(content);
 
-            // 解析正文内容
-            Map<?, ?> map = JSON.parseObject(content, Map.class);
+            // 解析正文内容 Map<?, ?> map = JSON.parseObject(content, Map.class)
+            Map<?, ?> map = mapper.readValue(content, Map.class);
             log.info(map.toString());
             // 传入数据模型到模板，替代模板中的占位符，并将模板转化为html字符串
             return FreeMarkerTemplateUtils.processTemplateIntoString(template, map);

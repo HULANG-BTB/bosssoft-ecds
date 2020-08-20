@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 
 /**
@@ -26,7 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/check")
 @CrossOrigin
 @Slf4j
-public class CheckController extends BaseController{
+public class CheckController extends BaseController {
 
     /**
      * 调用开票模块的查询接口
@@ -42,6 +43,7 @@ public class CheckController extends BaseController{
 
     @Resource
     private ObjectMapper mapper;
+
 
     /**
      * 调用远程接口查询开票信息
@@ -59,18 +61,18 @@ public class CheckController extends BaseController{
     @ApiOperation("票据查验接口")
     @GetMapping("/billCheck")
     public ResponseResult billCheck(@RequestParam String billId, @RequestParam String checkCode) throws JsonProcessingException {
+        // 参数校验
         if (StringUtils.isBlank(billId) || StringUtils.isBlank(checkCode)) {
-            // 参数为空
             return new ResponseResult(CommonCode.INVLIDATE);
         }
-
         // result 查验结果，0伪1真
         int result = 0;
-        String response = checkClient.getBillByIdAndCheckCode(billId, checkCode);
-        log.info(response);
-        QueryResponseResult<?> res = mapper.readValue(response, QueryResponseResult.class);
+        String resStr = checkClient.getBillByIdAndCheckCode(billId, checkCode);
+        log.info(resStr);
+        Map<?, ?> response = mapper.readValue(resStr, Map.class);
+        Object isSuccess = response.get("success");
         // 对返回体进行解析，获取响应状态码及携带的信息
-        if (res.isSuccess()) {
+        if ((boolean) isSuccess) {
             // 查询成功
             result = 1;
         }
@@ -79,10 +81,10 @@ public class CheckController extends BaseController{
         checkRecordService.saveRecord(billId, result, operIp);
         if (result == 1) {
             // 查验票据为真
-            return new QueryResponseResult<>(CommonCode.SUCCESS,res.data);
+            return new QueryResponseResult<>(CommonCode.SUCCESS, response.get("data"));
         }
         // 查验票据为假
-        return new QueryResponseResult<>(CommonCode.FAIL,res.data);
+        return new QueryResponseResult<>(CommonCode.FAIL, response.get("data"));
     }
 
 }
