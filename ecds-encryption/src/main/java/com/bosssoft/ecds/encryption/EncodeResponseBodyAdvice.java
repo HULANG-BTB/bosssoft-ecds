@@ -3,9 +3,9 @@ package com.bosssoft.ecds.encryption;
 
 import com.bosssoft.ecds.response.CommonCode;
 import com.bosssoft.ecds.response.QueryResponseResult;
-import com.bosssoft.ecds.util.AESUtil;
-import com.bosssoft.ecds.util.RSAUtil;
 import com.bosssoft.ecds.util.RedisUtils;
+import com.bosssoft.ecds.utils.AESUtil;
+import com.bosssoft.ecds.utils.RSAUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
@@ -33,7 +33,7 @@ public class EncodeResponseBodyAdvice implements ResponseBodyAdvice {
 
     @Override
     public boolean supports(MethodParameter methodParameter, Class aClass) {
-        //只有@SecretAnnotation的方法才会触发该类
+        //只有@Encrypt的方法才会触发该类
         return methodParameter.hasMethodAnnotation(Encrypt.class);
     }
 
