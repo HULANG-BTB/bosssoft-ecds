@@ -41,21 +41,20 @@ public class SignController {
     @PostMapping("/sign")
     @ApiOperation("签名")
     @HystrixCommand
-    public QueryResponseResult sign(@ApiParam("签名信息类") @RequestBody SignedDataDto signedData) throws Exception {
+        public QueryResponseResult sign(@ApiParam("签名信息类") @RequestBody SignedDataDto signedData) throws Exception {
         if (signService.verifySign(signedData) == true){
             SignedDataDto signedDataDto = signService.sign(signedData);
             return new QueryResponseResult<SignedDataDto>(CommonCode.SUCCESS, signedDataDto);
         }
-        return null;
-        //return new QueryResponseResult(CommonCode.addEnum("DENIED",false,11111,"信息被篡改，验签失败"),null);
+        return new QueryResponseResult(CommonCode.addEnum("DENIED",false,11111,"信息被篡改，验签失败"),null);
     }
 
     /**
      * 服务降级默认fallback方法
      * @return
      */
-    public ResponseResult fallBackToProtect(){
-        return new ResponseResult(CommonCode.SERVER_ERROR);
+    public QueryResponseResult fallBackToProtect(){
+        return new QueryResponseResult(CommonCode.SERVER_ERROR,null);
     }
 
 }

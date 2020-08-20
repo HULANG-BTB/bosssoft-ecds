@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
@@ -33,7 +34,7 @@ import java.security.cert.CertificateException;
 @Api("签名与验签控制器，提供签名与验签")
 @RestController
 @DefaultProperties(defaultFallback = "fallBackToProtect",
-        commandProperties = {@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds",value = "5000")},
+        commandProperties = {@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds",value = "5000000")},
         ignoreExceptions = Exception.class)
 public class SignController {
 
@@ -48,7 +49,7 @@ public class SignController {
      */
     @PostMapping("/sign")
     @ApiOperation("签名")
-    @HystrixCommand
+    @HystrixCommand(defaultFallback = "fallBack2")
     public QueryResponseResult sign(@ApiParam("需要签名的票据信息") String data) throws Exception {
         SignedDataDto signedDataDto = signService.sign(data);
         return new QueryResponseResult(CommonCode.SUCCESS, signedDataDto);
@@ -63,10 +64,10 @@ public class SignController {
     @PostMapping("/verifySign")
     @ApiOperation("验证签名")
     @HystrixCommand
-    public ResponseResult verifySign(@ApiParam("签名信息类") @RequestBody SignedDataDto signedData) throws NoSuchProviderException,
+    public ResponseResult verifySign(@ApiParam("签名信息类") @RequestBody SignedDataDto signedData, HttpServletRequest request) throws NoSuchProviderException,
             CertificateException, NoSuchAlgorithmException,
             InvalidKeyException, SignatureException, DecoderException {
-        return signService.verifySign(signedData) ? ResponseResult.SUCCESS():ResponseResult.FAIL();
+        return signService.verifySign(signedData,request) ? ResponseResult.SUCCESS():ResponseResult.FAIL();
     }
 
     /**
@@ -77,4 +78,11 @@ public class SignController {
         return new ResponseResult(CommonCode.SERVER_ERROR);
     }
 
+    /**
+     * 服务降级默认fallback2方法
+     * @return
+     */
+    public QueryResponseResult fallBack2(){
+        return new QueryResponseResult(CommonCode.SUCCESS, null);
+    }
 }

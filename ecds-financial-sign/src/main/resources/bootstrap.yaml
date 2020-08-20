@@ -1,5 +1,5 @@
 server:
-  port: 9118
+  port: 6699
 spring:
   application:
     name: financial-sign

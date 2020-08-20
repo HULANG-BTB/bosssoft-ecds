@@ -31,26 +31,27 @@ import java.security.cert.Certificate;
 @RefreshScope
 public class StampServiceImpl implements IStampService {
 
-    @Value("#{'${stamp.location.llx}'}")
-    private float llx;
-    @Value("#{'${stamp.location.lly}'}")
-    private float lly;
-    @Value("#{'${stamp.location.urx}'}")
-    private float urx;
-    @Value("#{'${stamp.location.ury}'}")
-    private float ury;
-    @Value("#{'${stamp.page}'}")
-    private int page;
-    @Value("${stamp.imagePath}")
+    //@Value("#{'${stamp.location.llx}'}")
+    private float llx = 200f;
+   // @Value("#{'${stamp.location.lly}'}")
+    private float lly = 200f;
+    //@Value("#{'${stamp.location.urx}'}")
+    private float urx = 200f;;
+    //@Value("#{'${stamp.location.ury}'}")
+    private float ury = 200f;;
+    //@Value("#{'${stamp.page}'}")
+    private int page =1;
+    //@Value("${stamp.imagePath}")
     private String imagePath;
-    @Value("${stamp.defaultImageName}")
-    private String defaultImageName;
+    //@Value("${stamp.defaultImageName}")*
+    private String defaultImageName ="stampImage.png";
 
 
     @Override
     public boolean stamp(MultipartFile uploadFile, String unitSignValue, String financeSignValue,
                       HttpServletRequest request,HttpServletResponse response) throws Exception {
         HttpSession session = request.getSession();
+        // 验证签名的有效性
         String finaSign = (String) session.getAttribute(unitSignValue);
         if ( finaSign == null || finaSign == "" || !finaSign.equals(financeSignValue)){
             return false;

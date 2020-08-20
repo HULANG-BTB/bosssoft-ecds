@@ -1,7 +1,6 @@
 package com.bosssoft.ecds.handler;
 
 import com.bosssoft.ecds.exception.ExceptionCatch;
-import com.bosssoft.ecds.response.CommonCode;
 import com.bosssoft.ecds.response.SignCode;
 import org.apache.commons.codec.DecoderException;
 import org.springframework.web.bind.annotation.ControllerAdvice;

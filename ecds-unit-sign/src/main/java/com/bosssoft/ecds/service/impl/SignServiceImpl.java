@@ -10,6 +10,8 @@ import org.apache.commons.codec.DecoderException;
 import org.springframework.stereotype.Service;
 import sun.security.x509.X509CertImpl;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.security.*;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
@@ -51,7 +53,7 @@ public class SignServiceImpl implements ISignService {
     }
 
     @Override
-    public boolean verifySign(SignedDataDto signedData) throws NoSuchProviderException,
+    public boolean verifySign(SignedDataDto signedData, HttpServletRequest request) throws NoSuchProviderException,
             CertificateException, NoSuchAlgorithmException,
             InvalidKeyException, SignatureException, DecoderException {
         // 获取并验证单位端公钥数字证书 crtCert
@@ -70,6 +72,10 @@ public class SignServiceImpl implements ISignService {
         // 获取财政公钥
         PublicKey finaPublicKey = crtCert.getPublicKey();
         if (SignUtil.verifySign(summary, financeSignValue, finaPublicKey, AlgorithmType.SHA256, signedData.getStringType())){
+            // 将单位段签名与财政端签名存入session，持续10min，作为盖章的依据
+            HttpSession session = request.getSession();
+            session.setMaxInactiveInterval(600);
+            session.setAttribute(signedData.getUnitSignValue(),signedData.getFinanceSignValue());
             return true;
         }
         return false;
