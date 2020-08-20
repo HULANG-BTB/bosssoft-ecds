@@ -1,15 +1,13 @@
 package com.bosssoft.ecds.service;
 
-import com.bosssoft.ecds.common.response.QueryResponseResult;
+import com.bosssoft.ecds.response.QueryResponseResult;
 import com.bosssoft.ecds.entity.dto.SubjectDTO;
 import com.bosssoft.ecds.entity.po.SubjectPO;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.bosssoft.ecds.entity.vo.subjectvo.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 /**
  * <p>
@@ -27,7 +25,7 @@ public interface SubjectService extends IService<SubjectPO> {
      * @param subjectQueryVO
      * @return
      */
-    QueryResponseResult<Map<String, SubjectVO>> listPage(SubjectQueryVO subjectQueryVO);
+    QueryResponseResult listPage(SubjectQueryVO subjectQueryVO);
 
     /**
      * 添加预算科目
