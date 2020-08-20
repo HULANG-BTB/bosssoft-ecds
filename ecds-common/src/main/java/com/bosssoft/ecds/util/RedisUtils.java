@@ -1,4 +1,4 @@
-package com.bosssoft.ecds.security.utils;
+package com.bosssoft.ecds.util;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;

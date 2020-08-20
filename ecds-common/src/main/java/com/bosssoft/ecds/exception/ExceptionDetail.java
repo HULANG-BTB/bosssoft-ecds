@@ -2,12 +2,14 @@ package com.bosssoft.ecds.exception;
 
 import com.bosssoft.ecds.response.ResultCode;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @author :Raiz
  * @date :2020/8/18
  */
 @Data
+@NoArgsConstructor
 public class ExceptionDetail {
 
     int code;
@@ -16,6 +18,11 @@ public class ExceptionDetail {
 
     String tags;
 
+    public ExceptionDetail (ResultCode resultCode, String tags){
+        this.code  = resultCode.code();
+        this.message = resultCode.message();
+        this.tags = tags;
+    }
     public ExceptionDetail (ResultCode resultCode, String errorMsg,String tags){
         this.code  = resultCode.code();
         this.tags = tags;

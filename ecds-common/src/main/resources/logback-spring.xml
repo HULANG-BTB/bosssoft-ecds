@@ -8,13 +8,13 @@
                     defaultValue="47.107.140.106:9092"/>
     <!-- ch.qos.logback.core.ConsoleAppender 表示控制台输出 -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-        <layout class="ch.qos.logback.classic.PatternLayout">
+        <layout class="org.apache.skywalking.apm.toolkit.log.logback.v1.x.TraceIdPatternLogbackLayout">
             <springProfile name="dev">
-                <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5level) %magenta([%-15.15(%thread)]) %cyan(%-50.50(%logger{50} )) : %msg%n
+                <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5level) - [%tid] - %magenta([%-3(%thread)]) %cyan(%-50.50(%logger{50} )) : %msg%n
                 </pattern>
             </springProfile>
             <springProfile name="!dev">
-                <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5level) %magenta([%-15.15(%thread)]) %cyan(%-50.50(%logger{50} )) : %msg%n
+                <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5level) - [%tid] - %magenta([%-3(%thread)]) %cyan(%-50.50(%logger{50} )) : %msg%n
                 </pattern>
             </springProfile>
         </layout>
@@ -37,9 +37,9 @@
         <bootstrapServers>${bootstrapServers}</bootstrapServers>
         <logTopic>${logTopic}</logTopic>
     </appender>
-    <appender name="BUSINESSKAFKA" class="com.bosssoft.ecds.appender.KafkaBusinessAppender">
+    <appender name="BUSINESSKAFKA" class="com.bosssoft.ecds.appender.KafkaAppender">
         <bootstrapServers>${bootstrapServers}</bootstrapServers>
-        <businessTopic>${businessTopic}</businessTopic>
+        <logTopic>${businessTopic}</logTopic>
     </appender>
     <!--异步写入kafka，尽量不占用主程序的资源-->
     <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">

@@ -32,7 +32,7 @@ public interface RegionService {
      * @param addRegion 区划信息
      * @return
      */
-    ResponseResult add(String userName, Long uid, AddRegionVO addRegion);
+    ResponseResult add(AddRegionVO addRegion);
 
     /**
      * 更新区划信息
@@ -66,4 +66,11 @@ public interface RegionService {
      * @return
      */
     QueryResponseResult getGrandId(Long pid);
+
+    /**
+     * 根据业务上级节点获取业务上级及其上级id
+     * @param pid 业务上级节点id
+     * @return
+     */
+    QueryResponseResult getBusIds(Long pid);
 }
