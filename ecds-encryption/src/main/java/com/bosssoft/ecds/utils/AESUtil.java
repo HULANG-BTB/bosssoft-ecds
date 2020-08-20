@@ -1,4 +1,4 @@
-package com.bosssoft.ecds.util;
+package com.bosssoft.ecds.utils;
 
 import org.apache.commons.codec.binary.Base64;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
