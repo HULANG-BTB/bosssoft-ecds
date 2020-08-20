@@ -1,21 +1,16 @@
 package com.bosssoft.ecds.service.impl;
 
-import com.bosssoft.ecds.dto.SignedDataDto;
 import com.bosssoft.ecds.dto.StampInfo;
-import com.bosssoft.ecds.service.ISignService;
 import com.bosssoft.ecds.service.IStampService;
 import com.bosssoft.ecds.utils.KeyUtill;
 import com.bosssoft.ecds.utils.StampUtill;
-import com.bosssoft.ecds.utils.StrToCertUtil;
 import com.bosssoft.ecds.utils.UnitP12Utill;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Rectangle;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

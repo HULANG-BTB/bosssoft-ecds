@@ -1,7 +1,9 @@
 package com.bosssoft.ecds.controller;
 
 import com.bosssoft.ecds.dto.SignedDataDto;
-import com.bosssoft.ecds.util.ResponseUtils;
+import com.bosssoft.ecds.response.CommonCode;
+import com.bosssoft.ecds.response.QueryResponseResult;
+import com.bosssoft.ecds.response.ResponseResult;
 import com.bosssoft.ecds.service.ISignService;
 import com.netflix.hystrix.contrib.javanica.annotation.DefaultProperties;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
@@ -12,9 +14,7 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
 import javax.annotation.Resource;
-import java.security.cert.X509Certificate;
 
 /**
  * @author LiDaShan
@@ -41,20 +41,21 @@ public class SignController {
     @PostMapping("/sign")
     @ApiOperation("签名")
     @HystrixCommand
-    public String sign(@ApiParam("签名信息类") @RequestBody SignedDataDto signedData) throws Exception {
+    public QueryResponseResult sign(@ApiParam("签名信息类") @RequestBody SignedDataDto signedData) throws Exception {
         if (signService.verifySign(signedData) == true){
             SignedDataDto signedDataDto = signService.sign(signedData);
-            return ResponseUtils.getResponse(200, "签名成功", signedDataDto);
+            return new QueryResponseResult<SignedDataDto>(CommonCode.SUCCESS, signedDataDto);
         }
-        return ResponseUtils.getResponse(250, "验签失败，信息已被篡改");
+        return null;
+        //return new QueryResponseResult(CommonCode.addEnum("DENIED",false,11111,"信息被篡改，验签失败"),null);
     }
 
     /**
      * 服务降级默认fallback方法
      * @return
      */
-    public String fallBackToProtect(){
-        return ResponseUtils.getResponse(500,"服务器正忙，请稍后再访问","/(ㄒoㄒ)/~~");
+    public ResponseResult fallBackToProtect(){
+        return new ResponseResult(CommonCode.SERVER_ERROR);
     }
 
 }

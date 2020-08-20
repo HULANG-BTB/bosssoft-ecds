@@ -1,6 +1,9 @@
 package com.bosssoft.ecds.controller;
 
 import com.bosssoft.ecds.dto.SignedDataDto;
+import com.bosssoft.ecds.response.CommonCode;
+import com.bosssoft.ecds.response.QueryResponseResult;
+import com.bosssoft.ecds.response.ResponseResult;
 import com.bosssoft.ecds.service.ISignService;
 import com.bosssoft.ecds.util.ResponseUtils;
 import com.netflix.hystrix.contrib.javanica.annotation.DefaultProperties;
@@ -46,9 +49,9 @@ public class SignController {
     @PostMapping("/sign")
     @ApiOperation("签名")
     @HystrixCommand
-    public String sign(@ApiParam("需要签名的票据信息") String data) throws Exception {
+    public QueryResponseResult sign(@ApiParam("需要签名的票据信息") String data) throws Exception {
         SignedDataDto signedDataDto = signService.sign(data);
-        return ResponseUtils.getResponse(200, "签名成功", signedDataDto);
+        return new QueryResponseResult(CommonCode.SUCCESS, signedDataDto);
     }
 
     /**
@@ -60,18 +63,18 @@ public class SignController {
     @PostMapping("/verifySign")
     @ApiOperation("验证签名")
     @HystrixCommand
-    public String verifySign(@ApiParam("签名信息类") @RequestBody SignedDataDto signedData) throws NoSuchProviderException,
+    public ResponseResult verifySign(@ApiParam("签名信息类") @RequestBody SignedDataDto signedData) throws NoSuchProviderException,
             CertificateException, NoSuchAlgorithmException,
             InvalidKeyException, SignatureException, DecoderException {
-        return signService.verifySign(signedData) ? ResponseUtils.getResponse(200,"验签成功",true):ResponseUtils.getResponse(200,"验签失败",false);
+        return signService.verifySign(signedData) ? ResponseResult.SUCCESS():ResponseResult.FAIL();
     }
 
     /**
      * 服务降级默认fallback方法
      * @return
      */
-    public String fallBackToProtect(){
-        return ResponseUtils.getResponse(500,"服务器正忙，请稍后再访问","/(ㄒoㄒ)/~~");
+    public ResponseResult fallBackToProtect(){
+        return new ResponseResult(CommonCode.SERVER_ERROR);
     }
 
 }

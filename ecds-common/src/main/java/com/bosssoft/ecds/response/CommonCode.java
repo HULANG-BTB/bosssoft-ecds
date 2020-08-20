@@ -1,6 +1,5 @@
 package com.bosssoft.ecds.response;
 
-
 import com.bosssoft.ecds.util.DynamicEnumUtil;
 
 /**

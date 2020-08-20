@@ -1,5 +1,7 @@
 package com.bosssoft.ecds.controller;
 
+import com.bosssoft.ecds.response.CommonCode;
+import com.bosssoft.ecds.response.ResponseResult;
 import com.bosssoft.ecds.service.IStampService;
 import com.bosssoft.ecds.util.ResponseUtils;
 import com.netflix.hystrix.contrib.javanica.annotation.DefaultProperties;
@@ -37,31 +39,24 @@ public class StampController {
     @PostMapping( value = "/stamp", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ApiOperation("加盖电子印章")
     @HystrixCommand
-    public String stamp(@ApiParam("需要盖章的pdf文件") @RequestPart("uploadFile") MultipartFile uploadFile,
-                        @ApiParam("单位签名") @RequestParam("unitSignValue") String unitSignValue,
-                        @ApiParam("财政签名") @RequestParam("financeSignValue") String financeSignValue,
-                        HttpServletRequest request, HttpServletResponse response) throws Exception {
-        //测试   成功================================
-        request.getSession().setAttribute("1","2");
+    public ResponseResult stamp(@ApiParam("需要盖章的pdf文件") @RequestPart("uploadFile") MultipartFile uploadFile,
+                                @ApiParam("单位签名") @RequestParam("unitSignValue") String unitSignValue,
+                                @ApiParam("财政签名") @RequestParam("financeSignValue") String financeSignValue,
+                                HttpServletRequest request, HttpServletResponse response) throws Exception {
         boolean result = stampService.stamp(uploadFile, unitSignValue, financeSignValue, request, response);
         if (result){
-            return ResponseUtils.getResponse(200,"成功盖章");
+            return new ResponseResult(CommonCode.addEnum("STAMP-SUCCESS",true,10000,"成功盖章"));
         } else {
-            return ResponseUtils.getResponse(250,"签名不正确或签名已失效");
+            return new ResponseResult(CommonCode.addEnum("STAMP-FAILURE",false,11111,"盖章失败，签名过期或签名错误"));
         }
-    }
-
-    @PostMapping("/test")
-    public String test(){
-        return "success";
     }
 
     /**
      * 服务降级默认fallback方法
      * @return
      */
-    public String fallBackToProtect(){
-        return ResponseUtils.getResponse(500,"服务器正忙，请稍后再访问","/(ㄒoㄒ)/~~");
+    public ResponseResult fallBackToProtect(){
+        return new ResponseResult(CommonCode.SERVER_ERROR);
     }
 
 }
