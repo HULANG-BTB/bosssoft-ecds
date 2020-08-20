@@ -173,8 +173,11 @@ public class IncomeSortServiceImpl implements IncomeSortService {
         }
 
         //如果是父级id为0,则编码长度只能为1位
-        if (parentId.equals(IncomeSortConstant.INIT_ALL_NUM) && (code.length() != 1)) {
-            throw new CustomException(InComeResultCode.INCOME_CODE_NUM_ERROR);
+        if (parentId.equals(IncomeSortConstant.INIT_ALL_NUM)) {
+            if (code.length() != 1) {
+                throw new CustomException(InComeResultCode.INCOME_CODE_NUM_ERROR);
+            }
+            return true;
         }
         String cTemp = incomeSortDao.getCode(parentId);
         if (!CharacterCheckUtil.characterComparison(cTemp, code)) {
@@ -267,6 +270,15 @@ public class IncomeSortServiceImpl implements IncomeSortService {
         IncomeSortDTO incomeSortDTO = incomeSortDao.getOneById(incomeId);
         if (incomeSortDTO == null) {
             throw new CustomException(InComeResultCode.INCOME_NAME_NOT_EXISTS);
+        }
+        //判断是否包含子级
+        if (incomeSortDTO.getLevel().equals(IncomeSortConstant.LEVEL_NUM)) {
+            QueryWrapper<IncomeSortPO> incomeSortPOQueryWrapper = new QueryWrapper<>();
+            incomeSortPOQueryWrapper.eq(IncomeSortConstant.F_LOGIC_DELETE, IncomeSortConstant.LOGC_DELETE_NUM);
+            incomeSortPOQueryWrapper.eq(IncomeSortConstant.F_PARENT_ID, incomeId);
+            if (incomeSortDao.selectOne(incomeSortPOQueryWrapper) != null) {
+                throw new CustomException(InComeResultCode.INCOME_SORT_NOT_NULL);
+            }
         }
         //判断项目里是否存在收入类别信息
         QueryWrapper<ItemPO> queryWrapper = new QueryWrapper<>();
