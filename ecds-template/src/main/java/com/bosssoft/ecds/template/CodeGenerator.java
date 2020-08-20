@@ -80,7 +80,7 @@ public class CodeGenerator {
         StrategyConfig strategy = new StrategyConfig();
         // strategy.setCapitalMode(true);// 全局大写命名 ORACLE 注意
 //        strategy.setTablePrefix(new String[] { "user_" });// 此处可以修改为您的表前缀
-        strategy.setTablePrefix(new String[] { "uaa_" });
+        strategy.setTablePrefix(new String[]{"uaa_"});
         strategy.setNaming(NamingStrategy.underline_to_camel);// 表名生成策略
         strategy.setInclude("uaa_print_template"); // 需要生成的表
         // strategy.setExclude(new String[]{"test"}); // 排除生成的表

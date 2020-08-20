@@ -5,7 +5,7 @@ import lombok.Data;
 import java.sql.Blob;
 
 @Data
-public class PrintTemplateDTO {
+public class PrintTemplateDto {
 
     /**
      * 主键

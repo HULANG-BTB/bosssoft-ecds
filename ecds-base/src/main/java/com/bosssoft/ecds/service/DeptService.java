@@ -2,6 +2,7 @@ package com.bosssoft.ecds.service;
 
 import com.bosssoft.ecds.entity.dto.DeptDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
+import com.bosssoft.ecds.entity.dto.PagesDTO;
 import com.bosssoft.ecds.entity.po.DeptPO;
 import com.baomidou.mybatisplus.extension.service.IService;
 import java.util.List;
@@ -84,10 +85,10 @@ public interface DeptService extends IService<DeptPO> {
     /**
      * 分页读取
      *
-     * @param pageDTO
+     * @param pagesDTO
      * @return
      */
-    public PageDTO listByPage(PageDTO pageDTO);
+    public PagesDTO listByPage(PagesDTO pagesDTO);
 
     /**
      * 批量删除角色

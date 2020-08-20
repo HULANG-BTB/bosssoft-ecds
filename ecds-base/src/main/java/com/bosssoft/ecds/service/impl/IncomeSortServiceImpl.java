@@ -4,19 +4,26 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.bosssoft.ecds.common.response.CommonCode;
-import com.bosssoft.ecds.common.response.QueryResponseResult;
-import com.bosssoft.ecds.common.response.QueryResult;
 import com.bosssoft.ecds.constant.IncomeSortConstant;
 import com.bosssoft.ecds.constant.PageConstant;
 import com.bosssoft.ecds.dao.IncomeSortDao;
+import com.bosssoft.ecds.dao.IncomeSortSubjectDao;
+import com.bosssoft.ecds.dao.ItemDao;
 import com.bosssoft.ecds.entity.dto.IncomeSortDTO;
+import com.bosssoft.ecds.entity.dto.IncomeSortShowDTO;
 import com.bosssoft.ecds.entity.po.IncomeSortPO;
+import com.bosssoft.ecds.entity.po.IncomeSortSubjectPO;
+import com.bosssoft.ecds.entity.po.ItemPO;
 import com.bosssoft.ecds.entity.vo.incomesortvo.AddIncomeSortVO;
 import com.bosssoft.ecds.entity.vo.incomesortvo.DeleteIncomeSortVO;
 import com.bosssoft.ecds.entity.vo.incomesortvo.FuzzyQueryIncomeSortVO;
 import com.bosssoft.ecds.entity.vo.incomesortvo.PageIncomeSortVO;
 import com.bosssoft.ecds.entity.vo.incomesortvo.UpdateIncomeSortVO;
+import com.bosssoft.ecds.enums.InComeResultCode;
+import com.bosssoft.ecds.exception.CustomException;
+import com.bosssoft.ecds.response.CommonCode;
+import com.bosssoft.ecds.response.QueryResponseResult;
+import com.bosssoft.ecds.response.QueryResult;
 import com.bosssoft.ecds.service.IncomeSortService;
 import com.bosssoft.ecds.utils.CharacterCheckUtil;
 import com.bosssoft.ecds.utils.SnowflakeIdWorker;
@@ -37,7 +44,10 @@ public class IncomeSortServiceImpl implements IncomeSortService {
 
     @Autowired
     private IncomeSortDao incomeSortDao;
-
+    @Autowired
+    private ItemDao itemDao;
+    @Autowired
+    private IncomeSortSubjectDao incomeSortSubjectDao;
 
     /**
      * 构建收入类别树
@@ -149,7 +159,7 @@ public class IncomeSortServiceImpl implements IncomeSortService {
         queryWrapper.eq("f_logic_delete", IncomeSortConstant.LOGC_DELETE_NUM);
         queryWrapper.eq("f_name", name);
         if (incomeSortDao.selectOne(queryWrapper) != null) {
-//            throw new MyIncomeSortException(InComeResultCode.INCOME_NAME_EXISTS);
+            throw new CustomException(InComeResultCode.INCOME_NAME_EXISTS);
         }
         return true;
     }
@@ -160,7 +170,7 @@ public class IncomeSortServiceImpl implements IncomeSortService {
         queryWrapper.eq("f_logic_delete", IncomeSortConstant.LOGC_DELETE_NUM);
         queryWrapper.eq("f_code", code);
         if (incomeSortDao.selectOne(queryWrapper) != null) {
-//            throw new MyIncomeSortException(InComeResultCode.INCOME_CODE_EXISTS);
+            throw new CustomException(InComeResultCode.INCOME_CODE_EXISTS);
         }
         //如果是父级id为0
         if (parentId.equals(IncomeSortConstant.INIT_ALL_NUM)) {
@@ -168,12 +178,12 @@ public class IncomeSortServiceImpl implements IncomeSortService {
             if (code.length() == 1) {
                 return true;
             } else {
-//                throw new MyIncomeSortException(InComeResultCode.INCOME_CODE_NUM_ERROR);
+                throw new CustomException(InComeResultCode.INCOME_CODE_NUM_ERROR);
             }
         }
         String cTemp = incomeSortDao.getCode(parentId);
         if (!CharacterCheckUtil.characterComparison(cTemp, code)) {
-//            throw new MyIncomeSortException(InComeResultCode.INCOME_CODE_FORM_ERROR);
+            throw new CustomException(InComeResultCode.INCOME_CODE_FORM_ERROR);
         }
         return true;
     }
@@ -252,12 +262,54 @@ public class IncomeSortServiceImpl implements IncomeSortService {
     @Override
     public Boolean delete(DeleteIncomeSortVO deleteIncomeSortVO) {
         Long id = deleteIncomeSortVO.getId();
-        if (incomeSortDao.selectById(id) == null) {
-//            throw new MyIncomeSortException(InComeResultCode.INCOME_CODE_NUM_ERROR);
-        }
-
-
+        checkDelete(id);
+        incomeSortDao.deleteById(id);
         return true;
+    }
+
+    /**
+     * 对外接口，删除预算科目,删除成功或无须删除都返回true
+     */
+    private boolean checkDelete(Long incomeId) {
+        //判断收入类别是否存在
+        IncomeSortDTO incomeSortDTO = incomeSortDao.getOneById(incomeId);
+        if (incomeSortDTO == null) {
+            throw new CustomException(InComeResultCode.INCOME_NAME_NOT_EXISTS);
+        }
+        //判断项目里是否存在收入类别信息
+        QueryWrapper<ItemPO> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("f_logic_delete", IncomeSortConstant.LOGC_DELETE_NUM);
+        queryWrapper.eq("f_incom_sort_code", incomeSortDTO.getCode());
+        if (itemDao.selectOne(queryWrapper) != null) {
+            throw new CustomException(InComeResultCode.ITEM_EXISTS);
+        }
+        //判断预算科目里是否存在收入类别信息
+        QueryWrapper<IncomeSortSubjectPO> poQueryWrapper = new QueryWrapper<>();
+        poQueryWrapper.eq("f_logic_delete", IncomeSortConstant.LOGC_DELETE_NUM);
+        poQueryWrapper.eq("f_income_sort_id", incomeId);
+        if (incomeSortSubjectDao.selectOne(poQueryWrapper) != null) {
+            throw new CustomException(InComeResultCode.SUBJECT_EXISTS);
+        }
+        return true;
+    }
+
+    @Override
+    public QueryResponseResult selectAll() {
+        List<IncomeSortShowDTO> incomeSortDTOList = incomeSortDao.selectAll();
+        QueryResult<IncomeSortShowDTO> queryResult = new QueryResult<>();
+        queryResult.setList(incomeSortDTOList);
+        QueryResponseResult queryResponseResult = new QueryResponseResult(CommonCode.SUCCESS, queryResult);
+        return queryResponseResult;
+    }
+
+    @Override
+    public QueryResponseResult getBySubjectId(Long subjectId) {
+        if (subjectId == null) {
+            throw new CustomException(InComeResultCode.SUBJECT_ID_IS_NULL);
+        }
+        IncomeSortShowDTO incomeSortDTO = incomeSortDao.getBySubjectId(subjectId);
+        QueryResponseResult queryResponseResult = new QueryResponseResult(CommonCode.SUCCESS, incomeSortDTO);
+        return queryResponseResult;
     }
 
 

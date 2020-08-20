@@ -2,6 +2,7 @@ package com.bosssoft.ecds.security.auth;
 
 import com.bosssoft.ecds.security.service.impl.SecurityUserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.ReactiveUserDetailsPasswordService;
@@ -31,6 +32,7 @@ public class CustomReactiveAuthenticationManager implements ReactiveAuthenticati
     private final SecurityUserServiceImpl userDetailsService;
 
     @Autowired
+    @Lazy
     private PasswordEncoder passwordEncoder;
 
     private ReactiveUserDetailsPasswordService userDetailsPasswordService;

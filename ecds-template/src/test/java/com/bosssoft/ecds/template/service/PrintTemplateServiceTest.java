@@ -1,7 +1,7 @@
 package com.bosssoft.ecds.template.service;
 
-import com.bosssoft.ecds.template.entity.dto.PrintTemplateDTO;
-import com.bosssoft.ecds.template.entity.po.PrintTemplatePO;
+import com.bosssoft.ecds.template.entity.dto.PrintTemplateDto;
+import com.bosssoft.ecds.template.entity.po.PrintTemplatePo;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
 @SpringBootTest
@@ -21,16 +19,16 @@ class PrintTemplateServiceTest {
 
     @Test
     void list() {
-        List<PrintTemplatePO> templatePOs = printTemplateService.list();
-        for (PrintTemplatePO t : templatePOs) {
+        List<PrintTemplatePo> templatePOs = printTemplateService.list();
+        for (PrintTemplatePo t : templatePOs) {
             log.info(t.toString());
         }
     }
 
     @Test
     void listDTO() {
-        List<PrintTemplateDTO> templateDTOs = printTemplateService.listAll();
-        for (PrintTemplateDTO t : templateDTOs) {
+        List<PrintTemplateDto> templateDTOs = printTemplateService.listAll();
+        for (PrintTemplateDto t : templateDTOs) {
             log.info(t.toString());
         }
     }
@@ -38,7 +36,7 @@ class PrintTemplateServiceTest {
     @Test
     @Transactional
     void addTest() {
-        PrintTemplateDTO templateDTO = new PrintTemplateDTO();
+        PrintTemplateDto templateDTO = new PrintTemplateDto();
         templateDTO.setTemplate("模板测试");
         templateDTO.setRgnCode("01");
         templateDTO.setSortId("16");
@@ -48,7 +46,7 @@ class PrintTemplateServiceTest {
 
     @Test
     void getTest() {
-        PrintTemplateDTO templateDTO = printTemplateService.getDtoById(11L);
+        PrintTemplateDto templateDTO = printTemplateService.getDtoById(11L);
         System.out.println(templateDTO.getTemplate());
     }
 }

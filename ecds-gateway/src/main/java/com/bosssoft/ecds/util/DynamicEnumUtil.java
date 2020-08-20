@@ -1,4 +1,4 @@
-package com.bosssoft.ecds.template.util;
+package com.bosssoft.ecds.util;
 
 import sun.reflect.ConstructorAccessor;
 import sun.reflect.FieldAccessor;
