@@ -7,6 +7,9 @@ import com.bosssoft.ecds.entity.vo.ArchiveOverViewVO;
 import com.bosssoft.ecds.service.ArchiveOverViewService;
 import com.bosssoft.ecds.utils.ResponseUtils;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,11 +41,13 @@ public class ArchiveOverViewController {
      * @param query
      * @return String
      */
+    @ApiOperation(value = "查询单位详细信息")
+    @ApiImplicitParam("查询参数对象")
     @PostMapping("/unit/info")
-    public String queryArchiveInfo(@RequestBody ArchiveOverViewQuery query){
+    public String queryArchiveInfo(@RequestBody @ApiParam("查询参数对象") ArchiveOverViewQuery query) {
         ArchiveOverViewDTO archiveOverViewDto = service.queryOverViewArchiveInfo(query);
         ArchiveOverViewVO vo = new ArchiveOverViewVO();
-        BeanUtil.copyProperties(archiveOverViewDto,vo);
+        BeanUtil.copyProperties(archiveOverViewDto, vo);
         return ResponseUtils.getResponse(vo, ResponseUtils.ResultType.SUCCESS);
     }
 
@@ -51,23 +56,25 @@ public class ArchiveOverViewController {
      *
      * @return
      */
+    @ApiOperation(value = "查询所有单位的归档信息")
+    @ApiImplicitParam("查询参数对象")
     @PostMapping("/fina/allInfo")
     public String queryArchiveAllInfo(@RequestBody ArchiveOverViewQuery query) {
         /**
          * 获取全部的单位信息
          */
-        List<ArchiveOverViewDTO> archiveOverViewDTOS = service.queryOverViewArchiveInfos(query);
+        List<ArchiveOverViewDTO> archiveOverViewDTOS = service.queryOverViewArchiveInfoPage(query);
         List<ArchiveOverViewVO> voList = new ArrayList<>();
 
         /**
          * 类型转换
          */
-        ArchiveOverViewVO vo = null;
-        for (ArchiveOverViewDTO dto : archiveOverViewDTOS) {
-            vo = new ArchiveOverViewVO();
-            BeanUtil.copyProperties(dto, vo);
-            voList.add(vo);
-        }
+        archiveOverViewDTOS.forEach(
+                dto -> {
+                    ArchiveOverViewVO vo = BeanUtil.toBean(dto, ArchiveOverViewVO.class);
+                    voList.add(vo);
+                }
+        );
 
         return ResponseUtils.getResponse(voList, ResponseUtils.ResultType.SUCCESS);
     }

@@ -2,13 +2,17 @@ package com.bosssoft.ecds.controller;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.bosssoft.ecds.entity.dto.ItemAvailableDTO;
+import com.bosssoft.ecds.entity.query.CommonQuery;
 import com.bosssoft.ecds.entity.vo.ItemAvailableVO;
 import com.bosssoft.ecds.service.ItemArchiveService;
 import com.bosssoft.ecds.utils.ResponseUtils;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,7 +29,7 @@ import java.util.List;
  */
 @Api("归档可用")
 @RestController
-@RequestMapping("/item")
+@RequestMapping("/archive/item")
 public class ItemAvailableArchiveController {
 
     @Autowired
@@ -36,9 +40,11 @@ public class ItemAvailableArchiveController {
      *
      * @return 单位的可用票据情况
      */
-    @GetMapping("/info/{agenCode}")
-    public String info(@PathVariable("agenCode") String agencode) {
-        List<ItemAvailableDTO> itemAvailableInfos = itemArchiveService.getItemAvailableInfos(agencode);
+    @ApiOperation(value = "获取单位的可用票据情况")
+    @ApiImplicitParam("查询参数对象")
+    @PostMapping("/info")
+    public String info(@RequestBody @ApiParam("查询参数对象") CommonQuery query) {
+        List<ItemAvailableDTO> itemAvailableInfos = itemArchiveService.getItemAvailableInfos(query);
         List<ItemAvailableVO> res = new ArrayList<>();
 
         itemAvailableInfos.forEach(

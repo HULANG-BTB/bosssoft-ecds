@@ -3,6 +3,7 @@ package com.bosssoft.ecds.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.bosssoft.ecds.entity.dto.BillAvailableInfoDTO;
 import com.bosssoft.ecds.entity.po.BillAvailableArchivePO;
+import com.bosssoft.ecds.entity.query.CommonQuery;
 
 import java.util.List;
 
@@ -19,10 +20,10 @@ public interface BillAvailableArchiveService extends IService<BillAvailableArchi
     /**
      * 获取所有单位的票据申领情况
      *
-     * @param agenCode
+     * @param query
      * @return List<BillApplyDto>
      */
-    List<BillAvailableInfoDTO> getBillApplyInfos(String agenCode);
+    List<BillAvailableInfoDTO> getBillApplyInfos(CommonQuery query);
 
     /**
      * 财政端电子票据申领情况归档

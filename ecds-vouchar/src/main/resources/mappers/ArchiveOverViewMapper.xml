@@ -5,13 +5,13 @@
     <!--实现精确查询-->
     <select id="queryOverViewArchiveInfo" resultType="com.bosssoft.ecds.entity.dto.ArchiveOverViewDTO">
         SELECT
-            A.f_id as id,
-            A.f_agen_code as agenCode,
-            A.f_agen_name as agenName,
-            G.f_mnem as mnem,
-            G.f_level as level,
-            G.f_org_code as orgCode,
-            A.f_kind_name as kindName,
+        A.f_id as id,
+        A.f_agen_code as agenCode,
+        A.f_agen_name as agenName,
+        G.f_mnem as mnem,
+        G.f_level as level,
+        G.f_org_code as orgCode,
+        A.f_kind_name as kindName,
         A.f_link_addr as linkAddr,
         G.f_link_man as linkMan,
         G.f_dept_name as deptName,
@@ -30,13 +30,13 @@
 
     <select id="queryOverViewArchiveAllInfo" resultType="com.bosssoft.ecds.entity.dto.ArchiveOverViewDTO">
         SELECT
-            A.f_id as id,
-            A.f_agen_code as agenCode,
-            A.f_agen_name as agenName,
-            G.f_mnem as mnem,
-            G.f_level as level,
-            G.f_org_code as orgCode,
-            A.f_kind_name as kindName,
+        A.f_id as id,
+        A.f_agen_code as agenCode,
+        A.f_agen_name as agenName,
+        G.f_mnem as mnem,
+        G.f_level as level,
+        G.f_org_code as orgCode,
+        A.f_kind_name as kindName,
         A.f_link_addr as linkAddr,
         G.f_link_man as linkMan,
         G.f_dept_name as deptName,
@@ -56,6 +56,39 @@
                 and A.f_agen_name LIKE concat('%',#{query.agenName},'%')
             </if>
         </where>
+    </select>
+
+    <!--归档总览信息 分页查询-->
+    <select id="queryOverViewArchivePageAllInfo" resultType="com.bosssoft.ecds.entity.dto.ArchiveOverViewDTO">
+        SELECT
+        A.f_id as id,
+        A.f_agen_code as agenCode,
+        A.f_agen_name as agenName,
+        G.f_mnem as mnem,
+        G.f_level as level,
+        G.f_org_code as orgCode,
+        A.f_kind_name as kindName,
+        A.f_link_addr as linkAddr,
+        G.f_link_man as linkMan,
+        G.f_dept_name as deptName,
+        A.f_apply_number as applyNumber,
+        A.f_use_number as useNumber,
+        A.f_author_number as authorNumber,
+        A.f_unauthor_number as unAuthorNumber,
+        A.f_create_time as createTime,
+        A.f_update_time as updateTime
+        FROM fbr_archive A
+        LEFT JOIN fab_agen G ON A.f_agen_code = G.f_agen_code
+        <where>
+            <if test="query.agenCode != null">
+                and A.f_agen_code LIKE concat('%',#{query.agenCode},'%')
+            </if>
+            <if test="query.agenName != null">
+                and A.f_agen_name LIKE concat('%',#{query.agenName},'%')
+            </if>
+        </where>
+        <bind name="key_offset" value="(query.page-1)*query.limit"/>
+        LIMIT #{key_offset}, #{query.limit}
     </select>
 
     <!-- 通用查询映射结果 -->

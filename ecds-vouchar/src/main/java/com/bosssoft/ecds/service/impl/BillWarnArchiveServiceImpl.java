@@ -2,10 +2,12 @@ package com.bosssoft.ecds.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bosssoft.ecds.dao.BillWarnArchiveDao;
 import com.bosssoft.ecds.entity.dto.BillWarnDTO;
 import com.bosssoft.ecds.entity.po.BillWarnArchivePO;
+import com.bosssoft.ecds.entity.query.CommonQuery;
 import com.bosssoft.ecds.service.BillWarnArchiveService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,10 +32,13 @@ public class BillWarnArchiveServiceImpl extends ServiceImpl<BillWarnArchiveDao, 
     private BillWarnArchiveDao billWarnArchiveDao;
 
     @Override
-    public List<BillWarnDTO> getBillWarnInfos(String agenCode) {
+    public List<BillWarnDTO> getBillWarnInfos(CommonQuery query) {
+        Page<BillWarnArchivePO> pager = new Page<>(query.getPage(), query.getLimit());
         LambdaQueryWrapper<BillWarnArchivePO> lambdaQuery = new LambdaQueryWrapper<>();
-        LambdaQueryWrapper<BillWarnArchivePO> eq = lambdaQuery.eq(BillWarnArchivePO::getAgenCode, agenCode);
-        List<BillWarnArchivePO> list = list(eq);
+        lambdaQuery.eq(BillWarnArchivePO::getAgenCode, query.getAgenCode())
+                .orderByDesc(BillWarnArchivePO::getCreateTime);
+        Page<BillWarnArchivePO> page = page(pager, lambdaQuery);
+        List<BillWarnArchivePO> list = page.getRecords();
         List<BillWarnDTO> res = new ArrayList<>();
         list.forEach(
                 po -> {

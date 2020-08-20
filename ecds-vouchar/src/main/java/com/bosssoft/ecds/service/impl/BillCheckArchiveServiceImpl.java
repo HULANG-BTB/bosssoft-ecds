@@ -2,6 +2,7 @@ package com.bosssoft.ecds.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bosssoft.ecds.dao.BillCheckArchiveDao;
 import com.bosssoft.ecds.entity.dto.BillCheckDTO;
@@ -9,6 +10,7 @@ import com.bosssoft.ecds.entity.dto.CBillAccountingDTO;
 import com.bosssoft.ecds.entity.po.ArchivePO;
 import com.bosssoft.ecds.entity.po.BillCheckArchivePO;
 import com.bosssoft.ecds.entity.po.CbillAccountingPO;
+import com.bosssoft.ecds.entity.query.CommonQuery;
 import com.bosssoft.ecds.service.ArchiveOverViewService;
 import com.bosssoft.ecds.service.BillCheckArchiveService;
 import lombok.extern.slf4j.Slf4j;
@@ -39,10 +41,13 @@ public class BillCheckArchiveServiceImpl extends ServiceImpl<BillCheckArchiveDao
     BillCheckArchiveDao billCheckArchiveDao;
 
     @Override
-    public List<BillCheckDTO> getBillCheckInfos(String agenCode) {
+    public List<BillCheckDTO> getBillCheckInfos(CommonQuery query) {
+        Page<BillCheckArchivePO> pager = new Page<>(query.getPage(), query.getLimit());
         LambdaQueryWrapper<BillCheckArchivePO> lambdaQuery = new LambdaQueryWrapper<>();
-        LambdaQueryWrapper<BillCheckArchivePO> eq = lambdaQuery.eq(BillCheckArchivePO::getAgenCode, agenCode);
-        List<BillCheckArchivePO> list = list(eq);
+        lambdaQuery.eq(BillCheckArchivePO::getAgenCode, query.getAgenCode())
+                .orderByDesc(BillCheckArchivePO::getSignTime);
+        Page<BillCheckArchivePO> page = super.page(pager, lambdaQuery);
+        List<BillCheckArchivePO> list = page.getRecords();
         List<BillCheckDTO> res = new ArrayList<>();
         list.forEach(
                 po -> {

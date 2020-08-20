@@ -2,10 +2,12 @@ package com.bosssoft.ecds.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bosssoft.ecds.dao.ItemArchiveDao;
 import com.bosssoft.ecds.entity.dto.ItemAvailableDTO;
 import com.bosssoft.ecds.entity.po.ItemArchivePO;
+import com.bosssoft.ecds.entity.query.CommonQuery;
 import com.bosssoft.ecds.service.ItemArchiveService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,10 +30,13 @@ public class ItemArchiveServiceImpl extends ServiceImpl<ItemArchiveDao, ItemArch
     private ItemArchiveDao itemArchiveDao;
 
     @Override
-    public List<ItemAvailableDTO> getItemAvailableInfos(String agenCode) {
+    public List<ItemAvailableDTO> getItemAvailableInfos(CommonQuery query) {
+        Page<ItemArchivePO> pager = new Page<>(query.getPage(), query.getLimit());
         LambdaQueryWrapper<ItemArchivePO> lambdaQuery = new LambdaQueryWrapper<>();
-        LambdaQueryWrapper<ItemArchivePO> eq = lambdaQuery.eq(ItemArchivePO::getAgenCode, agenCode);
-        List<ItemArchivePO> list = list(eq);
+        lambdaQuery.eq(ItemArchivePO::getAgenCode, query.getAgenCode())
+                .orderByDesc(ItemArchivePO::getCreateTime);
+        Page<ItemArchivePO> page = page(pager, lambdaQuery);
+        List<ItemArchivePO> list = page.getRecords();
         List<ItemAvailableDTO> res = new ArrayList<>();
         list.forEach(
                 po -> {

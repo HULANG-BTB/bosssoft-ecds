@@ -2,11 +2,13 @@ package com.bosssoft.ecds.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bosssoft.ecds.dao.BillApplyArchiveDao;
 import com.bosssoft.ecds.entity.dto.ArchiveOverViewDTO;
 import com.bosssoft.ecds.entity.dto.BillApplyDTO;
 import com.bosssoft.ecds.entity.po.BillApplyArchivePO;
+import com.bosssoft.ecds.entity.query.CommonQuery;
 import com.bosssoft.ecds.service.ArchiveOverViewService;
 import com.bosssoft.ecds.service.BillApplyArchiveService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,10 +40,15 @@ public class BillApplyArchiveServiceImpl extends ServiceImpl<BillApplyArchiveDao
      * 获取单位申请的可用票据
      */
     @Override
-    public List<BillApplyDTO> getBillApplyInfo(String agenCode) {
+    public List<BillApplyDTO> getBillApplyInfo(CommonQuery query) {
+        /*分页查询*/
+        Page<BillApplyArchivePO> pager = new Page<>(query.getPage(), query.getLimit());
+
         LambdaQueryWrapper<BillApplyArchivePO> lambdaQuery = new LambdaQueryWrapper<>();
-        LambdaQueryWrapper<BillApplyArchivePO> eq = lambdaQuery.eq(BillApplyArchivePO::getAgenCode, agenCode);
-        List<BillApplyArchivePO> list = list(eq);
+        lambdaQuery.eq(BillApplyArchivePO::getAgenCode, query.getAgenCode())
+                .orderByAsc(BillApplyArchivePO::getApplyTime);
+        Page<BillApplyArchivePO> page = super.page(pager, lambdaQuery);
+        List<BillApplyArchivePO> list = page.getRecords();
         List<BillApplyDTO> res = new ArrayList<>();
         list.forEach(
                 po -> {

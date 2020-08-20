@@ -34,6 +34,14 @@ public interface ArchiveOverViewService extends IService<ArchivePO> {
     List<ArchiveOverViewDTO> queryOverViewArchiveInfos(ArchiveOverViewQuery archiveOverViewQuery);
 
     /**
+     * 查询所有信息 以分页查询的形式
+     *
+     * @param archiveOverViewQuery
+     * @return
+     */
+    List<ArchiveOverViewDTO> queryOverViewArchiveInfoPage(ArchiveOverViewQuery archiveOverViewQuery);
+
+    /**
      * 批量更新归档信息
      *
      * @param list

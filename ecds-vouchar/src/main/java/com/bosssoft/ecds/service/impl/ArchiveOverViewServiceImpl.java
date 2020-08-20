@@ -44,11 +44,22 @@ public class ArchiveOverViewServiceImpl extends ServiceImpl<ArchiveOverViewDao, 
      * 查询出所有归档公司的信息
      * 方便服务之间调用，不设置分页
      *
-     * @return
+     * @return List<ArchiveOverViewDTO>
      */
     @Override
     public List<ArchiveOverViewDTO> queryOverViewArchiveInfos(ArchiveOverViewQuery archiveOverViewQuery) {
         return archiveDao.queryOverViewArchiveAllInfo(archiveOverViewQuery);
+    }
+
+    /**
+     * 以分页查询的形式，查询出所有归档公司的信息。
+     *
+     * @param archiveOverViewQuery
+     * @return
+     */
+    @Override
+    public List<ArchiveOverViewDTO> queryOverViewArchiveInfoPage(ArchiveOverViewQuery archiveOverViewQuery) {
+        return archiveDao.queryOverViewArchivePageAllInfo(archiveOverViewQuery);
     }
 
     /**

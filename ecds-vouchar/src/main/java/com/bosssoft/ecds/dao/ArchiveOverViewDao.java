@@ -35,4 +35,11 @@ public interface ArchiveOverViewDao extends BaseMapper<ArchivePO> {
      */
     List<ArchiveOverViewDTO> queryOverViewArchiveAllInfo(@Param("query") ArchiveOverViewQuery archiveOverViewQuery);
 
+    /**
+     * 以分页的形式查询所有单位的归档总览表中的信息
+     *
+     * @param archiveOverViewQuery
+     * @return List<ArchiveOverViewDTO>
+     */
+    List<ArchiveOverViewDTO> queryOverViewArchivePageAllInfo(@Param("query") ArchiveOverViewQuery archiveOverViewQuery);
 }

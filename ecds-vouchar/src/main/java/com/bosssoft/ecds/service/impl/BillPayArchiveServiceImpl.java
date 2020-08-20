@@ -3,10 +3,12 @@ package com.bosssoft.ecds.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.lang.Assert;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bosssoft.ecds.dao.BillPayArchiveDao;
 import com.bosssoft.ecds.entity.dto.BillPayDTO;
 import com.bosssoft.ecds.entity.po.BillPayArchivePO;
+import com.bosssoft.ecds.entity.query.CommonQuery;
 import com.bosssoft.ecds.service.BillPayArchiveService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,10 +37,13 @@ public class BillPayArchiveServiceImpl extends ServiceImpl<BillPayArchiveDao, Bi
     BillPayArchiveDao billPayArchiveDao;
 
     @Override
-    public List<BillPayDTO> getBillPayInfos(String agenCode) {
+    public List<BillPayDTO> getBillPayInfos(CommonQuery query) {
+        Page<BillPayArchivePO> pager = new Page<>(query.getPage(), query.getLimit());
         LambdaQueryWrapper<BillPayArchivePO> lambdaQuery = new LambdaQueryWrapper<>();
-        LambdaQueryWrapper<BillPayArchivePO> eq = lambdaQuery.eq(BillPayArchivePO::getAgenCode, agenCode);
-        List<BillPayArchivePO> list = list(eq);
+        lambdaQuery.eq(BillPayArchivePO::getAgenCode, query.getAgenCode())
+                .orderByDesc(BillPayArchivePO::getSummaryTime);
+        Page<BillPayArchivePO> page = super.page(pager, lambdaQuery);
+        List<BillPayArchivePO> list = page.getRecords();
         List<BillPayDTO> res = new ArrayList<>();
         list.forEach(
                 po -> {

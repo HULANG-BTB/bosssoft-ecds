@@ -3,6 +3,7 @@ package com.bosssoft.ecds.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.bosssoft.ecds.entity.dto.ItemAvailableDTO;
 import com.bosssoft.ecds.entity.po.ItemArchivePO;
+import com.bosssoft.ecds.entity.query.CommonQuery;
 
 import java.util.List;
 
@@ -21,10 +22,10 @@ public interface ItemArchiveService extends IService<ItemArchivePO> {
      * 获取所有单位的可用项目情况
      * 分页查询
      *
-     * @param agenCode
+     * @param query
      * @return List<ItemAvailableDto>
      */
-    List<ItemAvailableDTO> getItemAvailableInfos(String agenCode);
+    List<ItemAvailableDTO> getItemAvailableInfos(CommonQuery query);
 
     /**
      * 财政端 可用项目归档
