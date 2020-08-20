@@ -195,13 +195,16 @@ public class IncomeSortServiceImpl implements IncomeSortService {
         if (temp == null) {
             throw new CustomException(InComeResultCode.INCOME_NAME_NOT_EXISTS);
         }
-        checkByCode(updateIncomeSortVO.getCode(), temp.getId());
+        String code = updateIncomeSortVO.getCode();
+        if (!code.equals(temp.getCode())) {
+            checkByCode(code, temp.getParentId());
+        }
         IncomeSortPO incomeSort = new IncomeSortPO();
         incomeSort.setVersion(temp.getVersion());
         incomeSort.setName(updateIncomeSortVO.getName());
         incomeSort.setRemark(updateIncomeSortVO.getRemark());
         incomeSort.setLeaf(updateIncomeSortVO.getLeaf());
-        incomeSort.setCode(updateIncomeSortVO.getCode());
+        incomeSort.setCode(code);
         Date date = new Date();
         incomeSort.setUpdateTime(date);
         incomeSortDao.update(incomeSort, updateWrapper);
