@@ -34,9 +34,6 @@ public class ExcelUtil {
 
         //得到工作表
         Sheet sheet = getSheetByWorkbook(workbook, 0);
-        if (sheet.getRow(2000) != null) {
-            throw new RuntimeException("系统已限制单批次导入必须小于或等于2000笔！");
-        }
         return sheet;
     }
 

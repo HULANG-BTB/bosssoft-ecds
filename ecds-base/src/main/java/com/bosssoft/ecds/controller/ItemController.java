@@ -10,15 +10,15 @@ import com.bosssoft.ecds.response.QueryResponseResult;
 import com.bosssoft.ecds.response.ResponseResult;
 import com.bosssoft.ecds.service.ItemService;
 import com.bosssoft.ecds.service.SubjectService;
-import com.bosssoft.ecds.utils.ExcelUtil;
 import com.bosssoft.ecds.utils.MyBeanUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.poi.ss.usermodel.Sheet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -40,6 +40,7 @@ public class ItemController {
 
     @Autowired
     private SubjectService subjectServicec;
+
     /**
      * 插入项目相关信息
      *
@@ -140,7 +141,7 @@ public class ItemController {
     @GetMapping("/getItemTree")
     public ResponseResult getItemTree() {
         List<SubjectVO> all = subjectServicec.getSecondTree("2020");
-        return new QueryResponseResult<>(CommonCode.SUCCESS,all);
+        return new QueryResponseResult<>(CommonCode.SUCCESS, all);
     }
 
     /**
@@ -157,7 +158,7 @@ public class ItemController {
     /**
      * 从excel导入项目信息
      *
-     * @return
+     * @return 导入成功结果或者错误信息
      */
     @ApiOperation(value = "从excel导入项目信息")
     @PostMapping("/import")
@@ -166,14 +167,17 @@ public class ItemController {
     }
 
     /**
-     * 从excel导入项目信息
+     * 从excel导出项目信息
+     * 将文件已流的形式放入response，返回给前端
      *
-     * @return
+     * @param itemVOS itemVOS为空时导出所有的项目信息
+     *                itemVOS不为空时导出对应id的项目信息
      */
-    @ApiOperation(value = "从excel导入项目信息")
+    @ApiOperation(value = "从excel导出项目信息")
     @PostMapping("/export")
-    public ResponseResult exporEexcel() {
-        return itemService.exportExcel();
+    public void exportEexcel(@RequestBody List<ItemVO> itemVOS, HttpServletResponse response) throws IOException {
+        List<ItemDTO> itemDTOS = MyBeanUtil.copyListProperties(itemVOS, ItemDTO::new);
+        itemService.exportExcel(itemDTOS, response);
     }
 }
 

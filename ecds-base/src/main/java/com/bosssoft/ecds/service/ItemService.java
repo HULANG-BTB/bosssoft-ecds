@@ -9,6 +9,8 @@ import com.bosssoft.ecds.entity.vo.itemvo.ItemPageVO;
 import org.springframework.web.multipart.MultipartFile;
 
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -78,10 +80,29 @@ public interface ItemService extends IService<ItemPO> {
      */
     ResponseResult getItemAll();
 
+    /**
+     * 通过收入类别编码 ，获得收入类别的名字
+     *
+     * @param code 收入类别编码
+     * @return 返回收入类别名字
+     */
     ResponseResult getIncomeSortName(String code);
 
+    /**
+     * 通过excel导入项目
+     *
+     * @param file 导入文件
+     * @return 导入结果
+     */
     ResponseResult importExcel(MultipartFile file);
 
-    ResponseResult exportExcel();
+    /**
+     * 从excel导出项目信息
+     * 将文件已流的形式放入response，返回给前端
+     *
+     * @param itemDTOS itemDTOS为空时导出所有的项目信息
+     *                 itemDTOS不为空时导出对应id的项目信息
+     */
+    void exportExcel(List<ItemDTO> itemDTOS, HttpServletResponse response) throws IOException;
 
 }
