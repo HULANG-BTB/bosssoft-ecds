@@ -133,8 +133,8 @@ public class PrintTemplateController {
     /**
      * 模板列表分页查询
      *
-     * @param current   第几页
-     * @param size 每页多少项
+     * @param currentPage 第几页
+     * @param pageSize    每页多少项
      */
     @ApiOperation("模板列表分页查询")
     @GetMapping("/listPage")
@@ -148,5 +148,22 @@ public class PrintTemplateController {
     ) {
         Object page = printTemplateService.getPageVO(currentPage, pageSize);
         return new QueryResponseResult<>(CommonCode.SUCCESS, page);
+    }
+
+    @ApiOperation("根据6位票据代码或者模板名字查询列表")
+    @GetMapping("/searchList")
+    public ResponseResult searchList(
+            @RequestParam(required = false)
+            @ApiParam("前6位的票据代码，或者空")
+                    String billCode,
+            @RequestParam(required = false)
+            @ApiParam("模糊查询：模板名字")
+                    String name)
+    {
+        if (billCode != null && !"".equals(billCode) && billCode.length()!=6) {
+            return new ResponseResult(CommonCode.INVLIDATE);
+        }
+        List<PrintTemplateVo> list = printTemplateService.searchList(billCode, name);
+        return new QueryResponseResult<>(CommonCode.SUCCESS, list);
     }
 }

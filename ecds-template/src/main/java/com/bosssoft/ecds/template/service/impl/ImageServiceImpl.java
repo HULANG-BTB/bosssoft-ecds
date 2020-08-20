@@ -116,6 +116,21 @@ public class ImageServiceImpl implements ImageService {
         return path;
     }
 
+    public String queryAddress(String fullCode, Long expireTime) {
+        String fileName = fullCode + ".png";
+        String path = "boss-bill/" + fileName;
+
+        String url = null;
+        if (ossUtil.isExist(path)) {
+            if (expireTime == null) {
+                expireTime = 15 * 24 * 60 * 60 * 1000L;
+            }
+            url = ossUtil.temporaryUrl(path, expireTime).toString();
+        }
+
+        return url;
+    }
+
     @Override
     public String getRemoteImage(NontaxBillDto billDTO, Long expireTime) {
         String fileName = billDTO.getBillCode() + billDTO.getSerialCode() + ".png";

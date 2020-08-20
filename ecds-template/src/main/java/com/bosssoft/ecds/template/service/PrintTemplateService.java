@@ -27,4 +27,6 @@ public interface PrintTemplateService extends IService<PrintTemplatePo> {
     PrintTemplateDto getDtoById(Long id);
 
     IPage<PrintTemplateVo> getPageVO(Long current, Long size);
+
+    List<PrintTemplateVo> searchList(String billCode, String name);
 }
