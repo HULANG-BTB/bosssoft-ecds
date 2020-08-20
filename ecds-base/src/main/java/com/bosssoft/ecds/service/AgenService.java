@@ -66,6 +66,17 @@ public interface AgenService extends IService<AgenPO> {
     /**
      *
      *
+     * @description: 根据ID查询单位。
+     * @param {FabAgenDTO} fabAgenDTO
+     * @return: {FabAgenDTO}
+     * @author: YuHangChen
+     * @time: 09/08/2020 上午10:17
+     */
+    public AgenDTO getById(AgenDTO fabAgenDTO);
+
+    /**
+     *
+     *
      * @description: 根据单位名查询单位。
      * @param {FabDeptDTO} fabDeptDTO
      * @return: {FabDeptDTO}
@@ -134,4 +145,12 @@ public interface AgenService extends IService<AgenPO> {
      * @return 区划id，单位识别码，单位编码，开票点id，开票点编码，开票点名称
      */
     AgenInfoDTO getDetailByUnitName(String agenName);
+
+    /**
+     * 查看部门下
+     *
+     * @param fabAgenDTO
+     * @return
+     */
+    public String getAgenCount(AgenDTO fabAgenDTO);
 }

@@ -9,8 +9,10 @@ import com.bosssoft.ecds.entity.dto.agendto.AgenInfoDTO;
 import com.bosssoft.ecds.entity.dto.PagesDTO;
 import com.bosssoft.ecds.entity.po.AgenPO;
 import com.bosssoft.ecds.dao.AgenDao;
+import com.bosssoft.ecds.entity.po.DeptPO;
 import com.bosssoft.ecds.service.AgenService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.bosssoft.ecds.service.DeptService;
 import com.bosssoft.ecds.utils.MyBeanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,6 +36,9 @@ public class AgenServiceImpl extends ServiceImpl<AgenDao, AgenPO> implements Age
     @Autowired
     private AgenDao agenDao;
 
+    @Autowired
+    private DeptService deptService;
+
     /**
      *
      *
@@ -47,22 +52,30 @@ public class AgenServiceImpl extends ServiceImpl<AgenDao, AgenPO> implements Age
     public AgenDTO save(AgenDTO fabAgenDTO) {
         AgenPO fabAgenPO = new AgenPO();
         MyBeanUtil.copyProperties(fabAgenDTO, fabAgenPO);
+
+        DeptPO deptPO = new DeptPO();
+        deptPO.setDeptCode(fabAgenPO.getDeptCode());
+        deptPO = deptService.getOne(new QueryWrapper<DeptPO>(deptPO));
+
+        fabAgenPO.setRgnId(deptPO.getRgnId());
+        String rgn = deptPO.getRgnId();
+        fabAgenPO.setProvinceId(rgn.substring(0,2));
+        fabAgenPO.setCityId(rgn.substring(0,4));
+        fabAgenPO.setCountyId(rgn);
+
+        fabAgenPO.setPidCode("");
+        fabAgenPO.setOrgCode("");
+        fabAgenPO.setTypeCode("");
+
+        fabAgenPO.setOperator("0");
+        fabAgenPO.setOperatorId(0L);
+
         Date data = new Date();
-        fabAgenPO.setRgnId("1111111");
-        fabAgenPO.setAgenCode("123");
-        fabAgenPO.setPidCode("1");
         fabAgenPO.setIsleaf(true);
-        fabAgenPO.setOrgCode("1");
-        fabAgenPO.setTypeCode("1");
         fabAgenPO.setIsenable(false);
         fabAgenPO.setIstickAgen(false);
         fabAgenPO.setIsunpaid(false);
         fabAgenPO.setIsalarmAgen(false);
-        fabAgenPO.setProvinceId("1");
-        fabAgenPO.setCityId("1");
-        fabAgenPO.setCountyId("1");
-        fabAgenPO.setOperator("123");
-        fabAgenPO.setOperatorId(123L);
         fabAgenPO.setCreateTime(data);
         fabAgenPO.setUpdateTime(data);
         fabAgenPO.setLogicDelete(false);
@@ -118,6 +131,43 @@ public class AgenServiceImpl extends ServiceImpl<AgenDao, AgenPO> implements Age
         MyBeanUtil.copyProperties(fabAgenDTO, fabAgenPO);
         AgenPO fabAgenPO1 = super.getOne(new QueryWrapper<AgenPO>(fabAgenPO));
         return MyBeanUtil.copyProperties(fabAgenPO1, AgenDTO.class);
+    }
+
+    /**
+     *
+     *
+     * @description: 根据ID查询单位。
+     * @param {FabAgenDTO} fabAgenDTO
+     * @return: {FabAgenDTO}
+     * @author: YuHangChen
+     * @time: 09/08/2020 上午10:17
+     */
+    @Override
+    public AgenDTO getById(AgenDTO fabAgenDTO) {
+        AgenPO fabAgenPO = new AgenPO();
+        MyBeanUtil.copyProperties(fabAgenDTO, fabAgenPO);
+        AgenPO fabAgenPO1 = super.getById(fabAgenPO.getId());
+        return MyBeanUtil.copyProperties(fabAgenPO1, AgenDTO.class);
+    }
+
+
+    /**
+     *
+     *
+     * @description: 根据ID查询单位。
+     * @param {FabAgenDTO} fabAgenDTO
+     * @return: {FabAgenDTO}
+     * @author: YuHangChen
+     * @time: 09/08/2020 上午10:17
+     */
+    @Override
+    public String getAgenCount(AgenDTO fabAgenDTO) {
+        AgenPO fabAgenPO = new AgenPO();
+        MyBeanUtil.copyProperties(fabAgenDTO, fabAgenPO);
+        QueryWrapper<AgenPO> queryWrapper =  new QueryWrapper<>();
+        queryWrapper.eq(AgenPO.F_DEPT_CODE,fabAgenPO.getDeptCode());
+        int count = super.list(queryWrapper).size();
+        return String.format("%03d",count);
     }
 
     /**
