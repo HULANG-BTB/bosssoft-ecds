@@ -18,6 +18,7 @@ import com.bosssoft.ecds.entity.vo.UneCbillVo;
 import com.bosssoft.ecds.response.CommonCode;
 import com.bosssoft.ecds.response.QueryResponseResult;
 import com.bosssoft.ecds.response.ResponseResult;
+import com.bosssoft.ecds.response.ResultCode;
 import com.bosssoft.ecds.service.UneCbillService;
 import com.bosssoft.ecds.service.client.MessageService;
 import com.bosssoft.ecds.service.client.TemplateService;
@@ -260,11 +261,12 @@ public class UneCBillController {
      * @return
      */
     @RequestMapping(path = "/getItems", method = RequestMethod.GET)
-    public String getItems(String fPayerTel, String checkCode) {
+    public QueryResponseResult getItems(String fPayerTel, String checkCode) {
         QueryWrapper<UneCbill> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("f_payer_tel", fPayerTel)
                 .eq("f_check_code", checkCode);
         UneCbill uneCbill = uneCbillService.getBillByIdAndCheckCode(queryWrapper);
+        QueryResponseResult<PayDto> responseResult;
         if (uneCbill != null) {
             PayDto payDto = new PayDto();
             payDto.setPayerName(uneCbill.getFPayerName());
@@ -276,9 +278,11 @@ public class UneCBillController {
                 itemDtos.add(uneCbillItemDto);
             }
             payDto.setUneCbillItems(itemDtos);
-            return ResponseUtils.getResponse(JSON.toJSONString(payDto), ResponseUtils.ResultType.OK);
+            responseResult = new QueryResponseResult(CommonCode.SUCCESS, payDto);
+            return responseResult;
         }
-        return ResponseUtils.getResponse(404, "票据不存在");
+        responseResult = new QueryResponseResult(CommonCode.FAIL, "查询票据不存在");
+        return responseResult;
     }
 
     /**
@@ -341,16 +345,17 @@ public class UneCBillController {
     }
 
     /**
-     * 查询票据
+     * 查询核销票据
      *
      * @param start
      * @param end
      * @return
      */
     @GetMapping("/writeOffInfo")
-    public String writeOffInfo(String start, String end) {
+    public ResponseResult writeOffInfo(String start, String end) {
         List<UneCbill> list = uneCbillService.writeOff(start, end);
         List<WriteOffDto> writeOffDtos = new ArrayList<>();
+        QueryResponseResult<WriteOffDto> responseResult;
         if (list.size() != 0) {
             for (UneCbill uneCbill : list) {
                 WriteOffDto writeOffDto = new WriteOffDto();
@@ -358,8 +363,23 @@ public class UneCBillController {
                 writeOffDto.setUneCbillItems(uneCbillService.getItems(String.valueOf(uneCbill.getFId())));
                 writeOffDtos.add(writeOffDto);
             }
-            return ResponseUtils.getResponse(writeOffDtos, ResponseUtils.ResultType.OK);
+            responseResult = new QueryResponseResult(CommonCode.SUCCESS, writeOffDtos);
+            return responseResult;
         }
-        return ResponseUtils.getResponse(404, "需要核销票据不存在");
+        return new QueryResponseResult(CommonCode.FAIL, "票据不存在");
     }
+
+    /**
+     * 分页查询单位端审核通过记录
+     * @param currentPage
+     * @param pageSize
+     * @return
+     */
+    @RequestMapping(path = "/getPassBill", method = RequestMethod.GET)
+    public IPage<UneCbillVo> getPassBill(int currentPage, int pageSize) {
+        int total = uneCbillService.passBillCount();
+        Page<UneCbill> page = new Page<>(currentPage, pageSize, total);
+        return uneCbillService.selectPassBillPage(page);
+    }
+
 }

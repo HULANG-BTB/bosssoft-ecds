@@ -15,6 +15,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
+@Component
 public class AliyunOSSUtil {
     @Autowired
     AliyunOSSConfig ossConfig;
@@ -49,9 +50,7 @@ public class AliyunOSSUtil {
     public void upload(String objectName, InputStream inputStream) {
         OSS ossClient = ossConfig.getOssClient();
         String bucketName = ossConfig.getBucketName();
-
         ossClient.putObject(bucketName, objectName, inputStream);
-
         ossClient.shutdown();
     }
 
@@ -64,15 +63,12 @@ public class AliyunOSSUtil {
     public void download(String objectName, File file) {
         OSS ossClient = ossConfig.getOssClient();
         String bucketName = ossConfig.getBucketName();
-
         ossClient.getObject(new GetObjectRequest(bucketName, objectName), file);
-
         ossClient.shutdown();
     }
 
     /**
      * 获取对象的下载链接，链接在指定时间内过期
-     *
      * @param objectName   对象路径
      * @param milliseconds 过期时间（毫秒），从请求时开始算起
      * @return 文件的 URL
@@ -222,7 +218,6 @@ public class AliyunOSSUtil {
         // 创建OSSClient实例。
         OSS ossClient = ossConfig.getOssClient();
         String bucketName = ossConfig.getBucketName();
-
         // 下载请求，10个任务并发下载，启动断点续传。
         DownloadFileRequest downloadFileRequest = new DownloadFileRequest(bucketName, objectName);
         downloadFileRequest.setDownloadFile(fileName);
@@ -230,12 +225,10 @@ public class AliyunOSSUtil {
         downloadFileRequest.setTaskNum(10);
         downloadFileRequest.setEnableCheckpoint(true);
         downloadFileRequest.setCheckpointFile("checkPoint");
-
         // 下载文件。
         DownloadFileResult downloadRes = ossClient.downloadFile(downloadFileRequest);
         // 下载成功时，会返回文件元信息。
         downloadRes.getObjectMetadata();
-
         // 关闭OSSClient。
         ossClient.shutdown();
     }
