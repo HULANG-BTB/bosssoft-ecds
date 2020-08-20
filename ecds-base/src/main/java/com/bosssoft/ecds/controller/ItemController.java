@@ -10,11 +10,14 @@ import com.bosssoft.ecds.response.QueryResponseResult;
 import com.bosssoft.ecds.response.ResponseResult;
 import com.bosssoft.ecds.service.ItemService;
 import com.bosssoft.ecds.service.SubjectService;
+import com.bosssoft.ecds.utils.ExcelUtil;
 import com.bosssoft.ecds.utils.MyBeanUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -146,9 +149,31 @@ public class ItemController {
      * @return 项目信息集合
      */
     @ApiOperation(value = "根据收入类别编码，查询收入类别名字")
-    @GetMapping("/getIncomSortName")
+    @GetMapping("/getIncomeSortName")
     public ResponseResult getIncomSortName(String code) {
-        return itemService.getIncomSortName(code);
+        return itemService.getIncomeSortName(code);
+    }
+
+    /**
+     * 从excel导入项目信息
+     *
+     * @return
+     */
+    @ApiOperation(value = "从excel导入项目信息")
+    @PostMapping("/import")
+    public ResponseResult importExcel(MultipartFile file) {
+        return itemService.importExcel(file);
+    }
+
+    /**
+     * 从excel导入项目信息
+     *
+     * @return
+     */
+    @ApiOperation(value = "从excel导入项目信息")
+    @PostMapping("/export")
+    public ResponseResult exporEexcel() {
+        return itemService.exportExcel();
     }
 }
 

@@ -6,6 +6,7 @@ import com.bosssoft.ecds.entity.dto.itemdto.ItemDTO;
 import com.bosssoft.ecds.entity.po.ItemPO;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.bosssoft.ecds.entity.vo.itemvo.ItemPageVO;
+import org.springframework.web.multipart.MultipartFile;
 
 
 import java.util.List;
@@ -77,6 +78,10 @@ public interface ItemService extends IService<ItemPO> {
      */
     ResponseResult getItemAll();
 
-    ResponseResult getIncomSortName(String code);
+    ResponseResult getIncomeSortName(String code);
+
+    ResponseResult importExcel(MultipartFile file);
+
+    ResponseResult exportExcel();
 
 }

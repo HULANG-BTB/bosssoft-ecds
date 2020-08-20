@@ -3,6 +3,8 @@ package com.bosssoft.ecds.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.bosssoft.ecds.entity.dto.PagesDTO;
+import com.bosssoft.ecds.entity.vo.PagesVO;
 import com.bosssoft.ecds.response.CommonCode;
 import com.bosssoft.ecds.response.QueryResponseResult;
 import com.bosssoft.ecds.response.ResponseResult;
@@ -106,30 +108,33 @@ public class ItemStdServiceImpl extends ServiceImpl<ItemStdDao, ItemStdPO> imple
      * pageDTO.getKeyword() 无数据输入时实现查询全部数据，有数据输入时进行模糊查询
      * 分页展示查询结果
      *
-     * @param pageDTO
+     * @param pagesDTO
      * @return
      */
     @Override
-    public QueryResponseResult<PageVO> listByPage(PageDTO<ItemStdDTO> pageDTO) {
+    public ResponseResult listByPage(PagesDTO<ItemStdDTO> pagesDTO) {
         Page<ItemStdPO> itemStdDTOPage = new Page<>();
         // 设置分页信息
-        itemStdDTOPage.setCurrent(pageDTO.getPage());
-        itemStdDTOPage.setSize(pageDTO.getLimit());
+        itemStdDTOPage.setCurrent(pagesDTO.getPage());
+        itemStdDTOPage.setSize(pagesDTO.getLimit());
         // 读取分页数据
         QueryWrapper<ItemStdPO> queryWrapper = new QueryWrapper<>();
-        queryWrapper.like(ItemStdPO.F_ITEMSTD_NAME, pageDTO.getKeyword())
-                .or()
-                .like(ItemStdPO.F_ISENABLE, pageDTO.getKeyword());
-        queryWrapper.orderByAsc(ItemPO.F_CREATE_TIME);
+        if (pagesDTO.getKeyword().get("isenable").equals("")){
+            queryWrapper.like(ItemStdPO.F_ITEMSTD_NAME,pagesDTO.getKeyword().get("name"));
+        }else {
+            queryWrapper.eq(ItemStdPO.F_ISENABLE,pagesDTO.getKeyword().get("isenable"))
+                    .and(wrapper->wrapper.like(ItemStdPO.F_ITEMSTD_NAME,pagesDTO.getKeyword().get("name")));
+        }
+        queryWrapper.orderByAsc(ItemStdPO.F_CREATE_TIME);
         // 读取分页数据
         Page<ItemStdPO> itemPOPage = super.page(itemStdDTOPage, queryWrapper);
         List<ItemStdPO> records = itemPOPage.getRecords();
         // 转换数据
         List<ItemStdDTO> itemPOS = MyBeanUtil.copyListProperties(records, ItemStdDTO::new);
-        pageDTO.setTotal(itemPOPage.getTotal());
-        pageDTO.setItems(itemPOS);
-        PageVO pageVO = MyBeanUtil.myCopyProperties(pageDTO, PageVO.class);
-        return new QueryResponseResult<>(CommonCode.SUCCESS, pageVO);
+        pagesDTO.setTotal(itemPOPage.getTotal());
+        pagesDTO.setItems(itemPOS);
+        PagesVO pagesVO = MyBeanUtil.myCopyProperties(pagesDTO, PagesVO.class);
+        return new QueryResponseResult<>(CommonCode.SUCCESS, pagesVO);
     }
 
     /**

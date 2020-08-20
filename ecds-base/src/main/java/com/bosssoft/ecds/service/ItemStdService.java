@@ -1,5 +1,6 @@
 package com.bosssoft.ecds.service;
 
+import com.bosssoft.ecds.entity.dto.PagesDTO;
 import com.bosssoft.ecds.response.QueryResponseResult;
 import com.bosssoft.ecds.response.ResponseResult;
 import com.bosssoft.ecds.entity.dto.itemdto.ItemStdDTO;
@@ -48,11 +49,11 @@ public interface ItemStdService extends IService<ItemStdPO> {
     /**
      * 分页查询项目标准信息
      *
-     * @param pageDTO 输入分页信息,limit、page、keyword、isenable
+     * @param pagesDTO 输入分页信息,limit、page、keyword、isenable
      *                keyword为空时普通查询，keyword不为空时模糊查询
      * @return limit、page、total、items
      */
-    QueryResponseResult<PageVO> listByPage(PageDTO<ItemStdDTO> pageDTO);
+    ResponseResult listByPage(PagesDTO<ItemStdDTO> pagesDTO);
 
     /**
      * 批量删除项目标准信息
