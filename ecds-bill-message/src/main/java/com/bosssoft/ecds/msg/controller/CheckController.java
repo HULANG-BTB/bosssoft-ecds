@@ -83,8 +83,6 @@ public class CheckController extends BaseController{
         }
         // 查验票据为假
         return new QueryResponseResult<>(CommonCode.FAIL,res.data);
-
-
     }
 
 }
