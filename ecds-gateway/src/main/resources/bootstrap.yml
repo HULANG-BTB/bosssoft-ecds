@@ -29,9 +29,8 @@ spring:
         - data‐id: gateway-routes-dev.yaml
           group: DEFAULT_GROUP
           refresh: true
-
 server:
-  port: 27000
+  port: 7000
 
 
 

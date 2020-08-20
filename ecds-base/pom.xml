@@ -115,6 +115,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
+        <!--  api加密依赖 -->
         <dependency>
             <groupId>com.bosssoft</groupId>
             <artifactId>ecds-encryption</artifactId>
