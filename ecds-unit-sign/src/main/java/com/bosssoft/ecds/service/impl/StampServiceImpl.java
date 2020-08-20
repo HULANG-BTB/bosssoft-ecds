@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.security.KeyStore;
 import java.security.PrivateKey;
@@ -25,26 +26,26 @@ import java.security.cert.Certificate;
  * @author LiDaShan
  * @Version 1.0
  * @Date 2020/8/15
- * @Content:
+ * @Content: 对票据 pdf 盖章 service
  */
 @Service
 @RefreshScope
 public class StampServiceImpl implements IStampService {
 
-    //@Value("#{'${stamp.location.llx}'}")
-    private float llx = 200f;
-   // @Value("#{'${stamp.location.lly}'}")
-    private float lly = 200f;
-    //@Value("#{'${stamp.location.urx}'}")
-    private float urx = 200f;;
-    //@Value("#{'${stamp.location.ury}'}")
-    private float ury = 200f;;
-    //@Value("#{'${stamp.page}'}")
+    @Value("#{'${stamp.location.llx}'}")
+    private float llx;
+    @Value("#{'${stamp.location.lly}'}")
+    private float lly;
+    @Value("#{'${stamp.location.urx}'}")
+    private float urx = 200f;
+    @Value("#{'${stamp.location.ury}'}")
+    private float ury = 200f;
+    @Value("#{'${stamp.page}'}")
     private int page =1;
-    //@Value("${stamp.imagePath}")
+    @Value("${stamp.imagePath}")
     private String imagePath;
-    //@Value("${stamp.defaultImageName}")*
-    private String defaultImageName ="stampImage.png";
+    @Value("${stamp.defaultImageName}")
+    private String defaultImageName;
 
 
     @Override
@@ -53,7 +54,7 @@ public class StampServiceImpl implements IStampService {
         HttpSession session = request.getSession();
         // 验证签名的有效性
         String finaSign = (String) session.getAttribute(unitSignValue);
-        if ( finaSign == null || finaSign == "" || !finaSign.equals(financeSignValue)){
+        if ( finaSign == null || "".equals(finaSign) || !finaSign.equals(financeSignValue)){
             return false;
         }
         // 读取要盖章的 pdf 文件
@@ -62,7 +63,7 @@ public class StampServiceImpl implements IStampService {
         ServletOutputStream os = response.getOutputStream();
         // 获取私钥,密码和证书链
         KeyStore keyStore = UnitP12Utill.getKeyStore();
-        String alias = (String) keyStore.aliases().nextElement();
+        String alias = keyStore.aliases().nextElement();
         String password = UnitP12Utill.getKeyPassword();
         PrivateKey pk = KeyUtill.getPrivateKey(keyStore, password);
         Certificate[] chain = keyStore.getCertificateChain(alias);
@@ -77,8 +78,12 @@ public class StampServiceImpl implements IStampService {
         String location = "福建福州";
         // 默认
         Image image ;
-        if ( imagePath == null || imagePath.equals("")|| !new File(imagePath).exists()){
-            image = Image.getInstance(StampServiceImpl.class.getClassLoader().getResource(defaultImageName));
+        if ( imagePath == null || "".equals(imagePath)|| !new File(imagePath).exists() ){
+            if ( StampServiceImpl.class.getClassLoader().getResource(defaultImageName) != null ){
+                image = Image.getInstance(StampServiceImpl.class.getClassLoader().getResource(defaultImageName));
+            }else {
+                throw new FileNotFoundException("印章图片没有找到");
+            }
         }else {
             image = Image.getInstance(imagePath);
         }
