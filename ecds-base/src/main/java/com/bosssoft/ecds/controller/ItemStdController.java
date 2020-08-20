@@ -1,6 +1,8 @@
 package com.bosssoft.ecds.controller;
 
 
+import com.bosssoft.ecds.entity.dto.PagesDTO;
+import com.bosssoft.ecds.entity.vo.PagesVO;
 import com.bosssoft.ecds.response.QueryResponseResult;
 import com.bosssoft.ecds.response.ResponseResult;
 import com.bosssoft.ecds.entity.dto.itemdto.ItemStdDTO;
@@ -105,16 +107,16 @@ public class ItemStdController {
     /**
      * 分页查询
      *
-     * @param pageVO 输入分页信息,limit、page、keyword、isenable
+     * @param pagesVO 输入分页信息,limit、page、keyword、isenable
      *               keyword为空时普通查询，keyword不为空时模糊查询
      * @return limit、page、total、items
      */
     @ApiOperation(value = "分页查询项目标准", notes = "输入分页信息,limit、page、keyword，" +
             "keyword为空时普通查询，keyword不为空时模糊查询")
     @PostMapping("/listByPage")
-    public QueryResponseResult<PageVO> listByPage(@RequestBody PageVO pageVO) {
-        PageDTO<ItemStdDTO> pageDTO = MyBeanUtil.myCopyProperties(pageVO, PageDTO.class);
-        return itemStdService.listByPage(pageDTO);
+    public ResponseResult listByPage(@RequestBody PagesVO pagesVO) {
+        PagesDTO<ItemStdDTO> pagesDTO = MyBeanUtil.myCopyProperties(pagesVO, PagesDTO.class);
+        return itemStdService.listByPage(pagesDTO);
     }
 
     /**

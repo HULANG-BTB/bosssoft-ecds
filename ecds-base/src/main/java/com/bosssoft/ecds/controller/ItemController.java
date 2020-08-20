@@ -15,7 +15,10 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -37,6 +40,7 @@ public class ItemController {
 
     @Autowired
     private SubjectService subjectServicec;
+
     /**
      * 插入项目相关信息
      *
@@ -137,7 +141,7 @@ public class ItemController {
     @GetMapping("/getItemTree")
     public ResponseResult getItemTree() {
         List<SubjectVO> all = subjectServicec.getSecondTree("2020");
-        return new QueryResponseResult<>(CommonCode.SUCCESS,all);
+        return new QueryResponseResult<>(CommonCode.SUCCESS, all);
     }
 
     /**
@@ -146,9 +150,34 @@ public class ItemController {
      * @return 项目信息集合
      */
     @ApiOperation(value = "根据收入类别编码，查询收入类别名字")
-    @GetMapping("/getIncomSortName")
+    @GetMapping("/getIncomeSortName")
     public ResponseResult getIncomSortName(String code) {
-        return itemService.getIncomSortName(code);
+        return itemService.getIncomeSortName(code);
+    }
+
+    /**
+     * 从excel导入项目信息
+     *
+     * @return 导入成功结果或者错误信息
+     */
+    @ApiOperation(value = "从excel导入项目信息")
+    @PostMapping("/import")
+    public ResponseResult importExcel(MultipartFile file) {
+        return itemService.importExcel(file);
+    }
+
+    /**
+     * 从excel导出项目信息
+     * 将文件已流的形式放入response，返回给前端
+     *
+     * @param itemVOS itemVOS为空时导出所有的项目信息
+     *                itemVOS不为空时导出对应id的项目信息
+     */
+    @ApiOperation(value = "从excel导出项目信息")
+    @PostMapping("/export")
+    public void exportEexcel(@RequestBody List<ItemVO> itemVOS, HttpServletResponse response) throws IOException {
+        List<ItemDTO> itemDTOS = MyBeanUtil.copyListProperties(itemVOS, ItemDTO::new);
+        itemService.exportExcel(itemDTOS, response);
     }
 }
 

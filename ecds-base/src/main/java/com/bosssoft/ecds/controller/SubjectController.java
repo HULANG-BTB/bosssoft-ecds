@@ -1,7 +1,7 @@
 package com.bosssoft.ecds.controller;
 
 import com.alibaba.excel.EasyExcel;
-import com.bosssoft.ecds.common.response.QueryResponseResult;
+import com.bosssoft.ecds.response.QueryResponseResult;
 import com.bosssoft.ecds.entity.dto.SubjectDTO;
 import com.bosssoft.ecds.entity.vo.subjectvo.*;
 import com.bosssoft.ecds.service.SubjectService;

@@ -23,7 +23,6 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 
@@ -70,25 +69,17 @@ public class RSAUtil {
      */
     private static final int INITIALIZE_LENGTH = 1024;
 
-    /**
-     * 后端RSA的密钥对(公钥和私钥)Map，由静态代码块赋值
-     */
-    private static Map<String, Object> genKeyPair = new LinkedHashMap<>();
-
-    static {
-        try {
-            genKeyPair.putAll(genKeyPair());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
 
     /**
      * 生成密钥对(公钥和私钥)
      */
-    public static Map<String, Object> genKeyPair() throws Exception {
-        KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance(KEY_ALGORITHM);
+    public static Map<String, Object> genKeyPair() {
+        KeyPairGenerator keyPairGen = null;
+        try {
+            keyPairGen = KeyPairGenerator.getInstance(KEY_ALGORITHM);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
         keyPairGen.initialize(INITIALIZE_LENGTH);
         KeyPair keyPair = keyPairGen.generateKeyPair();
         RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
@@ -104,16 +95,16 @@ public class RSAUtil {
     /**
      * 获取私钥
      */
-    public static String getPrivateKey() {
-        Key key = (Key) genKeyPair.get(PRIVATE_KEY);
+    public static String getPrivateKey(Map<String, Object> map) {
+        Key key = (Key) map.get(PRIVATE_KEY);
         return Base64.encodeBase64String(key.getEncoded());
     }
 
     /**
      * 获取公钥
      */
-    public static String getPublicKey() {
-        Key key = (Key) genKeyPair.get(PUBLIC_KEY);
+    public static String getPublicKey(Map<String, Object> map) {
+        Key key = (Key) map.get(PUBLIC_KEY);
         return Base64.encodeBase64String(key.getEncoded());
     }
 
@@ -157,7 +148,6 @@ public class RSAUtil {
         return cipher.doFinal(data);
     }
 
-
     /**
      * 私钥解密
      *
@@ -191,7 +181,6 @@ public class RSAUtil {
         //分段进行加密操作
         return encryptAndDecryptOfSubsection(data, cipher, MAX_ENCRYPT_BLOCK);
     }
-
 
     /**
      * 分段进行加密、解密操作

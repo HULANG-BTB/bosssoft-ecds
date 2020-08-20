@@ -1,6 +1,6 @@
 package com.bosssoft.ecds.enums;
 
-import com.bosssoft.ecds.common.response.ResultCode;
+import com.bosssoft.ecds.response.ResultCode;
 
 /**
  * @author shkstart
@@ -16,7 +16,7 @@ public enum SubjectResultCode implements ResultCode {
     PARENT_ERROR(false, 20007, "父级预算科目不存在或已被删除，请刷新重试！"),
     UPDATE_DATE_ERROR(false, 20009, "只允许修改今年的数据！"),
     COPY_ERROR(false, 20010, "请选中左侧一级菜单！"),
-    DUPLICATE_ERROR(false, 20011, "存在重复数据！"),
+    IMPORT_ERROR(false, 20011, "Excel中数据格式错误！"),
     ;
 
     boolean success;

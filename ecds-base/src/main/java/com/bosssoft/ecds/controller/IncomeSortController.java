@@ -93,4 +93,10 @@ public class IncomeSortController {
         return incomeSortService.selectAll();
     }
 
+    @ApiOperation(value = "对外提供收入类别信息")
+    @GetMapping("getBySubjectId")
+    public QueryResponseResult getBySubjectId(Long subjectId) {
+        return incomeSortService.getBySubjectId(subjectId);
+    }
+
 }
