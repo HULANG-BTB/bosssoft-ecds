@@ -1,9 +1,9 @@
 package com.bosssoft.ecds.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.bosssoft.ecds.common.response.QueryResponseResult;
-import com.bosssoft.ecds.common.response.ResponseResult;
-import com.bosssoft.ecds.common.response.ResultCode;
+import com.bosssoft.ecds.response.QueryResponseResult;
+import com.bosssoft.ecds.response.ResponseResult;
+import com.bosssoft.ecds.response.ResultCode;
 import com.bosssoft.ecds.dao.BillTypeDao;
 import com.bosssoft.ecds.entity.dto.BillSortDTO;
 import com.bosssoft.ecds.entity.dto.BillTypeDTO;

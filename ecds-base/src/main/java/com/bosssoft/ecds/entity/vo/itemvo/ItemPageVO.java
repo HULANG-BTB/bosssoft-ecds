@@ -55,8 +55,23 @@ public class ItemPageVO<T> {
     private String keyword;
 
     /**
+     * 通过预算科目查询项目
+     */
+    @ApiModelProperty(value = "通过预算科目查询项目", required = false, example = "")
+    private String subjectCode;
+
+
+    /**
      * 通过审核状态进行筛选查询
      */
     @ApiModelProperty(value = "通过审核状态进行筛选查询", required = false, example = "")
     private Integer isenable;
+    /**
+     * 操作类型，项目管理或者项目审核界面
+     * 1表示维护
+     * 2表示审核
+     */
+    @ApiModelProperty(value = "操作类型，项目管理或者项目审核界面", required = false, example = "")
+    private Integer state;
+
 }

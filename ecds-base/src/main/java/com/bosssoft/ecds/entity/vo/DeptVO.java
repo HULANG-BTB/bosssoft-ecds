@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -47,9 +48,11 @@ public class DeptVO extends Model<DeptVO> {
     @ApiModelProperty(value = "经办人ID")
     private Long operatorId;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @ApiModelProperty(value = "创建日期")
     private Date createTime;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @ApiModelProperty(value = "最后修改时间")
     private Date updateTime;
 

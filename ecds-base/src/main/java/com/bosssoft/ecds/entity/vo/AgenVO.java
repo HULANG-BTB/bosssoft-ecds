@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -26,9 +27,11 @@ public class AgenVO extends Model<AgenVO> {
     @ApiModelProperty(value = "单位编码")
     private String agenCode;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @ApiModelProperty(value = "生效日期")
     private Date effDate;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @ApiModelProperty(value = "失效日期")
     private Date expDate;
 
@@ -110,9 +113,11 @@ public class AgenVO extends Model<AgenVO> {
     @ApiModelProperty(value = "经办人ID")
     private Long operatorId;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @ApiModelProperty(value = "创建日期")
     private Date createTime;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @ApiModelProperty(value = "最后修改时间")
     private Date updateTime;
 
