@@ -15,6 +15,10 @@ import com.bosssoft.ecds.entity.pojo.BatchPojo;
 import com.bosssoft.ecds.entity.vo.SendMailVo;
 import com.bosssoft.ecds.entity.vo.SendSmsVo;
 import com.bosssoft.ecds.entity.vo.UneCbillVo;
+import com.bosssoft.ecds.response.CommonCode;
+import com.bosssoft.ecds.response.QueryResponseResult;
+import com.bosssoft.ecds.response.ResponseResult;
+import com.bosssoft.ecds.response.ResultCode;
 import com.bosssoft.ecds.service.UneCbillService;
 import com.bosssoft.ecds.service.client.MessageService;
 import com.bosssoft.ecds.service.client.TemplateService;
@@ -24,12 +28,14 @@ import com.bosssoft.ecds.util.CommonUtil;
 import com.bosssoft.ecds.util.ResponseUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
+
 import java.text.DateFormat;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
@@ -66,6 +72,7 @@ public class UneCBillController {
 
     /**
      * 分页查询当前单位的开票记录
+     *
      * @param currentPage
      * @param pageSize
      * @return
@@ -79,6 +86,7 @@ public class UneCBillController {
 
     /**
      * 查询单张票据
+     *
      * @param billId
      * @return
      */
@@ -96,33 +104,40 @@ public class UneCBillController {
 
     /**
      * 根据票据ID和校验码查询票据
+     *
      * @param billId
      * @param checkCode
      * @return
      */
     @RequestMapping(value = "/getBillByIdAndCheckCode", method = RequestMethod.GET)
-        public String getBillByIdAndCheckCode(String billId, String checkCode) throws ExecutionException, InterruptedException {
+    public String getBillByIdAndCheckCode(String billId, String checkCode) throws ExecutionException, InterruptedException, JsonProcessingException {
         QueryWrapper<UneCbill> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("f_bill_id", billId)
                 .eq("f_check_code", checkCode);
         UneCbill uneCbill = uneCbillService.getBillByIdAndCheckCode(queryWrapper);
         log.info("success");
+        ObjectWriter writer = new ObjectMapper().writerWithDefaultPrettyPrinter();
+        QueryResponseResult<MessageUneCbill> res;
         if (uneCbill != null) {
             MessageUneCbill messageUneCbill = new MessageUneCbill();
             BeanUtil.copyProperties(uneCbill, messageUneCbill);
-            log.info(messageUneCbill.getFBillId() +" :"+ messageUneCbill.getFBillNo());
+            log.info(messageUneCbill.getFBillId() + " :" + messageUneCbill.getFBillNo());
             NontaxBillDTO nontaxBillDTO = new NontaxBillDTO();
             nontaxBillDTO.setBillCode(messageUneCbill.getFBillId());
             nontaxBillDTO.setSerialCode(messageUneCbill.getFBillNo());
-            String url = templateService.getTemplate(nontaxBillDTO);
-            messageUneCbill.setImgUrl(url);
-            return ResponseUtils.getResponse(uneCbill, ResponseUtils.ResultType.OK);
+            //String url = templateService.getTemplate(nontaxBillDTO);
+            messageUneCbill.setImgUrl("url");
+            res = new QueryResponseResult<>(CommonCode.SUCCESS, messageUneCbill);
+            return writer.writeValueAsString(res);
+
         }
-        return ResponseUtils.getResponse(404, "票据不存在");
+        res = new QueryResponseResult<>(CommonCode.FAIL, null);
+        return writer.writeValueAsString(res);
     }
 
     /**
      * 开票前验证
+     *
      * @param unitName
      * @return
      */
@@ -152,16 +167,18 @@ public class UneCBillController {
 
     /**
      * 获取单位信息
+     *
      * @param unitName
      * @return
      */
     @RequestMapping(value = "/getUnitInfo", method = RequestMethod.GET)
-    public String getUnitInfo (@RequestParam String unitName) {
+    public String getUnitInfo(@RequestParam String unitName) {
         return unitManagerService.getDetailByUnitName(unitName);
     }
 
     /**
      * 获取单位可用票据信息
+     *
      * @param unitName
      * @return
      */
@@ -174,6 +191,7 @@ public class UneCBillController {
     /**
      * 开票选择开票项目列表
      * 项目（通过UnitManagerService调用远程接口查询单位包含项目list）：项目编码，项目名称，收费标准，计量单位
+     *
      * @return
      */
     @RequestMapping(path = "getItemList", method = RequestMethod.GET)
@@ -185,11 +203,12 @@ public class UneCBillController {
     /**
      * 新增开票
      * 所需字段：
-     *单位（通过UnitManagerService调用远程接口查询）：区划id，单位识别码，单位编码，开票点id，开票点编码，开票点名称
-     *缴款人信息 http request body中直接获取
-     *项目（接收项目列表）：项目编码，项目名称，收费标准，计量单位
-     *编制人：当前登录用户(redis中获取)
+     * 单位（通过UnitManagerService调用远程接口查询）：区划id，单位识别码，单位编码，开票点id，开票点编码，开票点名称
+     * 缴款人信息 http request body中直接获取
+     * 项目（接收项目列表）：项目编码，项目名称，收费标准，计量单位
+     * 编制人：当前登录用户(redis中获取)
      * 校验码：commonUtil工具类生成
+     *
      * @return
      */
     @RequestMapping(path = "/addBill", method = RequestMethod.POST)
@@ -211,6 +230,7 @@ public class UneCBillController {
 
     /**
      * 获取票据模板
+     *
      * @param billId
      * @return
      */
@@ -235,16 +255,18 @@ public class UneCBillController {
 
     /**
      * 缴款方需要的DTO
+     *
      * @param fPayerTel
      * @param checkCode
      * @return
      */
     @RequestMapping(path = "/getItems", method = RequestMethod.GET)
-    public String getItems(String fPayerTel, String checkCode) {
+    public QueryResponseResult getItems(String fPayerTel, String checkCode) {
         QueryWrapper<UneCbill> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("f_payer_tel", fPayerTel)
                 .eq("f_check_code", checkCode);
         UneCbill uneCbill = uneCbillService.getBillByIdAndCheckCode(queryWrapper);
+        QueryResponseResult<PayDto> responseResult;
         if (uneCbill != null) {
             PayDto payDto = new PayDto();
             payDto.setPayerName(uneCbill.getFPayerName());
@@ -256,18 +278,21 @@ public class UneCBillController {
                 itemDtos.add(uneCbillItemDto);
             }
             payDto.setUneCbillItems(itemDtos);
-            return ResponseUtils.getResponse(JSON.toJSONString(payDto), ResponseUtils.ResultType.OK);
+            responseResult = new QueryResponseResult(CommonCode.SUCCESS, payDto);
+            return responseResult;
         }
-        return ResponseUtils.getResponse(404, "票据不存在");
+        responseResult = new QueryResponseResult(CommonCode.FAIL, "查询票据不存在");
+        return responseResult;
     }
 
     /**
      * 发送邮件
+     *
      * @param billId
      * @return
      */
     @RequestMapping(path = "/sendMail", method = RequestMethod.GET)
-    public String sendMail(String billId) throws ExecutionException, InterruptedException, JsonProcessingException {
+    public ResponseResult sendMail(String billId) throws ExecutionException, InterruptedException, JsonProcessingException {
         UneCbill uneCbill = uneCbillService.getUneCBillById(billId);
         if (uneCbill != null) {
             MessageDto messageDto = new MessageDto();
@@ -281,23 +306,24 @@ public class UneCBillController {
             sendMailVo.setSubject("邮件通知");
             sendMailVo.setTemplate("billTemplate.ftl");
             log.info(System.currentTimeMillis() + "");
-            String res = messageService.sendMail(sendMailVo);
-            JSONObject jsonObject = JSONObject.parseObject(res);
-            if (jsonObject.getString("status").equals(200)) {
-                return ResponseUtils.getResponse(res, ResponseUtils.ResultType.OK);
+            ResponseResult res = messageService.sendMail(sendMailVo);
+            //JSONObject jsonObject = JSONObject.parseObject(res);
+            if (res.isSuccess()) {
+                return ResponseResult.SUCCESS();
             }
-            return ResponseUtils.getResponse(404, "邮件发送失败");
+            return ResponseResult.FAIL();
         }
-        return ResponseUtils.getResponse(404, "票据不存在");
+        return ResponseResult.FAIL();
     }
 
     /**
      * 发送短信
+     *
      * @param billId
      * @return
      */
     @RequestMapping(path = "/sendSms", method = RequestMethod.GET)
-    public String sendSms(String billId)  throws ExecutionException, InterruptedException{
+    public ResponseResult sendSms(String billId) throws ExecutionException, InterruptedException {
         UneCbill uneCbill = uneCbillService.getUneCBillById(billId);
         if (uneCbill != null) {
             MessageDto messageDto = new MessageDto();
@@ -307,26 +333,29 @@ public class UneCBillController {
             sendSmsVo.setSmsFrom("开票单位：boss");
             sendSmsVo.setSmsTo(uneCbill.getFPayerTel());
             sendSmsVo.setContent(JSON.toJSONString(messageDto));
-            String res = messageService.send(sendSmsVo);
-            JSONObject jsonObject = JSONObject.parseObject(res);
-            if (jsonObject.getString("status").equals(200)) {
-                return ResponseUtils.getResponse(res, ResponseUtils.ResultType.OK);
+            log.info("before");
+            ResponseResult res = messageService.send(sendSmsVo);
+            //JSONObject jsonObject = JSONObject.parseObject(res);
+            if (res.isSuccess()) {
+                return ResponseResult.SUCCESS();
             }
-            return ResponseUtils.getResponse(404, "短信发送失败");
+            return ResponseResult.FAIL();
         }
-        return ResponseUtils.getResponse(404, "票据不存在");
+        return ResponseResult.FAIL();
     }
 
     /**
-     *查询票据
+     * 查询核销票据
+     *
      * @param start
      * @param end
      * @return
      */
     @GetMapping("/writeOffInfo")
-    public String writeOffInfo(String start, String end) {
+    public ResponseResult writeOffInfo(String start, String end) {
         List<UneCbill> list = uneCbillService.writeOff(start, end);
         List<WriteOffDto> writeOffDtos = new ArrayList<>();
+        QueryResponseResult<WriteOffDto> responseResult;
         if (list.size() != 0) {
             for (UneCbill uneCbill : list) {
                 WriteOffDto writeOffDto = new WriteOffDto();
@@ -334,8 +363,23 @@ public class UneCBillController {
                 writeOffDto.setUneCbillItems(uneCbillService.getItems(String.valueOf(uneCbill.getFId())));
                 writeOffDtos.add(writeOffDto);
             }
-            return ResponseUtils.getResponse(writeOffDtos, ResponseUtils.ResultType.OK);
+            responseResult = new QueryResponseResult(CommonCode.SUCCESS, writeOffDtos);
+            return responseResult;
         }
-        return ResponseUtils.getResponse(404, "需要核销票据不存在");
+        return new QueryResponseResult(CommonCode.FAIL, "票据不存在");
     }
+
+    /**
+     * 分页查询单位端审核通过记录
+     * @param currentPage
+     * @param pageSize
+     * @return
+     */
+    @RequestMapping(path = "/getPassBill", method = RequestMethod.GET)
+    public IPage<UneCbillVo> getPassBill(int currentPage, int pageSize) {
+        int total = uneCbillService.passBillCount();
+        Page<UneCbill> page = new Page<>(currentPage, pageSize, total);
+        return uneCbillService.selectPassBillPage(page);
+    }
+
 }

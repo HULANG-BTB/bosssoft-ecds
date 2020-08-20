@@ -22,6 +22,11 @@ public class WriteOffDto {
     private String fBillNo;
 
     /**
+     * 票据类型
+     */
+    private String fType;
+
+    /**
      * 开票金额
      */
     private double fTotalAmt;
