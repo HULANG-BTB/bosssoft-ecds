@@ -456,6 +456,7 @@ public class SubjectServiceImpl extends ServiceImpl<SubjectDao, SubjectPO> imple
      * @param year
      * @return
      */
+    @Override
     public List<SubjectVO> getSecondTree(String year) {
         QueryWrapper<SubjectPO> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(SubjectPO.F_PARENT_ID, SubjectConstant.INIT_PARENT_ID);
