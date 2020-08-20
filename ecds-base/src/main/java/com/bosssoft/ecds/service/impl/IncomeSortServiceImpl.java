@@ -171,7 +171,6 @@ public class IncomeSortServiceImpl implements IncomeSortService {
         if (incomeSortDao.selectOne(queryWrapper) != null) {
             throw new CustomException(InComeResultCode.INCOME_CODE_EXISTS);
         }
-
         //如果是父级id为0,则编码长度只能为1位
         if (parentId.equals(IncomeSortConstant.INIT_ALL_NUM)) {
             if (code.length() != 1) {
@@ -193,11 +192,16 @@ public class IncomeSortServiceImpl implements IncomeSortService {
         updateWrapper.eq(IncomeSortConstant.F_ID, updateIncomeSortVO.getId());
         //获取原信息版本号
         IncomeSortPO temp = incomeSortDao.selectById(updateIncomeSortVO.getId());
+        if (temp == null) {
+            throw new CustomException(InComeResultCode.INCOME_NAME_NOT_EXISTS);
+        }
+        checkByCode(updateIncomeSortVO.getCode(), temp.getId());
         IncomeSortPO incomeSort = new IncomeSortPO();
         incomeSort.setVersion(temp.getVersion());
         incomeSort.setName(updateIncomeSortVO.getName());
         incomeSort.setRemark(updateIncomeSortVO.getRemark());
         incomeSort.setLeaf(updateIncomeSortVO.getLeaf());
+        incomeSort.setCode(updateIncomeSortVO.getCode());
         Date date = new Date();
         incomeSort.setUpdateTime(date);
         incomeSortDao.update(incomeSort, updateWrapper);
@@ -280,14 +284,14 @@ public class IncomeSortServiceImpl implements IncomeSortService {
                 throw new CustomException(InComeResultCode.INCOME_SORT_NOT_NULL);
             }
         }
-        //判断项目里是否存在收入类别信息
+        //根据编码判断项目里是否存在收入类别信息
         QueryWrapper<ItemPO> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(IncomeSortConstant.F_LOGIC_DELETE, IncomeSortConstant.LOGC_DELETE_NUM);
         queryWrapper.eq(IncomeSortConstant.F_INCOM_SORT_CODE, incomeSortDTO.getCode());
         if (itemDao.selectOne(queryWrapper) != null) {
             throw new CustomException(InComeResultCode.ITEM_EXISTS);
         }
-        //判断预算科目里是否存在收入类别信息
+        //根据id判断预算科目里是否存在收入类别信息
         QueryWrapper<IncomeSortSubjectPO> poQueryWrapper = new QueryWrapper<>();
         poQueryWrapper.eq(IncomeSortConstant.F_LOGIC_DELETE, IncomeSortConstant.LOGC_DELETE_NUM);
         poQueryWrapper.eq(IncomeSortConstant.F_INCOME_SORT_ID, incomeId);
