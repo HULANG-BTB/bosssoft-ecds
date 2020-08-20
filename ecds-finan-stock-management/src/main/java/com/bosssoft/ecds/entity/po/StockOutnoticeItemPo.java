@@ -22,7 +22,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author misheep
- * @since 2020-08-11
+ * @since 2020-08-13
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -45,8 +45,8 @@ public class StockOutnoticeItemPo extends Model<StockOutnoticeItemPo> {
     private Long no;
 
     @ApiModelProperty(value = "票据代码（8位）")
-    @TableField("f_bill_code")
-    private String billCode;
+    @TableField("f_bill_precode")
+    private String billPrecode;
 
     @ApiModelProperty(value = "票据名称")
     @TableField("f_bill_name")
@@ -89,7 +89,7 @@ public class StockOutnoticeItemPo extends Model<StockOutnoticeItemPo> {
 
     public static final String F_NO = "f_no";
 
-    public static final String F_BILL_CODE = "f_bill_code";
+    public static final String F_BILL_PRECODE = "f_bill_precode";
 
     public static final String F_BILL_NAME = "f_bill_name";
 

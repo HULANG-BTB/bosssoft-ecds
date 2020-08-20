@@ -1,11 +1,15 @@
 package com.bosssoft.ecds.controller;
 
 
+import com.bosssoft.ecds.entity.dto.ReceiveFinanceapplyDto;
+import com.bosssoft.ecds.entity.dto.SentBillDto;
 import com.bosssoft.ecds.entity.po.FinanBillPo;
 import com.bosssoft.ecds.entity.vo.StockOutVo;
 import com.bosssoft.ecds.service.FinanBillService;
+import com.bosssoft.ecds.util.ResponseUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
@@ -60,6 +64,18 @@ public class FinanBillController {
 
         return SUCCESS;
     }
+
+    @PostMapping("/getBill")
+    public String getBill(ReceiveFinanceapplyDto financeapplyDto) {
+        SentBillDto billDto = new SentBillDto();
+
+        return ResponseUtil.getResponse(
+                ResponseUtil.ResultType.OK.getCode(),
+                ResponseUtil.ResultType.OK.getMsg(),
+                billDto);
+    }
+
+
 
 
 
