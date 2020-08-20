@@ -84,4 +84,17 @@ public interface UneCbillService {
      * @return
      */
     List<UneCbill> writeOff(String satrt, String end);
+
+    /**
+     * 查询审核通过票据列表
+     * @return
+     */
+    int passBillCount();
+
+    /**
+     * 分页查询通过审核票据信息
+     * @param page
+     * @return
+     */
+    IPage<UneCbillVo> selectPassBillPage(Page<UneCbill> page);
 }

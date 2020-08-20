@@ -15,4 +15,10 @@ public interface UneCbillMapper extends BaseMapper<UneCbill> {
 
     @Select("select count(*) from une_cbill")
     int billCount();
+
+    @Select("select count(*) from une_cbill where f_state=2")
+    int passBillCount();
+
+    @Select("select * from une_cbill where f_state=2")
+    List<UneCbill> selectPassPageVO(Page<UneCbill> page);
 }

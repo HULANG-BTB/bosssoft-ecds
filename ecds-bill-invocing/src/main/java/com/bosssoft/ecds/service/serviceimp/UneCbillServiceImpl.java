@@ -177,4 +177,38 @@ public class UneCbillServiceImpl implements UneCbillService {
                 .eq("f_state", 4);
         return uneCbillMapper.selectList(queryWrapper);
     }
+
+    /**
+     *查询通过审核票据数量
+     * @return
+     */
+    @Override
+    public int passBillCount() {
+        return uneCbillMapper.passBillCount();
+    }
+
+    /**
+     * 分页查询通过审核票据信息
+     * @param page
+     * @return
+     */
+    @Override
+    public IPage<UneCbillVo> selectPassBillPage(Page<UneCbill> page) {
+        List<UneCbill> cbillList = uneCbillMapper.selectPassPageVO(page);
+        List<UneCbillVo> cbillVos = new ArrayList<>();
+        /**
+         * 对象类型转换
+         */
+        for (UneCbill uneCbill : cbillList) {
+            UneCbillVo uneCbillVo = new UneCbillVo();
+            BeanUtil.copyProperties(uneCbill, uneCbillVo);
+            cbillVos.add(uneCbillVo);
+        }
+        long currentPage = page.getCurrent();
+        long pageSize = page.getSize();
+        long total = page.getTotal();
+        Page<UneCbillVo> page1 = new Page<>(currentPage, pageSize, total);
+        return page1.setRecords(cbillVos);
+    }
+
 }
