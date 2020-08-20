@@ -3,12 +3,12 @@ package com.bosssoft.ecds.controller;
 
 import com.bosssoft.ecds.response.QueryResponseResult;
 import com.bosssoft.ecds.response.ResponseResult;
-import com.bosssoft.ecds.entity.dto.agendto.AgenBillDTO;
+import com.bosssoft.ecds.entity.dto.agendto.AgenEnableBillDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.po.BillTypePO;
-import com.bosssoft.ecds.entity.vo.AgenBillVO;
+import com.bosssoft.ecds.entity.vo.AgenEnableBillVO;
 import com.bosssoft.ecds.entity.vo.PageVO;
-import com.bosssoft.ecds.service.AgenBillService;
+import com.bosssoft.ecds.service.AgenEnableBillService;
 import com.bosssoft.ecds.utils.MyBeanUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -31,10 +31,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/agenBill")
 @Api(value = "单位可用票据接口")
-public class AgenBillController {
+public class AgenEnableBillController {
 
     @Autowired
-    private AgenBillService agenBillService;
+    private AgenEnableBillService agenBillService;
 
 
     /**
@@ -45,8 +45,8 @@ public class AgenBillController {
      */
     @ApiOperation(value = "批量添加单位可用票据关系", notes = "输入单位编码和票据编码")
     @PostMapping("/updateBatch")
-    public ResponseResult updateBatch(@RequestBody List<AgenBillVO> agenBillVOList) {
-        List<AgenBillDTO> agenBillDTOList = MyBeanUtil.copyListProperties(agenBillVOList, AgenBillDTO.class);
+    public ResponseResult updateBatch(@RequestBody List<AgenEnableBillVO> agenBillVOList) {
+        List<AgenEnableBillDTO> agenBillDTOList = MyBeanUtil.copyListProperties(agenBillVOList, AgenEnableBillDTO.class);
         return agenBillService.updateBatch(agenBillDTOList);
     }
 
@@ -74,8 +74,8 @@ public class AgenBillController {
      */
     @ApiOperation(value = "查询单位所有可用票据", notes = "输入单位编码")
     @PostMapping("/getBillAll")
-    public QueryResponseResult<List<BillTypePO>> getBill(@RequestBody AgenBillVO agenBillVO) {
-        AgenBillDTO agenBillDTO = MyBeanUtil.myCopyProperties(agenBillVO, AgenBillDTO.class);
+    public QueryResponseResult<List<BillTypePO>> getBill(@RequestBody AgenEnableBillVO agenBillVO) {
+        AgenEnableBillDTO agenBillDTO = MyBeanUtil.myCopyProperties(agenBillVO, AgenEnableBillDTO.class);
         return agenBillService.getBill(agenBillDTO);
     }
 

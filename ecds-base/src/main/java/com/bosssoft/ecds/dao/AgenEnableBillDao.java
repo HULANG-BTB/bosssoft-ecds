@@ -1,11 +1,8 @@
 package com.bosssoft.ecds.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.bosssoft.ecds.entity.po.AgenBillPO;
-import com.bosssoft.ecds.entity.po.BillTypePO;
+import com.bosssoft.ecds.entity.po.AgenEnableBillPO;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 /**
  * <p>
@@ -16,6 +13,6 @@ import java.util.List;
  * @since 2020-08-12
  */
 @Component
-public interface AgenBillDao extends BaseMapper<AgenBillPO> {
+public interface AgenEnableBillDao extends BaseMapper<AgenEnableBillPO> {
 
 }

@@ -3,9 +3,9 @@ package com.bosssoft.ecds.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.bosssoft.ecds.response.QueryResponseResult;
 import com.bosssoft.ecds.response.ResponseResult;
-import com.bosssoft.ecds.entity.dto.agendto.AgenBillDTO;
+import com.bosssoft.ecds.entity.dto.agendto.AgenEnableBillDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
-import com.bosssoft.ecds.entity.po.AgenBillPO;
+import com.bosssoft.ecds.entity.po.AgenEnableBillPO;
 import com.bosssoft.ecds.entity.po.BillTypePO;
 import com.bosssoft.ecds.entity.vo.PageVO;
 
@@ -19,7 +19,7 @@ import java.util.List;
  * @author wzh
  * @since 2020-08-12
  */
-public interface AgenBillService extends IService<AgenBillPO> {
+public interface AgenEnableBillService extends IService<AgenEnableBillPO> {
 
     /**
      * 批量维护单位票据关系数据
@@ -27,7 +27,7 @@ public interface AgenBillService extends IService<AgenBillPO> {
      * @param agenBillDTOList 输入单位编码和票据编码
      * @return 返回成功或者失败的code和msg
      */
-    ResponseResult updateBatch(List<AgenBillDTO> agenBillDTOList);
+    ResponseResult updateBatch(List<AgenEnableBillDTO> agenBillDTOList);
 
     /**
      * 查询单位的可用票据，供单位端使用
@@ -45,5 +45,5 @@ public interface AgenBillService extends IService<AgenBillPO> {
      * @param agenBillDTO 输入单位编码
      * @return 返回出单位所有的可用票据
      */
-    QueryResponseResult<List<BillTypePO>> getBill(AgenBillDTO agenBillDTO);
+    QueryResponseResult<List<BillTypePO>> getBill(AgenEnableBillDTO agenBillDTO);
 }
