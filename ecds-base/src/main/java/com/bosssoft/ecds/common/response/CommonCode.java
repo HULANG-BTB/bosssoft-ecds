@@ -1,7 +1,5 @@
 package com.bosssoft.ecds.common.response;
 
-import com.bosssoft.ecds.utils.DynamicEnumUtil;
-
 /**
  * @author: lpb
  * @create: 2020-07-10 09:02
@@ -32,19 +30,6 @@ public enum CommonCode implements ResultCode {
         this.success = success;
         this.code = code;
         this.message = message;
-    }
-
-    /**
-     * 动态创建枚举类方法
-     * @param enumName 枚举名称
-     * @param success 是否成功
-     * @param code 枚举编码
-     * @param message 枚举消息
-     * @return
-     */
-    public static CommonCode addEnum(String enumName, boolean success, int code, String message){
-        CommonCode createCode = DynamicEnumUtil.addEnum(CommonCode.class, enumName, new Class[]{Boolean.class, Integer.class,String.class}, new Object[]{success,code, message});
-        return createCode;
     }
 
     @Override
