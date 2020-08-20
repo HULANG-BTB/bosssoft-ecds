@@ -92,11 +92,9 @@ public class FabItemBillServiceImpl implements FabItemBillService {
         String itemId = itemsInsertVO.getItemId();
         FabItemBillPO fabItemBillPO = fabItemBillDao.selectOne(new LambdaQueryWrapper<FabItemBillPO>().eq(FabItemBillPO::getFBillCode, billCode)
                 .eq(FabItemBillPO::getFItemIdCode, itemId).eq(FabItemBillPO::getFIsEnabled, true));
-        if (fabItemBillPO != null) {
-            return true;
-        }
-        return false;
+     return  fabItemBillPO!=null;
     }
+
 
     @Override
     public IPage<ItemPO> selectNoContactItem(SelectItemVO selectItemVO) {
@@ -108,7 +106,7 @@ public class FabItemBillServiceImpl implements FabItemBillService {
 
     public String beautifyItemName(String itemName) {
         String vueNull = "null";
-        if (vueNull.equals(itemName) || itemName == null || itemName == "") {
+        if (vueNull.equals(itemName) || itemName == null ||itemName.equals("")) {
             return "";
         } else {
             return '%' + itemName + '%';
@@ -117,7 +115,7 @@ public class FabItemBillServiceImpl implements FabItemBillService {
 
     public String beautifyBillCode(String billCode) {
         String vueNull = "null";
-        if (vueNull.equals(billCode) || billCode == null || billCode == "") {
+        if (vueNull.equals(billCode) || billCode == null || billCode.equals("")) {
             return "";
         } else {
             return billCode;
