@@ -2,10 +2,10 @@ package com.bosssoft.ecds.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.bosssoft.ecds.entity.dto.BillAvailableInfoDTO;
+import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.po.BillAvailableArchivePO;
 import com.bosssoft.ecds.entity.query.CommonQuery;
 
-import java.util.List;
 
 /**
  * <p>
@@ -23,7 +23,7 @@ public interface BillAvailableArchiveService extends IService<BillAvailableArchi
      * @param query
      * @return List<BillApplyDto>
      */
-    List<BillAvailableInfoDTO> getBillApplyInfos(CommonQuery query);
+    PageDTO<BillAvailableInfoDTO> getBillApplyInfos(CommonQuery query);
 
     /**
      * 财政端电子票据申领情况归档

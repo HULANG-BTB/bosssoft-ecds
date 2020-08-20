@@ -1,12 +1,12 @@
 package com.bosssoft.ecds.controller;
 
-
-import cn.hutool.core.bean.BeanUtil;
+import com.bosssoft.ecds.common.response.R;
 import com.bosssoft.ecds.entity.dto.BillWarnDTO;
+import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.query.CommonQuery;
 import com.bosssoft.ecds.entity.vo.BillWarnVO;
 import com.bosssoft.ecds.service.BillWarnArchiveService;
-import com.bosssoft.ecds.utils.ResponseUtils;
+import com.bosssoft.ecds.utils.MyBeanUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -44,18 +43,11 @@ public class BillWarnArchiveController {
     @ApiOperation(value = "获取单位的预警信息情况")
     @ApiImplicitParam("查询参数对象")
     @PostMapping("/info")
-    public String info(@RequestBody @ApiParam("查询参数对象") CommonQuery query) {
-        List<BillWarnDTO> billWarnInfos = billWarnArchiveService.getBillWarnInfos(query);
-        List<BillWarnVO> res = new ArrayList<>();
-
-        billWarnInfos.forEach(
-                item -> {
-                    BillWarnVO vo = BeanUtil.toBean(item, BillWarnVO.class);
-                    res.add(vo);
-                }
-        );
-
-        return ResponseUtils.getResponse(res, ResponseUtils.ResultType.SUCCESS);
+    public R info(@RequestBody @ApiParam("查询参数对象") CommonQuery query) {
+        PageDTO<BillWarnDTO> page = billWarnArchiveService.getBillWarnInfos(query);
+        List<BillWarnDTO> data = page.getData();
+        List<BillWarnVO> vos = MyBeanUtil.copyListProperties(data, BillWarnVO::new);
+        return R.ok().data("items", data).data("total", page.getTotal()).message("单位的预警信息情况");
     }
 }
 

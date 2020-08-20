@@ -2,10 +2,9 @@ package com.bosssoft.ecds.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.bosssoft.ecds.entity.dto.BillPayDTO;
+import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.po.BillPayArchivePO;
 import com.bosssoft.ecds.entity.query.CommonQuery;
-
-import java.util.List;
 
 /**
  * <p>
@@ -23,7 +22,7 @@ public interface BillPayArchiveService extends IService<BillPayArchivePO> {
      * @param query
      * @return List<BillPayDTO>
      */
-    List<BillPayDTO> getBillPayInfos(CommonQuery query);
+    PageDTO<BillPayDTO> getBillPayInfos(CommonQuery query);
 
     /**
      * 电子票据缴销情况归档

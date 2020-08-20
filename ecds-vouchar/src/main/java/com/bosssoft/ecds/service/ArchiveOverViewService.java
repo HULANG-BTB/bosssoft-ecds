@@ -2,6 +2,7 @@ package com.bosssoft.ecds.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.bosssoft.ecds.entity.dto.ArchiveOverViewDTO;
+import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.po.ArchivePO;
 import com.bosssoft.ecds.entity.query.ArchiveOverViewQuery;
 
@@ -39,7 +40,7 @@ public interface ArchiveOverViewService extends IService<ArchivePO> {
      * @param archiveOverViewQuery
      * @return
      */
-    List<ArchiveOverViewDTO> queryOverViewArchiveInfoPage(ArchiveOverViewQuery archiveOverViewQuery);
+    PageDTO<ArchiveOverViewDTO> queryOverViewArchiveInfoPage(ArchiveOverViewQuery archiveOverViewQuery);
 
     /**
      * 批量更新归档信息

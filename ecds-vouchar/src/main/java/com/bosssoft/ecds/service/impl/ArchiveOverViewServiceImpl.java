@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bosssoft.ecds.dao.ArchiveOverViewDao;
 import com.bosssoft.ecds.entity.dto.ArchiveOverViewDTO;
+import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.po.ArchivePO;
 import com.bosssoft.ecds.entity.query.ArchiveOverViewQuery;
 import com.bosssoft.ecds.service.ArchiveOverViewService;
@@ -58,8 +59,15 @@ public class ArchiveOverViewServiceImpl extends ServiceImpl<ArchiveOverViewDao, 
      * @return
      */
     @Override
-    public List<ArchiveOverViewDTO> queryOverViewArchiveInfoPage(ArchiveOverViewQuery archiveOverViewQuery) {
-        return archiveDao.queryOverViewArchivePageAllInfo(archiveOverViewQuery);
+    public PageDTO<ArchiveOverViewDTO> queryOverViewArchiveInfoPage(ArchiveOverViewQuery archiveOverViewQuery) {
+        PageDTO<ArchiveOverViewDTO> pageDTO = new PageDTO<>();
+        // 获取总信息条数
+        Long total = archiveDao.countInfo();
+        pageDTO.setTotal(total);
+        // 获取归档总览信息
+        List<ArchiveOverViewDTO> dtos = archiveDao.queryOverViewArchivePageAllInfo(archiveOverViewQuery);
+        pageDTO.setData(dtos);
+        return pageDTO;
     }
 
     /**

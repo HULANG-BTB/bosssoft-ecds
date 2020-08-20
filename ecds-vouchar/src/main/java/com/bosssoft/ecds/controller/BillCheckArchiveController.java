@@ -1,11 +1,12 @@
 package com.bosssoft.ecds.controller;
 
-import cn.hutool.core.bean.BeanUtil;
+import com.bosssoft.ecds.common.response.R;
 import com.bosssoft.ecds.entity.dto.BillCheckDTO;
+import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.query.CommonQuery;
 import com.bosssoft.ecds.entity.vo.BillCheckVO;
 import com.bosssoft.ecds.service.BillCheckArchiveService;
-import com.bosssoft.ecds.utils.ResponseUtils;
+import com.bosssoft.ecds.utils.MyBeanUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -43,18 +43,12 @@ public class BillCheckArchiveController {
     @ApiOperation(value = "获取单位的票据审验情况")
     @ApiImplicitParam("查询参数对象")
     @PostMapping("/info")
-    public String info(@RequestBody @ApiParam("查询参数对象") CommonQuery query) {
-        List<BillCheckDTO> billCheckInfos = billCheckArchiveService.getBillCheckInfos(query);
-        List<BillCheckVO> res = new ArrayList<>();
-
-        billCheckInfos.forEach(
-                item -> {
-                    BillCheckVO vo = BeanUtil.toBean(item, BillCheckVO.class);
-                    res.add(vo);
-                }
-        );
-
-        return ResponseUtils.getResponse(res, ResponseUtils.ResultType.SUCCESS);
+    public R info(@RequestBody @ApiParam("查询参数对象") CommonQuery query) {
+        PageDTO<BillCheckDTO> pageDTO = billCheckArchiveService.getBillCheckInfos(query);
+        // 获取数据并且转换对象
+        List<BillCheckDTO> data = pageDTO.getData();
+        List<BillCheckVO> vos = MyBeanUtil.copyListProperties(data, BillCheckVO::new);
+        return R.ok().data("items", vos).data("total", pageDTO.getTotal()).message("单位的票据审验情况");
     }
 }
 

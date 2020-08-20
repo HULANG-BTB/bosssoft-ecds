@@ -14,8 +14,6 @@ import java.util.List;
 
 /**
  * 枚举工具类
- *
- * @author liuke
  */
 public class DynamicEnumUtil {
 
@@ -54,10 +52,8 @@ public class DynamicEnumUtil {
     }
 
     private static void cleanEnumCache(Class<?> enumClass) throws NoSuchFieldException, IllegalAccessException {
-        // Sun (Oracle?!?) JDK 1.5/6
-        blankField(enumClass, "enumConstantDirectory");
-        // IBM JDK
-        blankField(enumClass, "enumConstants");
+        blankField(enumClass, "enumConstantDirectory"); // Sun (Oracle?!?) JDK 1.5/6
+        blankField(enumClass, "enumConstants"); // IBM JDK
     }
 
     private static ConstructorAccessor getConstructorAccessor(Class<?> enumClass, Class<?>[] additionalParameterTypes)
@@ -128,5 +124,11 @@ public class DynamicEnumUtil {
             throw new RuntimeException(e.getMessage(), e);
         }
     }
+
+
+    public static void main(String[] args) {
+
+    }
+
 
 }

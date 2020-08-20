@@ -1,10 +1,13 @@
 package com.bosssoft.ecds.controller;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.bosssoft.ecds.common.response.R;
 import com.bosssoft.ecds.entity.dto.ArchiveOverViewDTO;
+import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.query.ArchiveOverViewQuery;
 import com.bosssoft.ecds.entity.vo.ArchiveOverViewVO;
 import com.bosssoft.ecds.service.ArchiveOverViewService;
+import com.bosssoft.ecds.utils.MyBeanUtil;
 import com.bosssoft.ecds.utils.ResponseUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -16,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -59,24 +61,15 @@ public class ArchiveOverViewController {
     @ApiOperation(value = "查询所有单位的归档信息")
     @ApiImplicitParam("查询参数对象")
     @PostMapping("/fina/allInfo")
-    public String queryArchiveAllInfo(@RequestBody ArchiveOverViewQuery query) {
+    public R queryArchiveAllInfo(@RequestBody ArchiveOverViewQuery query) {
         /**
          * 获取全部的单位信息
          */
-        List<ArchiveOverViewDTO> archiveOverViewDTOS = service.queryOverViewArchiveInfoPage(query);
-        List<ArchiveOverViewVO> voList = new ArrayList<>();
-
-        /**
-         * 类型转换
-         */
-        archiveOverViewDTOS.forEach(
-                dto -> {
-                    ArchiveOverViewVO vo = BeanUtil.toBean(dto, ArchiveOverViewVO.class);
-                    voList.add(vo);
-                }
-        );
-
-        return ResponseUtils.getResponse(voList, ResponseUtils.ResultType.SUCCESS);
+        PageDTO<ArchiveOverViewDTO> pageDTO = service.queryOverViewArchiveInfoPage(query);
+        //转换对象
+        List<ArchiveOverViewDTO> data = pageDTO.getData();
+        List<ArchiveOverViewVO> vos = MyBeanUtil.copyListProperties(data, ArchiveOverViewVO::new);
+        return R.ok().data("items", vos).data("total", pageDTO.getTotal()).message("归档总览信息");
     }
 
 

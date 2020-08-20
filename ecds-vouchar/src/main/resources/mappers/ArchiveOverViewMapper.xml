@@ -91,6 +91,11 @@
         LIMIT #{key_offset}, #{query.limit}
     </select>
 
+    <select id="countInfo" resultType="Long">
+        SELECT count(f_id)
+        FROM fbr_archive
+    </select>
+
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.bosssoft.ecds.entity.po.ArchivePO">
         <id column="f_id" property="id"/>

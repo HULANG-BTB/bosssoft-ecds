@@ -2,10 +2,9 @@ package com.bosssoft.ecds.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.bosssoft.ecds.entity.dto.BillWarnDTO;
+import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.po.BillWarnArchivePO;
 import com.bosssoft.ecds.entity.query.CommonQuery;
-
-import java.util.List;
 
 /**
  * <p>
@@ -24,7 +23,7 @@ public interface BillWarnArchiveService extends IService<BillWarnArchivePO> {
      * @param query
      * @return List<BillWarnDTO>
      */
-    List<BillWarnDTO> getBillWarnInfos(CommonQuery query);
+    PageDTO<BillWarnDTO> getBillWarnInfos(CommonQuery query);
 
     /**
      * 预警电子票据归档信息

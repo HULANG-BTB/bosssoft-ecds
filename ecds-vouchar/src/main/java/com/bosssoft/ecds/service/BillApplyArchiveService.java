@@ -2,10 +2,9 @@ package com.bosssoft.ecds.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.bosssoft.ecds.entity.dto.BillApplyDTO;
+import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.po.BillApplyArchivePO;
 import com.bosssoft.ecds.entity.query.CommonQuery;
-
-import java.util.List;
 
 /**
  * <p>
@@ -25,7 +24,7 @@ public interface BillApplyArchiveService extends IService<BillApplyArchivePO> {
      * @param query
      * @return BillApplyDto
      */
-    List<BillApplyDTO> getBillApplyInfo(CommonQuery query);
+    PageDTO<BillApplyDTO> getBillApplyInfo(CommonQuery query);
 
 
     /**

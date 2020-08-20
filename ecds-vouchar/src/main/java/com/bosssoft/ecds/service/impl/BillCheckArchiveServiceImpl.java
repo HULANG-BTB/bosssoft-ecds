@@ -1,24 +1,24 @@
 package com.bosssoft.ecds.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bosssoft.ecds.dao.BillCheckArchiveDao;
 import com.bosssoft.ecds.entity.dto.BillCheckDTO;
 import com.bosssoft.ecds.entity.dto.CBillAccountingDTO;
+import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.po.ArchivePO;
 import com.bosssoft.ecds.entity.po.BillCheckArchivePO;
 import com.bosssoft.ecds.entity.po.CbillAccountingPO;
 import com.bosssoft.ecds.entity.query.CommonQuery;
 import com.bosssoft.ecds.service.ArchiveOverViewService;
 import com.bosssoft.ecds.service.BillCheckArchiveService;
+import com.bosssoft.ecds.utils.MyBeanUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,21 +41,22 @@ public class BillCheckArchiveServiceImpl extends ServiceImpl<BillCheckArchiveDao
     BillCheckArchiveDao billCheckArchiveDao;
 
     @Override
-    public List<BillCheckDTO> getBillCheckInfos(CommonQuery query) {
+    public PageDTO<BillCheckDTO> getBillCheckInfos(CommonQuery query) {
+        /*存放分页对象信息*/
+        PageDTO<BillCheckDTO> pageDTO = new PageDTO<>();
+        // 构造查询条件
         Page<BillCheckArchivePO> pager = new Page<>(query.getPage(), query.getLimit());
         LambdaQueryWrapper<BillCheckArchivePO> lambdaQuery = new LambdaQueryWrapper<>();
         lambdaQuery.eq(BillCheckArchivePO::getAgenCode, query.getAgenCode())
                 .orderByDesc(BillCheckArchivePO::getSignTime);
         Page<BillCheckArchivePO> page = super.page(pager, lambdaQuery);
+        // 赋予查询总数
+        pageDTO.setTotal(page.getTotal());
+        // 获取并且转换数据
         List<BillCheckArchivePO> list = page.getRecords();
-        List<BillCheckDTO> res = new ArrayList<>();
-        list.forEach(
-                po -> {
-                    BillCheckDTO dto = BeanUtil.toBean(po, BillCheckDTO.class);
-                    res.add(dto);
-                }
-        );
-        return res;
+        List<BillCheckDTO> dtos = MyBeanUtil.copyListProperties(list, BillCheckDTO::new);
+        pageDTO.setData(dtos);
+        return pageDTO;
     }
 
     @Override

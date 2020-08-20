@@ -1,21 +1,21 @@
 package com.bosssoft.ecds.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bosssoft.ecds.dao.BillApplyArchiveDao;
 import com.bosssoft.ecds.entity.dto.ArchiveOverViewDTO;
 import com.bosssoft.ecds.entity.dto.BillApplyDTO;
+import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.po.BillApplyArchivePO;
 import com.bosssoft.ecds.entity.query.CommonQuery;
 import com.bosssoft.ecds.service.ArchiveOverViewService;
 import com.bosssoft.ecds.service.BillApplyArchiveService;
+import com.bosssoft.ecds.utils.MyBeanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -38,25 +38,29 @@ public class BillApplyArchiveServiceImpl extends ServiceImpl<BillApplyArchiveDao
 
     /**
      * 获取单位申请的可用票据
+     *
+     * @return PageDTO
      */
     @Override
-    public List<BillApplyDTO> getBillApplyInfo(CommonQuery query) {
-        /*分页查询*/
+    public PageDTO<BillApplyDTO> getBillApplyInfo(CommonQuery query) {
+        /*存放分页对象信息*/
+        PageDTO<BillApplyDTO> pageDTO = new PageDTO<>();
+        /*分页查询条件*/
         Page<BillApplyArchivePO> pager = new Page<>(query.getPage(), query.getLimit());
-
+        // 设置查询条件
         LambdaQueryWrapper<BillApplyArchivePO> lambdaQuery = new LambdaQueryWrapper<>();
         lambdaQuery.eq(BillApplyArchivePO::getAgenCode, query.getAgenCode())
                 .orderByAsc(BillApplyArchivePO::getApplyTime);
         Page<BillApplyArchivePO> page = super.page(pager, lambdaQuery);
+        // 存放数据总数
+        pageDTO.setTotal(page.getTotal());
+        // 票据申请数据处理
         List<BillApplyArchivePO> list = page.getRecords();
-        List<BillApplyDTO> res = new ArrayList<>();
-        list.forEach(
-                po -> {
-                    BillApplyDTO billApplyDTO = BeanUtil.toBean(po, BillApplyDTO.class);
-                    res.add(billApplyDTO);
-                }
-        );
-        return res;
+        // 实现对象转换
+        List<BillApplyDTO> res = MyBeanUtil.copyListProperties(list, BillApplyDTO.class);
+        // 添加数据
+        pageDTO.setData(res);
+        return pageDTO;
     }
 
     /**

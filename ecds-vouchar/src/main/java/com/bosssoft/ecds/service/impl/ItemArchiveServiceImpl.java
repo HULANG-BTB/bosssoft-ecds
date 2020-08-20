@@ -1,18 +1,18 @@
 package com.bosssoft.ecds.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bosssoft.ecds.dao.ItemArchiveDao;
 import com.bosssoft.ecds.entity.dto.ItemAvailableDTO;
+import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.po.ItemArchivePO;
 import com.bosssoft.ecds.entity.query.CommonQuery;
 import com.bosssoft.ecds.service.ItemArchiveService;
+import com.bosssoft.ecds.utils.MyBeanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,21 +30,22 @@ public class ItemArchiveServiceImpl extends ServiceImpl<ItemArchiveDao, ItemArch
     private ItemArchiveDao itemArchiveDao;
 
     @Override
-    public List<ItemAvailableDTO> getItemAvailableInfos(CommonQuery query) {
+    public PageDTO<ItemAvailableDTO> getItemAvailableInfos(CommonQuery query) {
+        /*存放分页对象信息*/
+        PageDTO<ItemAvailableDTO> pageDTO = new PageDTO<>();
+        // 构造查询条件
         Page<ItemArchivePO> pager = new Page<>(query.getPage(), query.getLimit());
         LambdaQueryWrapper<ItemArchivePO> lambdaQuery = new LambdaQueryWrapper<>();
         lambdaQuery.eq(ItemArchivePO::getAgenCode, query.getAgenCode())
                 .orderByDesc(ItemArchivePO::getCreateTime);
         Page<ItemArchivePO> page = page(pager, lambdaQuery);
+        // 赋予查询总数
+        pageDTO.setTotal(page.getTotal());
+        // 获取并且转换对象
         List<ItemArchivePO> list = page.getRecords();
-        List<ItemAvailableDTO> res = new ArrayList<>();
-        list.forEach(
-                po -> {
-                    ItemAvailableDTO billApplyDTO = BeanUtil.toBean(po, ItemAvailableDTO.class);
-                    res.add(billApplyDTO);
-                }
-        );
-        return res;
+        List<ItemAvailableDTO> dtos = MyBeanUtil.copyListProperties(list, ItemAvailableDTO::new);
+        pageDTO.setData(dtos);
+        return pageDTO;
     }
 
     @Override
