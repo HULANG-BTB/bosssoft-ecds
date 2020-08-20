@@ -80,7 +80,7 @@ public class DecodeRequestBodyAdvice implements RequestBodyAdvice {
         String builderString = stringBuilder.toString();
         Long userId = 123L;
         if (redisUtils.get(userId + EncryptionConstant.PRIVATE_KEY) == null) {
-            throw new CustomException(CommonCode.ENCRYPTION_ERROR);
+            throw new CustomException(CommonCode.PRIVATE_KEY_IS_NULL);
         }
         String privateKey = String.valueOf(redisUtils.get(userId + EncryptionConstant.PRIVATE_KEY));
         try {

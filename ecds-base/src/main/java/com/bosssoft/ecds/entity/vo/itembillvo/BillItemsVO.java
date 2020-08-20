@@ -1,4 +1,4 @@
-package com.bosssoft.ecds.entity.vo;
+package com.bosssoft.ecds.entity.vo.itembillvo;
 
 import lombok.Data;
 

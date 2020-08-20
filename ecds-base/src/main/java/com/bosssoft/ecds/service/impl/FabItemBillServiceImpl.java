@@ -9,10 +9,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bosssoft.ecds.dao.FabItemBillDao;
 import com.bosssoft.ecds.entity.po.FabItemBillPO;
 import com.bosssoft.ecds.entity.po.ItemPO;
-import com.bosssoft.ecds.entity.vo.BillItemsInsertVO;
-import com.bosssoft.ecds.entity.vo.BillItemsVO;
-import com.bosssoft.ecds.entity.vo.ItemBillVO;
-import com.bosssoft.ecds.entity.vo.SelectItemVO;
+import com.bosssoft.ecds.entity.vo.itembillvo.BillItemsInsertVO;
+import com.bosssoft.ecds.entity.vo.itembillvo.BillItemsVO;
+import com.bosssoft.ecds.entity.vo.itembillvo.ItemBillVO;
+import com.bosssoft.ecds.entity.vo.itembillvo.SelectItemVO;
 import com.bosssoft.ecds.service.FabItemBillService;
 import com.bosssoft.ecds.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,11 +92,9 @@ public class FabItemBillServiceImpl implements FabItemBillService {
         String itemId = itemsInsertVO.getItemId();
         FabItemBillPO fabItemBillPO = fabItemBillDao.selectOne(new LambdaQueryWrapper<FabItemBillPO>().eq(FabItemBillPO::getFBillCode, billCode)
                 .eq(FabItemBillPO::getFItemIdCode, itemId).eq(FabItemBillPO::getFIsEnabled, true));
-        if (fabItemBillPO != null) {
-            return true;
-        }
-        return false;
+     return  fabItemBillPO!=null;
     }
+
 
     @Override
     public IPage<ItemPO> selectNoContactItem(SelectItemVO selectItemVO) {
@@ -108,7 +106,7 @@ public class FabItemBillServiceImpl implements FabItemBillService {
 
     public String beautifyItemName(String itemName) {
         String vueNull = "null";
-        if (vueNull.equals(itemName) || itemName == null || itemName == "") {
+        if (vueNull.equals(itemName) || itemName == null ||itemName.equals("")) {
             return "";
         } else {
             return '%' + itemName + '%';
@@ -117,7 +115,7 @@ public class FabItemBillServiceImpl implements FabItemBillService {
 
     public String beautifyBillCode(String billCode) {
         String vueNull = "null";
-        if (vueNull.equals(billCode) || billCode == null || billCode == "") {
+        if (vueNull.equals(billCode) || billCode == null || billCode.equals("")) {
             return "";
         } else {
             return billCode;
