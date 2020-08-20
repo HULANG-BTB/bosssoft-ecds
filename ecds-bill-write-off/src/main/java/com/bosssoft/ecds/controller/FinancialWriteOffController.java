@@ -107,6 +107,7 @@ public class FinancialWriteOffController {
     @ResponseBody
     @RequestMapping(value = "/pass", method = RequestMethod.POST)
     @ApiOperation(value = "审核通过", notes = "审核通过")
+    @ApiImplicitParam(name = "writeOffDetailVO", dataType = "WriteOffDetailVO", value = "审核结果")
     public ResponseResult pass(@RequestBody WriteOffDetailVO writeOffDetailVO){
 
         return new ResponseResult(CommonCode.SUCCESS);
@@ -122,6 +123,7 @@ public class FinancialWriteOffController {
     @ResponseBody
     @RequestMapping(value = "/unPass", method = RequestMethod.POST)
     @ApiOperation(value = "审核不通过", notes = "审核不通过")
+    @ApiImplicitParam(name = "writeOffDetailVO", dataType = "WriteOffDetailVO", value = "审核结果")
     public ResponseResult unPass(@RequestBody WriteOffDetailVO writeOffDetailVO){
 
         return new ResponseResult(CommonCode.SUCCESS);
