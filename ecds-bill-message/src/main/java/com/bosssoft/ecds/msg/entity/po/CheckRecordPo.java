@@ -68,6 +68,7 @@ public class CheckRecordPo {
     /**
      * 逻辑删除（0未删1删除）
      */
+    @TableLogic
     @TableField(value = "f_logic_delete", fill = FieldFill.INSERT)
     private Boolean logicDelete;
 
