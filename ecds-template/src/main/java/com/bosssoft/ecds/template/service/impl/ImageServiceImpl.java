@@ -146,9 +146,9 @@ public class ImageServiceImpl implements ImageService {
             ossUtil.upload(path, inputStream);
         }
 
-        // 5 年的图片访问时间
+        // 默认1个月的图片访问时间
         if (expireTime == null) {
-            expireTime = 15 * 24 * 60 * 60 * 1000L;
+            expireTime = 30 * 24 * 60 * 60 * 1000L;
         }
         URL url = ossUtil.temporaryUrl(path, expireTime);
 
