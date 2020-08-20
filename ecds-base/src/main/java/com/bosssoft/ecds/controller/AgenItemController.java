@@ -1,9 +1,10 @@
 package com.bosssoft.ecds.controller;
 
-import com.bosssoft.ecds.common.response.QueryResponseResult;
-import com.bosssoft.ecds.common.response.ResponseResult;
-import com.bosssoft.ecds.entity.dto.AgenItemDTO;
-import com.bosssoft.ecds.entity.dto.ItemDTO;
+import com.bosssoft.ecds.entity.dto.itemdto.ItemInfoDTO;
+import com.bosssoft.ecds.response.QueryResponseResult;
+import com.bosssoft.ecds.response.ResponseResult;
+import com.bosssoft.ecds.entity.dto.agendto.AgenItemDTO;
+import com.bosssoft.ecds.entity.dto.itemdto.ItemDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.vo.AgenItemVO;
 import com.bosssoft.ecds.entity.vo.itemvo.ItemVO;
@@ -59,6 +60,18 @@ public class AgenItemController {
     public QueryResponseResult<List<ItemVO>> getItem(@RequestBody AgenItemVO agenItemVO) {
         AgenItemDTO agenItemDTO = MyBeanUtil.myCopyProperties(agenItemVO, AgenItemDTO.class);
         return agenItemService.getItemAll(agenItemDTO);
+    }
+
+    /**
+     * 查询单位所有可用项目
+     *
+     * @param agenName 输入单位名称
+     * @return 返回出单位所有的可用项目
+     */
+    @ApiOperation(value = "查询单位所有可用项目", notes = "输入单位编码")
+    @PostMapping("/getItemInfo")
+    public List<ItemInfoDTO> getItemInfo(String agenName) {
+        return agenItemService.getItemInfo(agenName);
     }
 
     /**

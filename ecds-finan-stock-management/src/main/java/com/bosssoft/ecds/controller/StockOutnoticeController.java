@@ -17,6 +17,8 @@ import com.bosssoft.ecds.service.StockOutnoticeItemService;
 import com.bosssoft.ecds.service.StockOutnoticeService;
 import com.bosssoft.ecds.util.ConverUtil;
 import com.bosssoft.ecds.util.ResponseUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -37,6 +39,7 @@ import static com.bosssoft.ecds.entity.constant.StockOutChangeConstant.UN_CHANGE
 @RestController
 @RequestMapping("/stock-out")
 @CrossOrigin
+@Api(tags = "StockOutnoticeController1233333333333333333333333333")
 public class StockOutnoticeController {
 
     @Autowired
@@ -53,11 +56,10 @@ public class StockOutnoticeController {
      *
      * @return 已保存出库请求的list
      */
+    @ApiOperation("showAll")
     @PostMapping("/showAll")
     public String showAll(@RequestBody StockOutPageVo pageVo) {
-
         Long total = outService.getCount(pageVo);
-        log.info("--------------------{}", pageVo.toString());
         List<StockOutDto> stockOutDtos = outService.queryByPageVo(
                 pageVo,
                 pageVo.getPage(),
@@ -76,10 +78,6 @@ public class StockOutnoticeController {
                 ResponseUtil.ResultType.OK.getMsg(),
                 pageResult);
     }
-    //Convert.convert(StockOutVo.class, stockOutDtos);
-//        List<StockOutD>
-
-//        Convert.toList()
 
     /**
      * 1.获取 ActionForm 表单数据
@@ -90,21 +88,6 @@ public class StockOutnoticeController {
      * BeanUtils.copyProperties(user, uForm);
      */
 
-        /*
-        MailDto mailDto = DozerUtils.map(mailVo, MailDto.class);
-        // 获取匹配记录数
-        Long total = mailService.getTotal(mailDto);
-        // 查询匹配记录
-        List<MailDto> mails = mailService.listPage(mailDto, mailVo.getPage(), mailVo.getLimit());
-        // 封装结果集，携带页面参数
-        PageResult pageResult = new PageResult(total, mailVo.getLimit(), mailVo.getPage(), mails);
-
-        return ResponseUtils.getResponse(
-                ResponseUtils.ResultType.OK.getCode(),
-                ResponseUtils.ResultType.OK.getMsg(),
-                pageResult);
-        */
-
     /**
      * 通过pid（即：出库表id）获取明细表
      *
@@ -114,7 +97,6 @@ public class StockOutnoticeController {
      */
     @GetMapping("/getItem")
     public String getItem(@RequestParam Long pid) {
-        log.info("-----------------------pid:{}", pid);
         List<StockOutItemDto> outItemDtos = itemService.queryItemByPid(pid);
         return ResponseUtil.getResponse(
                 ResponseUtil.ResultType.OK.getCode(),
@@ -152,44 +134,39 @@ public class StockOutnoticeController {
      */
     @PostMapping("/save")
     public String save(@RequestBody StockOutVo outVo) {
-        /**
-         * 转换为Dto
+        /*
+         转换为Dto
          */
         StockOutDto outDto = Convert.convert(StockOutDto.class, outVo);
         List<StockOutItemDto> outItemDtos = ConverUtil.converList(StockOutItemDto.class, outVo.getOutItemVos());
         outItemDtos.forEach(dto -> dto.setPid(outDto.getId()));
-        /**
-         * 自动审核，
-         * 需要出库表和出库明细表数据正确
+        /*
+         自动审核，
+         需要出库表和出库明细表数据正确
          */
         if (outService.checkSave(outDto) && itemService.checkSave(outItemDtos)) {
-            /**
-             * 通过主键id，新增or更新出库表数据
+            /*
+             通过主键id，新增or更新出库表数据
              */
             outService.saveOrUpdate(
                     Convert.convert(StockOutnoticePo.class, outDto),
                     Wrappers.<StockOutnoticePo>lambdaQuery().eq(StockOutnoticePo::getId, outDto.getId()));
 
-            /**
-             * 记录变动到出库变动表
-             * 通过altercode 确定新增的变动表的altercode变动状态属性
+            /*
+             记录变动到出库变动表
+             通过altercode 确定新增的变动表的altercode变动状态属性
              */
-            log.info("------------------change的dto：{}",ConverUtil.outVoToChangeDto(outVo));
-            log.info("------------------change的po：{}",Convert.convert(
-                    StockOutnoticeChangePo.class,
-                    ConverUtil.outVoToChangeDto(outVo)));
             changeService.save(Convert.convert(
                     StockOutnoticeChangePo.class,
                     ConverUtil.outVoToChangeDto(outVo)));
 
-            /**
-             * 通过pid，新增or更新出库明细表
+            /*
+             通过pid，新增or更新出库明细表
              */
-            log.info("进入了saveitem,dto:{}", outItemDtos.toString());
             log.info(ConverUtil.converList(StockOutnoticeItemPo.class, outItemDtos).toString());
             itemService.saveChange(ConverUtil.converList(StockOutnoticeItemPo.class, outItemDtos), outDto.getId());
-            /**
-             * 返回正确通知
+            /*
+             返回正确通知
              */
             return ResponseUtil.getResponse(
                     ResponseUtil.ResultType.OK.getCode(),
@@ -214,7 +191,6 @@ public class StockOutnoticeController {
      */
     @PutMapping("/submit")
     public String submit(@RequestParam Long id) {
-        log.info("-----------------------id:{}", id);
         Boolean result = outService.updateChangeState(id, UN_CHANGE);
         return ResponseUtil.getResponse(
                 ResponseUtil.ResultType.OK.getCode(),

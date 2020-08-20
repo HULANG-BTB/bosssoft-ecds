@@ -3,9 +3,10 @@ package com.bosssoft.ecds.service.impl;
 import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.bosssoft.ecds.entity.dto.AgenDTO;
+import com.bosssoft.ecds.entity.dto.agendto.AgenDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.dto.CrtDTO;
+import com.bosssoft.ecds.entity.dto.PagesDTO;
 import com.bosssoft.ecds.entity.po.CrtPO;
 import com.bosssoft.ecds.dao.CrtDao;
 import com.bosssoft.ecds.service.AgenService;
@@ -15,7 +16,6 @@ import com.bosssoft.ecds.utils.MyBeanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -172,54 +172,79 @@ public class CrtServiceImpl extends ServiceImpl<CrtDao, CrtPO> implements CrtSer
     /**
      * 分页读取领购证
      *
-     * @param pageDTO
+     * @param pagesDTO
      * @return
      */
     @Override
-    public PageDTO listByPage(PageDTO pageDTO) {
+    public PagesDTO listByPage(PagesDTO pagesDTO) {
         Page<CrtPO> uabCrtPOPage = new Page<>();
         // 设置分页信息
-        uabCrtPOPage.setCurrent(pageDTO.getPage());
-        uabCrtPOPage.setSize(pageDTO.getLimit());
+        uabCrtPOPage.setCurrent(pagesDTO.getPage());
+        uabCrtPOPage.setSize(pagesDTO.getLimit());
         // 读取分页数据
         QueryWrapper<CrtPO> queryWrapper = new QueryWrapper<>();
-        queryWrapper.like(CrtPO.F_CRT_NAME, pageDTO.getKeyword()).or().like(CrtPO.F_AGEN_CODE, pageDTO.getKeyword()).or().like(CrtPO.F_CRT_CODE, pageDTO.getKeyword());
+        if(pagesDTO.getKeyword().get("isenable") != null){
+            String s = (String) pagesDTO.getKeyword().get("isenable");
+            if(s.equals("false")){
+                queryWrapper.eq(CrtPO.F_ISENABLE, false);
+            }
+            if(s.equals("true")){
+                queryWrapper.eq(CrtPO.F_ISENABLE, true);
+            }
+        }
+        if(pagesDTO.getKeyword().get("crtName") != null && pagesDTO.getKeyword().get("crtName").equals("")==false){
+            queryWrapper.like(CrtPO.F_CRT_NAME, pagesDTO.getKeyword().get("crtName"));
+        }
+        if(pagesDTO.getKeyword().get("agenName") != null && pagesDTO.getKeyword().get("agenName").equals("")==false){
+            queryWrapper.and(wrapper -> wrapper.like(CrtPO.F_AGEN_NAME, pagesDTO.getKeyword().get("agenName")));
+        }
+        if(pagesDTO.getKeyword().get("crtCode") != null && pagesDTO.getKeyword().get("crtCode").equals("")==false){
+            queryWrapper.and(wrapper -> wrapper.like(CrtPO.F_CRT_CODE, pagesDTO.getKeyword().get("crtCode")));
+        }
         queryWrapper.orderByAsc(CrtPO.F_CREATE_TIME);
         // 读取分页数据
         Page<CrtPO> uabCrtPOPage1 = super.page(uabCrtPOPage, queryWrapper);
         List<CrtPO> records = uabCrtPOPage1.getRecords();
         // 转换数据
         List<CrtDTO> userDTOList = MyBeanUtil.copyListProperties(records, CrtDTO.class);
-        pageDTO.setTotal(uabCrtPOPage1.getTotal());
-        pageDTO.setItems(userDTOList);
-        return pageDTO;
+        pagesDTO.setTotal(uabCrtPOPage1.getTotal());
+        pagesDTO.setItems(userDTOList);
+        return pagesDTO;
     }
 
     /**
      * 准购证审核分页读取领购证
      *
-     * @param pageDTO
+     * @param pagesDTO
      * @return
      */
     @Override
-    public PageDTO checkListByPage(PageDTO pageDTO) {
+    public PagesDTO checkListByPage(PagesDTO pagesDTO) {
         Page<CrtPO> uabCrtPOPage = new Page<>();
         // 设置分页信息
-        uabCrtPOPage.setCurrent(pageDTO.getPage());
-        uabCrtPOPage.setSize(pageDTO.getLimit());
+        uabCrtPOPage.setCurrent(pagesDTO.getPage());
+        uabCrtPOPage.setSize(pagesDTO.getLimit());
         // 读取分页数据
         QueryWrapper<CrtPO> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(CrtPO.F_ISENABLE, false);
-        queryWrapper.and(wrapper -> wrapper.like(CrtPO.F_CRT_NAME, pageDTO.getKeyword()).or().like(CrtPO.F_AGEN_CODE, pageDTO.getKeyword()).or().like(CrtPO.F_CRT_CODE, pageDTO.getKeyword()));
+        if(pagesDTO.getKeyword().get("crtName") != null && pagesDTO.getKeyword().get("crtName").equals("")==false){
+            queryWrapper.like(CrtPO.F_CRT_NAME, pagesDTO.getKeyword().get("crtName"));
+        }
+        if(pagesDTO.getKeyword().get("agenName") != null && pagesDTO.getKeyword().get("agenName").equals("")==false){
+            queryWrapper.and(wrapper -> wrapper.like(CrtPO.F_AGEN_NAME, pagesDTO.getKeyword().get("agenName")));
+        }
+        if(pagesDTO.getKeyword().get("crtCode") != null && pagesDTO.getKeyword().get("crtCode").equals("")==false){
+            queryWrapper.and(wrapper -> wrapper.like(CrtPO.F_CRT_CODE, pagesDTO.getKeyword().get("crtCode")));
+        }
         queryWrapper.orderByAsc(CrtPO.F_CREATE_TIME);
         // 读取分页数据
         Page<CrtPO> uabCrtPOPage1 = super.page(uabCrtPOPage, queryWrapper);
         List<CrtPO> records = uabCrtPOPage1.getRecords();
         // 转换数据
         List<CrtDTO> userDTOList = MyBeanUtil.copyListProperties(records, CrtDTO.class);
-        pageDTO.setTotal(uabCrtPOPage1.getTotal());
-        pageDTO.setItems(userDTOList);
-        return pageDTO;
+        pagesDTO.setTotal(uabCrtPOPage1.getTotal());
+        pagesDTO.setItems(userDTOList);
+        return pagesDTO;
     }
 
     /**

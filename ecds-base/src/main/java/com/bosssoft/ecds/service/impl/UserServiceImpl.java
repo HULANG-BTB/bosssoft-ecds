@@ -10,6 +10,7 @@ import com.bosssoft.ecds.dao.UserDao;
 import com.bosssoft.ecds.entity.po.RolePO;
 import com.bosssoft.ecds.entity.po.UserPO;
 import com.bosssoft.ecds.entity.po.UserRolePO;
+import com.bosssoft.ecds.entity.vo.UserVO;
 import com.bosssoft.ecds.service.UserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bosssoft.ecds.utils.MyBeanUtil;
@@ -37,6 +38,9 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserPO> implements Use
 
     @Autowired
     UserRoleServiceImpl userRoleService;
+
+    @Autowired
+    RoleServiceImpl roleService;
 
     /**
      * 插入用户
@@ -202,6 +206,17 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserPO> implements Use
         String hashpw = BCrypt.hashpw(userDTO.getPassword());
         userPO.setPassword(hashpw);
         return super.updateById(userPO);
+    }
+
+    @Override
+    public UserDTO getById() {
+        Long authId = Long.valueOf(httpServletRequest.getHeader("auth_id"));
+        UserPO userPO = super.getById(authId);
+        userPO.setPassword(null);
+        List<RolePO> rolePOS = roleService.getBaseMapper().selectByUid(userPO.getId());
+        userPO.setRoles(rolePOS);
+        UserDTO userDTO = MyBeanUtil.copyProperties(userPO, UserDTO.class);
+        return userDTO;
     }
 
 }

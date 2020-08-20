@@ -1,10 +1,15 @@
 package com.bosssoft.ecds.controller;
 
 
+import com.bosssoft.ecds.response.CommonCode;
+import com.bosssoft.ecds.response.QueryResponseResult;
+import com.bosssoft.ecds.response.ResponseResult;
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.dto.CrtDTO;
+import com.bosssoft.ecds.entity.dto.PagesDTO;
 import com.bosssoft.ecds.entity.vo.PageVO;
 import com.bosssoft.ecds.entity.vo.CrtVO;
+import com.bosssoft.ecds.entity.vo.PagesVO;
 import com.bosssoft.ecds.service.CrtService;
 import com.bosssoft.ecds.utils.MyBeanUtil;
 import com.bosssoft.ecds.utils.ResponseUtils;
@@ -44,12 +49,12 @@ public class CrtController {
      */
     @PostMapping("/save")
     @ApiOperation(value = "新增领购证")
-    public String save(@RequestBody CrtVO uabCrtVO){
+    public QueryResponseResult save(@RequestBody CrtVO uabCrtVO){
         CrtDTO uabCrtDTO = new CrtDTO();
         MyBeanUtil.copyProperties(uabCrtVO,uabCrtDTO);
         uabCrtDTO = uabCrtService.save(uabCrtDTO);
         MyBeanUtil.copyProperties(uabCrtDTO,uabCrtVO);
-        return ResponseUtils.getResponse(uabCrtVO,ResponseUtils.ResultType.OK);
+        return new QueryResponseResult<>(CommonCode.SUCCESS,uabCrtVO);
     }
 
     /**
@@ -63,12 +68,12 @@ public class CrtController {
      */
     @PostMapping("/remove")
     @ApiOperation(value = "按领购证ID删除领购证")
-    public String remove(@RequestBody CrtVO uabCrtVO){
+    public QueryResponseResult remove(@RequestBody CrtVO uabCrtVO){
         CrtDTO uabCrtDTO = new CrtDTO();
         MyBeanUtil.copyProperties(uabCrtVO,uabCrtDTO);
         Boolean result = uabCrtService.remove(uabCrtDTO);
         MyBeanUtil.copyProperties(uabCrtDTO,uabCrtVO);
-        return ResponseUtils.getResponse(result,ResponseUtils.ResultType.OK);
+        return new QueryResponseResult<>(CommonCode.SUCCESS,result);
     }
 
     /**
@@ -82,12 +87,12 @@ public class CrtController {
      */
     @PostMapping("/update")
     @ApiOperation(value = "用于修改领购证信息")
-    public String update(@RequestBody CrtVO uabCrtVO){
+    public QueryResponseResult update(@RequestBody CrtVO uabCrtVO){
         CrtDTO uabCrtDTO = new CrtDTO();
         MyBeanUtil.copyProperties(uabCrtVO,uabCrtDTO);
         Boolean result = uabCrtService.update(uabCrtDTO);
         MyBeanUtil.copyProperties(uabCrtDTO,uabCrtVO);
-        return ResponseUtils.getResponse(result,ResponseUtils.ResultType.OK);
+        return new QueryResponseResult<>(CommonCode.SUCCESS,result);
     }
 
     /**
@@ -101,12 +106,12 @@ public class CrtController {
      */
     @PostMapping("/getByCrtCode")
     @ApiOperation(value = "根据领购证编码查询领购证")
-    public String getByCrtCode(@RequestBody CrtVO uabCrtVO){
+    public QueryResponseResult getByCrtCode(@RequestBody CrtVO uabCrtVO){
         CrtDTO uabCrtDTO = new CrtDTO();
         MyBeanUtil.copyProperties(uabCrtVO,uabCrtDTO);
         uabCrtDTO = uabCrtService.getByCrtCode(uabCrtDTO);
         MyBeanUtil.copyProperties(uabCrtDTO,uabCrtVO);
-        return ResponseUtils.getResponse(uabCrtVO,ResponseUtils.ResultType.OK);
+        return new QueryResponseResult<>(CommonCode.SUCCESS,uabCrtVO);
     }
 
     /**
@@ -120,12 +125,12 @@ public class CrtController {
      */
     @PostMapping("/getById")
     @ApiOperation(value = "根据领购证id查询领购证")
-    public String getById(@RequestBody CrtVO uabCrtVO){
+    public QueryResponseResult getById(@RequestBody CrtVO uabCrtVO){
         CrtDTO uabCrtDTO = new CrtDTO();
         MyBeanUtil.copyProperties(uabCrtVO,uabCrtDTO);
         uabCrtDTO = uabCrtService.getById(uabCrtDTO);
         MyBeanUtil.copyProperties(uabCrtDTO,uabCrtVO);
-        return ResponseUtils.getResponse(uabCrtVO,ResponseUtils.ResultType.OK);
+        return new QueryResponseResult<>(CommonCode.SUCCESS,uabCrtVO);
     }
 
     /**
@@ -139,12 +144,12 @@ public class CrtController {
      */
     @PostMapping("/getByAgenCode")
     @ApiOperation(value = "根据单位编码查询领购证")
-    public String getByAgenCode(@RequestBody CrtVO uabCrtVO){
+    public QueryResponseResult getByAgenCode(@RequestBody CrtVO uabCrtVO){
         CrtDTO uabCrtDTO = new CrtDTO();
         MyBeanUtil.copyProperties(uabCrtVO,uabCrtDTO);
         List<CrtDTO> uabCrtDTOList = uabCrtService.getByAgenCode(uabCrtDTO);
         MyBeanUtil.copyListProperties(uabCrtDTOList, CrtVO.class);
-        return ResponseUtils.getResponse(uabCrtDTOList,ResponseUtils.ResultType.OK);
+        return new QueryResponseResult<>(CommonCode.SUCCESS,uabCrtDTOList);
     }
 
     /**
@@ -157,42 +162,42 @@ public class CrtController {
      */
     @GetMapping("/listAll")
     @ApiOperation(value = "用于查看领购证列表")
-    public String listAll(){
+    public QueryResponseResult listAll(){
         List<CrtDTO> uabCrtDTOList = uabCrtService.listAll();
         List<CrtVO> uabCrtVOList = MyBeanUtil.copyListProperties(uabCrtDTOList, CrtVO.class);
-        return ResponseUtils.getResponse(uabCrtVOList,ResponseUtils.ResultType.OK);
+        return new QueryResponseResult<>(CommonCode.SUCCESS,uabCrtVOList);
     }
 
     /**
      * 通过分页查询
      *
-     * @param pageVO
+     * @param pagesVO
      * @return
      */
-    @PostMapping("listByPage")
+    @PostMapping("/listByPage")
     @ApiOperation(value = "通过分页查询")
-    public String listByPage(@RequestBody PageVO pageVO) {
-        PageDTO pageDTO = MyBeanUtil.copyProperties(pageVO, PageDTO.class);
-        pageDTO = uabCrtService.listByPage(pageDTO);
+    public QueryResponseResult listByPage(@RequestBody PagesVO pagesVO) {
+        PagesDTO pagesDTO = MyBeanUtil.copyProperties(pagesVO, PagesDTO.class);
+        pagesDTO = uabCrtService.listByPage(pagesDTO);
 
-        pageVO = MyBeanUtil.copyProperties(pageDTO, PageVO.class);
-        return ResponseUtils.getResponse(pageVO, ResponseUtils.ResultType.OK);
+        pagesVO = MyBeanUtil.copyProperties(pagesDTO, PagesVO.class);
+        return new QueryResponseResult<>(CommonCode.SUCCESS,pagesVO);
     }
 
     /**
      * 准购证审核分页查询
      *
-     * @param pageVO
+     * @param pagesVO
      * @return
      */
     @PostMapping("/checkListByPage")
     @ApiOperation(value = "准购证审核分页查询")
-    public String checkListByPage(@RequestBody PageVO pageVO) {
-        PageDTO pageDTO = MyBeanUtil.copyProperties(pageVO, PageDTO.class);
-        pageDTO = uabCrtService.checkListByPage(pageDTO);
+    public QueryResponseResult checkListByPage(@RequestBody PagesVO pagesVO) {
+        PagesDTO pagesDTO = MyBeanUtil.copyProperties(pagesVO, PagesDTO.class);
+        pagesDTO = uabCrtService.checkListByPage(pagesDTO);
 
-        pageVO = MyBeanUtil.copyProperties(pageDTO, PageVO.class);
-        return ResponseUtils.getResponse(pageVO, ResponseUtils.ResultType.OK);
+        pagesVO = MyBeanUtil.copyProperties(pagesDTO, PagesVO.class);
+        return new QueryResponseResult<>(CommonCode.SUCCESS,pagesVO);
     }
 
     /**
@@ -201,12 +206,12 @@ public class CrtController {
      * @param uabCrtVOList
      * @return
      */
-    @PostMapping("removeBatch")
+    @PostMapping("/removeBatch")
     @ApiOperation(value = "批量删除领购证")
-    public String removeBatch(@RequestBody List<CrtVO> uabCrtVOList) {
+    public QueryResponseResult removeBatch(@RequestBody List<CrtVO> uabCrtVOList) {
         List<CrtDTO> uabCrtDTOList = MyBeanUtil.copyListProperties(uabCrtVOList, CrtDTO.class);
         Boolean result = uabCrtService.removeBatch(uabCrtDTOList);
-        return ResponseUtils.getResponse(result, ResponseUtils.ResultType.OK);
+        return new QueryResponseResult<>(CommonCode.SUCCESS,result);
     }
 
     /**
@@ -217,10 +222,10 @@ public class CrtController {
      */
     @PostMapping("checkBatch")
     @ApiOperation(value = "批量删除领购证")
-    public String checkBatch(@RequestBody List<CrtVO> uabCrtVOList) {
+    public QueryResponseResult checkBatch(@RequestBody List<CrtVO> uabCrtVOList) {
         List<CrtDTO> uabCrtDTOList = MyBeanUtil.copyListProperties(uabCrtVOList, CrtDTO.class);
         Boolean result = uabCrtService.checkBatch(uabCrtDTOList);
-        return ResponseUtils.getResponse(result, ResponseUtils.ResultType.OK);
+        return new QueryResponseResult<>(CommonCode.SUCCESS,result);
     }
 
 }
