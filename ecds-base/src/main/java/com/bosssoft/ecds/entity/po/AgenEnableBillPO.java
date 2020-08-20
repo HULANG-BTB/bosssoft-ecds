@@ -22,9 +22,9 @@ import java.util.Date;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("fab_agen_bill")
+@TableName("fab_agen_enable_bill")
 @ApiModel(value="AgenBillPO对象", description="")
-public class AgenBillPO extends Model<AgenBillPO> {
+public class AgenEnableBillPO extends Model<AgenEnableBillPO> {
 
 
     @ApiModelProperty(value = "主键")
@@ -32,8 +32,8 @@ public class AgenBillPO extends Model<AgenBillPO> {
     private Long id;
 
     @ApiModelProperty(value = "单位编码")
-    @TableField("f_agen_idcode")
-    private String agenIdcode;
+    @TableField("f_agen_code")
+    private String agenCode;
 
     @ApiModelProperty(value = "票据编码")
     @TableField("f_type_code")
@@ -62,7 +62,7 @@ public class AgenBillPO extends Model<AgenBillPO> {
 
     public static final String F_ID = "f_id";
 
-    public static final String F_AGEN_IDCODE = "f_agen_idcode";
+    public static final String F_AGEN_CODE = "f_agen_code";
 
     public static final String F_TYPE_CODE = "f_type_code";
 
