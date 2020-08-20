@@ -21,5 +21,14 @@ public class IncomeSortConstant {
     public static final String LEAF_NOT_NULL = "是否底级不能为空";
     public static final String PUBLIC_KEY_NOT_NULL = "前端公钥不能为空";
 
+    public static final String F_LOGIC_DELETE = "f_logic_delete";
+    public static final String F_PARENT_ID = "f_parent_id";
+    public static final String F_ID = "f_id";
+    public static final String F_NAME = "f_name";
+    public static final String F_CODE = "f_code";
+    public static final String F_LEVEL = "f_level";
+    public static final String F_INCOM_SORT_CODE = "f_incom_sort_code";
+    public static final String F_INCOME_SORT_ID = "f_income_sort_id";
+
 
 }

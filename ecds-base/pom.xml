@@ -91,16 +91,7 @@
             <artifactId>easyexcel</artifactId>
             <version>2.1.7</version>
         </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>1.7.5</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.xmlbeans</groupId>
-            <artifactId>xmlbeans</artifactId>
-            <version>3.1.0</version>
-        </dependency>
+
 
         <dependency>
             <groupId>com.github.pagehelper</groupId>
@@ -123,6 +114,13 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+        <!--  api加密依赖 -->
+        <dependency>
+            <groupId>com.bosssoft</groupId>
+            <artifactId>ecds-encryption</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
         <!--Alibaba sentinel -->
         <dependency>
