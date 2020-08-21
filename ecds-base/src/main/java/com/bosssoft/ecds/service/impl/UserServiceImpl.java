@@ -4,15 +4,14 @@ import cn.hutool.crypto.digest.BCrypt;
 import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.bosssoft.ecds.dao.UserDao;
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.dto.UserDTO;
-import com.bosssoft.ecds.dao.UserDao;
 import com.bosssoft.ecds.entity.po.RolePO;
 import com.bosssoft.ecds.entity.po.UserPO;
 import com.bosssoft.ecds.entity.po.UserRolePO;
-import com.bosssoft.ecds.entity.vo.UserVO;
 import com.bosssoft.ecds.service.UserService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bosssoft.ecds.utils.MyBeanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -94,61 +93,25 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserPO> implements Use
         UserPO userPO = super.getById(userDTO.getId());
         MyBeanUtil.copyProperties(userDTO, userPO);
 
-        // 读取角色列表
+        // 获得请求中的角色列表
         List<RolePO> newRoleList = MyBeanUtil.copyListProperties(userDTO.getRoles(), RolePO.class);
 
-        // 读取用户已经拥有角色列表
+        // 删除所有原来有的角色列表
         QueryWrapper<UserRolePO> userRolePOQueryWrapper = new QueryWrapper<>();
         userRolePOQueryWrapper.eq(UserRolePO.F_USER_ID, userDTO.getId());
-        List<UserRolePO> userRoleHasExist = userRoleService.list(userRolePOQueryWrapper);
+        boolean remove = userRoleService.remove(userRolePOQueryWrapper);
 
-        // 需要删除的权限列表 记录ID
-        ArrayList<Long> removeList = new ArrayList<>();
-        // 需要更新的角色 和 需要添加的
-        ArrayList<UserRolePO> insertAndUpdateList = new ArrayList<>();
-
-        // 整合需要删除的角色 和 需要更新的权限
-        for (UserRolePO userRolePO : userRoleHasExist) {
-            Boolean shouldDelete = true;
-            for (RolePO rolePO : newRoleList) {
-                // 原有的角色在新的角色列表中存在 则不需要删除 标记为需要更新
-                if (rolePO.getId().equals(userRolePO.getRoleId())) {
-                    insertAndUpdateList.add(userRolePO);
-                    shouldDelete = false;
-                    break;
-                }
-            }
-            if (shouldDelete.booleanValue()) {
-                removeList.add(userRolePO.getId());
-            }
-        }
-
-        // 整合需要添加的角色
+        // 添加新的角色列表
+        List<UserRolePO> userRoleList = new ArrayList<>();
         for (RolePO rolePO : newRoleList) {
-            Boolean shouldAdd = true;
-            for (UserRolePO userRolePO : userRoleHasExist) {
-                // 新的角色在原来的角色列表中存在 则不需要添加
-                if (rolePO.getId().equals(userRolePO.getRoleId())) {
-                    shouldAdd = false;
-                    break;
-                }
-            }
-            if (shouldAdd.booleanValue()) {
-                UserRolePO userRolePO = new UserRolePO();
-                userRolePO.setUserId(userDTO.getId());
-                userRolePO.setRoleId(rolePO.getId());
-                insertAndUpdateList.add(userRolePO);
-            }
+            UserRolePO userRolePO = new UserRolePO();
+            userRolePO.setUserId(userDTO.getId());
+            userRolePO.setRoleId(rolePO.getId());
+            userRoleList.add(userRolePO);
         }
+        boolean save = userRoleService.saveBatch(userRoleList);
 
-        // 更新用户信息
-        boolean roleUpdateResult = super.updateById(userPO);
-        // 删除需要删除的
-        boolean removeByIdsResult = userRoleService.removeByIds(removeList);
-        // 更新或者添加需要更新的和需要添加的
-        boolean saveOrUpdateBatchResult = userRoleService.saveOrUpdateBatch(insertAndUpdateList);
-
-        return roleUpdateResult && removeByIdsResult && saveOrUpdateBatchResult;
+        return save && remove;
     }
 
     /**

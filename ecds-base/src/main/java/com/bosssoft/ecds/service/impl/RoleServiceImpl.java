@@ -91,58 +91,22 @@ public class RoleServiceImpl extends ServiceImpl<RoleDao, RolePO> implements Rol
         // 读取权限列表
         List<PermissionPO> newPermissionList = MyBeanUtil.copyListProperties(roleDTO.getPermissions(), PermissionPO.class);
 
-        // 读取用户已经拥有权限列表
+        // 删除原来已经拥有的权限列表
         QueryWrapper<RolePermissionPO> rolePermissionPOQueryWrapper = new QueryWrapper<>();
         rolePermissionPOQueryWrapper.eq(RolePermissionPO.F_ROLE_ID, roleDTO.getId());
-        List<RolePermissionPO> rolePermissionHasExist = rolePermissionService.list(rolePermissionPOQueryWrapper);
+        boolean remove = rolePermissionService.remove(rolePermissionPOQueryWrapper);
 
-        // 需要删除的权限列表 记录ID
-        ArrayList<Long> removeList = new ArrayList<>();
-        // 需要更新的权限 和 需要添加的
-        ArrayList<RolePermissionPO> insertAndUpdateList = new ArrayList<>();
-
-        // 整合需要删除的权限 和 需要 更新的权限
-        for (RolePermissionPO rolePermissionPO : rolePermissionHasExist) {
-            Boolean shouldDelete = true;
-            for (PermissionPO permissionPO : newPermissionList) {
-                // 原有的权限在新的权限列表中存在 则不需要删除 标记为需要更新
-                if (permissionPO.getId().equals(rolePermissionPO.getPermissionId())) {
-                    insertAndUpdateList.add(rolePermissionPO);
-                    shouldDelete = false;
-                    break;
-                }
-            }
-            if (shouldDelete.booleanValue()) {
-                removeList.add(rolePermissionPO.getId());
-            }
-        }
-
-        // 整合需要添加的权限
+        // 批量添加新的角色列表
+        List<RolePermissionPO> insertAndUpdateList = new ArrayList<>();
         for (PermissionPO permissionPO : newPermissionList) {
-            Boolean shouldAdd = true;
-            for (RolePermissionPO rolePermissionPO : rolePermissionHasExist) {
-                // 新的权限在原来的权限中存在 则不需要添加
-                if (permissionPO.getId().equals(rolePermissionPO.getPermissionId())) {
-                    shouldAdd = false;
-                    break;
-                }
-            }
-            if (shouldAdd.booleanValue()) {
-                RolePermissionPO rolePermissionPO = new RolePermissionPO();
-                rolePermissionPO.setRoleId(roleDTO.getId());
-                rolePermissionPO.setPermissionId(permissionPO.getId());
-                insertAndUpdateList.add(rolePermissionPO);
-            }
+            RolePermissionPO rolePermissionPO = new RolePermissionPO();
+            rolePermissionPO.setRoleId(roleDTO.getId());
+            rolePermissionPO.setPermissionId(permissionPO.getId());
+            insertAndUpdateList.add(rolePermissionPO);
         }
+        boolean save = rolePermissionService.saveBatch(insertAndUpdateList);
 
-        // 更新角色信息
-        boolean roleUpdateResult = super.updateById(rolePO);
-        // 删除需要删除的
-        boolean removeByIdsResult = rolePermissionService.removeByIds(removeList);
-        // 更新或者添加需要更新的和需要添加的
-        boolean saveOrUpdateBatchResult = rolePermissionService.saveOrUpdateBatch(insertAndUpdateList);
-
-        return roleUpdateResult && removeByIdsResult && saveOrUpdateBatchResult;
+        return save && remove;
     }
 
     /**

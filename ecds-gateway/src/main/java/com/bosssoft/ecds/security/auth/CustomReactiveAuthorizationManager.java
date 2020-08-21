@@ -53,7 +53,9 @@ public class CustomReactiveAuthorizationManager implements ReactiveAuthorization
                             return true;
                         }
                     }
-                    return false;
+                    // Todo 使用真实鉴权
+                    // 上线修改 return false;
+                    return true;
                 })
                 .map(AuthorizationDecision::new)
                 .defaultIfEmpty(new AuthorizationDecision(false));
