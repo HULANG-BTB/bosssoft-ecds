@@ -1,6 +1,5 @@
 package com.bosssoft.ecds.controller;
 
-import com.bosssoft.ecds.exception.CustomException;
 import com.bosssoft.ecds.response.ResponseResult;
 import com.bosssoft.ecds.entity.vo.billtypevo.AddBillTypeVO;
 import com.bosssoft.ecds.entity.vo.billtypevo.BillTypeIdVo;
@@ -11,14 +10,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-
-import static com.bosssoft.ecds.response.CommonCode.FAIL;
 
 /**
  * @author :Raiz
@@ -38,14 +32,14 @@ public class BillTypeController {
         return billTypeService.add(addBillTypeVO);
     }
 
-    @PostMapping("delete")
+    @DeleteMapping("delete")
     @ApiOperation(value = "逻辑删除票据种类", notes = "逻辑删除")
     public ResponseResult delete(@RequestBody @Valid BillTypeIdVo billTypeIdVo) {
         return billTypeService.delete(billTypeIdVo);
     }
 
     @ApiOperation(value = "更新票据种类", notes = "票据编码和名称唯一,种类的编码必须以父类的编码为前缀")
-    @PostMapping("update")
+    @PutMapping("update")
     public ResponseResult update(@RequestBody @Valid UpdateBillTypeVO updateBillTypeVO) {
         return billTypeService.update(updateBillTypeVO);
     }
@@ -57,25 +51,21 @@ public class BillTypeController {
     }
 
     @ApiOperation(value = "查询所有票据分类")
-    @PostMapping("queryAllBillSort")
+    @GetMapping("queryAllBillSort")
     public ResponseResult queryAllBillSort() {
         return billTypeService.queryAllBillSort();
     }
 
     @ApiOperation(value = "查询所有票据种类")
-    @PostMapping("queryAllBillType")
+    @GetMapping("queryAllBillType")
     public ResponseResult queryAllBillType() {
         return billTypeService.queryAllBillType();
     }
 
     @ApiOperation(value = "查询票据分类及其种类以树状返回")
-    @PostMapping("queryBillTypeTree")
+    @GetMapping("queryBillTypeTree")
     public ResponseResult queryBillTypeTree() {
         return billTypeService.queryBillTypeTree();
     }
 
-    @PostMapping("exception")
-    public ResponseResult exception() {
-        throw new CustomException(FAIL, "自定义信息");
-    }
 }

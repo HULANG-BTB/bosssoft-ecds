@@ -159,7 +159,6 @@ public class DeptController {
     public QueryResponseResult listByPage(@RequestBody PagesVO pagesVO) {
         PagesDTO pagesDTO = MyBeanUtil.copyProperties(pagesVO, PagesDTO.class);
         pagesDTO = fabDeptService.listByPage(pagesDTO);
-
         pagesVO = MyBeanUtil.copyProperties(pagesDTO, PagesVO.class);
         return new QueryResponseResult<>(CommonCode.SUCCESS,pagesVO);
     }

@@ -24,7 +24,7 @@ import java.util.Date;
  * @create: 2020-08-14 10:33
  */
 @Component
-@Slf4j
+@Slf4j(topic = "kafka_logger")
 public class MyBlockRequestHandler implements BlockRequestHandler {
 
     @Override
@@ -32,7 +32,7 @@ public class MyBlockRequestHandler implements BlockRequestHandler {
         String massage = "Blocked by Sentinel: " + t.getClass().getSimpleName() + ",time:"+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
         String tags = t.getClass().getSimpleName();
         ExceptionDetail detail = new ExceptionDetail(GatewayCode.TOO_MANY_REQUESTS,massage,tags);
-        log.info(JSON.toJSONString(detail));
+        log.error(JSON.toJSONString(detail));
         return ServerResponse.status(HttpStatus.TOO_MANY_REQUESTS)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .body(BodyInserters.fromValue(new ResponseResult(GatewayCode.TOO_MANY_REQUESTS)));

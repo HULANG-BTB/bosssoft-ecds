@@ -3,11 +3,14 @@ package com.bosssoft.ecds.response;
 
 import com.bosssoft.ecds.utils.DynamicEnumUtil;
 
+/**
+ * @author: lpb
+ * @create: 2020-07-10 09:02
+ */
 public enum CommonCode implements ResultCode {
 
     //操作成功时返回的状态码
     SUCCESS(true, 10000, "操作成功！"),
-
     //操作失败时返回的状态码
     FAIL(false, 11111, "操作失败！"),
     //参数输入有误时返回的状态码
@@ -16,7 +19,9 @@ public enum CommonCode implements ResultCode {
     METHOD_NOT_SUPPORTED(false, 1005, "请求方法不受支持"),
 
     SERVER_ERROR(false, 99999, "抱歉，系统繁忙，请稍后重试！"),
-    DUPLICATE_ERROR(false, 21111, "该数据已存在");
+    DUPLICATE_ERROR(false, 21111, "该数据已存在"),
+    EMAIL_NOTIFICATION(false, 29999, "邮件通知")
+    ;
     //操作是否成功
     boolean success;
     //操作代码

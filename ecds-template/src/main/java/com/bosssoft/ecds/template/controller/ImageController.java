@@ -3,6 +3,7 @@ package com.bosssoft.ecds.template.controller;
 import com.bosssoft.ecds.template.entity.dto.NontaxBillDto;
 import com.bosssoft.ecds.template.service.ImageService;
 import com.bosssoft.ecds.template.util.ResponseBody;
+import com.bosssoft.ecds.template.util.response.ResponseResult;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;

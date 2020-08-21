@@ -36,7 +36,7 @@ public class UpdateSourceMessageUtils {
     BillDao billDao;
 
     @Resource
-    RedisTemplate redisTemplate;
+    RedisTemplate<String, String> redisTemplate;
 
     @Resource
     RedissonClient redissonClient;
@@ -58,9 +58,10 @@ public class UpdateSourceMessageUtils {
             if (isLock) {
                 for (int i = 0; i < list.size(); i++) {
                     redisTemplate.delete(list.get(i).getBillTypeCode());
-                    Map map = new HashMap(16);
+                    Map<String, java.io.Serializable> map = new HashMap<>(16);
                     map.put("table", list.get(i).getTable());
                     map.put("threshold", list.get(i).getThreshold());
+                    map.put("pushNumber", list.get(i).getPushNumber());
                     redisTemplate.opsForHash().putAll(list.get(i).getBillTypeCode(), map);
                     logger.info("更新billTypeCode对象:" + list.get(i));
                 }
@@ -78,10 +79,6 @@ public class UpdateSourceMessageUtils {
 
         SourceMessagePo sourceMessagePo = sourceSetDao.retrieveSourceMessageByCode(billTypeCode);
 
-        if(sourceMessagePo.equals(null)) {
-            return;
-        }
-
         updateBillTypeCode();
 
         RLock lock = redissonClient.getLock(LOCK_KEY);
@@ -91,9 +88,10 @@ public class UpdateSourceMessageUtils {
             isLock = redLock.tryLock(100L, 10L, TimeUnit.SECONDS);
 
             if (isLock) {
-                Map map = new HashMap(16);
+                Map<String, java.io.Serializable> map = new HashMap<>(16);
                 map.put("table", sourceMessagePo.getTable());
                 map.put("threshold", sourceMessagePo.getThreshold());
+                map.put("pushNumber", sourceMessagePo.getPushNumber());
                 redisTemplate.delete(sourceMessagePo.getBillTypeCode());
                 redisTemplate.opsForHash().putAll(sourceMessagePo.getBillTypeCode(), map);
                 logger.info("更新billTypeCode对象" + sourceMessagePo);

@@ -17,6 +17,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 //@EnableHystrix
 //@RefreshScope
 @MapperScan("com.bosssoft.ecds.mapper")
+@MapperScan("com.bosssoft.ecds.dao")
 public class FSMApplication {
 
 	public static void main(String[] args) {

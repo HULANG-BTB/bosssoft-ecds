@@ -108,6 +108,39 @@ public class AgenController {
 
     /**
      * @param {FabAgenVO} fabAgenVO
+     * @description: 根据ID查询单位。
+     * @return: {String}
+     * @author: YuHangChen
+     * @time: 09/08/2020 上午10:17
+     */
+    @ApiOperation(value = "根据ID查询单位")
+    @PostMapping("/getById")
+    public QueryResponseResult getById(@RequestBody AgenVO fabAgenVO) {
+        AgenDTO fabAgenDTO = new AgenDTO();
+        MyBeanUtil.copyProperties(fabAgenVO, fabAgenDTO);
+        fabAgenDTO = fabAgenService.getById(fabAgenDTO);
+        MyBeanUtil.copyProperties(fabAgenDTO, fabAgenVO);
+        return new QueryResponseResult<>(CommonCode.SUCCESS,fabAgenVO);
+    }
+
+    /**
+     * @param {FabAgenVO} fabAgenVO
+     * @description: 根据部门编码查询部门下属单位数。
+     * @return: {QueryResponseResult}
+     * @author: YuHangChen
+     * @time: 09/08/2020 上午10:17
+     */
+    @ApiOperation(value = "根据部门编码查询部门下属单位数")
+    @PostMapping("/getAgenCount")
+    public QueryResponseResult getAgenCount(@RequestBody AgenVO fabAgenVO) {
+        AgenDTO fabAgenDTO = new AgenDTO();
+        MyBeanUtil.copyProperties(fabAgenVO, fabAgenDTO);
+        String res = fabAgenService.getAgenCount(fabAgenDTO);
+        return new QueryResponseResult<>(CommonCode.SUCCESS,res);
+    }
+
+    /**
+     * @param {FabAgenVO} fabAgenVO
      * @description: 根据单位名查询单位。
      * @return: {String}
      * @author: YuHangChen

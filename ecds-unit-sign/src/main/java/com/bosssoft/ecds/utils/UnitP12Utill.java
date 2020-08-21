@@ -61,7 +61,7 @@ public class UnitP12Utill {
             keyStore.load(input, keyPassword.toCharArray());
             input.close();
         } catch (Exception e) {
-            log.error("单位p12根证书加载失败，请检查p12证书是否添加配置");
+            log.error("根证书加载失败，请检查p12证书是否添加配置");
         }
     }
 

@@ -1,8 +1,5 @@
 package com.bosssoft.ecds.template.controller;
 
-
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bosssoft.ecds.template.entity.dto.NontaxBillDto;
 import com.bosssoft.ecds.template.entity.dto.PrintTemplateDto;
 import com.bosssoft.ecds.template.entity.vo.PrintTemplateVo;
@@ -77,16 +74,28 @@ public class PrintTemplateController {
         }
 
         String content = new String(file.getBytes());
-        PrintTemplateDto templateDTO = new PrintTemplateDto();
-        templateDTO.setRgnCode(billCode.substring(0, 2));
-        templateDTO.setTypeId(billCode.substring(2, 4));
-        templateDTO.setSortId(billCode.substring(4, 6));
-        templateDTO.setName(templateName);
-        templateDTO.setMemo(memo);
-        templateDTO.setTemplate(content);
-
+        PrintTemplateDto templateDTO =
+                fillTemplateDto(billCode, templateName, memo, content);
         printTemplateService.add(templateDTO);
 
+        return ResponseResult.SUCCESS();
+    }
+
+    @ApiOperation("新建打印模板，上传Excel文件")
+    @PostMapping("/uploadExcel")
+    public ResponseResult uploadExcel(
+            @RequestParam @ApiParam("模板名字") String templateName,
+            @RequestParam @ApiParam("票据代码（前6位，不包含年度）") String billCode,
+            @RequestParam @ApiParam("备注") String memo,
+            @RequestParam("file") @ApiParam("Excel 文件") MultipartFile file
+    ) throws IOException {
+
+        //从上传的Excel文件生成模板文件
+        String template = printTemplateService.convertExcel(file.getInputStream());
+
+        PrintTemplateDto templateDto =
+                fillTemplateDto(billCode, templateName, memo, template);
+        printTemplateService.add(templateDto);
         return ResponseResult.SUCCESS();
     }
 
@@ -136,20 +145,49 @@ public class PrintTemplateController {
     /**
      * 模板列表分页查询
      *
-     * @param current   第几页
-     * @param size 每页多少项
+     * @param currentPage 第几页
+     * @param pageSize    每页多少项
      */
     @ApiOperation("模板列表分页查询")
     @GetMapping("/listPage")
     public ResponseResult listPage(
             @RequestParam
             @ApiParam(value = "页码", example = "1")
-                    Long current,
+                    Long currentPage,
             @RequestParam(defaultValue = "10", required = false)
             @ApiParam(value = "每页几项", example = "10")
-                    Long size
+                    Long pageSize
     ) {
-        IPage<PrintTemplateVo> page = printTemplateService.getPageVO(new Page<>(current, size));
+        Object page = printTemplateService.getPageVO(currentPage, pageSize);
         return new QueryResponseResult<>(CommonCode.SUCCESS, page);
+    }
+
+    @ApiOperation("根据6位票据代码或者模板名字查询列表")
+    @GetMapping("/searchList")
+    public ResponseResult searchList(
+            @RequestParam(required = false)
+            @ApiParam("前6位的票据代码，或者空")
+                    String billCode,
+            @RequestParam(required = false)
+            @ApiParam("模糊查询：模板名字")
+                    String name) {
+        if (billCode != null && !"".equals(billCode) && billCode.length() != 6) {
+            return new ResponseResult(CommonCode.INVLIDATE);
+        }
+        List<PrintTemplateVo> list = printTemplateService.searchList(billCode, name);
+        return new QueryResponseResult<>(CommonCode.SUCCESS, list);
+    }
+
+    private PrintTemplateDto fillTemplateDto(
+            String billCode, String name, String memo, String template
+    ) {
+        PrintTemplateDto templateDTO = new PrintTemplateDto();
+        templateDTO.setRgnCode(billCode.substring(0, 2));
+        templateDTO.setTypeId(billCode.substring(2, 4));
+        templateDTO.setSortId(billCode.substring(4, 6));
+        templateDTO.setName(name);
+        templateDTO.setMemo(memo);
+        templateDTO.setTemplate(template);
+        return templateDTO;
     }
 }

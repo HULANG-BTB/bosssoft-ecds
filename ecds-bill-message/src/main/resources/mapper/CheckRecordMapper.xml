@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bosssoft.ecds.msg.mapper.CheckRecordMapper">
+    <resultMap id="BaseResultMap" type="com.bosssoft.ecds.msg.entity.po.CheckRecordPo">
+        <!--@mbg.generated-->
+        <!--@Table fbe_check_record-->
+        <id column="f_id" jdbcType="BIGINT" property="id"/>
+        <result column="f_version" jdbcType="INTEGER" property="version"/>
+        <result column="f_check_type" jdbcType="VARCHAR" property="checkType"/>
+        <result column="f_create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="f_update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="f_operator" jdbcType="VARCHAR" property="operator"/>
+        <result column="f_bill_code" jdbcType="VARCHAR" property="billCode"/>
+        <result column="f_result" jdbcType="INTEGER" property="result"/>
+        <result column="f_logic_delete" jdbcType="BOOLEAN" property="logicDelete"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        f_id, f_version, f_check_type, f_create_time, f_operator, f_bill_code,
+        f_result, f_logic_delete,f_update_time
+    </sql>
+</mapper>

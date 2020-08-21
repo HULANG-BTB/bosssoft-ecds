@@ -69,7 +69,13 @@ public class StockInController {
     @PostMapping("/store")
     public R store(@RequestBody StoreDTO storeDTO) {
         boolean success = stockInService.store(storeDTO);
-        return RUtils.responseForBoolean(success, null, "入库失败，稍后再试");
+        return RUtils.responseForBoolean(success, null, "入库成功");
+    }
+    
+    @PostMapping("/checkStore")
+    public String checkStore(@RequestBody CheckStoreDTO checkStoreDTO) {
+        boolean available = stockInService.checkStore(checkStoreDTO);
+        return RUtils.responseBoolean(available, null, "可用", "不可用");
     }
 }
 

@@ -8,9 +8,6 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import org.springframework.beans.factory.annotation.Value;
-
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -39,7 +36,6 @@ public class SubjectDTO extends Model<SubjectDTO> {
     @ApiModelProperty(value = "层级")
     private Integer level;
 
-    @Value("false")
     @ApiModelProperty(value = "是否底级,0否，1是")
     private Boolean leaf;
 
@@ -47,7 +43,6 @@ public class SubjectDTO extends Model<SubjectDTO> {
     @JsonSerialize(using = ToStringSerializer.class)
     private Long parentId;
 
-    @Value("true")
     @ApiModelProperty(value = "是否启用，0否，1是")
     private Boolean enable;
 
