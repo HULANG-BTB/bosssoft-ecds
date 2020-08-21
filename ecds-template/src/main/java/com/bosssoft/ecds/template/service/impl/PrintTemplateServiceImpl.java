@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.bosssoft.ecds.exception.CustomException;
 import com.bosssoft.ecds.template.entity.dto.PrintTemplateDto;
 import com.bosssoft.ecds.template.entity.po.PrintTemplatePo;
 import com.bosssoft.ecds.template.entity.vo.PrintTemplateVo;
@@ -24,6 +25,8 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.List;
 
+import static com.bosssoft.ecds.response.CommonCode.DUPLICATE_ERROR;
+
 /**
  * <p>
  * 打印模板表 服务实现类
@@ -32,7 +35,7 @@ import java.util.List;
  * @author Lazyb0x
  * @since 2020-08-17
  */
-@Slf4j
+@Slf4j(topic = "kafka_logger")
 @Service
 public class PrintTemplateServiceImpl extends ServiceImpl<PrintTemplateMapper, PrintTemplatePo> implements PrintTemplateService {
 
@@ -111,5 +114,25 @@ public class PrintTemplateServiceImpl extends ServiceImpl<PrintTemplateMapper, P
         }
 
         return ftlTemplate;
+    }
+
+    @Override
+    public PrintTemplateDto getByBillCode(String billCode) {
+        if (billCode==null || billCode.length()!=6)
+            return null;
+        String rgnCode = billCode.substring(0, 2);
+        String typeId = billCode.substring(2, 4);
+        String sortId = billCode.substring(4, 6);
+
+        QueryWrapper<PrintTemplatePo> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda()
+                .eq(PrintTemplatePo::getRgnCode, rgnCode)
+                .eq(PrintTemplatePo::getTypeId, typeId)
+                .eq(PrintTemplatePo::getSortId, sortId);
+
+        PrintTemplatePo templatePo = printTemplateMapper.selectOne(queryWrapper);
+        PrintTemplateDto templateDto = new PrintTemplateDto();
+        BeanUtils.copyProperties(templatePo, templateDto);
+        return templateDto;
     }
 }

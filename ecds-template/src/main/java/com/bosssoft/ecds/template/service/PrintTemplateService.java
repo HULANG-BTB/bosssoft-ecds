@@ -32,4 +32,6 @@ public interface PrintTemplateService extends IService<PrintTemplatePo> {
     List<PrintTemplateVo> searchList(String billCode, String name);
 
     String convertExcel(InputStream inputStream);
+
+    PrintTemplateDto getByBillCode(String billCode);
 }

@@ -225,4 +225,9 @@ public class PdfServiceImpl implements PdfService {
             e.printStackTrace();
         }
     }
+
+    private String getHtmlData() {
+        // todo
+        return null;
+    }
 }
