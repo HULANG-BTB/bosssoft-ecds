@@ -4,6 +4,8 @@
     <springProperty scope="context" name="logTopic" source="mylog.logTopic" defaultValue="my-log-topic"/>
     <springProperty scope="context" name="businessTopic" source="mylog.businessTopic"
                     defaultValue="business-log-topic"/>
+    <springProperty scope="context" name="applicationName" source="spring.application.name"
+                    defaultValue="none"/>
     <springProperty scope="context" name="bootstrapServers" source="mylog.bootstrapServers"
                     defaultValue="47.107.140.106:9092"/>
     <!-- ch.qos.logback.core.ConsoleAppender 表示控制台输出 -->
@@ -36,36 +38,29 @@
     <appender name="KAFKA" class="com.bosssoft.ecds.appender.KafkaAppender">
         <bootstrapServers>${bootstrapServers}</bootstrapServers>
         <logTopic>${logTopic}</logTopic>
+        <applicationName>${applicationName}</applicationName>
     </appender>
     <appender name="BUSINESSKAFKA" class="com.bosssoft.ecds.appender.KafkaAppender">
         <bootstrapServers>${bootstrapServers}</bootstrapServers>
         <logTopic>${businessTopic}</logTopic>
+        <applicationName>${applicationName}</applicationName>
     </appender>
     <!--异步写入kafka，尽量不占用主程序的资源-->
     <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
-           
         <neverBlock>true</neverBlock>
-           
         <includeCallerData>true</includeCallerData>
-           
         <discardingThreshold>0</discardingThreshold>
-           
         <queueSize>2048</queueSize>
-           
         <appender-ref ref="KAFKA"/>
     </appender>
     <appender name="BUSINESS" class="ch.qos.logback.classic.AsyncAppender">
-           
-        <neverBlock>true</neverBlock>
-           
-        <includeCallerData>true</includeCallerData>
-           
-        <discardingThreshold>0</discardingThreshold>
-           
-        <queueSize>2048</queueSize>
-           
-        <appender-ref ref="BUSINESSKAFKA"/>
+    <neverBlock>true</neverBlock>
+    <includeCallerData>true</includeCallerData>
+    <discardingThreshold>0</discardingThreshold>
+    <queueSize>2048</queueSize>
+    <appender-ref ref="BUSINESSKAFKA"/>
     </appender>
+
     <!--将上面的appender添加到root-->
     <root level="INFO">
         <appender-ref ref="CONSOLE"/>

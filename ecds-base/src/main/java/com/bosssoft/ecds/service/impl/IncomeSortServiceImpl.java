@@ -208,6 +208,20 @@ public class IncomeSortServiceImpl implements IncomeSortService {
         Date date = new Date();
         incomeSort.setUpdateTime(date);
         incomeSortDao.update(incomeSort, updateWrapper);
+        QueryWrapper<ItemPO> itemPOQueryWrapper = new QueryWrapper<>();
+        itemPOQueryWrapper.eq(IncomeSortConstant.F_INCOM_SORT_CODE, temp.getCode());
+        //修改科目表中编码
+        List<ItemPO> itemPOS = itemDao.selectList(itemPOQueryWrapper);
+        UpdateWrapper<ItemPO> itemPOUpdateWrapper = new UpdateWrapper<>();
+        itemPOUpdateWrapper.eq(IncomeSortConstant.F_INCOM_SORT_CODE, temp.getCode());
+        for (ItemPO itemPO :
+                itemPOS) {
+            ItemPO item = new ItemPO();
+            item.setIncomSortCode(code);
+            item.setVersion(itemPO.getVersion());
+            item.setUpdateTime(new Date());
+            itemDao.update(item, itemPOUpdateWrapper);
+        }
         return true;
     }
 
