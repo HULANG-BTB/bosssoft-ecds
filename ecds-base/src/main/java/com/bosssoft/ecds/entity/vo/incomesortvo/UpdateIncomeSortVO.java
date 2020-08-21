@@ -35,6 +35,12 @@ public class UpdateIncomeSortVO implements Serializable {
     @Pattern(regexp = CheckConstant.CHINESE_REGULAR, message = IncomeSortConstant.NAME_IS_CHINESE)
     private String name;
     /**
+     * 收入种类编码
+     */
+    @NotNull(message = IncomeSortConstant.INCOME_SORT_CODE_NOT_NULL)
+    @Pattern(regexp = CheckConstant.INTEGER_REGULAR, message = IncomeSortConstant.CODE_IS_INTEGER)
+    private String code;
+    /**
      * 是否底级
      */
     @NotNull(message = IncomeSortConstant.LEAF_NOT_NULL)

@@ -1,11 +1,8 @@
-package com.bosssoft.ecds.entity.dto.agendto;
+package com.bosssoft.ecds.entity.vo;
 
-import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
 
 import java.util.Date;
 
@@ -15,14 +12,13 @@ import java.util.Date;
  * @description
  */
 @Data
-@ApiModel(value = "AgenBillDTO对象", description = "")
-public class AgenBillDTO {
-
+@ApiModel(value = "AgenBillVO对象", description = "")
+public class AgenEnableBillVO {
     @ApiModelProperty(value = "主键")
     private Long id;
 
     @ApiModelProperty(value = "单位编码")
-    private String agenIdcode;
+    private String agenCode;
 
     @ApiModelProperty(value = "票据编码")
     private String typeCode;

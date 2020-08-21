@@ -1,5 +1,6 @@
 package com.bosssoft.ecds.service.impl;
 
+import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bosssoft.ecds.entity.dto.DeptDTO;
@@ -28,6 +29,7 @@ import java.util.List;
  * @since 2020-08-09
  */
 @Service
+@DS("master")
 public class DeptServiceImpl extends ServiceImpl<DeptDao, DeptPO> implements DeptService {
 
     /**
