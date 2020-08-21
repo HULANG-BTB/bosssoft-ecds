@@ -7,7 +7,7 @@ spring:
         file-extension: yml
         name: archive-server-dev
   redis:
-    host: 127.0.0.1
+    host: 116.62.10.188
     # Redis服务器连接端口
     port: 6379
     # 连接超时时间（毫秒）
