@@ -12,7 +12,6 @@ import org.springframework.cloud.client.SpringCloudApplication;
 @SpringCloudApplication
 public class UnitSignMain {
 
-    public static void main(String[] args) {
-        SpringApplication.run(UnitSignMain.class);
+    public static void main(String[] args) { SpringApplication.run(UnitSignMain.class);
     }
 }

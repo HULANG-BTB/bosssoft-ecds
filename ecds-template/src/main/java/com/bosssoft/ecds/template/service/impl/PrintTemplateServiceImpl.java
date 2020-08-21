@@ -1,5 +1,6 @@
 package com.bosssoft.ecds.template.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -9,11 +10,18 @@ import com.bosssoft.ecds.template.entity.vo.PrintTemplateVo;
 import com.bosssoft.ecds.template.mapper.PrintTemplateMapper;
 import com.bosssoft.ecds.template.service.PrintTemplateService;
 import com.bosssoft.ecds.template.util.BeanCopyUtil;
+import com.bosssoft.ecds.template.util.excel.SampleUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.dom4j.DocumentException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.List;
 
 /**
@@ -58,7 +66,50 @@ public class PrintTemplateServiceImpl extends ServiceImpl<PrintTemplateMapper, P
     }
 
     @Override
-    public IPage<PrintTemplateVo> getPageVO(Page<?> page) {
-        return printTemplateMapper.selectTemplateVo(page);
+    public IPage<PrintTemplateVo> getPageVO(Long current, Long size) {
+        return printTemplateMapper.selectTemplateVo(new Page<>(current, size));
+    }
+
+    @Override
+    public List<PrintTemplateVo> searchList(String billCode, String name) {
+        if (name==null)
+            name="";
+        String rgnCode = "";
+        String typeId = "";
+        String sortId = "";
+
+        if (billCode!=null && billCode.length()==6) {
+            rgnCode = billCode.substring(0, 2);
+            typeId = billCode.substring(2, 4);
+            sortId = billCode.substring(4, 6);
+        }
+
+        QueryWrapper<PrintTemplatePo> queryWrapper = new QueryWrapper<>();
+        queryWrapper
+                .lambda()
+                    .eq(!"".equals(rgnCode), PrintTemplatePo::getRgnCode, rgnCode)
+                    .eq(!"".equals(typeId), PrintTemplatePo::getTypeId, typeId)
+                    .eq(!"".equals(sortId), PrintTemplatePo::getSortId, sortId)
+                    .like(!"".equals(name), PrintTemplatePo::getName, name);
+
+        List<PrintTemplatePo> poList = printTemplateMapper.selectList(queryWrapper);
+
+        return BeanCopyUtil.copyListProperties(poList, PrintTemplateVo::new);
+    }
+
+    @Override
+    public String convertExcel(InputStream inputStream) {
+        String ftlTemplate = "";
+
+        StringWriter writer = new StringWriter();
+        try {
+            SampleUtils.excelToXml(inputStream, writer);
+            StringReader reader = new StringReader(writer.toString());
+            ftlTemplate = SampleUtils.xmlToFtl(reader, "billDTO");
+        } catch (IOException | InvalidFormatException | DocumentException e) {
+            e.printStackTrace();
+        }
+
+        return ftlTemplate;
     }
 }

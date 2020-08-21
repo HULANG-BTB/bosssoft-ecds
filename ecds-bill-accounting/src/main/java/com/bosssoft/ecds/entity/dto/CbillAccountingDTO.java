@@ -1,7 +1,10 @@
 package com.bosssoft.ecds.entity.dto;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.Version;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -26,6 +29,7 @@ import java.util.Date;
 public class CbillAccountingDTO {
 
     @ApiModelProperty(value = "主键")
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
     @ApiModelProperty(value = "单位代码")
@@ -63,6 +67,7 @@ public class CbillAccountingDTO {
     private BigDecimal account;
 
     @ApiModelProperty(value = "入账凭证号")
+    @JsonSerialize(using = ToStringSerializer.class)
     private long accountId;
 
     @ApiModelProperty(value = "版本号")
@@ -78,6 +83,7 @@ public class CbillAccountingDTO {
     private Date updateTime;
 
     @ApiModelProperty(value = "删除状态(1.已经删除 0.未删除)")
+    @TableField(select = false)
     private Boolean logicDelete;
 
     @ApiModelProperty(value = "应缴金额")

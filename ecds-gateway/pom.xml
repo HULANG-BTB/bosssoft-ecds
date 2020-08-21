@@ -66,12 +66,6 @@
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
-        <!--   redis  依赖 开始   -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis-reactive</artifactId>
-        </dependency>
-        <!--   redis  依赖 结束   -->
         <!--    JWT 依赖 开始    -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>

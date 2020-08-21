@@ -16,7 +16,6 @@ import java.util.List;
  * @author: lpb
  * @create: 2020-08-05 10:49
  */
-@Mapper
 @Repository
 public interface RegionMapper extends BaseMapper<AuthRegion> {
 

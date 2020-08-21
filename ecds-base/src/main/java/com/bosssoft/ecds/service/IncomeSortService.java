@@ -1,7 +1,6 @@
 package com.bosssoft.ecds.service;
 
 
-import com.bosssoft.ecds.entity.dto.IncomeSortDTO;
 import com.bosssoft.ecds.entity.vo.incomesortvo.AddIncomeSortVO;
 import com.bosssoft.ecds.entity.vo.incomesortvo.DeleteIncomeSortVO;
 import com.bosssoft.ecds.entity.vo.incomesortvo.FuzzyQueryIncomeSortVO;
@@ -28,7 +27,7 @@ public interface IncomeSortService {
      * @param fuzzyQueryIncomeSortVO
      * @return
      */
-    QueryResponseResult<IncomeSortDTO> pageQueryByName(FuzzyQueryIncomeSortVO fuzzyQueryIncomeSortVO);
+    QueryResponseResult pageQueryByName(FuzzyQueryIncomeSortVO fuzzyQueryIncomeSortVO);
 
     /**
      * 根据收入类别id分页获取该种类的子类信息
@@ -36,7 +35,7 @@ public interface IncomeSortService {
      * @param pageIncomeSortVO
      * @return
      */
-    QueryResponseResult<IncomeSortDTO> pageQueryById(PageIncomeSortVO pageIncomeSortVO);
+    QueryResponseResult pageQueryById(PageIncomeSortVO pageIncomeSortVO);
 
     /**
      * 判断收入名称是否符合入库规则

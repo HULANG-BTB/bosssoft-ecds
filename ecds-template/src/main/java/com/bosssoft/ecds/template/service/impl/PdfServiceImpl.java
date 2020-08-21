@@ -158,7 +158,7 @@ public class PdfServiceImpl implements PdfService {
     }
 
     @Override
-    public String getRemoteAddress(NontaxBillDto billDTO, boolean isForce) {
+    public String getRemoteAddress(NontaxBillDto billDTO, boolean isForce, Long expireTime) {
         String pdfFileName = getPdfDest(billDTO.getBillCode(), billDTO.getSerialCode());
         String path = "boss-bill/" + pdfFileName;
 
@@ -172,7 +172,12 @@ public class PdfServiceImpl implements PdfService {
             ossUtil.upload(path, new ByteArrayInputStream(pdfBytes));
         }
 
-        URL url = ossUtil.temporaryUrl(path, 5 * 60 * 1000);
+        // 默认1个月的文件访问时间
+        if (expireTime==null) {
+            expireTime = 30 * 24 * 60 * 60 * 1000L;
+        }
+
+        URL url = ossUtil.temporaryUrl(path, expireTime);
 
         return url.toString();
     }

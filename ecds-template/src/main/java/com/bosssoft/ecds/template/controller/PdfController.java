@@ -82,8 +82,13 @@ public class PdfController {
 
     @ApiOperation("根据票据信息生成pdf文件，并返回远程（OSS）下载链接")
     @PostMapping("/getRemoteAddress")
-    public ResponseBody getRemoteAddress(@RequestBody NontaxBillDto billDTO) {
-        String url = pdfService.getRemoteAddress(billDTO, false);
+    public ResponseBody getRemoteAddress(
+            @RequestBody
+                    NontaxBillDto billDTO,
+            @RequestParam(defaultValue = "2592000000")
+            @ApiParam(value = "过期时间，默认是1个月", example = "0")
+                    Long expireTime) {
+        String url = pdfService.getRemoteAddress(billDTO, false, expireTime);
         log.info(url);
         return ResponseBody.ok(url);
     }
