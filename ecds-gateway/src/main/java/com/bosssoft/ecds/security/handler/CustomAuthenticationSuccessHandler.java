@@ -60,8 +60,6 @@ public class CustomAuthenticationSuccessHandler extends WebFilterChainServerAuth
         HttpHeaders httpHeaders = response.getHeaders();
         httpHeaders.add("Content-Type", "application/json; charset=UTF-8");
         httpHeaders.add("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
-        // Todo 上线删除本行
-        httpHeaders.setAccessControlAllowOrigin("http://localhost:9528");
         // 设置body
         byte[] dataBytes = {};
         try {
