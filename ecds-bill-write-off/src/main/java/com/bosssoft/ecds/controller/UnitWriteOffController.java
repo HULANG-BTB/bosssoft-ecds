@@ -10,6 +10,8 @@ import com.bosssoft.ecds.response.QueryResponseResult;
 import com.bosssoft.ecds.response.QueryResult;
 import com.bosssoft.ecds.response.ResponseResult;
 import com.bosssoft.ecds.service.UnitWriteOffService;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +31,8 @@ public class UnitWriteOffController {
         this.unitWriteOffService = unitWriteOffService;
     }
 
+    @ApiOperation(value = "查询核销请求", notes = "根据单位Id，页码，每页数据数量获取该单位已有的核销请求")
+    @ApiImplicitParam(name = "queryInfoVO", type = "UnitWriteOffApplyQueryInfoVOUnitWriteOffApplyQueryInfoVO", value = "申请分页查询信息")
     @GetMapping("selectApply")
     public ResponseResult selectApply (UnitWriteOffApplyQueryInfoVO queryInfoVO) {
         UnitWriteOffApplyQueryInfoDTO queryInfoDTO = BeanUtil.copyProperties(queryInfoVO, UnitWriteOffApplyQueryInfoDTO.class);
@@ -41,6 +45,8 @@ public class UnitWriteOffController {
         return new QueryResponseResult<>(CommonCode.SUCCESS, queryResult);
     }
 
+    @ApiOperation(value = "删除核销请求", notes = "根据业务单号删除未上报的核销请求")
+    @ApiImplicitParam(name = "no", type = "String", value = "需要删除申请的业务单号")
     @DeleteMapping("deleteApply/{no}")
     public ResponseResult deleteApply(@PathVariable String no) {
         if (unitWriteOffService.deleteApply(no)) {
@@ -49,6 +55,8 @@ public class UnitWriteOffController {
         return ResponseResult.FAIL();
     }
 
+    @ApiOperation(value = "上报核销请求", notes = "根据业务单号列表上报核销请求")
+    @ApiImplicitParam(name = "noList", type = "List", value = "需要上报申请的业务单号列表")
     @PutMapping("uploadApply")
     public ResponseResult uploadApply(@RequestBody List<String> noList) {
         if (unitWriteOffService.uploadApply(noList)) {
@@ -57,6 +65,8 @@ public class UnitWriteOffController {
         return ResponseResult.FAIL();
     }
 
+    @ApiOperation(value = "撤销核销请求", notes = "根据业务单号列表撤销核销请求")
+    @ApiImplicitParam(name = "noList", type = "List", value = "需要撤销申请的业务单号列表")
     @PutMapping("rescindApply")
     public ResponseResult rescindApply(@RequestBody List<String> noList) {
         if (unitWriteOffService.rescindApply(noList)) {
@@ -65,6 +75,8 @@ public class UnitWriteOffController {
         return ResponseResult.FAIL();
     }
 
+    @ApiOperation(value = "查询请求的开票明细", notes = "根据业务单号页码，每页数据数量获取请求对应的开票明细")
+    @ApiImplicitParam(name = "queryInfoVO", type = "UnitWriteOffItemAndIncomeQueryInfoVO", value = "分页查询信息")
     @GetMapping("selectItem")
     public ResponseResult selectItem(UnitWriteOffItemAndIncomeQueryInfoVO queryInfoVO) {
         UnitWriteOffItemAndIncomeQueryInfoDTO queryInfoDTO = BeanUtil.copyProperties(queryInfoVO, UnitWriteOffItemAndIncomeQueryInfoDTO.class);
@@ -75,6 +87,8 @@ public class UnitWriteOffController {
         return new QueryResponseResult<>(CommonCode.SUCCESS, queryResult);
     }
 
+    @ApiOperation(value = "查询请求的收入情况", notes = "根据业务单号页码，每页数据数量获取请求对应的收入情况")
+    @ApiImplicitParam(name = "queryInfoVO", type = "UnitWriteOffItemAndIncomeQueryInfoVO", value = "分页查询信息")
     @GetMapping("selectIncome")
     public ResponseResult selectIncome(UnitWriteOffItemAndIncomeQueryInfoVO queryInfoVO) {
         UnitWriteOffItemAndIncomeQueryInfoDTO queryInfoDTO = BeanUtil.copyProperties(queryInfoVO, UnitWriteOffItemAndIncomeQueryInfoDTO.class);
@@ -85,6 +99,8 @@ public class UnitWriteOffController {
         return new QueryResponseResult<>(CommonCode.SUCCESS, queryResult);
     }
 
+    @ApiOperation(value = "获取票据信息", notes = "根据单位代码，截止日期获取开票信息")
+    @ApiImplicitParam(name = "billQueryVO", type = "BillQueryVO", value = "票据查询信息")
     @GetMapping("getBillInfo")
     public ResponseResult getBillInfo(BillQueryVO billQueryVO) {
         BillQueryDTO billQueryDTO = BeanUtil.copyProperties(billQueryVO, BillQueryDTO.class);
@@ -98,6 +114,8 @@ public class UnitWriteOffController {
         return new QueryResponseResult<>(CommonCode.SUCCESS, billInfoVO);
     }
 
+    @ApiOperation(value = "新增或更新申请", notes = "根据相关信息新增申请或者更新已有的申请")
+    @ApiImplicitParam(name = "applyVO", type = "ApplyVO", value = "申请VO")
     @PostMapping("addOrUpdateApply")
     public ResponseResult addOrUpdateApply(@RequestBody ApplyVO applyVO) {
         ApplyDTO applyDTO = BeanUtil.copyProperties(applyVO, ApplyDTO.class);
