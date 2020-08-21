@@ -43,9 +43,8 @@ public class StampController {
     public ResponseResult stamp(@ApiParam("需要盖章的pdf文件") @RequestPart("uploadFile") MultipartFile uploadFile,
                                 @ApiParam("单位签名") @RequestParam("unitSignValue") String unitSignValue,
                                 @ApiParam("财政签名") @RequestParam("financeSignValue") String financeSignValue,
-                                HttpServletRequest request, HttpServletResponse response) throws Exception {
-        request.getSession().setAttribute("1","1");
-        boolean result = stampService.stamp(uploadFile, unitSignValue, financeSignValue, request, response);
+                                HttpServletResponse response) throws Exception {
+        boolean result = stampService.stamp(uploadFile, unitSignValue, financeSignValue, response);
         if (result){
             return new ResponseResult(SignCode.STAMP_SUCCESS);
         } else {

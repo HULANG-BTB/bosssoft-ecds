@@ -2,7 +2,6 @@ package com.bosssoft.ecds.utils;
 
 import com.bosssoft.ecds.domain.AlgorithmType;
 import com.bosssoft.ecds.domain.StringType;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;

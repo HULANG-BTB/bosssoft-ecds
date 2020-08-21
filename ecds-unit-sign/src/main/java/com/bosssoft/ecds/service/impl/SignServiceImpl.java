@@ -1,17 +1,15 @@
 package com.bosssoft.ecds.service.impl;
 
-import cn.hutool.json.JSON;
-import cn.hutool.json.JSONUtil;
 import com.bosssoft.ecds.domain.*;
 import com.bosssoft.ecds.dto.SignedDataDto;
 import com.bosssoft.ecds.service.ISignService;
+import com.bosssoft.ecds.util.RedisUtils;
 import com.bosssoft.ecds.utils.*;
 import org.apache.commons.codec.DecoderException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import sun.security.x509.X509CertImpl;
-
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.security.*;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
@@ -24,6 +22,9 @@ import java.security.cert.X509Certificate;
  */
 @Service
 public class SignServiceImpl implements ISignService {
+
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     @Override
     public SignedDataDto sign(String data) throws Exception {
@@ -52,8 +53,6 @@ public class SignServiceImpl implements ISignService {
                 .build();
     }
 
-
-
     @Override
     public boolean verifySign(SignedDataDto signedData, HttpServletRequest request) throws NoSuchProviderException,
             CertificateException, NoSuchAlgorithmException,
@@ -74,10 +73,10 @@ public class SignServiceImpl implements ISignService {
         // 获取财政公钥
         PublicKey finaPublicKey = crtCert.getPublicKey();
         if (SignUtil.verifySign(summary, financeSignValue, finaPublicKey, AlgorithmType.SHA256, signedData.getStringType())){
-            // 将单位段签名与财政端签名存入session，持续10min，作为盖章的依据
-            HttpSession session = request.getSession();
-            session.setMaxInactiveInterval(600);
-            session.setAttribute(signedData.getUnitSignValue(),signedData.getFinanceSignValue());
+            // 将单位段签名与财政端签名存入redis，持续10min，作为盖章的依据
+            RedisUtils redisUtils = new RedisUtils(redisTemplate);
+            redisUtils.set(signedData.getUnitSignValue(),signedData.getFinanceSignValue());
+            redisUtils.expire(signedData.getUnitSignValue(),600);
             return true;
         }
         return false;

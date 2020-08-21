@@ -3,7 +3,6 @@ package com.bosssoft.ecds.controller;
 import com.bosssoft.ecds.dto.SignedDataDto;
 import com.bosssoft.ecds.response.CommonCode;
 import com.bosssoft.ecds.response.QueryResponseResult;
-import com.bosssoft.ecds.response.ResponseResult;
 import com.bosssoft.ecds.response.SignCode;
 import com.bosssoft.ecds.service.ISignService;
 import com.netflix.hystrix.contrib.javanica.annotation.DefaultProperties;

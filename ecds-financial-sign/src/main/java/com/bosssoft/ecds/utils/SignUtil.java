@@ -3,9 +3,7 @@ package com.bosssoft.ecds.utils;
 import com.bosssoft.ecds.domain.AlgorithmType;
 import com.bosssoft.ecds.domain.StringType;
 import org.apache.commons.codec.DecoderException;
-
 import java.security.*;
-
 
 /**
  * @author LiDaShan
@@ -26,8 +24,7 @@ public class SignUtil {
      */
     public static String signData(String summary, PrivateKey privateKey, AlgorithmType algorithmType,StringType stringType) throws Exception {
         // 根据签名算法，获取签名实例
-        Signature signture = null;
-        signture = Signature.getInstance(algorithmType.getsignatureAlgorithmType());
+        Signature signture = Signature.getInstance(algorithmType.getsignatureAlgorithmType());
         signture.initSign(privateKey);
         // 对数据进行签名
         signture.update(summary.getBytes());
@@ -52,7 +49,6 @@ public class SignUtil {
         // 更新要签名或验证的数据,即摘要原文
         signature.update(summary.getBytes());
         // 使用解密获取的签名与签名原数据对比，验证签名
-        boolean bverify = signature.verify(ByteUtill.decode(signValue,stringType));
-        return bverify;
+        return signature.verify(ByteUtill.decode(signValue,stringType));
     }
 }

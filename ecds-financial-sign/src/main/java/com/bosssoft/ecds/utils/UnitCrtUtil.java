@@ -1,10 +1,8 @@
 package com.bosssoft.ecds.utils;
 
 import cn.hutool.core.util.StrUtil;
-import com.bosssoft.ecds.domain.StringType;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.jcajce.provider.asymmetric.rsa.RSAUtil;
-
 import java.io.*;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
@@ -46,7 +44,7 @@ public class UnitCrtUtil {
             // 初始化证书工厂,此处仅支持证书格式 X.509
             CertificateFactory certificatefactory=CertificateFactory.getInstance("X.509");
             File certFile=new File(certPath);
-            InputStream input=null;
+            InputStream input = null;
             if(StrUtil.isEmpty(certPath) ||!certFile.exists()){
                 // 如果配置证书路径，就默认读取resources目录下名为defaultCertName的默认证书文件
                 input= RSAUtil.class.getClassLoader().getResourceAsStream(defaultCertName);
