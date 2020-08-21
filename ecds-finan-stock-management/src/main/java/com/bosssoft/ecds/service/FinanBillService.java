@@ -1,6 +1,9 @@
 package com.bosssoft.ecds.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.bosssoft.ecds.entity.dto.FinanBillDto;
+import com.bosssoft.ecds.entity.dto.ReceiveFinanceapplyDto;
+import com.bosssoft.ecds.entity.dto.SentBillDto;
 import com.bosssoft.ecds.entity.po.FinanBillPo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -21,9 +24,40 @@ public interface FinanBillService extends IService<FinanBillPo> {
      */
 
     /**
-     *              主体业务外界调用
+     *              主体业务
      * *********************************************
      */
+
+    /**
+     * 批量发放票据出库
+     * @param receiveDtos 接收的发票请求list，主要包含票据代码和数量
+     * @return SentBillDto的list，即发送的票据段list
+     */
+    List<SentBillDto> outBills(List<ReceiveFinanceapplyDto> receiveDtos);
+
+    /**
+     * 发放票据出库
+     * @param receiveDto 接收的发票请求，主要包含票据代码和数量
+     * @return FinanBillDto 发送的票据段
+     */
+    FinanBillDto getStartNo(ReceiveFinanceapplyDto receiveDto);
+
+    /**
+     * 判断票据发放请求数量是否合理
+     * 即：判断该票据代码下，是否有足够票据用来发放
+     *
+     * @param receiveDto 发放请求
+     * @return 是否足够
+     */
+    Boolean enoughBill(ReceiveFinanceapplyDto receiveDto);
+
+    /**
+     * 根据发送票据dto，更新状态为已发送
+     *
+     * @param sentBillDto 发送票据dto
+     * @return 是否成功
+     */
+    Boolean updateIsPutOut(SentBillDto sentBillDto);
 
     /**
      * 出库操作
