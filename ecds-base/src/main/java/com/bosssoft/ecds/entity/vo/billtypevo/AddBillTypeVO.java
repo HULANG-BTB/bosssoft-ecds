@@ -4,10 +4,7 @@ import com.bosssoft.ecds.constant.CheckConstant;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
-import javax.validation.constraints.Future;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -22,7 +19,7 @@ import static com.bosssoft.ecds.constant.BillTypeConstant.*;
 public class AddBillTypeVO {
 
     @NotBlank(message = CODE_NOT_BLANK)
-    @Pattern(regexp = CheckConstant.INTEGER_REGULAR, message = "编码只能为数字型字符串")
+    @Pattern(regexp = CODE_PATTERN, message = CODE_MESSAGE)
     String code;
 
     @NotBlank(message = NAME_NOT_BLANK)
