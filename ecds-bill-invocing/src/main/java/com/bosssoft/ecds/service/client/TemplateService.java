@@ -1,6 +1,7 @@
 package com.bosssoft.ecds.service.client;
 
 import com.bosssoft.ecds.entity.dto.NontaxBillDTO;
+import com.bosssoft.ecds.response.QueryResponseResult;
 import com.bosssoft.ecds.service.fallback.FallBack;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
@@ -15,6 +16,6 @@ public interface TemplateService {
      * 获取模板
      * @return
      */
-    @PostMapping("/image/getRemoteAddress")
-    String getTemplate(@RequestBody NontaxBillDTO nontaxBillDTO)throws ExecutionException, InterruptedException;
+    @PostMapping("/pdf/getRemoteAddress")
+    QueryResponseResult getTemplate(@RequestBody NontaxBillDTO nontaxBillDTO)throws ExecutionException, InterruptedException;
 }

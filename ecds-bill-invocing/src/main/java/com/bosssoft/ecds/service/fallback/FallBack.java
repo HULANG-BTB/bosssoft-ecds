@@ -2,6 +2,7 @@ package com.bosssoft.ecds.service.fallback;
 
 import com.bosssoft.ecds.entity.dto.NontaxBillDTO;
 import com.bosssoft.ecds.entity.dto.TemplateDto;
+import com.bosssoft.ecds.response.QueryResponseResult;
 import com.bosssoft.ecds.service.client.TemplateService;
 import com.bosssoft.ecds.service.client.TestService;
 import com.bosssoft.ecds.service.client.UnitManagerService;
@@ -47,7 +48,7 @@ public class FallBack implements UnitManagerService, TestService , TemplateServi
     }
 
     @Override
-    public String getTemplate(NontaxBillDTO nontaxBillDTO) {
+    public QueryResponseResult getTemplate(NontaxBillDTO nontaxBillDTO) {
         return null;
     }
 }

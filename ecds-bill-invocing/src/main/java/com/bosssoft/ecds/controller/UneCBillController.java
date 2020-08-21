@@ -1,14 +1,13 @@
 package com.bosssoft.ecds.controller;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.convert.Convert;
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bosssoft.ecds.entity.dto.*;
-import com.bosssoft.ecds.entity.po.MessageUneCbill;
-import com.bosssoft.ecds.entity.po.Template;
+import com.bosssoft.ecds.entity.po.Sign;
 import com.bosssoft.ecds.entity.po.UneCbill;
 import com.bosssoft.ecds.entity.po.UneCbillItem;
 import com.bosssoft.ecds.entity.pojo.BatchPojo;
@@ -18,25 +17,19 @@ import com.bosssoft.ecds.entity.vo.UneCbillVo;
 import com.bosssoft.ecds.response.CommonCode;
 import com.bosssoft.ecds.response.QueryResponseResult;
 import com.bosssoft.ecds.response.ResponseResult;
-import com.bosssoft.ecds.response.ResultCode;
+import com.bosssoft.ecds.service.SignService;
 import com.bosssoft.ecds.service.UneCbillService;
 import com.bosssoft.ecds.service.client.MessageService;
+import com.bosssoft.ecds.service.client.SignatureService;
 import com.bosssoft.ecds.service.client.TemplateService;
 import com.bosssoft.ecds.service.client.UnitManagerService;
 import com.bosssoft.ecds.service.VerifyService;
 import com.bosssoft.ecds.util.CommonUtil;
 import com.bosssoft.ecds.util.ResponseUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
-
-import java.text.DateFormat;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.locks.ReentrantLock;
@@ -69,6 +62,12 @@ public class UneCBillController {
     private MessageService messageService;
 
     private ReentrantLock lock = new ReentrantLock();
+
+    @Autowired
+    private SignatureService signatureService;
+
+    @Autowired
+    private SignService signService;
 
     /**
      * 分页查询当前单位的开票记录
@@ -111,28 +110,24 @@ public class UneCBillController {
      */
     @RequestMapping(value = "/getBillByIdAndCheckCode", method = RequestMethod.GET)
     public String getBillByIdAndCheckCode(String billId, String checkCode) throws ExecutionException, InterruptedException, JsonProcessingException {
+        // 查bill
         QueryWrapper<UneCbill> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("f_bill_id", billId)
                 .eq("f_check_code", checkCode);
         UneCbill uneCbill = uneCbillService.getBillByIdAndCheckCode(queryWrapper);
-        log.info("success");
-        ObjectWriter writer = new ObjectMapper().writerWithDefaultPrettyPrinter();
-        QueryResponseResult<MessageUneCbill> res;
+        // 查询图片地址，并返回
         if (uneCbill != null) {
-            MessageUneCbill messageUneCbill = new MessageUneCbill();
-            BeanUtil.copyProperties(uneCbill, messageUneCbill);
-            log.info(messageUneCbill.getFBillId() + " :" + messageUneCbill.getFBillNo());
+            // 获取图片地址
+            log.info(uneCbill.getFBillId() + " :" + uneCbill.getFBillNo());
             NontaxBillDTO nontaxBillDTO = new NontaxBillDTO();
-            nontaxBillDTO.setBillCode(messageUneCbill.getFBillId());
-            nontaxBillDTO.setSerialCode(messageUneCbill.getFBillNo());
-            //String url = templateService.getTemplate(nontaxBillDTO);
-            messageUneCbill.setImgUrl("url");
-            res = new QueryResponseResult<>(CommonCode.SUCCESS, messageUneCbill);
-            return writer.writeValueAsString(res);
-
+            nontaxBillDTO.setBillCode(uneCbill.getFBillId());
+            nontaxBillDTO.setSerialCode(uneCbill.getFBillNo());
+            String url = null;
+            String content = getMsgContent(uneCbill, url);
+            QueryResponseResult<String> res = new QueryResponseResult<>(CommonCode.SUCCESS, content);
+            return JSON.toJSONString(res);
         }
-        res = new QueryResponseResult<>(CommonCode.FAIL, null);
-        return writer.writeValueAsString(res);
+        return JSON.toJSONString(new QueryResponseResult<>(CommonCode.FAIL, null));
     }
 
     /**
@@ -195,7 +190,7 @@ public class UneCBillController {
      * @return
      */
     @RequestMapping(path = "getItemList", method = RequestMethod.GET)
-    public String getItemLisst(String unitName) {
+    public String getItemList(String unitName) {
         String itemList = unitManagerService.getItemList(unitName);
         return "";
     }
@@ -222,6 +217,15 @@ public class UneCBillController {
             UneCbill uneCbill = commonUtil.convert(batchPojo.getUnitName(), batchPojo.getPayerDto(),
                     batchPojo.getUneCbillDto(), commonUtil.generateID(), batchPojo.getfAmt());
             uneCbillService.addUneCbill(uneCbill, itemDtos);
+            String singMsg = JSON.toJSONString(batchPojo);
+            Object o = Convert.toMap(String.class, Object.class, signatureService.sign(singMsg)).get("data");
+            log.info(o.toString());
+            SignedDataDto signedDataDto = Convert.convert(SignedDataDto.class, o);
+            log.info(JSON.toJSONString(signedDataDto));
+            Sign sign = new Sign();
+            BeanUtil.copyProperties(signedDataDto, sign);
+            sign.setSignId(uneCbill.getFId());
+            signService.addSign(sign);
         } finally {
             lock.unlock();
         }
@@ -238,16 +242,9 @@ public class UneCBillController {
     public String getTemplate(String billId) throws ExecutionException, InterruptedException {
         UneCbill uneCbill = uneCbillService.getUneCBillById(billId);
         if (uneCbill != null) {
-            NontaxBillDTO nontaxBillDTO = uneCbillService.convert(uneCbill);
-            List<BillItemDTO> uneCbillItemDtos = new ArrayList<>();
             List<UneCbillItem> uneCbillItems = uneCbillService.getItems(billId);
-            for (UneCbillItem uneCbillItem : uneCbillItems) {
-                BillItemDTO billItemDTO = uneCbillService.convertToItem(uneCbillItem);
-                uneCbillItemDtos.add(billItemDTO);
-            }
-            nontaxBillDTO.setItems(uneCbillItemDtos);
-            log.info(JSON.toJSONString(nontaxBillDTO));
-            String url = templateService.getTemplate(nontaxBillDTO);
+            NontaxBillDTO nontaxBillDTO = uneCbillService.getNontaxBillDto(uneCbill, uneCbillItems);
+            String url = Convert.convert(String.class, (templateService.getTemplate(nontaxBillDTO)).data) ;
             return ResponseUtils.getResponse(url, ResponseUtils.ResultType.OK);
         }
         return ResponseUtils.getResponse(404, "票据不存在");
@@ -295,19 +292,15 @@ public class UneCBillController {
     public ResponseResult sendMail(String billId) throws ExecutionException, InterruptedException, JsonProcessingException {
         UneCbill uneCbill = uneCbillService.getUneCBillById(billId);
         if (uneCbill != null) {
-            MessageDto messageDto = new MessageDto();
-            BeanUtil.copyProperties(uneCbill, messageDto);
-            messageDto.setFBillType("通用非税票据");
-            messageDto.setFBillImgUrl("url");
+            String imgUrl = null;
+            String content = getMsgContent(uneCbill, imgUrl);
             SendMailVo sendMailVo = new SendMailVo();
-            String str = new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(messageDto);
-            sendMailVo.setContent(str);
+            sendMailVo.setContent(content);
             sendMailVo.setMailTo(uneCbill.getFPayerEmail());
             sendMailVo.setSubject("邮件通知");
             sendMailVo.setTemplate("billTemplate.ftl");
             log.info(System.currentTimeMillis() + "");
             ResponseResult res = messageService.sendMail(sendMailVo);
-            //JSONObject jsonObject = JSONObject.parseObject(res);
             if (res.isSuccess()) {
                 return ResponseResult.SUCCESS();
             }
@@ -326,16 +319,14 @@ public class UneCBillController {
     public ResponseResult sendSms(String billId) throws ExecutionException, InterruptedException {
         UneCbill uneCbill = uneCbillService.getUneCBillById(billId);
         if (uneCbill != null) {
-            MessageDto messageDto = new MessageDto();
-            BeanUtil.copyProperties(uneCbill, messageDto);
-            messageDto.setFBillImgUrl("url");
+            String imgUrl = null;
+            String content = getMsgContent(uneCbill, imgUrl);
             SendSmsVo sendSmsVo = new SendSmsVo();
             sendSmsVo.setSmsFrom("开票单位：boss");
             sendSmsVo.setSmsTo(uneCbill.getFPayerTel());
-            sendSmsVo.setContent(JSON.toJSONString(messageDto));
+            sendSmsVo.setContent(content);
             log.info("before");
             ResponseResult res = messageService.send(sendSmsVo);
-            //JSONObject jsonObject = JSONObject.parseObject(res);
             if (res.isSuccess()) {
                 return ResponseResult.SUCCESS();
             }
@@ -380,6 +371,16 @@ public class UneCBillController {
         int total = uneCbillService.passBillCount();
         Page<UneCbill> page = new Page<>(currentPage, pageSize, total);
         return uneCbillService.selectPassBillPage(page);
+    }
+
+    public String getMsgContent(UneCbill uneCbill,String imgUrl) {
+        MessageDto messageDto = new MessageDto();
+        BeanUtil.copyProperties(uneCbill, messageDto);
+        // 定义开票时间
+        messageDto.setFCreateTime(uneCbill.getFDate());
+        messageDto.setFBillType(uneCbill.getFType());
+        messageDto.setFBillImgUrl(imgUrl);
+        return JSON.toJSONStringWithDateFormat(messageDto, "yyyy-MM-dd HH:mm:ss");
     }
 
 }
