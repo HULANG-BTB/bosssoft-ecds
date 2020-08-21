@@ -43,12 +43,10 @@ public class FanoutBillWarnReceiver {
         retrieveBillDto.setNumber(10);
         InsertBillDto insertBillDto = new InsertBillDto();
         exportBillDto = restTemplate.postForObject("http://127.0.0.1:8083/retrieveBill", retrieveBillDto, ExportBillDto.class);
-        logger.info(exportBillDto.toString());
         BillDto dto = new BillDto();
         dto.setBillTypeCode(exportBillDto.getRegionCode());
         dto.setBillCodeBegin(exportBillDto.getBillCodeBegin());
         dto.setBillCodeEnd(exportBillDto.getBillCodeEnd());
-        logger.info(dto.toString());
         restTemplate.postForObject("http://127.0.0.1:8083/createBill", dto, int.class);
         fanoutRabbitUtils.sendBillDelayMessage(billTypeCode);
     }
