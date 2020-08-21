@@ -2,6 +2,7 @@ package com.bosssoft.ecds.service.client;
 
 import com.bosssoft.ecds.entity.vo.SendMailVo;
 import com.bosssoft.ecds.entity.vo.SendSmsVo;
+import com.bosssoft.ecds.response.ResponseResult;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,14 +16,14 @@ public interface MessageService {
      * @return
      */
     @PostMapping("/mail/send")
-    String sendMail(@RequestBody SendMailVo sendMailVo) throws ExecutionException, InterruptedException;
+    ResponseResult sendMail(@RequestBody SendMailVo sendMailVo) throws ExecutionException, InterruptedException;
 
     /**
      * 短信发送给
      * @return
      */
     @PostMapping("/sms/send")
-    String send(@RequestBody SendSmsVo sendSmsVo)  throws ExecutionException, InterruptedException;
+    ResponseResult send(@RequestBody SendSmsVo sendSmsVo)  throws ExecutionException, InterruptedException;
 
     @GetMapping("/test")
     void test(@RequestParam("value")String value);

@@ -1,5 +1,6 @@
 package com.bosssoft.ecds.entity.po;
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
@@ -11,6 +12,7 @@ import java.util.Date;
 @TableName("une_cbill_item")
 public class UneCbillItem {
 
+    @TableId(value = "f_id")
     private long fId;
 
     private long fPid;

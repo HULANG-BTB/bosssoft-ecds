@@ -39,13 +39,23 @@ public interface WriteOffApplyMapper extends BaseMapper<WriteOffApplyPO> {
     /**
      * 处理退回的核销申请
      * 根据fNo业务单号进行修改
-     * 更新 f_check_result以及 f_is_upload
      * f_check_result "审验结果：1 良好 2 合格 3 问题 4 整改通过" -- > 3
      * f_is_upload "是否上报：1 未上报 2 已上报"  -- > 1
      * f_change_state "是否审验：1 未审验 2 已审验"  -- > 2
+     *
      * @param fNo
      * @return
      */
     @Update("UPDATE ube_writeoff_apply SET f_change_state = 2, f_check_result = 3, f_is_upload = 1 WHERE f_no = #{fNo}")
     boolean updateWriteOffApply(@Param("fNo") String fNo);
+
+    /**
+     * 处理审核结果
+     * f_check_result "审验结果：1 良好 2 合格 3 问题 4 整改通过" -- > 3
+     * f_is_upload "是否上报：1 未上报 2 已上报"  -- > 1
+     * f_change_state "是否审验：1 未审验 2 已审验"  -- > 2
+     *
+     */
+    @Update("UPDATE ube_writeoff_apply SET f_change_state = 2, f_check_result = #{result}, f_is_upload = 1 WHERE f_no = #{fNo}")
+    boolean setResult(@Param("fNo") String fNo, @Param("result") int result);
 }
