@@ -2,6 +2,9 @@ package com.bosssoft.ecds.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.bosssoft.ecds.entity.dto.*;
+import com.bosssoft.ecds.entity.po.WriteOffApplyIncomePO;
+import com.bosssoft.ecds.entity.po.WriteOffApplyItemPO;
+import com.bosssoft.ecds.entity.po.WriteOffApplyPO;
 
 import java.util.List;
 
@@ -65,4 +68,38 @@ public interface UnitWriteOffService {
      * @return 是否成功
      */
     boolean addOrUpdateApply(ApplyDTO applyDTO);
+
+    /**
+     * 获取申请列表
+     * @param fAgenIdCode 单位代码
+     * @return 申请列表
+     */
+    List<WriteOffApplyPO> getWriteOffApplyPOByAgenIdCode(String fAgenIdCode);
+
+    /**
+     * 批量更新申请数据（退回）
+     * @param no 业务单号
+     */
+    void updateWriteOffApply(String no);
+
+    /**
+     * 设置结果
+     * @param no 业务单号
+     * @param result 结果代码
+     */
+    void setResult(String no, int result);
+
+    /**
+     * 获取item列表
+     * @param fPid 业务单号
+     * @return item列表
+     */
+    List<WriteOffApplyItemPO> getWriteOffApplyItemList(String fPid);
+
+    /**
+     * 获取income列表
+     * @param fPid 业务单号
+     * @return income列表
+     */
+    List<WriteOffApplyIncomePO> getWriteOffApplyIncomeList(String fPid);
 }

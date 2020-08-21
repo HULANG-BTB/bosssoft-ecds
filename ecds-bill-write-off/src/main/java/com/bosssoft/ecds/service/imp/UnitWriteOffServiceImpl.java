@@ -250,6 +250,31 @@ public class UnitWriteOffServiceImpl implements UnitWriteOffService {
         return result == 1;
     }
 
+    @Override
+    public List<WriteOffApplyPO> getWriteOffApplyPOByAgenIdCode(String fAgenIdCode) {
+        return writeOffApplyMapper.getWriteOffApplyPOByAgenIdCode(fAgenIdCode);
+    }
+
+    @Override
+    public void updateWriteOffApply(String no) {
+        writeOffApplyMapper.updateWriteOffApply(no);
+    }
+
+    @Override
+    public void setResult(String no, int result) {
+        writeOffApplyMapper.setResult(no, result);
+    }
+
+    @Override
+    public List<WriteOffApplyItemPO> getWriteOffApplyItemList(String fPid) {
+        return writeOffApplyItemMapper.getWriteOffApplyItemList(fPid);
+    }
+
+    @Override
+    public List<WriteOffApplyIncomePO> getWriteOffApplyIncomeList(String fPid) {
+        return writeOffApplyIncomeMapper.getWriteOffApplyIncomeList(fPid);
+    }
+
     private void addWriteOffItem(WriteOffDto bill, List<WriteOffApplyItemDTO> list) {
         WriteOffApplyItemDTO dto = new WriteOffApplyItemDTO();
         dto.setFBatchNo(bill.getFbillBatchCode());

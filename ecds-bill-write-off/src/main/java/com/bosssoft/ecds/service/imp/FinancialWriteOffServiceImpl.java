@@ -83,7 +83,8 @@ public class FinancialWriteOffServiceImpl implements FinancialWriteOffService {
         return true;
     }
 
-    public boolean setResult(WriteOffDetailDTO writeOffDetailDTO ,WriteOffResultDTO writeOffResultDTO) {
+    @Override
+    public boolean setResult(WriteOffDetailDTO writeOffDetailDTO , WriteOffResultDTO writeOffResultDTO) {
         // 点击审验后， 对审验结果进行保存
         // 保存审验结果
 //        setDetails(writeOffDetailDTO);
