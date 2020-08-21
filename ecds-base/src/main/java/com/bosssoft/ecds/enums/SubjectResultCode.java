@@ -16,7 +16,7 @@ public enum SubjectResultCode implements ResultCode {
     PARENT_ERROR(false, 20007, "父级预算科目不存在或已被删除，请刷新重试！"),
     UPDATE_DATE_ERROR(false, 20009, "只允许修改今年的数据！"),
     COPY_ERROR(false, 20010, "请选中左侧一级菜单！"),
-    IMPORT_ERROR(false, 20011, "Excel中数据格式错误！"),
+    IMPORT_ERROR(false, 20011, "文件解析错误！"),
     ;
 
     boolean success;
@@ -42,5 +42,10 @@ public enum SubjectResultCode implements ResultCode {
     @Override
     public String message() {
         return message;
+    }
+
+    public SubjectResultCode setMessage(String message){
+        this.message=message;
+        return this;
     }
 }

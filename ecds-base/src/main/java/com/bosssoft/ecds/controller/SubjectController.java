@@ -1,6 +1,7 @@
 package com.bosssoft.ecds.controller;
 
 import com.alibaba.excel.EasyExcel;
+import com.bosssoft.ecds.constant.SubjectConstant;
 import com.bosssoft.ecds.response.QueryResponseResult;
 import com.bosssoft.ecds.entity.dto.SubjectDTO;
 import com.bosssoft.ecds.entity.vo.subjectvo.*;
@@ -71,12 +72,11 @@ public class SubjectController {
         response.setCharacterEncoding("utf-8");
         // 这里URLEncoder.encode可以防止中文乱码
         String fileName = URLEncoder.encode(subjectService.getFileName(subjectQueryVO.getId()), "UTF-8");
-        response.setHeader("Content-disposition", "attachment;filename=" + fileName + ".xlsx");
-        EasyExcel.write(response.getOutputStream(), SubjectExcelData.class).sheet("预算科目").doWrite(subjectService.selectExcel(subjectQueryVO))
-
-        ;
+        response.setHeader("Content-disposition", "attachment;filename=" + fileName + "."+ SubjectConstant.FILE_suffix);
+        EasyExcel.write(response.getOutputStream(), SubjectExcelData.class).sheet("预算科目").doWrite(subjectService.selectExcel(subjectQueryVO));
     }
 
+    @ApiOperation(value = "导入预算科目")
     @PostMapping("/upload")
     public QueryResponseResult upload(MultipartFile file, Long id) throws IOException {
         return subjectService.upload(file, id);
