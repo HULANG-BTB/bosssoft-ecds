@@ -34,21 +34,24 @@ public class SourceSetController {
     @PostMapping("/setSource")
     public ResponseResult setSource(@RequestBody @Valid SourceSetDto sourceSetDto) {
         return sourceSetService.updateSet(sourceSetDto) > 0 ?
-                new ResponseResult(true, 200, "设置票据池成功") :
+                new ResponseResult(true, 10000, "设置票据池成功") :
+//                new ResponseResult(CommonCode.SUCCESS):
                 new ResponseResult(CommonCode.SERVER_ERROR);
     }
 
     @PostMapping("/addSource")
     public ResponseResult addSource(@RequestBody @Valid SourceSetDto sourceSetDto) {
         return sourceSetService.updateSet(sourceSetDto) > 0 ?
-                new ResponseResult(true, 200, "创建票据池成功") :
+                new ResponseResult(true, 10000, "创建票据池成功") :
+//                new ResponseResult(CommonCode.SUCCESS):
                 new ResponseResult(CommonCode.SERVER_ERROR);
     }
 
     @PostMapping("/removeSource")
     public ResponseResult removeSource(@RequestBody @Valid SourceSetDto sourceSetDto) {
         return sourceSetService.updateSet(sourceSetDto) > 0 ?
-                new ResponseResult(true, 200, "删除票据池成功") :
+                new ResponseResult(true, 10000, "修改票据池状态成功") :
+//                new ResponseResult(CommonCode.SUCCESS):
                 new ResponseResult(CommonCode.SERVER_ERROR);
     }
 
@@ -61,7 +64,7 @@ public class SourceSetController {
         List<SourceSetVo> list = BeanUtils.convertList(sourceSetService.retrieveSetList(), SourceSetVo.class);
         return list != null ?
                 new QueryResponseResult<>(CommonCode.SUCCESS, list) :
-                new ResponseResult(false, 500, "获取失败，请联系管理员");
+                new ResponseResult(CommonCode.FAIL);
     }
 
     /**
@@ -74,6 +77,6 @@ public class SourceSetController {
         SourceSetVo sourceSetVo = BeanUtils.convertObject(sourceSetService.retrieveSetByCode(billTypeCode), SourceSetVo.class);
         return sourceSetVo != null ?
                 new QueryResponseResult<>(CommonCode.SUCCESS, sourceSetVo) :
-                new ResponseResult(false, 500, "获取失败，该票据池不存在");
+                new ResponseResult(CommonCode.FAIL);
     }
 }
