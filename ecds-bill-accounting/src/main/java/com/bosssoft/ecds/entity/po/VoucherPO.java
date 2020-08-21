@@ -1,7 +1,10 @@
 package com.bosssoft.ecds.entity.po;
 
+import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -29,6 +32,7 @@ import java.util.Date;
 public class VoucherPO extends Model<VoucherPO> {
 
     @ApiModelProperty(value = "入账凭证号")
+    @JsonSerialize(using = ToStringSerializer.class)
     @TableId(value = "f_account_id", type = IdType.ASSIGN_ID)
     private Long accountId;
 
@@ -108,7 +112,7 @@ public class VoucherPO extends Model<VoucherPO> {
 
     public static final String F_BILL_NO = "f_bill_no";
 
-    public static final String F_AGEN_TYPE = "f_agen_type";
+    public static final String F_AGEN_IDCODE = "f_agen_idcode";
 
     public static final String F_AGEN_NAME = "f_agen_name";
 

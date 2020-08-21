@@ -12,11 +12,13 @@ import com.bosssoft.ecds.entity.po.StockOutnoticePo;
 import com.bosssoft.ecds.entity.vo.StockOutPageVo;
 import com.bosssoft.ecds.entity.vo.StockOutVo;
 //import com.bosssoft.ecds.service.StockOutnoticeChangeService;
+import com.bosssoft.ecds.response.CommonCode;
+import com.bosssoft.ecds.response.QueryResponseResult;
+import com.bosssoft.ecds.response.ResponseResult;
 import com.bosssoft.ecds.service.StockOutnoticeChangeService;
 import com.bosssoft.ecds.service.StockOutnoticeItemService;
 import com.bosssoft.ecds.service.StockOutnoticeService;
 import com.bosssoft.ecds.util.ConverUtil;
-import com.bosssoft.ecds.util.ResponseUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +27,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.bosssoft.ecds.entity.constant.StockOutChangeConstant.UN_CHANGE;
+import static com.bosssoft.ecds.entity.constant.StockOutConstant.UN_CHANGE;
 
 /**
  * <p>
@@ -39,8 +41,8 @@ import static com.bosssoft.ecds.entity.constant.StockOutChangeConstant.UN_CHANGE
 @RestController
 @RequestMapping("/stock-out")
 @CrossOrigin
-@Api(tags = "StockOutnoticeController1233333333333333333333333333")
-public class StockOutnoticeController {
+@Api(tags = "财政出库Controller")
+public class StockOutnoticeController extends BaseController {
 
     @Autowired
     private StockOutnoticeService outService;
@@ -56,9 +58,10 @@ public class StockOutnoticeController {
      *
      * @return 已保存出库请求的list
      */
-    @ApiOperation("showAll")
+    @ApiOperation("展示出库列表")
     @PostMapping("/showAll")
-    public String showAll(@RequestBody StockOutPageVo pageVo) {
+    public QueryResponseResult<PageResult> showAll(@RequestBody StockOutPageVo pageVo) {
+        log.info("进入showAll方法...");
         Long total = outService.getCount(pageVo);
         List<StockOutDto> stockOutDtos = outService.queryByPageVo(
                 pageVo,
@@ -72,11 +75,8 @@ public class StockOutnoticeController {
                 pageVo.getLimit(),
                 pageVo.getPage(),
                 stockOutVos);
-
-        return ResponseUtil.getResponse(
-                ResponseUtil.ResultType.OK.getCode(),
-                ResponseUtil.ResultType.OK.getMsg(),
-                pageResult);
+    log.info("退出方法，data:{}",stockOutDtos.toString());
+    return new QueryResponseResult<>(CommonCode.SUCCESS, pageResult);
     }
 
     /**
@@ -95,13 +95,13 @@ public class StockOutnoticeController {
      *
      * @return 明细list
      */
+    @ApiOperation("获得出库明细列表")
     @GetMapping("/getItem")
-    public String getItem(@RequestParam Long pid) {
+    public QueryResponseResult getItem(@RequestParam Long pid) {
+        log.info("进入getItem方法...");
         List<StockOutItemDto> outItemDtos = itemService.queryItemByPid(pid);
-        return ResponseUtil.getResponse(
-                ResponseUtil.ResultType.OK.getCode(),
-                ResponseUtil.ResultType.OK.getMsg(),
-                outItemDtos);
+        log.info("退出方法，data:{}", outItemDtos);
+        return new QueryResponseResult<>(CommonCode.SUCCESS, outItemDtos);
     }
 
     /**
@@ -114,11 +114,11 @@ public class StockOutnoticeController {
      *
      * @return 出库通知单号（主键id）
      */
+    @ApiOperation("新增出库请求")
     @GetMapping("/add")
-    public String add(@RequestParam String author) {
-        return ResponseUtil.getResponse(
-                ResponseUtil.ResultType.OK.getCode(),
-                ResponseUtil.ResultType.OK.getMsg(),
+    public QueryResponseResult add(@RequestParam String author) {
+        return new QueryResponseResult<>(
+                CommonCode.SUCCESS,
                 Convert.convert(StockOutDto.class, outService.addNewBuss(author)));
     }
 
@@ -132,8 +132,9 @@ public class StockOutnoticeController {
      *
      * @return 结果
      */
+    @ApiOperation("保存编辑")
     @PostMapping("/save")
-    public String save(@RequestBody StockOutVo outVo) {
+    public ResponseResult save(@RequestBody StockOutVo outVo) {
         /*
          转换为Dto
          */
@@ -168,15 +169,9 @@ public class StockOutnoticeController {
             /*
              返回正确通知
              */
-            return ResponseUtil.getResponse(
-                    ResponseUtil.ResultType.OK.getCode(),
-                    ResponseUtil.ResultType.OK.getMsg(),
-                    true);
+            return ResponseResult.SUCCESS();
         } else {
-            return ResponseUtil.getResponse(
-                    ResponseUtil.ResultType.NOT_MODIFIED.getCode(),
-                    ResponseUtil.ResultType.NOT_MODIFIED.getMsg(),
-                    false);
+            return ResponseResult.FAIL();
         }
     }
 
@@ -189,13 +184,11 @@ public class StockOutnoticeController {
      *
      * @return 提交是否成功
      */
+    @ApiOperation("提交审核")
     @PutMapping("/submit")
-    public String submit(@RequestParam Long id) {
+    public ResponseResult submit(@RequestParam Long id) {
         Boolean result = outService.updateChangeState(id, UN_CHANGE);
-        return ResponseUtil.getResponse(
-                ResponseUtil.ResultType.OK.getCode(),
-                ResponseUtil.ResultType.OK.getMsg(),
-                result);
+        return getRes(result);
     }
 
     /**
@@ -206,14 +199,12 @@ public class StockOutnoticeController {
      *
      * @return 是否成功
      */
+    @ApiOperation("提交审核批量")
     @PutMapping("/submitAll")
-    public String submitAll(@RequestBody List<StockOutVo> outVos) {
+    public ResponseResult submitAll(@RequestBody List<StockOutVo> outVos) {
         List<StockOutDto> outDtos = ConverUtil.converList(StockOutDto.class, outVos);
         Boolean result = outService.updateChangeState(outDtos, UN_CHANGE);
-        return ResponseUtil.getResponse(
-                ResponseUtil.ResultType.OK.getCode(),
-                ResponseUtil.ResultType.OK.getMsg(),
-                result);
+        return getRes(result);
     }
 
     /**
@@ -223,14 +214,12 @@ public class StockOutnoticeController {
      *
      * @return 是否成功
      */
+    @ApiOperation("删除出库记录批量")
     @PutMapping("/deleteAll")
-    public String deleteAll(@RequestBody List<StockOutVo> outVos) {
+    public ResponseResult deleteAll(@RequestBody List<StockOutVo> outVos) {
         List<StockOutnoticePo> pos = ConverUtil.converList(StockOutnoticePo.class, outVos);
         Boolean result = outService.deleteByPos(pos);
-        return ResponseUtil.getResponse(
-                ResponseUtil.ResultType.OK.getCode(),
-                ResponseUtil.ResultType.OK.getMsg(),
-                result);
+        return getRes(result);
     }
 
     /**
@@ -242,13 +231,14 @@ public class StockOutnoticeController {
      *
      * @return 是否通过
      */
+    @ApiOperation("人工审核")
     @PostMapping("check")
-    public String check(StockOutVo outVo) {
+    public ResponseResult check(@RequestBody StockOutVo outVo) {
+        log.info("进入check方法...");
+        log.info(outVo.toString());
         Boolean result = outService.updateChangeState(outVo.getId(), outVo.getChangeState());
-        return ResponseUtil.getResponse(
-                ResponseUtil.ResultType.OK.getCode(),
-                ResponseUtil.ResultType.OK.getMsg(),
-                result);
+        log.info("退出方法，data:{}",result);
+        return getRes(result);
     }
 
     /**
@@ -261,23 +251,18 @@ public class StockOutnoticeController {
      *
      * @return 是否成功
      */
+    @ApiOperation("人工审核批量")
     @PutMapping("/checkAll")
-    public String checkAll(@RequestBody List<StockOutVo> outVos) {
+    public ResponseResult checkAll(@RequestBody List<StockOutVo> outVos) {
         if (outVos == null || outVos.isEmpty()) {
-            return ResponseUtil.getResponse(
-                    ResponseUtil.ResultType.BAD_REQUEST.getCode(),
-                    ResponseUtil.ResultType.BAD_REQUEST.getMsg(),
-                    false);
+            return getRes(false);
 
         }
         List<StockOutDto> outDtos = ConverUtil.converList(StockOutDto.class, outVos);
         Integer changeState = outDtos.stream().findAny().get().getChangeState();
         log.info("changeState(use Stream):{}", changeState);
         Boolean result = outService.updateChangeState(outDtos, changeState);
-        return ResponseUtil.getResponse(
-                ResponseUtil.ResultType.OK.getCode(),
-                ResponseUtil.ResultType.OK.getMsg(),
-                result);
+        return getRes(result);
     }
 
 

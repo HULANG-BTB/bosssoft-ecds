@@ -12,16 +12,15 @@ import org.springframework.cloud.gateway.route.Route;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.support.NotFoundException;
 import org.springframework.cloud.gateway.support.ServerWebExchangeUtils;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.ServerWebExchangeDecorator;
 import reactor.core.publisher.Flux;
-
-import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 
 
@@ -38,14 +37,11 @@ public class FallbackService {
 
     @Autowired
     RouteLocator routeLocator;
-
+    @Autowired
+    RedisTemplate<String, Object> redisTemplate;
     /**
-     * 存储找不到服务id 与对应的时间     一个服务失败可能会有很多个失败请求同时发生
-     */
-    private static Map<String, Long> notFoundMap;
-
-    /**
-     *  处理Hystrix调用异常
+     * 处理Hystrix调用异常
+     *
      * @param exchange
      * @param throwable
      * @return
@@ -65,6 +61,7 @@ public class FallbackService {
 
     /**
      * 找不到有效服务时处理方法
+     *
      * @param exchange
      * @param throwable
      * @return
@@ -77,33 +74,21 @@ public class FallbackService {
         AntPathMatcher antPathMatcher = new AntPathMatcher();
         Predicate<Route> predicate = temp -> {
             String tempurl = temp.getPredicate().toString();
-            String pattern = tempurl.substring(tempurl.indexOf('[')+ 1, tempurl.indexOf(']'));
+            String pattern = tempurl.substring(tempurl.indexOf('[') + 1, tempurl.indexOf(']'));
             return antPathMatcher.match(pattern, path);
         };
         Optional<Route> optional = routeFlux.toStream().filter(predicate).findAny();
-        Date date = new Date();
-        String serviceId="" ;
-        if(optional.isPresent()){
-            serviceId= optional.get().getId();
+        String serviceId = "";
+        if (optional.isPresent()) {
+            serviceId = optional.get().getId();
         }
         String msg = "找不到运行的服务" + serviceId + "url: " + url;
-        if (notFoundMap.containsKey(serviceId)) {
-            Long oldTime = notFoundMap.get(serviceId);
-            Long newTime = date.getTime();
-            Long expectTime = oldTime + 10 * 60 * 1000L;
-            if (newTime > expectTime) {
-                notFoundMap.put(serviceId, date.getTime());
-                throw new CustomException(GatewayCode.EMAIL_NOTIFICATION, msg);
-            } else {
-                throw new CustomException(GatewayCode.NOT_FOUND_SERVICE, "多次" + msg);
-            }
+        long keyTime = redisTemplate.getExpire(serviceId);
+        if (keyTime > 0) {
+            throw new CustomException(GatewayCode.NOT_FOUND_SERVICE, "多次" + msg);
         } else {
-            notFoundMap.put(serviceId, date.getTime());
+            redisTemplate.opsForValue().set(serviceId, url, 10L, TimeUnit.MINUTES);
             throw new CustomException(GatewayCode.EMAIL_NOTIFICATION, msg);
         }
-    }
-
-    static {
-        notFoundMap = new HashMap<>();
     }
 }

@@ -10,7 +10,6 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
-
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.annotations.ApiModel;
@@ -18,7 +17,6 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import org.springframework.beans.factory.annotation.Value;
 
 /**
  * <p>
@@ -34,7 +32,6 @@ import org.springframework.beans.factory.annotation.Value;
 @TableName("fab_subject")
 @ApiModel(value="SubjectPO对象", description="")
 public class SubjectPO extends Model<SubjectPO> {
-
 
     @ApiModelProperty(value = "科目id")
     @JsonSerialize(using = ToStringSerializer.class)
@@ -57,7 +54,6 @@ public class SubjectPO extends Model<SubjectPO> {
     @TableField("f_level")
     private Integer level;
 
-    @Value("false")
     @ApiModelProperty(value = "是否底级,0否，1是")
     @TableField("f_is_leaf")
     private Boolean leaf;
@@ -67,7 +63,6 @@ public class SubjectPO extends Model<SubjectPO> {
     @TableField("f_parent_id")
     private Long parentId;
 
-    @Value("true")
     @ApiModelProperty(value = "是否启用，0否，1是")
     @TableField("f_is_enable")
     private Boolean enable;
@@ -102,7 +97,6 @@ public class SubjectPO extends Model<SubjectPO> {
     @TableField("f_logic_delete")
     @TableLogic
     private Boolean logicDelete;
-
 
     public static final String F_ID = "f_id";
 

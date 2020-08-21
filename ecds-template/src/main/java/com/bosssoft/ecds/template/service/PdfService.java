@@ -26,7 +26,8 @@ public interface PdfService {
      *
      * @param billDTO 非税票据DTO
      * @param isForce 是否强制生成
+     * @param expireTime 过期时间
      * @return 可访问的 URL
      */
-    String getRemoteAddress(NontaxBillDto billDTO, boolean isForce);
+    String getRemoteAddress(NontaxBillDto billDTO, boolean isForce,  Long expireTime);
 }

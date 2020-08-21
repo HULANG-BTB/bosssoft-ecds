@@ -1,9 +1,12 @@
 package com.bosssoft.ecds.service;
 
-import com.bosssoft.ecds.entity.dto.ArchiveOverViewDto;
-import com.bosssoft.ecds.entity.po.ArchivePO;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.bosssoft.ecds.entity.dto.ArchiveOverViewDTO;
+import com.bosssoft.ecds.entity.dto.PageDTO;
+import com.bosssoft.ecds.entity.po.ArchivePO;
 import com.bosssoft.ecds.entity.query.ArchiveOverViewQuery;
+
+import java.util.List;
 
 /**
  * <p>
@@ -16,9 +19,34 @@ import com.bosssoft.ecds.entity.query.ArchiveOverViewQuery;
  */
 public interface ArchiveOverViewService extends IService<ArchivePO> {
     /**
-     * 根据传来的查询信息，查询出归档总览表中信息  （已归档状态下）
+     * 根据传来的查询信息，查询出归档总览表中信息
+     *
      * @param archiveOverViewQuery
      * @return OverViewArchiveDto
      */
-    ArchiveOverViewDto queryOverViewArchiveInfo(ArchiveOverViewQuery archiveOverViewQuery);
+    ArchiveOverViewDTO queryOverViewArchiveInfo(ArchiveOverViewQuery archiveOverViewQuery);
+
+    /**
+     * 根据传来的查询信息，查询出归档总览表中信息 (模糊查询)
+     *
+     * @param archiveOverViewQuery
+     * @return OverViewArchiveDto
+     */
+    List<ArchiveOverViewDTO> queryOverViewArchiveInfos(ArchiveOverViewQuery archiveOverViewQuery);
+
+    /**
+     * 查询所有信息 以分页查询的形式
+     *
+     * @param archiveOverViewQuery
+     * @return
+     */
+    PageDTO<ArchiveOverViewDTO> queryOverViewArchiveInfoPage(ArchiveOverViewQuery archiveOverViewQuery);
+
+    /**
+     * 批量更新归档信息
+     *
+     * @param list
+     * @return boolean
+     */
+    Boolean updateBatch(List<ArchiveOverViewDTO> list);
 }

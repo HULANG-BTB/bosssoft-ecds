@@ -37,10 +37,10 @@ output
 
 ### Resources ###
 src/main/resources/
-/src/main/java/com/bosssoft/ecds/util/CodeBuilder.java
 /src/main/resources/application.yml
 /src/main/resources/generatorConfig.xml
 /src/main/resources/jdbc.properties
 /src/main/resources/mybatis-config.xml
 /src/main/resources/spring-dao.xml
+/src/main/java/com/bosssoft/ecds/util/CodeBuilder.java
 /src/main/java/com/bosssoft/ecds/util/HuTest.java

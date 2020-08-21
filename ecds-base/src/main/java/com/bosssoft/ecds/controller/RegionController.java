@@ -11,6 +11,9 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
 /**
  * @author: lpb
  * @create: 2020-08-05 11:30
@@ -47,21 +50,15 @@ public class RegionController {
         return regionService.list(page,size,queryRegionRequest);
     }
 
-
     @PostMapping("/add")
     @ApiOperation(value = "添加新的区划信息")
     public ResponseResult add(@RequestBody AddRegionVO addRegion){
-        //获取操作用户的名称,当前为虚拟用户，以后要从request中动态获取
-        String userName = "虚拟用户";
-        Long uid = 222222L;
-        return regionService.add(userName,uid,addRegion);
+        return regionService.add(addRegion);
     }
 
     @PutMapping("/edit")
     @ApiOperation(value = "更新区划信息")
     public ResponseResult edit(@RequestBody EditRegionVO editRegion){
-        //获取操作用户的名称,当前为虚拟用户，以后要从request中动态获取
-        String userName = "虚拟用户";
         return regionService.edit(editRegion);
     }
 
@@ -75,6 +72,12 @@ public class RegionController {
     @ApiOperation(value = "获取祖父节点ID")
     public QueryResponseResult getGrandId(@PathVariable("parentId") Long pid){
         return regionService.getGrandId(pid);
+    }
+
+    @GetMapping("/getBusIds/{busParentId}")
+    @ApiOperation(value = "获取当前节点父级以上节点ID")
+    public QueryResponseResult getBusIds(@PathVariable("busParentId") Long pid){
+        return regionService.getBusIds(pid);
     }
 
 }

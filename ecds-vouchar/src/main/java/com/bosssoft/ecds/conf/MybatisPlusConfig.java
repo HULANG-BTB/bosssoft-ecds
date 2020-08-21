@@ -1,7 +1,6 @@
 package com.bosssoft.ecds.conf;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
-import com.baomidou.mybatisplus.core.injector.ISqlInjector;
 import com.baomidou.mybatisplus.extension.plugins.OptimisticLockerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import org.apache.ibatis.reflection.MetaObject;
@@ -26,7 +25,7 @@ public class MybatisPlusConfig {
      *
      * @return
      */
-    //@Bean
+    @Bean
     public MetaObjectHandler getMetaObjectHandler() {
 
         return new MetaObjectHandler() {
