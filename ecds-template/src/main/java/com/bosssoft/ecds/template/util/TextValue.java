@@ -9,19 +9,27 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class TextValue {
-    /** 填充内容的字段名 */
+    /**
+     * 填充内容的字段名
+     */
     private String fieldName;
 
-    /** 填充内容 */
+    /**
+     * 填充内容
+     */
     private String value;
 
-    /** x轴坐标 */
+    /**
+     * x轴坐标
+     */
     private int x;
 
-    /** y轴坐标 */
+    /**
+     * y轴坐标
+     */
     private int y;
 
-    public TextValue(String fieldName, int x, int y){
+    public TextValue(String fieldName, int x, int y) {
         this.fieldName = fieldName;
         this.x = x;
         this.y = y;

@@ -1,6 +1,8 @@
 package com.bosssoft.ecds.security.handler;
 
-import com.bosssoft.ecds.security.utils.ResponseUtils;
+import cn.hutool.json.JSONUtil;
+import com.bosssoft.ecds.response.CommonCode;
+import com.bosssoft.ecds.response.QueryResponseResult;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpResponse;
@@ -43,9 +45,8 @@ public class CustomAuthenticationFailureHandler implements ServerAuthenticationF
         httpHeaders.add("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
         // 设置body
         // 生成响应内容
-        String res = ResponseUtils.getResponse(exception.getMessage(), ResponseUtils.ResultType.FORBIDDEN);
-        DataBuffer bodyDataBuffer = null;
-        bodyDataBuffer = response.bufferFactory().wrap(res.getBytes(StandardCharsets.UTF_8));
+        QueryResponseResult<String> responseResult = new QueryResponseResult<>(CommonCode.FAIL, exception.getMessage());
+        DataBuffer bodyDataBuffer = response.bufferFactory().wrap(JSONUtil.toJsonStr(responseResult).getBytes(StandardCharsets.UTF_8));
         // 写入内容 返回
         return response.writeWith(Mono.just(bodyDataBuffer));
     }

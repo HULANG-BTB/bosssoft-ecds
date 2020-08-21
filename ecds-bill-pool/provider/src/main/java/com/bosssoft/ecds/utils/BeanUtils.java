@@ -8,9 +8,15 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+/**
+ * @author lixin
+ * @version 1.0
+ * @date 2020/8/18 10:43
+ */
 public class BeanUtils {
 
-    private static final ConcurrentMap<String, BeanCopier> beanCopierMap = new ConcurrentHashMap<>();
+    @SuppressWarnings("AlibabaConstantFieldShouldBeUpperCase")
+    private static ConcurrentMap<String, BeanCopier> beanCopierMap = new ConcurrentHashMap<>();
 
     public static <T> T convertObject(Object source, Class<T> target) {
         T ret = null;

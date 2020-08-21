@@ -1,7 +1,6 @@
 package com.bosssoft.ecds.entity.po;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -20,7 +19,7 @@ import java.util.Date;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author AloneH
@@ -30,7 +29,7 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @TableName("fab_income_sort")
-@ApiModel(value="IncomeSortPO对象", description="")
+@ApiModel(value = "IncomeSortPO对象", description = "")
 public class IncomeSortPO extends Model<IncomeSortPO> {
 
     /**
@@ -131,7 +130,7 @@ public class IncomeSortPO extends Model<IncomeSortPO> {
 
     @Override
     protected Serializable pkVal() {
-        return this.id;
+        return id;
     }
 
 }

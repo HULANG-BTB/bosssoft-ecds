@@ -19,6 +19,10 @@ public class GroupDTO {
     @ApiModelProperty(value = "主键")
     private Integer id;
 
+    @ApiModelProperty(value = "单位编码")
+    private String agenCode;
+
+
     @ApiModelProperty(value = "分组编码")
     private String groupCode;
 

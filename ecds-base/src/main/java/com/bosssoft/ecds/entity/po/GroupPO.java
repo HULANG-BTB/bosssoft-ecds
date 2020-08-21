@@ -31,6 +31,10 @@ public class GroupPO extends Model<GroupPO> {
     @TableId(value = "f_id", type = IdType.AUTO)
     private Integer id;
 
+    @ApiModelProperty(value = "单位编码")
+    @TableField("f_agen_code")
+    private String agenCode;
+
     @ApiModelProperty(value = "分组编码")
     @TableField("f_group_code")
     private String groupCode;
@@ -71,6 +75,8 @@ public class GroupPO extends Model<GroupPO> {
 
 
     public static final String F_ID = "f_id";
+
+    public static final String F_AGEN_CODE = "f_agen_code";
 
     public static final String F_GROUP_CODE = "f_group_code";
 
