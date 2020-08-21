@@ -34,7 +34,6 @@
             <artifactId>fastjson</artifactId>
             <version>1.2.51</version>
         </dependency>
-
         <!--log4j-->
         <dependency>
             <groupId>ch.qos.logback</groupId>

@@ -1,55 +1,46 @@
 package com.bosssoft.ecds.entity.vo;
 
+import com.bosssoft.ecds.entity.dto.WriteOffBillInvDetailDTO;
+import com.bosssoft.ecds.entity.dto.WriteOffIncomeDetailDTO;
+import com.bosssoft.ecds.entity.dto.WriteOffInvoceDetailDTO;
+
 import java.math.BigDecimal;
+import java.util.List;
 
 public class WriteOffDetailVO {
+    // 开票总览
+    List<WriteOffInvoceDetailDTO> writeOffInvoceDetailDTOList;
 
-    /** 详细信息 */
-    //开票单位
-    private String fAgenIdCode;
+    // 收入情况
+    List<WriteOffIncomeDetailDTO> writeOffIncomeDetailDTOList;
 
-    //票据编码
-    private String fBillId;
+    // 开票明细
+    List<WriteOffBillInvDetailDTO> writeOffBillInvDetailDTOList;
 
-    //票据名称
-    private String fBillName;
+    // 预警记录
 
-    //计量单位
-    private String fUnits;
 
-    //份数
-    private int fTotalNumber;
+    public List<WriteOffInvoceDetailDTO> getWriteOffInvoceDetailDTOList() {
+        return writeOffInvoceDetailDTOList;
+    }
 
-    //开票份数
-    private int fNumber;
+    public void setWriteOffInvoceDetailDTOList(List<WriteOffInvoceDetailDTO> writeOffInvoceDetailDTOList) {
+        this.writeOffInvoceDetailDTOList = writeOffInvoceDetailDTOList;
+    }
 
-    //开票金额
-    private BigDecimal fAmt;
+    public List<WriteOffIncomeDetailDTO> getWriteOffIncomeDetailDTOList() {
+        return writeOffIncomeDetailDTOList;
+    }
 
-    //作废份数
-    private int fCancelNumber;
+    public void setWriteOffIncomeDetailDTOList(List<WriteOffIncomeDetailDTO> writeOffIncomeDetailDTOList) {
+        this.writeOffIncomeDetailDTOList = writeOffIncomeDetailDTOList;
+    }
 
-    // 收费项目编码
-    private String fItemCode;
+    public List<WriteOffBillInvDetailDTO> getWriteOffBillInvDetailDTOList() {
+        return writeOffBillInvDetailDTOList;
+    }
 
-    // 收费项目名称
-    private String fItemName;
-
-    // 票据批次编码
-    private String fBillBatchCode;
-
-    // 起始号
-
-    // 终止号
-
-    /** 预警 */
-    // 预警日期
-
-    // 发送时间
-
-    // 监控事件
-
-    // 预警内容
-
-    // 处理状态
+    public void setWriteOffBillInvDetailDTOList(List<WriteOffBillInvDetailDTO> writeOffBillInvDetailDTOList) {
+        this.writeOffBillInvDetailDTOList = writeOffBillInvDetailDTOList;
+    }
 }

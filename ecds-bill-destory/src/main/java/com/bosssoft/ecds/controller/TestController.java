@@ -5,6 +5,7 @@ import com.bosssoft.ecds.service.feign.TestFeign;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -19,7 +20,7 @@ public class TestController {
     @Autowired
     private TestFeign testFeign;
 
-    @RequestMapping(value = "test")
+    @RequestMapping(value = "test",method = RequestMethod.GET)
     public String test(String billId, String checkCode){
         String msg = test.test(billId,checkCode);
         return msg;
