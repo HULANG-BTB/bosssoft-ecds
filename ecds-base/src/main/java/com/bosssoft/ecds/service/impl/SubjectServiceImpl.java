@@ -246,7 +246,6 @@ public class SubjectServiceImpl extends ServiceImpl<SubjectDao, SubjectPO> imple
         } else {
             return new QueryResponseResult(CommonCode.FAIL, null);
         }
-
     }
 
     /**
@@ -321,8 +320,6 @@ public class SubjectServiceImpl extends ServiceImpl<SubjectDao, SubjectPO> imple
         }
         copyRec(subjectPO, SubjectConstant.INIT_PARENT_ID);
         return new QueryResponseResult(CommonCode.SUCCESS, null);
-
-
     }
 
     /**
@@ -392,7 +389,7 @@ public class SubjectServiceImpl extends ServiceImpl<SubjectDao, SubjectPO> imple
     public QueryResponseResult upload(MultipartFile file, Long id) throws IOException {
         String originalFilenameName = file.getOriginalFilename();
         String type = originalFilenameName.substring(originalFilenameName.indexOf(".") + 1);
-        if(!"xlsx".equalsIgnoreCase(type)){
+        if(!SubjectConstant.FILE_suffix.equalsIgnoreCase(type)){
             ExceptionCast.cast(SubjectResultCode.IMPORT_ERROR.setMessage("文件格式错误"));
         }
         try {
