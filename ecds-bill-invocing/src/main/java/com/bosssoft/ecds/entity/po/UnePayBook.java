@@ -1,11 +1,14 @@
 package com.bosssoft.ecds.entity.po;
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
 import java.util.Date;
 
 @Data
 public class UnePayBook {
+
+    @TableId(value = "f_id")
     private int fId;
 
     //区划编码

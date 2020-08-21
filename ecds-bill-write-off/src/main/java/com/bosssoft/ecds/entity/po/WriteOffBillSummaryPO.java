@@ -1,6 +1,11 @@
 package com.bosssoft.ecds.entity.po;
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.Version;
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -8,9 +13,6 @@ import lombok.Data;
 import java.math.BigDecimal;
 import java.util.Date;
 
-/**
- * @author wlx hjr
- */
 @Data
 @TableName("fbe_writeoff_billsummary")
 @ApiModel(value="WriteOffBillsummaryPO对象")
@@ -76,4 +78,5 @@ public class WriteOffBillSummaryPO {
     @ApiModelProperty(value = "操作人")
     @TableField(value = "f_operator", fill = FieldFill.INSERT_UPDATE)
     private String fOperator;
+
 }
