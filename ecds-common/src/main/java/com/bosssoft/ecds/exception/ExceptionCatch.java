@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * 统一异常捕获类，其他模块想要扩充可以自行继承此类进行扩充，扩充的子类只需要创建
  * static代码块并使用builder.put()添加需要捕获的异常和对应的响应数据类型，同时也
@@ -41,10 +44,17 @@ public class ExceptionCatch {
            EXCEPTIONS = builder.build();
         }
         ResultCode resultCode = EXCEPTIONS.get(e.getClass());
+        ExceptionDetail detail = new ExceptionDetail();
+        detail.setTags(e.getClass().getSimpleName());
         if(resultCode != null){
+            detail.setCode(resultCode.code());
+            detail.setMessage(resultCode.message());
+            log.error(JSON.toJSONString(detail));
             return new ResponseResult(resultCode);
         }
-        log.error("catch exception info:{}",e.getMessage());
+        detail.setCode(CommonCode.EMAIL_NOTIFICATION.code());
+        detail.setMessage("Not captured exception:"+e.getClass().getSimpleName()+",message:"+e.getMessage()+",time:"+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        log.error(JSON.toJSONString(detail));
         e.printStackTrace();
         return new ResponseResult(CommonCode.SERVER_ERROR);
     }
