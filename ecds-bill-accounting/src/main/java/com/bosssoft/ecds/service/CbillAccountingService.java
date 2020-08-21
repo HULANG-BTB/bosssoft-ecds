@@ -1,12 +1,12 @@
 package com.bosssoft.ecds.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.bosssoft.ecds.common.response.ResponseResult;
 import com.bosssoft.ecds.entity.dto.AccBaseInfoDTO;
 import com.bosssoft.ecds.entity.dto.AccBillDTO;
 import com.bosssoft.ecds.entity.dto.AccIntoInfoDTO;
 import com.bosssoft.ecds.entity.dto.CbillAccountingDTO;
 import com.bosssoft.ecds.entity.po.CbillAccountingPO;
+import com.bosssoft.ecds.response.ResponseResult;
 
 import java.util.List;
 
@@ -26,13 +26,6 @@ public interface CbillAccountingService extends IService<CbillAccountingPO> {
      * @return
      */
     ResponseResult insert(AccBaseInfoDTO accBaseInfoDto);
-
-    /**
-     * 开票阶段批量插入基础信息
-     *
-     * @return
-     */
-    ResponseResult insertBatch(List<AccBaseInfoDTO> accBaseInfoDTOList);
 
     /**
      * 缴费阶段查询应缴金额
@@ -77,17 +70,9 @@ public interface CbillAccountingService extends IService<CbillAccountingPO> {
     ResponseResult batchDelete(List<CbillAccountingDTO> cbillAccountingDTOList);
 
     /**
-     * 批量查询入账状态信息
+     * 修改入账状态
      *
      * @return
      */
-    ResponseResult selectAllStatus(List<AccBaseInfoDTO> accBaseInfoDTOList);
-
-    /**
-     * 批量查询代缴金额信息
-     *
-     * @return
-     */
-    ResponseResult selectAllAccount(List<CbillAccountingDTO> accountingDTOList);
-
+    ResponseResult updateStatus(CbillAccountingDTO cbillAccountingDTO);
 }

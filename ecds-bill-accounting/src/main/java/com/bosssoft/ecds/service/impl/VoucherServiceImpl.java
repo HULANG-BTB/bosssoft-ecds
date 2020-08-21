@@ -3,8 +3,6 @@ package com.bosssoft.ecds.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.bosssoft.ecds.common.response.QueryResponseResult;
-import com.bosssoft.ecds.common.response.ResponseResult;
 import com.bosssoft.ecds.dao.VoucherDao;
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.dto.VoucherDTO;
@@ -12,6 +10,8 @@ import com.bosssoft.ecds.entity.po.VoucherPO;
 import com.bosssoft.ecds.entity.vo.PageVO;
 import com.bosssoft.ecds.entity.vo.VoucherVO;
 import com.bosssoft.ecds.enums.VoucherCode;
+import com.bosssoft.ecds.response.QueryResponseResult;
+import com.bosssoft.ecds.response.ResponseResult;
 import com.bosssoft.ecds.service.VoucherService;
 import com.bosssoft.ecds.utils.MyBeanUtil;
 import org.springframework.stereotype.Service;
@@ -104,7 +104,7 @@ public class VoucherServiceImpl extends ServiceImpl<VoucherDao, VoucherPO> imple
             queryWrapper.eq(VoucherPO.F_ACCOUNT_TYPE,pageDTO.getAccountType());
         }
         //keyword为空代表查询全部
-        if(pageDTO.getKeyword()==""||pageDTO.getKeyword()=="null"||pageDTO.getKeyword()==null){
+        if(pageDTO.getKeyword().equals("")||pageDTO.getKeyword().equals("null")||pageDTO.getKeyword()==null){
             //不对queryWrapper进行任何修改
         }else{
             //模糊查询
