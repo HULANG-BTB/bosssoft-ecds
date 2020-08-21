@@ -18,12 +18,7 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@ApiModel(value="PermissionPO对象", description="")
 public class PermissionVO extends Model<PermissionVO> {
-
-
-    @ApiModelProperty(value = "ID")
-    private Long id;
 
     @ApiModelProperty(value = "地址")
     private String url;

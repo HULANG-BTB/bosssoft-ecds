@@ -73,7 +73,7 @@ public class CustomServerSecurityContextRepository implements ServerSecurityCont
                 String nickname = authUserDetails.getNickname();
 
                 // 从redis中获取具体信息
-                Map<String, Object> info = (Map<String, Object>) redisUtils.get(username);
+                Map<String, Object> info = (Map<String, Object>) redisUtils.get(username + "_" + id + "_info");
                 if (null == info) {
                     throw new RuntimeException("从 redis 读取数据为null");
                 }
@@ -82,8 +82,7 @@ public class CustomServerSecurityContextRepository implements ServerSecurityCont
                 // 设置请求头数据
                 ServerHttpRequest serverHttpRequest = request.mutate().header("auth_id", String.valueOf(id)).header("auth_nickname", nickname).build();
                 exchange = exchange.mutate().request(serverHttpRequest).build();
-
-                Authentication auth = new UsernamePasswordAuthenticationToken(authUserDetails.getUsername(), authUserDetails.getPassword(), authUserDetails.getAuthorities());
+                Authentication auth = new UsernamePasswordAuthenticationToken(authUserDetails, authUserDetails.getPassword(), authUserDetails.getAuthorities());
                 return Mono.just(auth).map(SecurityContextImpl::new);
             }
             catch (Exception ex) {

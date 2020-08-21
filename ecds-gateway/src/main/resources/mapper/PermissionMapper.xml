@@ -23,25 +23,21 @@
         f_id, f_parent_id, f_url, f_name, f_method, f_operator_id, f_operator, f_create_time, f_update_time, f_logic_delete, f_version, f_note
     </sql>
 
-    <!--  根据UID查询权限  -->
-    <select id="getByUid" parameterType="Long" resultMap="BaseResultMap">
-        select DISTINCT permission.*
-        from faa_role_permission role_permission, faa_user_role user_role, faa_permission permission
-        where user_role.f_user_id = #{id}
-            and role_permission.f_role_id = user_role.f_role_id
-            and permission.f_logic_delete = 0
-            and role_permission.f_logic_delete = 0
-            and user_role.f_logic_delete = 0
-    </select>
-
-    <!--  根据RID查询权限  -->
-    <select id="getByRid" parameterType="Long" resultMap="BaseResultMap">
-        select DISTINCT permission.*
-        from faa_role_permission role_permission, faa_permission permission
-        where role_permission.f_role_id = #{id}
-            and permission.f_id = role_permission.f_permission_id
-            and permission.f_logic_delete = 0
-            and role_permission.f_logic_delete = 0
+    <select id="listByUid" parameterType="Long" resultMap="BaseResultMap">
+        SELECT
+            DISTINCT `permission`.*
+        FROM
+            `faa_user_role` `user_role`,
+            `faa_role_permission` `role_permission`,
+            `faa_permission` `permission`
+        WHERE
+            `role_permission`.`f_permission_id` = `permission`.`f_id`
+            AND
+            `user_role`.`f_role_id` = `role_permission`.`f_role_id`
+            AND
+            `user_role`.`f_user_id` = #{id}
+            AND
+            `permission`.`f_logic_delete` = 0
     </select>
 
 </mapper>

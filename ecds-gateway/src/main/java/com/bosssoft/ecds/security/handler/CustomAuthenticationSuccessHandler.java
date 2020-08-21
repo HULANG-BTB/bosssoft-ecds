@@ -7,6 +7,7 @@ import com.bosssoft.ecds.response.CommonCode;
 import com.bosssoft.ecds.response.QueryResponseResult;
 import com.bosssoft.ecds.security.config.RsaKeyProperties;
 import com.bosssoft.ecds.security.entity.domain.AuthUserDetails;
+import com.bosssoft.ecds.security.entity.po.PermissionPO;
 import com.bosssoft.ecds.security.entity.vo.RoleVO;
 import com.bosssoft.ecds.security.entity.vo.UserVO;
 import com.bosssoft.ecds.security.service.impl.SecurityUserServiceImpl;
@@ -26,6 +27,7 @@ import reactor.core.publisher.Mono;
 
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -69,7 +71,7 @@ public class CustomAuthenticationSuccessHandler extends WebFilterChainServerAuth
 
             // 权限信息 存入redis
             Map<String, Object> stringObjectMap = BeanUtil.beanToMap(userDetails);
-            redisUtils.set(userDetails.getUsername(), stringObjectMap);
+            redisUtils.set(userDetails.getUsername() + "_" + userDetails.getId() + "_info", stringObjectMap);
 
             // 设置用户名 昵称 id 等信息
             UserVO userVO = new UserVO();
@@ -83,6 +85,7 @@ public class CustomAuthenticationSuccessHandler extends WebFilterChainServerAuth
             RSA rsa = new RSA(privateKey, null);
             userDetails.setAuthorities(null);
             userDetails.setPassword(null);
+            userDetails.setPermissions(null);
             String token = JwtUtils.generateTokenExpireInMinutes(userDetails, rsa.getPrivateKey(), 60 * 24 * 30);
             userVO.setToken(token);
 

@@ -1,9 +1,12 @@
 package com.bosssoft.ecds.security.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bosssoft.ecds.security.dao.UserDao;
 import com.bosssoft.ecds.security.entity.domain.AuthRoleGrantedAuthority;
 import com.bosssoft.ecds.security.entity.domain.AuthUserDetails;
+import com.bosssoft.ecds.security.entity.po.PermissionPO;
 import com.bosssoft.ecds.security.entity.po.RolePO;
 import com.bosssoft.ecds.security.entity.po.UserPO;
 import com.bosssoft.ecds.security.entity.vo.PermissionVO;
@@ -17,13 +20,13 @@ import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName UserServiceImpl
  * @Author AloneH
  * @Date 2020/8/9 16:56
- * @Description
- *      Security service impl
+ * @Description Security service impl
  **/
 
 @Service
@@ -32,34 +35,51 @@ public class SecurityUserServiceImpl extends ServiceImpl<UserDao, UserPO> implem
     @Autowired
     RedisTemplate redisTemplate;
 
+    @Autowired
+    RoleServiceImpl roleService;
+
+    @Autowired
+    PermissionServiceImpl permissionService;
+
     @Override
     public Mono<UserDetails> findByUsername(String username) {
         // 查询用户
-        UserPO userPO = super.getBaseMapper().selectByUsername(username);
-        if (userPO == null) {
+        QueryWrapper<UserPO> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(UserPO.F_USERNAME, username);
+        UserPO user = super.getOne(queryWrapper);
+
+        if (user == null) {
             return Mono.empty();
         }
 
-        // 设置权限
-        AuthUserDetails authUserDetails = new AuthUserDetails();
-        List<AuthRoleGrantedAuthority> authRoleGrantedAuthorities = new ArrayList<>();
-        List<RolePO> roles = userPO.getRoles();
+        // 读取角色列表
+        List<RolePO> rolePOList = roleService.getBaseMapper().listByUid(user.getId());
+        // 读取权限列表
+        List<PermissionPO> permissionPOList = permissionService.getBaseMapper().listByUid(user.getId());
 
-        if (roles != null) {
-            for (RolePO role : roles) {
+        // 创建 AuthUserDetails 对象
+        AuthUserDetails authUserDetails = new AuthUserDetails();
+        authUserDetails.setId(user.getId());
+        authUserDetails.setUsername(user.getUsername());
+        authUserDetails.setPassword(user.getPassword());
+        authUserDetails.setNickname(user.getNickname());
+        if (rolePOList != null) {
+            List<AuthRoleGrantedAuthority> authRoleGrantedAuthorities = new ArrayList<>();
+            for (RolePO rolePO : rolePOList) {
                 AuthRoleGrantedAuthority authRoleGrantedAuthority = new AuthRoleGrantedAuthority();
-                authRoleGrantedAuthority.setId(role.getId());
-                authRoleGrantedAuthority.setName(role.getName());
-                authRoleGrantedAuthority.setRole(role.getRole());
-                authRoleGrantedAuthority.setPermissions(BeanUtils.copyListProperties(role.getPermissions(), PermissionVO::new));
+                authRoleGrantedAuthority.setId(rolePO.getId());
+                authRoleGrantedAuthority.setName(rolePO.getName());
+                authRoleGrantedAuthority.setRole(rolePO.getRole());
                 authRoleGrantedAuthorities.add(authRoleGrantedAuthority);
             }
+            authUserDetails.setAuthorities(authRoleGrantedAuthorities);
         }
-        authUserDetails.setId(userPO.getId());
-        authUserDetails.setUsername(userPO.getUsername());
-        authUserDetails.setPassword(userPO.getPassword());
-        authUserDetails.setNickname(userPO.getNickname());
-        authUserDetails.setAuthorities(authRoleGrantedAuthorities);
+
+        if (permissionPOList != null) {
+            List<PermissionVO> permissionVOS = BeanUtils.copyListProperties(permissionPOList, PermissionVO::new);
+            authUserDetails.setPermissions(permissionVOS);
+        }
+
         return Mono.just(authUserDetails);
     }
 }

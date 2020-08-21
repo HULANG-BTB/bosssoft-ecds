@@ -73,9 +73,13 @@ public class UserPO extends Model<UserPO> {
     @TableField("f_note")
     private String note;
 
-    @ApiModelProperty(value = "权限列表")
+    @ApiModelProperty(value = "角色列表")
     @TableField(exist = false)
     private List<RolePO> roles;
+
+    @ApiModelProperty(value = "权限列表")
+    @TableField(exist = false)
+    private List<PermissionPO> permissions;
 
     public static final String F_ID = "f_id";
 
