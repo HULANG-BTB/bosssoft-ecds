@@ -1,7 +1,5 @@
 package com.bosssoft.ecds.common.response;
 
-import com.bosssoft.ecds.utils.DynamicEnumUtil;
-
 /**
  * @ClassName CommonCode
  * @Description 通用返回码
@@ -9,18 +7,17 @@ import com.bosssoft.ecds.utils.DynamicEnumUtil;
  * @Date 2020/8/12 11:31
  * @Version 1.0
  */
-public enum CommonCode implements ResultCode{
+public enum CommonCode implements ResultCode {
 
     //操作成功时返回的状态码
-    SUCCESS(true,10000,"操作成功！"),
+    SUCCESS(true,1000,"操作成功！"),
     //操作失败时返回的状态码
-    FAIL(false,11111,"操作失败！"),
+    FAIL(false,999,"操作失败！"),
     //参数输入有误时返回的状态码
-    INVLIDATE(false,10003,"非法参数！"),
-    PARAM_VALID_ERROR(false,10004, "参数验证错误"),
-    METHOD_NOT_SUPPORTED(false,1005, "请求方法不受支持"),
+    INVALIDATE(false,998,"非法参数！"),
+    METHOD_NOT_SUPPORTED(false,997, "请求方法不受支持"),
 
-    SERVER_ERROR(false,99999,"抱歉，系统繁忙，请稍后重试！"),
+    SERVER_ERROR(false,9999,"抱歉，系统繁忙，请稍后重试！"),
     ;
 
     //操作是否成功
@@ -34,18 +31,6 @@ public enum CommonCode implements ResultCode{
         this.success = success;
         this.code = code;
         this.message = message;
-    }
-
-    /**
-     * 动态创建枚举类方法
-     * @param enumName 枚举名称
-     * @param success 是否成功
-     * @param code 枚举编码
-     * @param message 枚举消息
-     * @return
-     */
-    public static CommonCode addEnum(String enumName, boolean success, int code, String message){
-        return DynamicEnumUtil.addEnum(CommonCode.class, enumName, new Class[]{Boolean.class, Integer.class,String.class}, new Object[]{success,code, message});
     }
 
     @Override

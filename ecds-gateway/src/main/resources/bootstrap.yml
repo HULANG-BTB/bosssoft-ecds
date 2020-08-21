@@ -14,24 +14,23 @@ spring:
         file-extension: yaml
         prefix: gateway-config
         ext‐config:
-          - data‐id: rsa-key-dev.yaml
-            group: DEFAULT_GROUP
-            refresh: true
+        - data‐id: rsa-key-dev.yaml
+          group: DEFAULT_GROUP
+          refresh: true
 
-          - data‐id: redis-server-dev.yaml
-            group: DEFAULT_GROUP
-            refresh: true
+        - data‐id: redis-server-dev.yaml
+          group: DEFAULT_GROUP
+          refresh: true
 
-          - data‐id: gateway-datasource-dev.yaml
-            group: DEFAULT_GROUP
-            refresh: true
+        - data‐id: gateway-datasource-dev.yaml
+          group: DEFAULT_GROUP
+          refresh: true
 
-          - data‐id: gateway-routes-dev.yaml
-            group: DEFAULT_GROUP
-            refresh: true
-
+        - data‐id: gateway-routes-dev.yaml
+          group: DEFAULT_GROUP
+          refresh: true
 server:
-  port: 7000
+  port: 8050
 
 
 

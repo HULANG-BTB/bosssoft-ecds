@@ -12,7 +12,7 @@ import com.bosssoft.ecds.security.entity.vo.UserVO;
 import com.bosssoft.ecds.security.service.impl.SecurityUserServiceImpl;
 import com.bosssoft.ecds.security.utils.BeanUtils;
 import com.bosssoft.ecds.security.utils.JwtUtils;
-import com.bosssoft.ecds.security.utils.RedisUtils;
+import com.bosssoft.ecds.util.RedisUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpHeaders;

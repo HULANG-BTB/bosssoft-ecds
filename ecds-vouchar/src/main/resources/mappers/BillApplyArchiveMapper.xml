@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bosssoft.ecds.dao.BillApplyArchiveDao">
+    <!--归档领用信息-->
+    <select id="queryBillApplyAll" resultType="com.bosssoft.ecds.entity.po.BillApplyArchivePO">
+        SELECT
+            S.f_agen_id_code as agenCode,
+            S.f_create_time as applyTime,
+            S.f_bill_code as billCode,
+            B.f_name as billName,
+            S.f_batch_num as batchNum,
+            S.f_link_man as linkMan,
+            S.f_link_tel as linkTel
+        FROM fbe_stock_financeapply S
+        LEFT JOIN fab_bill B ON S.f_bill_code = B.f_code
+        WHERE date_format(S.f_create_time, '%Y-%m-%d') = date_format(date_sub(SYSDATE(), interval 1 day), '%Y-%m-%d')
+    </select>
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.bosssoft.ecds.entity.po.BillApplyArchivePO">
+        <id column="f_id" property="id"/>
+        <result column="f_agen_code" property="agenCode"/>
+        <result column="f_apply_time" property="applyTime"/>
+        <result column="f_bill_code" property="billCode"/>
+        <result column="f_bill_name" property="billName"/>
+        <result column="f_batch_num" property="batchNum"/>
+        <result column="f_link_man" property="linkMan"/>
+        <result column="f_link_tel" property="linkTel"/>
+        <result column="f_create_time" property="createTime"/>
+        <result column="f_update_time" property="updateTime"/>
+        <result column="f_operator_id" property="operatorId"/>
+        <result column="f_operator" property="operator"/>
+        <result column="f_version" property="version"/>
+        <result column="f_logic_delete" property="logicDelete"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        f_id, f_agen_code, f_apply_time, f_bill_code, f_batch_num, f_link_man, f_link_tel, f_create_time, f_update_time, f_operator_id, f_operator, f_version, f_logic_delete
+    </sql>
+
+</mapper>

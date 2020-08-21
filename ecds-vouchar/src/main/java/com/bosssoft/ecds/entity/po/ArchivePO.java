@@ -1,24 +1,20 @@
 package com.bosssoft.ecds.entity.po;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
-import java.util.Date;
-import com.baomidou.mybatisplus.annotation.Version;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableLogic;
-import com.baomidou.mybatisplus.annotation.TableField;
-import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import java.io.Serializable;
+import java.util.Date;
+
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author liuke
@@ -81,10 +77,12 @@ public class ArchivePO extends Model<ArchivePO> {
     private Long destoryNumber;
 
     @ApiModelProperty(value = "创建时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Shanghai")
     @TableField(value = "f_create_time", fill = FieldFill.INSERT)
     private Date createTime;
 
     @ApiModelProperty(value = "修改时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Shanghai")
     @TableField(value = "f_update_time", fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
 
@@ -106,42 +104,6 @@ public class ArchivePO extends Model<ArchivePO> {
     @TableLogic
     private Boolean logicDelete;
 
-
-    public static final String F_ID = "f_id";
-
-    public static final String F_AGEN_IDCODE = "f_agen_idcode";
-
-    public static final String F_AGEN_NAME = "f_agen_name";
-
-    public static final String F_KIND_NAME = "f_kind_name";
-
-    public static final String F_LINK_ADDR = "f_link_addr";
-
-    public static final String F_APPLY_NUMBER = "f_apply_number";
-
-    public static final String F_USE_NUMBER = "f_use_number";
-
-    public static final String F_AUTHOR_NUMBER = "f_author_number";
-
-    public static final String F_UNAUTHOR_NUMBER = "f_unauthor_number";
-
-    public static final String F_WARN_NUMBER = "f_warn_number";
-
-    public static final String F_RETURN_NUMBER = "f_return_number";
-
-    public static final String F_DESTORY_NUMBER = "f_destory_number";
-
-    public static final String F_CREATE_TIME = "f_create_time";
-
-    public static final String F_UPDATE_TIME = "f_update_time";
-
-    public static final String F_OPERATOR_ID = "f_operator_id";
-
-    public static final String F_OPERATOR = "f_operator";
-
-    public static final String F_VERSION = "f_version";
-
-    public static final String F_LOGIC_DELETE = "f_logic_delete";
 
     @Override
     protected Serializable pkVal() {
