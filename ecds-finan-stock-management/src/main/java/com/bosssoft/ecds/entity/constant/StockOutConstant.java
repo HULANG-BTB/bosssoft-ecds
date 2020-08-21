@@ -6,7 +6,7 @@ package com.bosssoft.ecds.entity.constant;
  * @Author misheep
  * @Date 2020/8/12 20:14
  */
-public class StockOutChangeConstant {
+public class StockOutConstant {
     /**
      * 审核状态(0保存1提交2通过3退回）
      */
