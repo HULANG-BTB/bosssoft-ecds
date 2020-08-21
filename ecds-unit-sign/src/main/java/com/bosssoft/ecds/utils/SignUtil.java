@@ -2,7 +2,6 @@ package com.bosssoft.ecds.utils;
 
 import com.bosssoft.ecds.domain.AlgorithmType;
 import com.bosssoft.ecds.domain.StringType;
-import org.apache.commons.codec.DecoderException;
 
 import java.security.*;
 
@@ -44,7 +43,7 @@ public class SignUtil {
      * @param stringType 签名编码类型
      * @return 签名是否正确
      */
-    public static boolean verifySign(String summary, String signValue, PublicKey publicKey, AlgorithmType algorithmType,StringType stringType) throws InvalidKeyException,SignatureException,NoSuchAlgorithmException, DecoderException {
+    public static boolean verifySign(String summary, String signValue, PublicKey publicKey, AlgorithmType algorithmType,StringType stringType) throws Exception {
         Signature signature = Signature.getInstance(algorithmType.getsignatureAlgorithmType());
         // 签名初始化公钥，即使用CA公钥解密
         signature.initVerify(publicKey);

@@ -3,15 +3,10 @@ package com.bosssoft.ecds.service.impl;
 import cn.hutool.json.JSON;
 import cn.hutool.json.JSONUtil;
 import com.bosssoft.ecds.domain.*;
-import com.bosssoft.ecds.dto.SignedDataDto;
+import com.bosssoft.ecds.dto.SignedBillDto;
 import com.bosssoft.ecds.service.ISignService;
 import com.bosssoft.ecds.utils.*;
-import org.apache.commons.codec.DecoderException;
 import org.springframework.stereotype.Service;
-import sun.security.x509.X509CertImpl;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.security.*;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
@@ -26,7 +21,10 @@ import java.security.cert.X509Certificate;
 public class SignServiceImpl implements ISignService {
 
     @Override
-    public SignedDataDto sign(String data) throws Exception {
+    public SignedBillDto sign(Bill bill) throws Exception {
+        // 获取要签名数据的字符串
+        JSON billJson = JSONUtil.parse(bill);
+        String data = billJson.toString();
         // 使用 SHA256 摘要算法生成摘要，并对摘要使用 BASE64 编码
         String summary = SummaryUtil.getSummary(data, AlgorithmType.SHA256, StringType.BASE64);
         // 从 keyStore 中读取私钥
@@ -41,41 +39,36 @@ public class SignServiceImpl implements ISignService {
         }
         // 使用私钥，采用SHA256算法加密摘要,获取签名
         String signValue = SignUtil.signData(summary, privateKey, AlgorithmType.SHA256, StringType.BASE64);
-        // 获取公钥证书 crtCert已BASE64编码的字符串
-        String crtCertStr = UnitCrtUtil.getCertStr();
+        // 获取单位端的CA证书 crtCert
+        X509Certificate unitCrtCert = UnitCrtUtil.getCert();
         // 开始封装 SignedDocument, 并返回，使用建造者模式
-        return SignedDataDto.builder()
-                .data(data)
+        return SignedBillDto.builder()
+                .bill(bill)
                 .unitSignValue(signValue)
-                .unitCrtCert(crtCertStr)
+                .unitCrtCert(unitCrtCert)
                 .stringType(StringType.BASE64)
                 .build();
     }
 
     @Override
-    public boolean verifySign(SignedDataDto signedData, HttpServletRequest request) throws NoSuchProviderException,
-            CertificateException, NoSuchAlgorithmException,
-            InvalidKeyException, SignatureException, DecoderException {
-        // 获取并验证单位端公钥数字证书 crtCert
-        String crtCertStr = signedData.getFinaCrtCert();
-        X509Certificate crtCert = StrToCertUtil.toCert(crtCertStr);
-        verifyCrtCert(crtCert);
+    public boolean verifySign(SignedBillDto signedBill) throws Exception {
+        // 获取并验证财政端 CA 数字证书 crtCert
+        X509Certificate finaCrtCert = signedBill.getFinaCrtCert();
+        verifyCrtCert(finaCrtCert);
         // 判断算法类型，
-        if(!AlgorithmType.SHA256.getsignatureAlgorithmType().equals(crtCert.getSigAlgName())){
-            throw new NoSuchAlgorithmException("此算法类型不支持");
+        if(!AlgorithmType.SHA256.getsignatureAlgorithmType().equals(finaCrtCert.getSigAlgName())){
+            throw new Exception("此算法类型不支持");
         }
         // 获取原文信息，生成摘要
-        String data = signedData.getData();
-        String summary = SummaryUtil.getSummary(data, AlgorithmType.SHA256, signedData.getStringType());
+        Bill bill = signedBill.getBill();
+        JSON billJson = JSONUtil.parse(bill);
+        String data = billJson.toString();
+        String summary = SummaryUtil.getSummary(data, AlgorithmType.SHA256, signedBill.getStringType());
         // 获取财政签名
-        String financeSignValue = signedData.getFinanceSignValue();
+        String financeSignValue = signedBill.getFinanceSignValue();
         // 获取财政公钥
-        PublicKey finaPublicKey = crtCert.getPublicKey();
-        if (SignUtil.verifySign(summary, financeSignValue, finaPublicKey, AlgorithmType.SHA256, signedData.getStringType())){
-            // 将单位段签名与财政端签名存入session，持续10min，作为盖章的依据
-            HttpSession session = request.getSession();
-            session.setMaxInactiveInterval(600);
-            session.setAttribute(signedData.getUnitSignValue(),signedData.getFinanceSignValue());
+        PublicKey finaPublicKey = finaCrtCert.getPublicKey();
+        if (SignUtil.verifySign(summary, financeSignValue, finaPublicKey, AlgorithmType.SHA256, signedBill.getStringType())){
             return true;
         }
         return false;

@@ -56,7 +56,7 @@ public class SummaryUtil {
      * @param stringType 摘要编码方式
      * @return 生成的摘要
      */
-    public static String getSummary (String message, AlgorithmType algorithmType,StringType stringType) {
+    public static String getSummary (String message, AlgorithmType algorithmType,StringType stringType) throws Exception {
         try {
             MessageDigest md = MessageDigest.getInstance(algorithmType.getsummaryAlgorithType());
             byte[] b = md.digest(message.getBytes("utf-8"));
@@ -64,8 +64,6 @@ public class SummaryUtil {
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;

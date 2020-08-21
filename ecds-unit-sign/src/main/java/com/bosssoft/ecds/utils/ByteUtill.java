@@ -2,7 +2,6 @@ package com.bosssoft.ecds.utils;
 
 
 import com.bosssoft.ecds.domain.StringType;
-import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.BinaryCodec;
 import org.apache.commons.codec.binary.Hex;
@@ -40,7 +39,7 @@ public class ByteUtill {
      * @return
      * @throws Exception
      */
-    public static byte[] decode(String data,StringType type) throws DecoderException {
+    public static byte[] decode(String data,StringType type) throws Exception{
         switch (type) {
             case HEX:
                 return Hex.decodeHex(data.toCharArray());
