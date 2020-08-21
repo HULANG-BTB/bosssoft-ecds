@@ -57,7 +57,7 @@ public class IncomeSortController {
 
     @ApiOperation(value = "更新收入类别信息", notes = "可以修改收入名称、是否底级、备注信息等")
     @PostMapping("/update")
-    @Decrypt
+//    @Decrypt
     public ResponseResult update(@RequestBody @Validated UpdateIncomeSortVO updateIncomeSortVO) {
         incomeSortService.update(updateIncomeSortVO);
         return new ResponseResult(CommonCode.SUCCESS);

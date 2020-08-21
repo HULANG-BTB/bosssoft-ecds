@@ -1,12 +1,12 @@
 package com.bosssoft.ecds.dao;
 
-import com.bosssoft.ecds.entity.po.ItemPO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.bosssoft.ecds.entity.po.ItemPO;
 import org.springframework.stereotype.Component;
 
 /**
  * <p>
- *  Mapper 接口
+ * Mapper 接口
  * </p>
  *
  * @author wzh
@@ -14,5 +14,6 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public interface ItemDao extends BaseMapper<ItemPO> {
+
 
 }
