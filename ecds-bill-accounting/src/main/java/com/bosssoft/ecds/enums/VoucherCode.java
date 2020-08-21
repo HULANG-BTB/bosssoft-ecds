@@ -4,16 +4,22 @@ import com.bosssoft.ecds.common.response.ResultCode;
 
 /**
  * @ClassName CbillAccountingCode
- * @Description 入账凭证数据异常码
+ * @Description 自定义的入账凭证数据异常码
  * @Auther UoweMe
  * @Date 2020/8/12 11:39
  * @Version 1.0
  */
-public class VoucherCode implements ResultCode {
+public enum VoucherCode implements ResultCode {
 
     //自定义错误类型及返回码
-
-
+    //自定义错误类型及返回码
+    SUCCESS(true, 20000, "操作成功！"),
+    //操作失败时返回的状态码
+    INSERT_FAIL(false,1001,"插入失败"),
+    UPDATE_FAIL(false,1002,"更新失败"),
+    DELETE_FAIL(false,1003,"删除失败"),
+    ACCOUNT_ID_NOT_EXIST(false, 1004, "该电子凭证号码不存在"),
+    ;
     boolean success;
 
     int code;
