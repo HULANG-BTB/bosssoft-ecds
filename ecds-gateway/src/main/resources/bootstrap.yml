@@ -30,7 +30,7 @@ spring:
           group: DEFAULT_GROUP
           refresh: true
 server:
-  port: 7000
+  port: 8050
 
 
 
