@@ -44,16 +44,10 @@ public class CheckController extends BaseController {
     @Resource
     private ObjectMapper mapper;
 
-
     /**
      * 调用远程接口查询开票信息
      * 用户查询 -> 提交票据号码及校验码 -> 参数校验 -> 调用远程接口查询
      * 接口返回结果 -> 保存查验记录 -> 返回查验结果给前端
-     * response中需要的参数：
-     * 1. code: 状态码，记录本次查询成功与否
-     * 2. msg: 查询信息，一般为状态码对应的信息
-     * 3. data: 记录查询成功后票据详细的票面信息，包括明细表
-     *
      * @param billId    票据号码
      * @param checkCode 校验码
      * @return 票据查验信息，查验成功包括票据具体信息
@@ -77,8 +71,8 @@ public class CheckController extends BaseController {
             result = 1;
         }
         // 处理返回结果,保存查验记录
-        String operIp = getRealIp(request);
-        checkRecordService.saveRecord(billId, result, operIp);
+
+        checkRecordService.saveRecord(billId, result);
         if (result == 1) {
             // 查验票据为真
             return new QueryResponseResult<>(CommonCode.SUCCESS, response.get("data"));

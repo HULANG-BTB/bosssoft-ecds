@@ -1,5 +1,6 @@
 package com.bosssoft.ecds.msg.controller;
 
+
 import com.bosssoft.ecds.response.ResponseResult;
 
 import javax.servlet.http.HttpServletRequest;

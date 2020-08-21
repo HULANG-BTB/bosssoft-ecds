@@ -31,7 +31,6 @@ import java.util.regex.Pattern;
 @Slf4j
 public class SmsController extends BaseController{
 
-
     @Resource
     private SendSmsService sendsmsService;
 
@@ -40,7 +39,6 @@ public class SmsController extends BaseController{
 
     /**
      * 短信发送接口
-     *
      * @param smsVo 短信收件人，及内容是必须的
      * @return 发件成功与否
      */
@@ -65,21 +63,18 @@ public class SmsController extends BaseController{
     @GetMapping("/getBill")
     public ResponseResult getBillByKey(String tel, String verifyCode) {
         log.info("-- tel:" + tel + ";verifyCode:" + verifyCode);
-
         // 电话号码参数校验
         String telRegex = "^1\\d{10}$";
         if (tel == null || !Pattern.matches(telRegex, tel)) {
             // 电话号码格式有误
             return new ResponseResult(CommonCode.INVLIDATE);
         }
-
         // 校验码参数校验
         String verifyCodeRegex = "^[A-Za-z0-9]{6}$";
         if (verifyCode == null || !Pattern.matches(verifyCodeRegex, verifyCode)) {
             // 校验码参数有误
             return new ResponseResult(CommonCode.INVLIDATE);
         }
-
         // 参数无误，查询票据
         String bill = smsService.getBillByKey(tel, verifyCode.toLowerCase());
         if (StringUtils.isNotBlank(bill)) {
@@ -88,7 +83,6 @@ public class SmsController extends BaseController{
         return new ResponseResult(CommonCode.FAIL);
 
     }
-
 
     /**
      * 分页查询邮件
