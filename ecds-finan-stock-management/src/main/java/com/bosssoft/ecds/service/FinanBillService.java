@@ -37,10 +37,10 @@ public interface FinanBillService extends IService<FinanBillPo> {
 
     /**
      * 发放票据出库
-     * @param receiveDto 接收的发票请求，主要包含票据代码和数量
+     * @param billPrecode 票据代码
      * @return FinanBillDto 发送的票据段
      */
-    FinanBillDto getStartNo(ReceiveFinanceapplyDto receiveDto);
+    FinanBillDto getStartNo(String billPrecode);
 
     /**
      * 判断票据发放请求数量是否合理
@@ -54,10 +54,25 @@ public interface FinanBillService extends IService<FinanBillPo> {
     /**
      * 根据发送票据dto，更新状态为已发送
      *
-     * @param sentBillDto 发送票据dto
+     * @param receiveDto 接收票据dto
      * @return 是否成功
      */
-    Boolean updateIsPutOut(SentBillDto sentBillDto);
+    Boolean updateIsPutOut(ReceiveFinanceapplyDto receiveDto);
+
+    /**
+     * 根据票据代码，获得可用票据号段
+     *
+     * @param billPrecode 票据代码
+     * @return 可用段dto
+     */
+    SentBillDto getValidBills(String billPrecode);
+
+    /**
+     * 获得数量
+     * @param billPrecode 票据代码
+     * @return Integer 数量
+     */
+    Integer getCount(String billPrecode);
 
     /**
      * 出库操作

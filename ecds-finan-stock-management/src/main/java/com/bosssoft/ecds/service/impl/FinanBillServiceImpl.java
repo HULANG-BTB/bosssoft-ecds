@@ -76,15 +76,17 @@ public class FinanBillServiceImpl extends ServiceImpl<FinanBillMapper, FinanBill
             2. 发送票据
              */
             receiveDtos.forEach(dto -> {
-                FinanBillDto finanBillDto = getStartNo(dto);
+                FinanBillDto finanBillDto = getStartNo(dto.getBillPrecode());
                 Integer endNo = Integer.parseInt(finanBillDto.getBillId()) + dto.getNumber() - 1;
-                SentBillDto sentBillDto = new SentBillDto();
-                sentBillDto.setBillPrecode(dto.getBillPrecode());
-                sentBillDto.setNumber(dto.getNumber());
-                sentBillDto.setBillNo1(finanBillDto.getBillId());
-                sentBillDto.setBillNo2(String.format("%010d", endNo));
+                dto.setBillNo1(finanBillDto.getBillId());
+                dto.setBillNo2(String.format("%010d", endNo));
+                SentBillDto sentBillDto = Convert.convert(SentBillDto.class, dto);
+//                sentBillDto.setBillPrecode(dto.getBillPrecode());
+//                sentBillDto.setNumber(dto.getNumber());
+//                sentBillDto.setBillNo1(finanBillDto.getBillId());
+//                sentBillDto.setBillNo2(String.format("%010d", endNo));
                 // 更新表的是否发放字段为已发放（1）
-                updateIsPutOut(sentBillDto);
+                updateIsPutOut(dto);
                 sentBillDtos.add(sentBillDto);
             });
             log.info("退出outBills方法，发送数据：{}", sentBillDtos);
@@ -95,18 +97,18 @@ public class FinanBillServiceImpl extends ServiceImpl<FinanBillMapper, FinanBill
     /**
      * 发放票据出库
      *
-     * @param receiveDto 接收的发票请求，主要包含票据代码和数量
+     * @param billPrecode 票据代码
      *
      * @return FinanBillDto 发送的票据段
      */
     @Override
-    public FinanBillDto getStartNo(ReceiveFinanceapplyDto receiveDto) {
+    public FinanBillDto getStartNo(String billPrecode) {
         log.info("开始获取起始号...");
         // 获得起始票据（号）
         FinanBillDto billDto = Convert.convert(
                 FinanBillDto.class,
                 this.getOne(getWrapperValid()
-                        .eq(FinanBillPo::getBillPrecode, receiveDto.getBillPrecode())
+                        .eq(FinanBillPo::getBillPrecode, billPrecode)
                         .orderByAsc(FinanBillPo::getBillId), false));
         log.info("起始号代码：{},号码：{}", billDto.getBillPrecode(), billDto.getBillId());
         return billDto;
@@ -123,10 +125,8 @@ public class FinanBillServiceImpl extends ServiceImpl<FinanBillMapper, FinanBill
     @Override
     public Boolean enoughBill(ReceiveFinanceapplyDto receiveDto) {
         log.info("判断代码：{}的数量是否足够", receiveDto.getBillPrecode());
-        LambdaQueryWrapper<FinanBillPo> wrapper = getWrapperValid();
-        wrapper.eq(FinanBillPo::getBillPrecode, receiveDto.getBillPrecode());
         // 获得数量
-        int count = this.count(wrapper);
+        int count = getCount(receiveDto.getBillPrecode());
         log.info("需求数量为：{}，获取的数量为：{}", receiveDto.getNumber(), count);
         // 数量足够，返回true
         if (receiveDto.getNumber() <= count) {
@@ -138,18 +138,51 @@ public class FinanBillServiceImpl extends ServiceImpl<FinanBillMapper, FinanBill
     /**
      * 根据发送票据dto，更新状态为已发送
      *
-     * @param sentBillDto 发送票据dto
+     * @param receiveDto 接收票据dto
      *
      * @return 是否成功
      */
     @Override
-    public Boolean updateIsPutOut(SentBillDto sentBillDto) {
+    public Boolean updateIsPutOut(ReceiveFinanceapplyDto receiveDto) {
         LambdaUpdateWrapper<FinanBillPo> wrapper = Wrappers.lambdaUpdate();
-        wrapper.eq(FinanBillPo::getBillPrecode, sentBillDto.getBillPrecode())
-                .ge(FinanBillPo::getBillId, sentBillDto.getBillNo1())
-                .le(FinanBillPo::getBillId, sentBillDto.getBillNo2())
-                .set(FinanBillPo::getIsPutout, 1);
+        wrapper
+                .eq(FinanBillPo::getBillPrecode, receiveDto.getBillPrecode())
+                .ge(FinanBillPo::getBillId, receiveDto.getBillNo1())
+                .le(FinanBillPo::getBillId, receiveDto.getBillNo2())
+                .set(FinanBillPo::getIsPutout, 1)
+                .set(FinanBillPo::getOperator, receiveDto.getAuthor());
         return this.update(wrapper);
+    }
+
+    /**
+     * 根据票据代码，获得可用票据号段
+     *
+     * @param billPrecode 票据代码
+     *
+     * @return 可用段dto
+     */
+    @Override
+    public SentBillDto getValidBills(String billPrecode) {
+        FinanBillDto billDto = getStartNo(billPrecode);
+        SentBillDto sentBillDto = new SentBillDto();
+        sentBillDto.setBillPrecode(billPrecode);
+        sentBillDto.setNumber(getCount(billPrecode));
+        sentBillDto.setBillNo1(billDto.getBillId());
+        return sentBillDto;
+    }
+
+    /**
+     * 获得数量
+     *
+     * @param billPrecode 票据代码
+     *
+     * @return Integer 数量
+     */
+    @Override
+    public Integer getCount(String billPrecode) {
+        LambdaQueryWrapper<FinanBillPo> wrapper = getWrapperValid();
+        wrapper.eq(FinanBillPo::getBillPrecode, billPrecode);
+        return this.count(wrapper);
     }
 
     /**

@@ -42,10 +42,11 @@ public class FinanBillController {
     @Autowired
     private FinanBillService billService;
 
-    @ApiOperation("获得出库明细列表")
+    @ApiOperation("票据出库")
     @PostMapping("/outBills")
     public QueryResponseResult outBills(@RequestBody List<ReceiveFinanceapplyDto> receiveDtos) {
         log.info("Controller:进入outBills方法...");
+        log.info("data:{}", receiveDtos);
         List<SentBillDto> sentBillDtos = billService.outBills(receiveDtos);
         log.info("退出方法，data:{}", sentBillDtos);
         return new QueryResponseResult<>(CommonCode.SUCCESS, sentBillDtos);
