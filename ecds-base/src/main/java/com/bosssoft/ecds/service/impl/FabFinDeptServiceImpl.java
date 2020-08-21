@@ -1,7 +1,6 @@
 package com.bosssoft.ecds.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -20,9 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -177,12 +174,8 @@ public class FabFinDeptServiceImpl extends ServiceImpl<FabFinDeptDao, FabFinDept
         }
         //设置分页
         Page<FabFinDept> pageInfo = new Page<FabFinDept>(pageNumber, pageSize);
-        //查询参数
-        Map<String, Object> map = new HashMap<>();
-//        map.put("f_findept_name", fabFinDeptVo.getFindeptName());
-        map.put("f_is_enable", fabFinDeptVo.getIsEnable());
         //查询
-        IPage<FabFinDept> pages = this.page(pageInfo, new QueryWrapper<FabFinDept>().like("f_findept_name", fabFinDeptVo.getFindeptName()).allEq(map, false));
+        IPage<FabFinDept> pages = fabFinDeptMapper.selectByCondition(pageInfo, fabFinDeptVo.getIsEnable(), fabFinDeptVo.getFindeptName());
         QueryResult<FabFinDept> queryResult = new QueryResult<FabFinDept>();
         queryResult.setList(pages.getRecords());
         queryResult.setTotal(pages.getTotal());

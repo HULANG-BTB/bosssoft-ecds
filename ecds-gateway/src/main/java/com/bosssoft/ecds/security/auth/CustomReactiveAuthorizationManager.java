@@ -36,9 +36,8 @@ public class CustomReactiveAuthorizationManager implements ReactiveAuthorization
     @Override
     public Mono<AuthorizationDecision> check(Mono<Authentication> authentication, AuthorizationContext object) {
         this.path = object.getExchange().getRequest().getPath().toString();
+        this.path = this.path.substring(this.path.indexOf('/', 1));
         this.method = object.getExchange().getRequest().getMethod().toString();
-        // Todo 上线删除微服务前缀
-//        this.path = this.path.replaceFirst("(/.*)/", "");
         return authentication
                 .filter(Authentication::isAuthenticated)
                 .flatMapIterable(Authentication::getAuthorities)
