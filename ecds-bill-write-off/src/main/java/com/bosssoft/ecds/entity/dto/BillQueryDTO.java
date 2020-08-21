@@ -14,11 +14,6 @@ public class BillQueryDTO {
     private String agenIdCode;
 
     /**
-     * 开始日期
-     */
-    private String start;
-
-    /**
      * 结束日期
      */
     private String end;

@@ -39,11 +39,18 @@ public interface UnitWriteOffService {
     boolean rescindApply(List<String> noList);
 
     /**
-     * 查询申请明细（已经上报无法更改的情况）
+     * 查询申请明细
      * @param queryInfoDTO 明细查询DTO
      * @return 分页对象
      */
-    IPage<WriteOffApplyItemDTO> selectItemPage(UnitWriteOffItemQueryInfoDTO queryInfoDTO);
+    IPage<WriteOffApplyItemDTO> selectItemPage(UnitWriteOffItemAndIncomeQueryInfoDTO queryInfoDTO);
+
+    /**
+     * 查询收费项目
+     * @param queryInfoDTO 项目查询DTO
+     * @return 分页对象
+     */
+    IPage<WriteOffApplyIncomeDTO> selectIncomePage(UnitWriteOffItemAndIncomeQueryInfoDTO queryInfoDTO);
 
     /**
      * 从接口中获取数据并整合
@@ -51,4 +58,11 @@ public interface UnitWriteOffService {
      * @return 获取之后整合的数据
      */
     BillInfoDTO getData(BillQueryDTO billQueryDTO);
+
+    /**
+     * 添加或者更新申请
+     * @param applyDTO 申请DTO
+     * @return 是否成功
+     */
+    boolean addOrUpdateApply(ApplyDTO applyDTO);
 }

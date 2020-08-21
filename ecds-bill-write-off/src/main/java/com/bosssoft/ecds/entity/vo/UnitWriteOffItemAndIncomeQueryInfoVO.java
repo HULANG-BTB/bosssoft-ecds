@@ -1,4 +1,4 @@
-package com.bosssoft.ecds.entity.dto;
+package com.bosssoft.ecds.entity.vo;
 
 import lombok.Data;
 
@@ -7,7 +7,7 @@ import lombok.Data;
  * @date 2020-8-17
  */
 @Data
-public class UnitWriteOffItemQueryInfoDTO {
+public class UnitWriteOffItemAndIncomeQueryInfoVO {
     /**
      * 业务单号
      */

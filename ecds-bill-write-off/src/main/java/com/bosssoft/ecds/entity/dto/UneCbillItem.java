@@ -9,20 +9,20 @@ public class UneCbillItem {
     /**
      * 项目编码
      */
-    private String fItemCode;
+    private String fitemCode;
 
     /**
      * 项目名称
      */
-    private String fItemName;
+    private String fitemName;
 
     /**
      * 单位
      */
-    private String fUnits;
+    private String funits;
 
     /**
      * 金额
      */
-    private double fAmt;
+    private double famt;
 }
