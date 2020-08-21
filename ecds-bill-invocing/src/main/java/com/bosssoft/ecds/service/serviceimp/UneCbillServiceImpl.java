@@ -8,6 +8,7 @@ import com.bosssoft.ecds.dao.UneCbillItemMapper;
 import com.bosssoft.ecds.dao.UneCbillMapper;
 import com.bosssoft.ecds.entity.dto.BillItemDTO;
 import com.bosssoft.ecds.entity.dto.NontaxBillDTO;
+import com.bosssoft.ecds.entity.dto.SignedDataDto;
 import com.bosssoft.ecds.entity.dto.UneCbillItemDto;
 import com.bosssoft.ecds.entity.po.UneCbill;
 import com.bosssoft.ecds.entity.po.UneCbillItem;
@@ -83,7 +84,7 @@ public class UneCbillServiceImpl implements UneCbillService {
             uneCbillItem.setFCreateTime(new Date());
             uneCbillItem.setFId(CommonUtil.generateID());
             uneCbillItem.setFSortNo(i++);
-            uneCbillItem.setFStd(8888.00);
+            uneCbillItem.setFStd(itemDto.getfAmt());
             uneCbillItem.setFVersion(0);
             uneCbillItem.setFUpdateTime(new Date());
             uneCbillItem.setFOperator("samuel");
@@ -143,7 +144,7 @@ public class UneCbillServiceImpl implements UneCbillService {
         nontaxBillDTO.setPayee(String.valueOf(uneCbill.getFPayerType()));
         nontaxBillDTO.setPayerName(uneCbill.getFPayerName());
         nontaxBillDTO.setRemark(uneCbill.getFMemo());
-        nontaxBillDTO.setSerialCode("100");
+        nontaxBillDTO.setSerialCode(uneCbill.getFBillNo());
         return nontaxBillDTO;
     }
 
@@ -211,4 +212,36 @@ public class UneCbillServiceImpl implements UneCbillService {
         return page1.setRecords(cbillVos);
     }
 
+    /**
+     * 获取模板所需的DTO
+     * @param uneCbill
+     * @return
+     */
+    @Override
+    public NontaxBillDTO getNontaxBillDto(UneCbill uneCbill, List<UneCbillItem> uneCbillItems) {
+        NontaxBillDTO nontaxBillDTO = convert(uneCbill);
+        List<BillItemDTO> uneCbillItemDtos = new ArrayList<>();
+        for (UneCbillItem uneCbillItem : uneCbillItems) {
+            BillItemDTO billItemDTO = convertToItem(uneCbillItem);
+            uneCbillItemDtos.add(billItemDTO);
+        }
+        nontaxBillDTO.setItems(uneCbillItemDtos);
+        return nontaxBillDTO;
+    }
+
+    /**
+     * 通过billId和BillNo查询票据
+     * @param billId
+     * @param billNo
+     * @return
+     */
+    @Override
+    public UneCbill getUneCbillByIdAndNo(String billId, String billNo) {
+        QueryWrapper<UneCbill> queryWrapper = new QueryWrapper();
+        queryWrapper.eq("f_bill_id", billId)
+                .eq("f_bill_no", billNo);
+        SignedDataDto signedDataDto = new SignedDataDto();
+        UneCbill uneCbill = uneCbillMapper.selectOne(queryWrapper);
+        return uneCbill;
+    }
 }

@@ -97,4 +97,20 @@ public interface UneCbillService {
      * @return
      */
     IPage<UneCbillVo> selectPassBillPage(Page<UneCbill> page);
+
+    /**
+     * 获取模板所需的DTO
+     * @param uneCbill
+     * @return
+     */
+    NontaxBillDTO getNontaxBillDto(UneCbill uneCbill, List<UneCbillItem> uneCbillItems);
+
+    /**
+     * 通过billId和billNo查询bill信息
+     * @param billId
+     * @param billNo
+     * @return
+     */
+    UneCbill getUneCbillByIdAndNo(String billId, String billNo);
+
 }
