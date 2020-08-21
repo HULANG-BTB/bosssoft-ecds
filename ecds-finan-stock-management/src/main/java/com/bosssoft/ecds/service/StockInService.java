@@ -70,4 +70,12 @@ public interface StockInService extends IService<StockInPO> {
      * @return 操作结果
      */
     boolean store(StoreDTO storeDTO);
+    
+    /**
+     * 检查票据段是否可用
+     *
+     * @param checkStoreDTO 传入的DTO
+     * @return 票据段是否可用
+     */
+    boolean checkStore(CheckStoreDTO checkStoreDTO);
 }
