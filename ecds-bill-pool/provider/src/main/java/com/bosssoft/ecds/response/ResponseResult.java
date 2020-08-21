@@ -1,5 +1,10 @@
 package com.bosssoft.ecds.response;
 
+/**
+ * @author: lpb
+ * @create: 2020-07-10 09:29
+ * 统一的响应结果
+ */
 public class ResponseResult {
 
     //操作是否成功
@@ -13,6 +18,16 @@ public class ResponseResult {
         this.success = resultCode.success();
         this.code = resultCode.code();
         this.message = resultCode.message();
+    }
+
+    public ResponseResult(ResultCode resultCode, String message) {
+        this.success = resultCode.success();
+        this.code = resultCode.code();
+        if (message != null && !"".equals(message.trim())) {
+            this.message = message;
+        } else {
+            this.message = resultCode.message();
+        }
     }
 
     public ResponseResult(boolean success, int code, String message) {

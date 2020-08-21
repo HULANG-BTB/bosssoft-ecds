@@ -4,25 +4,25 @@ import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.bosssoft.ecds.common.response.CommonCode;
-import com.bosssoft.ecds.common.response.QueryResponseResult;
-import com.bosssoft.ecds.common.response.ResponseResult;
+import com.bosssoft.ecds.entity.vo.groupvo.GroupPageVO;
+import com.bosssoft.ecds.response.CommonCode;
+import com.bosssoft.ecds.response.QueryResponseResult;
+import com.bosssoft.ecds.response.ResponseResult;
 import com.bosssoft.ecds.dao.GroupDao;
 import com.bosssoft.ecds.dao.GroupItemDao;
 import com.bosssoft.ecds.entity.dto.GroupDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.po.GroupItemPO;
 import com.bosssoft.ecds.entity.po.GroupPO;
-import com.bosssoft.ecds.entity.po.ItemPO;
 import com.bosssoft.ecds.entity.vo.PageVO;
 import com.bosssoft.ecds.entity.vo.groupvo.GroupVO;
 import com.bosssoft.ecds.enums.ItemResultCode;
-import com.bosssoft.ecds.service.GroupItemService;
 import com.bosssoft.ecds.service.GroupService;
 import com.bosssoft.ecds.utils.MyBeanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -46,6 +46,11 @@ public class GroupServiceImpl extends ServiceImpl<GroupDao, GroupPO> implements 
     public ResponseResult save(GroupDTO groupDTO) {
         // 将dto转化为po
         GroupPO groupPO = MyBeanUtil.copyProperties(groupDTO, GroupPO.class);
+        Date date = new Date();
+        groupPO.setCreateTime(date);
+        groupPO.setUpdateTime(date);
+        groupPO.setLogicDelete(false);
+        groupPO.setVersion(1);
         boolean save = super.save(groupPO);
         if (!save) {
             return new ResponseResult(CommonCode.FAIL);
@@ -100,24 +105,25 @@ public class GroupServiceImpl extends ServiceImpl<GroupDao, GroupPO> implements 
     }
 
     @Override
-    public ResponseResult listByPage(PageDTO<GroupVO> pageDTO) {
+    public ResponseResult listByPage(GroupPageVO<GroupVO> groupPageVO) {
         Page<GroupPO> groupPOPage = new Page<>();
         // 设置分页信息
-        groupPOPage.setCurrent(pageDTO.getPage());
-        groupPOPage.setSize(pageDTO.getLimit());
+        groupPOPage.setCurrent(groupPageVO.getPage());
+        groupPOPage.setSize(groupPageVO.getLimit());
         // 构造条件查询器，分页模糊查询
         QueryWrapper<GroupPO> queryWrapper = new QueryWrapper<>();
-        queryWrapper.like(GroupPO.F_GROUP_NAME, pageDTO.getKeyword());
+
+        queryWrapper.eq(GroupPO.F_AGEN_CODE, groupPageVO.getAgenCode())
+                .and(wrapper->wrapper.like(GroupPO.F_GROUP_NAME,groupPageVO.getGroupName()));
         queryWrapper.orderByAsc(GroupPO.F_CREATE_TIME);
         // 读取分页数据
         Page<GroupPO> page = super.page(groupPOPage, queryWrapper);
         List<GroupPO> records = page.getRecords();
         // 转换数据
         List<GroupVO> groupVOS = MyBeanUtil.copyListProperties(records, GroupVO::new);
-        pageDTO.setItems(groupVOS);
-        pageDTO.setTotal(page.getTotal());
-        PageVO pageVO = MyBeanUtil.copyProperties(pageDTO, PageVO.class);
-        return new QueryResponseResult<>(CommonCode.SUCCESS, pageVO);
+        groupPageVO.setItems(groupVOS);
+        groupPageVO.setTotal(page.getTotal());
+        return new QueryResponseResult<>(CommonCode.SUCCESS, groupPageVO);
     }
 
     @Override

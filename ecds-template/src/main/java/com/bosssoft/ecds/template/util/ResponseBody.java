@@ -5,7 +5,8 @@ package com.bosssoft.ecds.template.util;
  */
 public class ResponseBody extends ResponseUtils.ResponseBody {
 
-    public ResponseBody(){}
+    public ResponseBody() {
+    }
 
     public ResponseBody(Integer status, String msg, Object data) {
         setStatus(status);
@@ -13,13 +14,13 @@ public class ResponseBody extends ResponseUtils.ResponseBody {
         setData(data);
     }
 
-    public ResponseBody(ResponseUtils.ResultType resultType, Object data){
+    public ResponseBody(ResponseUtils.ResultType resultType, Object data) {
         setStatus(resultType.getCode());
         setMsg(resultType.getMsg());
         setData(data);
     }
 
-    public static ResponseBody ok(){
+    public static ResponseBody ok() {
         return ok(null);
     }
 
@@ -31,7 +32,7 @@ public class ResponseBody extends ResponseUtils.ResponseBody {
         return error(null);
     }
 
-    public static ResponseBody error(String msg){
+    public static ResponseBody error(String msg) {
         ResponseBody responseBody = new ResponseBody();
         responseBody.setMsg(msg);
         responseBody.setStatus(ResponseUtils.ResultType.INTERNAL_SERVER_ERROR.getCode());

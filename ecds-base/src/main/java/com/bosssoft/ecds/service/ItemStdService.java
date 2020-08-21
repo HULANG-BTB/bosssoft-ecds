@@ -1,12 +1,12 @@
 package com.bosssoft.ecds.service;
 
-import com.bosssoft.ecds.common.response.QueryResponseResult;
-import com.bosssoft.ecds.common.response.ResponseResult;
-import com.bosssoft.ecds.entity.dto.ItemStdDTO;
+import com.bosssoft.ecds.response.QueryResponseResult;
+import com.bosssoft.ecds.response.ResponseResult;
+import com.bosssoft.ecds.entity.dto.itemdto.ItemStdDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.po.ItemStdPO;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.bosssoft.ecds.entity.vo.ItemStdVO;
+import com.bosssoft.ecds.entity.vo.itemvo.ItemStdVO;
 import com.bosssoft.ecds.entity.vo.PageVO;
 
 import java.util.List;

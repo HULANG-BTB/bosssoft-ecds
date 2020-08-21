@@ -7,6 +7,7 @@ import com.bosssoft.ecds.response.QueryResponseResult;
 import com.bosssoft.ecds.response.ResponseResult;
 import com.bosssoft.ecds.service.SourceSetService;
 import com.bosssoft.ecds.utils.BeanUtils;
+import io.swagger.annotations.Api;
 import org.hibernate.validator.constraints.Length;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,9 +22,8 @@ import java.util.List;
  * @version 1.0
  * @date 2020/8/18 10:43
  */
+@Api
 @RestController
-@RequestMapping("/pool")
-@CrossOrigin
 public class SourceSetController {
 
     private static final Logger logger = LoggerFactory.getLogger(SourceSetController.class);
@@ -65,14 +65,10 @@ public class SourceSetController {
         return list != null ?
                 new QueryResponseResult<>(CommonCode.SUCCESS, list) :
                 new ResponseResult(CommonCode.FAIL);
+
     }
 
-    /**
-     * 根据票据代码获取
-     * @param billTypeCode
-     * @return
-     */
-    @GetMapping("/retrieveSetByCode")
+    @RequestMapping(value = "/retrieveSetByCode", method = RequestMethod.GET)
     public ResponseResult retrieveSetByCode(@RequestParam @Valid @Length(min = 8, max = 8, message = "票号编码不规范") String billTypeCode) {
         SourceSetVo sourceSetVo = BeanUtils.convertObject(sourceSetService.retrieveSetByCode(billTypeCode), SourceSetVo.class);
         return sourceSetVo != null ?

@@ -33,12 +33,13 @@ public class FanoutBillErrorReceiver {
     @RabbitListener(queues = "deadLetterQueue")
     @RabbitHandler
     public void handle(String billTypeCode) {
-        if (!redisTemplate.hasKey(billTypeCode)){
+        if (!redisTemplate.hasKey(billTypeCode)) {
             logger.error(billTypeCode + "不存在");
             return;
         }
         int threshold = (int) redisTemplate.opsForHash().get(billTypeCode, "threshold");
         String table = (String) redisTemplate.opsForHash().get(billTypeCode, "table");
+        logger.info(table);
         int remainderBill = billDao.retrieveNumber(table);
         if (remainderBill <= threshold) {
             logger.error(billTypeCode + " 放票请求系统未及时相应" + dateFormat.format(new Date()));

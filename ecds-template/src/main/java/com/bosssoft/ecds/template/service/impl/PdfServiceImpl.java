@@ -1,6 +1,6 @@
 package com.bosssoft.ecds.template.service.impl;
 
-import com.bosssoft.ecds.template.entity.dto.NontaxBillDTO;
+import com.bosssoft.ecds.template.entity.dto.NontaxBillDto;
 import com.bosssoft.ecds.template.service.PdfService;
 import com.bosssoft.ecds.template.util.AliyunOSSUtil;
 import com.itextpdf.text.pdf.BaseFont;
@@ -52,13 +52,14 @@ public class PdfServiceImpl implements PdfService {
         /**
          * 设置模板加载路径
          */
-        cfg.setClassForTemplateLoading(this.getClass(),"/templates");
+        cfg.setClassForTemplateLoading(this.getClass(), "/templates");
         return cfg;
     }
 
     /**
      * 获取前端数据与html模板整合到一起的数据，并转成字符串的形式
-     * @param data 需要整合的数据
+     *
+     * @param data    需要整合的数据
      * @param ftlName html模板地址
      * @return
      */
@@ -95,8 +96,9 @@ public class PdfServiceImpl implements PdfService {
 
     /**
      * 生成pdf文件
+     *
      * @param htmlData html文本
-     * @param pdfDest 生成pdf文件的路径
+     * @param pdfDest  生成pdf文件的路径
      */
     @Override
     public File createPdf(String htmlData, String pdfDest) {
@@ -110,8 +112,7 @@ public class PdfServiceImpl implements PdfService {
 
             createPdf(htmlData, outputStream);
             log.info("createPdf: {}", file);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return file;
@@ -119,12 +120,13 @@ public class PdfServiceImpl implements PdfService {
 
     /**
      * 生成pdf文件
+     *
      * @param billDTO
      */
     @Override
-    public void createPdf(NontaxBillDTO billDTO) {
+    public void createPdf(NontaxBillDto billDTO) {
         Map<String, Object> data = new HashMap<>();
-        data.put("billDTO",billDTO);
+        data.put("billDTO", billDTO);
         String htmlName = getHtmlName(billDTO.getBillCode());
         String pdfDest = defaultPdfDest + getPdfDest(billDTO.getBillCode(), billDTO.getSerialCode());
         String outData = getOutData(data, htmlName);
@@ -132,11 +134,10 @@ public class PdfServiceImpl implements PdfService {
     }
 
     @Override
-    public void createPdf(NontaxBillDTO billDTO, OutputStream outputStream) {
+    public void createPdf(NontaxBillDto billDTO, OutputStream outputStream) {
         Map<String, Object> data = new HashMap<>();
-        data.put("billDTO",billDTO);
+        data.put("billDTO", billDTO);
         String htmlName = getHtmlName(billDTO.getBillCode());
-//        String pdfDest = defaultPdfDest + getPdfDest(billDTO.getBillCode(), billDTO.getSerialCode());
         String outData = getOutData(data, htmlName);
         createPdf(outData, outputStream);
     }
@@ -157,7 +158,7 @@ public class PdfServiceImpl implements PdfService {
     }
 
     @Override
-    public String getRemoteAddress(NontaxBillDTO billDTO, boolean isForce) {
+    public String getRemoteAddress(NontaxBillDto billDTO, boolean isForce, Long expireTime) {
         String pdfFileName = getPdfDest(billDTO.getBillCode(), billDTO.getSerialCode());
         String path = "boss-bill/" + pdfFileName;
 
@@ -171,27 +172,34 @@ public class PdfServiceImpl implements PdfService {
             ossUtil.upload(path, new ByteArrayInputStream(pdfBytes));
         }
 
-        URL url = ossUtil.temporaryUrl(path, 5 * 60 * 1000);
+        // 默认1个月的文件访问时间
+        if (expireTime==null) {
+            expireTime = 30 * 24 * 60 * 60 * 1000L;
+        }
+
+        URL url = ossUtil.temporaryUrl(path, expireTime);
 
         return url.toString();
     }
 
     /**
      * 设置ftl模板名
+     *
      * @param code 票据代码
      * @return
      */
-    private String getHtmlName(String code){
+    private String getHtmlName(String code) {
         return code + ".ftl";
     }
 
     /**
      * 设置生成的pdf文件名
-     * @param code 票据代码
+     *
+     * @param code   票据代码
      * @param serial 票号
      * @return
      */
-    private String getPdfDest(String code, String serial){
+    private String getPdfDest(String code, String serial) {
         return code + serial + ".pdf";
     }
 

@@ -1,15 +1,17 @@
 package com.bosssoft.ecds.handler.rabbitmq;
 
+import com.bosssoft.ecds.entity.dto.*;
 import com.bosssoft.ecds.utils.FanoutRabbitUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * @author lixin
@@ -26,10 +28,28 @@ public class FanoutBillWarnReceiver {
     @Resource
     FanoutRabbitUtils fanoutRabbitUtils;
 
+    @Resource
+    RedisTemplate redisTemplate;
+
     @RabbitListener(queues = "warnQueueFirst")
     @RabbitHandler
     public void handle(String billTypeCode) {
+        RestTemplate restTemplate = new RestTemplate();
+        Integer number = (Integer) redisTemplate.opsForHash().get(billTypeCode, "pushNumber");
+        RequestBillDto billDto = new RequestBillDto(billTypeCode, number, "source", "source");
+        ExportBillDto exportBillDto;
+        RetrieveBillDto retrieveBillDto = new RetrieveBillDto();
+        retrieveBillDto.setBillTypeCode("88888888");
+        retrieveBillDto.setNumber(10);
+        InsertBillDto insertBillDto = new InsertBillDto();
+        exportBillDto = restTemplate.postForObject("http://127.0.0.1:8083/retrieveBill", retrieveBillDto, ExportBillDto.class);
+        logger.info(exportBillDto.toString());
+        BillDto dto = new BillDto();
+        dto.setBillTypeCode(exportBillDto.getRegionCode());
+        dto.setBillCodeBegin(exportBillDto.getBillCodeBegin());
+        dto.setBillCodeEnd(exportBillDto.getBillCodeEnd());
+        logger.info(dto.toString());
+        restTemplate.postForObject("http://127.0.0.1:8083/createBill", dto, int.class);
         fanoutRabbitUtils.sendBillDelayMessage(billTypeCode);
-        logger.info(billTypeCode + " 放票请求已发送" + dateFormat.format(new Date()));
     }
 }

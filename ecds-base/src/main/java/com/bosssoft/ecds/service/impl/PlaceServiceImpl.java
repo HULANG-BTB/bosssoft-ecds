@@ -3,17 +3,15 @@ package com.bosssoft.ecds.service.impl;
 import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.bosssoft.ecds.common.response.CommonCode;
-import com.bosssoft.ecds.common.response.QueryResponseResult;
-import com.bosssoft.ecds.common.response.ResponseResult;
-import com.bosssoft.ecds.entity.dto.ItemDTO;
+import com.bosssoft.ecds.response.CommonCode;
+import com.bosssoft.ecds.response.QueryResponseResult;
+import com.bosssoft.ecds.response.ResponseResult;
 import com.bosssoft.ecds.entity.dto.PageDTO;
-import com.bosssoft.ecds.entity.dto.PlaceDTO;
+import com.bosssoft.ecds.entity.dto.placedto.PlaceAllDTO;
 import com.bosssoft.ecds.entity.po.ItemPO;
 import com.bosssoft.ecds.entity.po.PlacePO;
 import com.bosssoft.ecds.dao.PlaceDao;
 import com.bosssoft.ecds.entity.vo.PageVO;
-import com.bosssoft.ecds.enums.ItemResultCode;
 import com.bosssoft.ecds.enums.PlaceResultCode;
 import com.bosssoft.ecds.service.PlaceService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -43,7 +41,7 @@ public class PlaceServiceImpl extends ServiceImpl<PlaceDao, PlacePO> implements 
      * @return
      */
     @Override
-    public ResponseResult save(PlaceDTO placeDTO) {
+    public ResponseResult save(PlaceAllDTO placeDTO) {
         // 将dto转化为po
         PlacePO placePO = MyBeanUtil.myCopyProperties(placeDTO, PlacePO.class);
         // 执行插入操作
@@ -63,7 +61,7 @@ public class PlaceServiceImpl extends ServiceImpl<PlaceDao, PlacePO> implements 
      * @return
      */
     @Override
-    public ResponseResult update(PlaceDTO placeDTO) {
+    public ResponseResult update(PlaceAllDTO placeDTO) {
         // 将dto转化为po
         PlacePO placePO = MyBeanUtil.myCopyProperties(placeDTO, PlacePO.class);
         // 执行更新操作
@@ -83,7 +81,7 @@ public class PlaceServiceImpl extends ServiceImpl<PlaceDao, PlacePO> implements 
      * @return
      */
     @Override
-    public ResponseResult delete(PlaceDTO placeDTO) {
+    public ResponseResult delete(PlaceAllDTO placeDTO) {
         // 判断传入id是否存在
         if (placeDTO.getId() == null) {
             return new ResponseResult(PlaceResultCode.PLACE_NOT_EXISTS);
@@ -106,7 +104,7 @@ public class PlaceServiceImpl extends ServiceImpl<PlaceDao, PlacePO> implements 
      * @return
      */
     @Override
-    public QueryResponseResult<PageVO> listByPage(PageDTO<PlaceDTO> pageDTO) {
+    public QueryResponseResult<PageVO> listByPage(PageDTO<PlaceAllDTO> pageDTO) {
         Page<PlacePO> placePOPage = new Page<>();
         // 设置分页信息
         placePOPage.setCurrent(pageDTO.getPage());
@@ -123,7 +121,7 @@ public class PlaceServiceImpl extends ServiceImpl<PlaceDao, PlacePO> implements 
         Page<PlacePO> itemPOPage = super.page(placePOPage, queryWrapper);
         List<PlacePO> records = itemPOPage.getRecords();
         // 转换数据
-        List<PlaceDTO> placeDTOS = MyBeanUtil.copyListProperties(records, PlaceDTO::new);
+        List<PlaceAllDTO> placeDTOS = MyBeanUtil.copyListProperties(records, PlaceAllDTO::new);
         pageDTO.setTotal(itemPOPage.getTotal());
         pageDTO.setItems(placeDTOS);
         PageVO pageVO = MyBeanUtil.myCopyProperties(pageDTO, PageVO.class);
@@ -137,10 +135,10 @@ public class PlaceServiceImpl extends ServiceImpl<PlaceDao, PlacePO> implements 
      * @return
      */
     @Override
-    public ResponseResult batchDelete(List<PlaceDTO> placeDTOList) {
+    public ResponseResult batchDelete(List<PlaceAllDTO> placeDTOList) {
         // 构建批量删除的idList
         ArrayList<Long> idList = new ArrayList<>();
-        for (Iterator<PlaceDTO> iterator = placeDTOList.iterator(); iterator.hasNext(); ) {
+        for (Iterator<PlaceAllDTO> iterator = placeDTOList.iterator(); iterator.hasNext(); ) {
             idList.add(iterator.next().getId());
         }
         // 执行批量删除
@@ -154,7 +152,7 @@ public class PlaceServiceImpl extends ServiceImpl<PlaceDao, PlacePO> implements 
     }
 
     @Override
-    public ResponseResult batchVerify(List<PlaceDTO> placeDTOList) {
+    public ResponseResult batchVerify(List<PlaceAllDTO> placeDTOList) {
         return null;
     }
 }

@@ -253,8 +253,8 @@ public class SubjectServiceImpl extends ServiceImpl<SubjectDao, SubjectPO> imple
         if (subjectPO.getLevel() <= getMaxLevelFromIncome()) {
             incomeSortSubjectService.deleteBySid(subjectPO.getId());
         }
-        baseMapper.deleteById(subjectPO.getId());
-        return true;
+        return baseMapper.deleteById(subjectPO.getId())==1?true:false;
+
     }
 
     /**
@@ -347,7 +347,8 @@ public class SubjectServiceImpl extends ServiceImpl<SubjectDao, SubjectPO> imple
      * @param year
      * @return
      */
-    private List<SubjectVO> getAll(String year) {
+    @Override
+    public List<SubjectVO> getAll(String year) {
         QueryWrapper<SubjectPO> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("f_year", year);
         List<SubjectPO> subjectPOS = subjectDao.selectList(queryWrapper);
@@ -355,6 +356,24 @@ public class SubjectServiceImpl extends ServiceImpl<SubjectDao, SubjectPO> imple
         List<SubjectVO> subjectVOTree = buildSubjectVOTree(subjectVOS, SubjectConstant.INIT_PARENT_ID);
         return subjectVOTree;
     }
+
+    @Override
+    public List<SubjectVO> getSecondTree(String year) {
+        QueryWrapper<SubjectPO> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(SubjectPO.F_PARENT_ID, SubjectConstant.INIT_PARENT_ID)
+                .and(wrapper->wrapper.eq("f_year", year));
+        List<SubjectPO> subjectPOS1 = baseMapper.selectList(queryWrapper);
+        List<SubjectVO> subjectVOS1 = MyBeanUtil.copyListProperties(subjectPOS1, SubjectVO::new);
+        subjectVOS1.forEach(subjectVO -> {
+            QueryWrapper<SubjectPO> queryWrapper2 = new QueryWrapper<>();
+            queryWrapper2.eq(SubjectPO.F_PARENT_ID,subjectVO.getId());
+            List<SubjectPO> subjectPOS2 = baseMapper.selectList(queryWrapper2);
+            List<SubjectVO> subjectVOS2 = MyBeanUtil.copyListProperties(subjectPOS2, SubjectVO::new);
+            subjectVO.setSubjectVOS(subjectVOS2);
+        });
+        return subjectVOS1;
+    }
+
 
     /**
      * 查看收入类别最大层级
@@ -375,13 +394,16 @@ public class SubjectServiceImpl extends ServiceImpl<SubjectDao, SubjectPO> imple
      * 对外接口，更新预算科目编码,更新成功或无须更新都返回true
      */
     @Transactional(rollbackFor = Exception.class)
-    public boolean updateFromInconme(Long incomeId, String code) {
+    public boolean updateFromInconme(Long incomeId, String name) {
         IncomeSortSubjectPO incomeSortSubjectPO = incomeSortSubjectService.selectByIncomeId(incomeId);
+        if (incomeSortSubjectPO == null) {
+            return true;
+        }
         SubjectPO subjectPO = baseMapper.selectById(incomeSortSubjectPO.getSubjectId());
-        subjectPO.setCode(code);
         if (!subjectPO.getYear().equals(getCurrentYear())) {
             return true;
         }
+        subjectPO.setCode(name);
         return baseMapper.updateById(subjectPO) == 1 ? true : false;
     }
 

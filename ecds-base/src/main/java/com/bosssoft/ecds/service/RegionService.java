@@ -1,10 +1,10 @@
 package com.bosssoft.ecds.service;
 
-import com.bosssoft.ecds.common.response.QueryResponseResult;
-import com.bosssoft.ecds.common.response.ResponseResult;
 import com.bosssoft.ecds.entity.vo.AddRegionVO;
 import com.bosssoft.ecds.entity.vo.EditRegionVO;
 import com.bosssoft.ecds.entity.vo.QueryRegionRequestVO;
+import com.bosssoft.ecds.response.QueryResponseResult;
+import com.bosssoft.ecds.response.ResponseResult;
 
 /**
  * @author: lpb

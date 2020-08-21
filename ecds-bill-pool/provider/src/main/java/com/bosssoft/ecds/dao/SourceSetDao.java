@@ -2,6 +2,7 @@ package com.bosssoft.ecds.dao;
 
 import com.bosssoft.ecds.entity.po.SourceMessagePo;
 import com.bosssoft.ecds.entity.po.SourceSetPo;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -14,6 +15,7 @@ public interface SourceSetDao {
 
     /**
      * 更新票据池设置
+     *
      * @param sourceSetPo 需要修改的票据池编码、最小推送数、修改类型
      * @return int
      */
@@ -21,6 +23,7 @@ public interface SourceSetDao {
 
     /**
      * 更新票据池设置
+     *
      * @param sourceSetPo 需要修改的票据池编码、阈值、修改类型
      * @return int
      */
@@ -28,6 +31,7 @@ public interface SourceSetDao {
 
     /**
      * 更新票据池设置
+     *
      * @param sourceSetPo 票据池修改的全部信息包括推送数量、阈值、修改类型等
      * @return int
      */
@@ -35,6 +39,7 @@ public interface SourceSetDao {
 
     /**
      * 创建数据表
+     *
      * @param sourceSetPo 新数据表需要的票据编码，根据票据编码创建新数据表
      * @return int
      */
@@ -42,6 +47,7 @@ public interface SourceSetDao {
 
     /**
      * 插入票据池与数据表的对应
+     *
      * @param sourceSetPo 票据编码
      * @return int
      */
@@ -49,6 +55,7 @@ public interface SourceSetDao {
 
     /**
      * 删除数据表
+     *
      * @param sourceSetPo 通过票据编码找到数据表名
      * @return int
      */
@@ -56,6 +63,7 @@ public interface SourceSetDao {
 
     /**
      * 插入新的票据池信息
+     *
      * @param sourceSetPo 票据池设置的各种信息
      * @return
      */
@@ -63,27 +71,31 @@ public interface SourceSetDao {
 
     /**
      * 取出票据池的各种信息，票据编码、数据表表名、阈值
+     *
      * @return List
      */
     List<SourceMessagePo> retrieveSourceMessageList();
 
     /**
      * 根据票据编码获取对应票据池信息，票据编码、数据表表名、阈值
+     *
      * @param billTypeCode 票据编码
      * @return SourceMessagePo
      */
-    SourceMessagePo retrieveSourceMessageByCode(String billTypeCode);
+    SourceMessagePo retrieveSourceMessageByCode(@Param("billTypeCode") String billTypeCode);
 
     /**
      * 取出全部票据池设置信息
+     *
      * @return List<SourceSetPo>
      */
     List<SourceSetPo> retrieveSetList();
 
     /**
      * 根据票据编码取出对应票据池设置信息
+     *
      * @param billTypeCode 票据编码
      * @return
      */
-    SourceSetPo retrieveSetByCode(String billTypeCode);
+    SourceSetPo retrieveSetByCode(@Param("billTypeCode") String billTypeCode);
 }

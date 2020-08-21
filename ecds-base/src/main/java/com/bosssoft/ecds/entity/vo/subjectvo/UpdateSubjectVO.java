@@ -2,15 +2,15 @@ package com.bosssoft.ecds.entity.vo.subjectvo;
 
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.bosssoft.ecds.constant.CheckConstant;
-import com.bosssoft.ecds.constant.IncomeSortConstant;
 import com.bosssoft.ecds.constant.SubjectConstant;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import org.springframework.beans.factory.annotation.Value;
-
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -26,6 +26,7 @@ import javax.validation.constraints.Pattern;
 public class UpdateSubjectVO extends Model<UpdateSubjectVO> {
 
     @NotNull(message = SubjectConstant.Subject_ID_NOT_NULL)
+    @JsonSerialize(using = ToStringSerializer.class)
     @ApiModelProperty(value = "科目id")
     private Long id;
 

@@ -22,11 +22,12 @@ public class ImageUtils {
 
     /**
      * 使用 Graphics2D 在图片上绘制文字
+     *
      * @param billValues 包含文字内容，坐标
      * @param srcImgName 可以带 `classpath:` 前缀的图片文件位置
      * @return 图片文件字节数组
      */
-    private byte[] addMark(List<TextValue> billValues, String srcImgName){
+    private byte[] addMark(List<TextValue> billValues, String srcImgName) {
 
         File srcImgFile = null;
         try {
@@ -52,7 +53,7 @@ public class ImageUtils {
         g.setFont(font);
 
         // 绘制文本
-        for (TextValue value : billValues){
+        for (TextValue value : billValues) {
             g.drawString(value.getValue(), value.getX(), value.getY());
         }
 
