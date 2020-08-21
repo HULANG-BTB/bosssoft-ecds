@@ -1,6 +1,7 @@
 package com.bosssoft.ecds.appender;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.classic.spi.LoggingEvent;
 import ch.qos.logback.core.AppenderBase;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +35,10 @@ public class KafkaAppender extends AppenderBase<ILoggingEvent> {
      * kafka topic
      */
     private String logTopic;
+    /**
+     * 服务名称
+     */
+    private  String applicationName;
 
     @Override
     public void start() {
@@ -65,8 +70,9 @@ public class KafkaAppender extends AppenderBase<ILoggingEvent> {
     @Override
     protected void append(ILoggingEvent eventObject) {
         String msg = eventObject.getFormattedMessage();
+        String result =msg.substring(0,msg.length()-1)+",applicatinoName: \""+applicationName+"\"";
         log.debug("向kafka推送日志开始:" + msg);
-        ProducerRecord<String, String> record = new ProducerRecord<>(logTopic, msg);
+        ProducerRecord<String, String> record = new ProducerRecord<>(logTopic, result);
         producer.send(record);
     }
 }
