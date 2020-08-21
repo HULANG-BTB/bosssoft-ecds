@@ -77,6 +77,7 @@ public class SubjectController {
         ;
     }
 
+    @ApiOperation(value = "导入预算科目")
     @PostMapping("/upload")
     public QueryResponseResult upload(MultipartFile file, Long id) throws IOException {
         return subjectService.upload(file, id);

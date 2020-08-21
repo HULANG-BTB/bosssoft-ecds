@@ -3,9 +3,13 @@ package com.bosssoft.ecds.utils;
 import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.event.AnalysisEventListener;
 import com.bosssoft.ecds.entity.vo.subjectvo.SubjectImportData;
+import com.bosssoft.ecds.enums.SubjectResultCode;
+import com.bosssoft.ecds.exception.ExceptionCast;
 import com.bosssoft.ecds.service.SubjectService;
+import javax.validation.ConstraintViolation;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author shkstart
@@ -39,6 +43,21 @@ public class SubjectDataListener extends AnalysisEventListener<SubjectImportData
      */
     @Override
     public void invoke(SubjectImportData data, AnalysisContext context) {
+        Set<ConstraintViolation<SubjectImportData>> set = ValidationUtils.getValidator().validate(data);
+        if (set.size() > 0) {
+            //获取行号
+            Integer index = context.readRowHolder().getRowIndex() + 1;
+            int num = 0;
+            String message = "";
+            for (ConstraintViolation<SubjectImportData> cv : set) {
+                if (num != 0) {
+                    message += "，";
+                }
+                num++;
+                message += cv.getMessage();
+            }
+            ExceptionCast.cast(SubjectResultCode.IMPORT_ERROR.setMessage("[数据处理异常--第" + index + "行]----" + message));
+        }
         list.add(data);
         // 达到BATCH_COUNT了，需要去存储一次数据库，防止数据几万条数据在内存，容易OOM
         if (list.size() >= BATCH_COUNT) {
