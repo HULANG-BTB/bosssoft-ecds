@@ -3,6 +3,7 @@ package com.bosssoft.ecds.entity.vo;
 import com.bosssoft.ecds.entity.dto.WriteOffBillInvDetailDTO;
 import com.bosssoft.ecds.entity.dto.WriteOffIncomeDetailDTO;
 import com.bosssoft.ecds.entity.dto.WriteOffInvoceDetailDTO;
+import com.bosssoft.ecds.entity.dto.WriteOffMonitorDetailDTO;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -18,7 +19,7 @@ public class WriteOffDetailVO {
     List<WriteOffBillInvDetailDTO> writeOffBillInvDetailDTOList;
 
     // 预警记录
-
+    List<WriteOffMonitorDetailDTO> writeOffMonitorDetailDTOList;
 
     public List<WriteOffInvoceDetailDTO> getWriteOffInvoceDetailDTOList() {
         return writeOffInvoceDetailDTOList;
@@ -42,5 +43,13 @@ public class WriteOffDetailVO {
 
     public void setWriteOffBillInvDetailDTOList(List<WriteOffBillInvDetailDTO> writeOffBillInvDetailDTOList) {
         this.writeOffBillInvDetailDTOList = writeOffBillInvDetailDTOList;
+    }
+
+    public List<WriteOffMonitorDetailDTO> getWriteOffMonitorDetailDTOList() {
+        return writeOffMonitorDetailDTOList;
+    }
+
+    public void setWriteOffMonitorDetailDTOList(List<WriteOffMonitorDetailDTO> writeOffMonitorDetailDTOList) {
+        this.writeOffMonitorDetailDTOList = writeOffMonitorDetailDTOList;
     }
 }

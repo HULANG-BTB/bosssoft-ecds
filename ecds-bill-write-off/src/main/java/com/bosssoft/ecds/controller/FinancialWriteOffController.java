@@ -8,6 +8,7 @@ import com.bosssoft.ecds.response.CommonCode;
 import com.bosssoft.ecds.response.QueryResponseResult;
 import com.bosssoft.ecds.response.ResponseResult;
 import com.bosssoft.ecds.service.FinancialWriteOffService;
+import com.bosssoft.ecds.service.MonitorRecordService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,8 @@ public class FinancialWriteOffController {
     @Autowired
     private FinancialWriteOffService financialWriteOffService;
 
+    @Autowired
+    private MonitorRecordService monitorRecordService;
     /**
      * 获取单位端传来的核销信息
      * 接收一段时间的下级单位传来的核销信息
@@ -94,6 +97,7 @@ public class FinancialWriteOffController {
         writeOffDetailVO.setWriteOffBillInvDetailDTOList(writeOffDetailDTO.getWriteOffBillInvDetailDTOList());
         writeOffDetailVO.setWriteOffIncomeDetailDTOList(writeOffDetailDTO.getWriteOffIncomeDetailDTOList());
         writeOffDetailVO.setWriteOffInvoceDetailDTOList(writeOffDetailDTO.getWriteOffInvoceDetailDTOList());
+        writeOffDetailVO.setWriteOffMonitorDetailDTOList(monitorRecordService.getMonitorDetail(writeOffDetailDTO));
         return new QueryResponseResult(CommonCode.SUCCESS, writeOffDetailVO);
     }
 

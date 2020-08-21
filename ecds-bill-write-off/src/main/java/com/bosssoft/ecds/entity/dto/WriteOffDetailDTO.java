@@ -20,6 +20,4 @@ public class WriteOffDetailDTO {
     // 开票明细
     List<WriteOffBillInvDetailDTO> writeOffBillInvDetailDTOList;
 
-    // 预警记录
-
 }
