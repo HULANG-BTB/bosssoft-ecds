@@ -5,12 +5,13 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
- * @author hujierong
- * @date 2020-8-11
- */
+ * @author: qiuheng
+ * @create: 2020-08-11 16:47
+ **/
 @SpringBootApplication
-public class  WriteOffApplication {
+@MapperScan("com.bosssoft.ecds.dao")
+public class billDestroyApplication {
     public static void main(String[] args) {
-        SpringApplication.run(WriteOffApplication.class, args);
+        SpringApplication.run(billDestroyApplication.class,args);
     }
 }
