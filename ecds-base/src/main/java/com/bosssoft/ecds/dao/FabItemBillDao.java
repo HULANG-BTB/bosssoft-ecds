@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bosssoft.ecds.entity.po.FabItemBillPO;
 import com.bosssoft.ecds.entity.po.ItemPO;
-import com.bosssoft.ecds.entity.vo.ItemBillVO;
+import com.bosssoft.ecds.entity.vo.itembillvo.ItemBillVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -44,7 +44,7 @@ public interface FabItemBillDao extends BaseMapper<FabItemBillPO> {
             " where f_bill_code=#{fBillCode} </if> " +
             ")a left JOIN fab_item b  on  a.f_item_id_code=b.f_item_id    " +
             "<if test = 'itemName !=null  and itemName !=\"\" '>" +
-            " where b.f_item_name like #{itemName} </if> " +
+            " where b.f_item_name like #{itemName} </if>  order  by a.f_update_time desc  " +
             "</script>"})
     IPage<ItemBillVO> selectItemWithBillCode(Page<?> page, @Param("fBillCode") String fBillCode, @Param("itemName") String itemName);
 
@@ -64,7 +64,7 @@ public interface FabItemBillDao extends BaseMapper<FabItemBillPO> {
             "<if test = 'fBillCode !=null  and fBillCode !=\"\"  '>" +
             "  where f_bill_code =#{fBillCode} </if> " +
             " ) <if test = 'itemName !=null  and itemName !=\"\"  '>" +
-            "  and f_item_name like #{itemName} </if> " +
+            "  and f_item_name like #{itemName} </if>  order  by f_update_time desc " +
             "</script>"})
     IPage<ItemPO> selectNoContactItem(Page<?> page, @Param("fBillCode") String fBillCode, @Param("itemName") String itemName);
 

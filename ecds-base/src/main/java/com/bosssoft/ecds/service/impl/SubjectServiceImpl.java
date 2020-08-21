@@ -467,9 +467,11 @@ public class SubjectServiceImpl extends ServiceImpl<SubjectDao, SubjectPO> imple
      * @param year
      * @return
      */
+    @Override
     public List<SubjectVO> getSecondTree(String year) {
         QueryWrapper<SubjectPO> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq(SubjectPO.F_PARENT_ID, SubjectConstant.INIT_PARENT_ID);
+        queryWrapper.eq(SubjectPO.F_PARENT_ID, SubjectConstant.INIT_PARENT_ID)
+                .and(wrapper->wrapper.eq(SubjectPO.F_YEAR,year));
 //        第一级list
         List<SubjectPO> subjectPOS1 = baseMapper.selectList(queryWrapper);
         List<SubjectVO> subjectVOS1 = MyBeanUtil.copyListProperties(subjectPOS1, SubjectVO::new);

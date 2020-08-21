@@ -87,6 +87,17 @@
             <artifactId>apm-toolkit-logback-1.x</artifactId>
             <version>8.0.1</version>
         </dependency>
+        <!-- SkyWalking Opentracing 集成 -->
+        <dependency>
+            <groupId>org.apache.skywalking</groupId>
+            <artifactId>apm-toolkit-trace</artifactId>
+            <version>8.0.1</version>
+        </dependency>
+        <!-- aop -->
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

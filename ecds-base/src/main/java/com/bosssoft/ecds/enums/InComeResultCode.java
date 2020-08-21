@@ -15,7 +15,8 @@ public enum InComeResultCode implements ResultCode {
     INCOME_NAME_NOT_EXISTS(false, 2005, "收入类别不存在"),
     ITEM_EXISTS(false, 2006, "项目中存在收入类别"),
     SUBJECT_EXISTS(false, 2006, "项目中存在收入类别"),
-    SUBJECT_ID_IS_NULL(false, 2007, "项目ID为空");
+    SUBJECT_ID_IS_NULL(false, 2007, "项目ID为空"),
+    INCOME_SORT_NOT_NULL(false, 2008, "存在子级收入类别");
 
     /**
      * 操作是否成功

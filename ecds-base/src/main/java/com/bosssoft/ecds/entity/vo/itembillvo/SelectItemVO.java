@@ -1,4 +1,4 @@
-package com.bosssoft.ecds.entity.vo;
+package com.bosssoft.ecds.entity.vo.itembillvo;
 
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import lombok.Data;

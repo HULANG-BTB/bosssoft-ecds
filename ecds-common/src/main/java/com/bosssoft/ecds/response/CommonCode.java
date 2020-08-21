@@ -1,8 +1,6 @@
 package com.bosssoft.ecds.response;
 
 
-import com.bosssoft.ecds.util.DynamicEnumUtil;
-
 /**
  * @author: lpb
  * @create: 2020-07-10 09:02
@@ -22,7 +20,8 @@ public enum CommonCode implements ResultCode {
     DUPLICATE_ERROR(false, 21111, "该数据已存在"),
     ENCRYPTION_ERROR(false, 21222, "加密参数缺失"),
     EMAIL_NOTIFICATION(false, 29999, "邮件通知"),
-    PUBLIC_KEY_IS_NULL(false, 29229, "未获取前端公钥");
+    PUBLIC_KEY_IS_NULL(false, 29229, "未获取前端公钥"),
+    PRIVATE_KEY_IS_NULL(false, 29729, "后端私钥为空");
     //操作是否成功
     boolean success;
     //操作代码
@@ -34,19 +33,6 @@ public enum CommonCode implements ResultCode {
         this.success = success;
         this.code = code;
         this.message = message;
-    }
-
-    /**
-     * 动态创建枚举类方法
-     *
-     * @param enumName 枚举名称
-     * @param success  是否成功
-     * @param code     枚举编码
-     * @param message  枚举消息
-     * @return
-     */
-    public static CommonCode addEnum(String enumName, boolean success, int code, String message) {
-        return DynamicEnumUtil.addEnum(CommonCode.class, enumName, new Class[]{Boolean.class, Integer.class, String.class}, new Object[]{success, code, message});
     }
 
     @Override

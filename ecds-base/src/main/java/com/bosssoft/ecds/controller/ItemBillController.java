@@ -1,10 +1,10 @@
 package com.bosssoft.ecds.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.bosssoft.ecds.entity.vo.BillItemsInsertVO;
-import com.bosssoft.ecds.entity.vo.BillItemsVO;
-import com.bosssoft.ecds.entity.vo.ItemBillVO;
-import com.bosssoft.ecds.entity.vo.SelectItemVO;
+import com.bosssoft.ecds.entity.vo.itembillvo.BillItemsInsertVO;
+import com.bosssoft.ecds.entity.vo.itembillvo.BillItemsVO;
+import com.bosssoft.ecds.entity.vo.itembillvo.ItemBillVO;
+import com.bosssoft.ecds.entity.vo.itembillvo.SelectItemVO;
 import com.bosssoft.ecds.response.CommonCode;
 import com.bosssoft.ecds.response.QueryResponseResult;
 import com.bosssoft.ecds.service.FabItemBillService;
@@ -13,8 +13,6 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import javax.websocket.server.PathParam;
 
 /**
  * @ClassName :  ItemBillController

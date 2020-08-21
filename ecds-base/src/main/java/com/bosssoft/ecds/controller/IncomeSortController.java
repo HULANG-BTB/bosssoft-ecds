@@ -2,7 +2,6 @@ package com.bosssoft.ecds.controller;
 
 
 import com.bosssoft.ecds.encryption.Decrypt;
-import com.bosssoft.ecds.encryption.Encrypt;
 import com.bosssoft.ecds.entity.vo.incomesortvo.AddIncomeSortVO;
 import com.bosssoft.ecds.entity.vo.incomesortvo.DeleteIncomeSortVO;
 import com.bosssoft.ecds.entity.vo.incomesortvo.FuzzyQueryIncomeSortVO;
@@ -52,15 +51,13 @@ public class IncomeSortController {
 
     @ApiOperation(value = "分页查询收入类别信息", notes = "通过id查询显示子级收入类别")
     @PostMapping("/pageQueryById")
-    @Decrypt
-    @Encrypt
     public QueryResponseResult pageQueryById(@RequestBody @Validated FuzzyQueryIncomeSortVO fuzzyQueryIncomeSortVO) {
         return incomeSortService.pageQueryByName(fuzzyQueryIncomeSortVO);
     }
 
     @ApiOperation(value = "更新收入类别信息", notes = "可以修改收入名称、是否底级、备注信息等")
     @PostMapping("/update")
-    @Decrypt
+//    @Decrypt
     public ResponseResult update(@RequestBody @Validated UpdateIncomeSortVO updateIncomeSortVO) {
         incomeSortService.update(updateIncomeSortVO);
         return new ResponseResult(CommonCode.SUCCESS);
@@ -91,6 +88,12 @@ public class IncomeSortController {
     @GetMapping("selectAll")
     public QueryResponseResult select() {
         return incomeSortService.selectAll();
+    }
+
+    @ApiOperation(value = "对外提供收入类别信息")
+    @GetMapping("getBySubjectId")
+    public QueryResponseResult getBySubjectId(Long subjectId) {
+        return incomeSortService.getBySubjectId(subjectId);
     }
 
 }

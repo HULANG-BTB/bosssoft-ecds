@@ -2,12 +2,15 @@ package com.bosssoft.ecds.encryption;
 
 
 import com.alibaba.fastjson.JSONObject;
+import com.bosssoft.ecds.constant.EncryptionConstant;
 import com.bosssoft.ecds.exception.CustomException;
 import com.bosssoft.ecds.response.CommonCode;
+import com.bosssoft.ecds.util.RedisUtils;
 import com.bosssoft.ecds.utils.AESUtil;
 import com.bosssoft.ecds.utils.RSAUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpInputMessage;
@@ -33,7 +36,8 @@ import java.nio.charset.StandardCharsets;
 @Slf4j
 @RestControllerAdvice
 public class DecodeRequestBodyAdvice implements RequestBodyAdvice {
-
+    @Autowired
+    private RedisUtils redisUtils;
 
     @Override
     public boolean supports(MethodParameter methodParameter, Type targetType,
@@ -45,6 +49,7 @@ public class DecodeRequestBodyAdvice implements RequestBodyAdvice {
     @Override
     public HttpInputMessage beforeBodyRead(HttpInputMessage inputMessage, MethodParameter parameter, Type targetType,
                                            Class<? extends HttpMessageConverter<?>> converterType) throws IOException {
+
         StringBuilder stringBuilder = new StringBuilder();
         BufferedReader bufferedReader = null;
         try {
@@ -73,8 +78,13 @@ public class DecodeRequestBodyAdvice implements RequestBodyAdvice {
         }
         //获取请求数据
         String builderString = stringBuilder.toString();
+        Long userId = 123L;
+        if (redisUtils.get(userId + EncryptionConstant.PRIVATE_KEY) == null) {
+            throw new CustomException(CommonCode.PRIVATE_KEY_IS_NULL);
+        }
+        String privateKey = String.valueOf(redisUtils.get(userId + EncryptionConstant.PRIVATE_KEY));
         try {
-            return new MyHttpInputMessage(inputMessage.getHeaders(), builderString);
+            return new MyHttpInputMessage(inputMessage.getHeaders(), builderString, privateKey);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -103,12 +113,14 @@ public class DecodeRequestBodyAdvice implements RequestBodyAdvice {
      * 实现rsa+ase混合解密
      */
     static class MyHttpInputMessage implements HttpInputMessage {
+
+
         HttpHeaders headers;
         InputStream body;
 
-        public MyHttpInputMessage(HttpHeaders headers, String data) throws Exception {
+        public MyHttpInputMessage(HttpHeaders headers, String data, String privateKey) throws Exception {
             this.headers = headers;
-            body = new ByteArrayInputStream(getData(data).getBytes(StandardCharsets.UTF_8));
+            body = new ByteArrayInputStream(getData(data, privateKey).getBytes(StandardCharsets.UTF_8));
         }
 
         public MyHttpInputMessage(HttpHeaders headers, InputStream body) {
@@ -126,7 +138,7 @@ public class DecodeRequestBodyAdvice implements RequestBodyAdvice {
             return headers;
         }
 
-        public String getData(String requestData) throws Exception {
+        public String getData(String requestData, String privateKey) throws Exception {
             if (requestData == null) {
                 throw new CustomException(CommonCode.ENCRYPTION_ERROR);
             }
@@ -136,8 +148,9 @@ public class DecodeRequestBodyAdvice implements RequestBodyAdvice {
             if (data == null || aesKey == null) {
                 throw new CustomException(CommonCode.ENCRYPTION_ERROR);
             }
+
             //后端私钥解密的到AES的key
-            byte[] key = RSAUtil.decryptByPrivateKey(Base64.decodeBase64(aesKey), Base64.decodeBase64(RSAUtil.getPrivateKey()));
+            byte[] key = RSAUtil.decryptByPrivateKey(Base64.decodeBase64(aesKey), Base64.decodeBase64(privateKey));
             //AES解密得到明文data数据
             String decrypt = AESUtil.decrypt(data, key);
             return decrypt;

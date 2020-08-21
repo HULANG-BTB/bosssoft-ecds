@@ -1,5 +1,6 @@
 package com.bosssoft.ecds.service.impl;
 
+import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bosssoft.ecds.entity.dto.DeptDTO;
@@ -14,7 +15,9 @@ import com.bosssoft.ecds.utils.MyBeanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.xml.crypto.Data;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -26,6 +29,7 @@ import java.util.List;
  * @since 2020-08-09
  */
 @Service
+@DS("master")
 public class DeptServiceImpl extends ServiceImpl<DeptDao, DeptPO> implements DeptService {
 
     /**
@@ -41,6 +45,12 @@ public class DeptServiceImpl extends ServiceImpl<DeptDao, DeptPO> implements Dep
     public DeptDTO save(DeptDTO fabDeptDTO) {
         DeptPO fabDeptPO = new DeptPO();
         MyBeanUtil.copyProperties(fabDeptDTO, fabDeptPO);
+        Date date = new Date();
+        fabDeptPO.setUpdateTime(date);
+        QueryWrapper<DeptPO> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(DeptPO.F_RGN_ID,fabDeptPO.getRgnId());
+        int count = super.list(queryWrapper).size();
+        fabDeptPO.setDeptCode(fabDeptPO.getRgnId()+String.format("%03d", count));
         super.save(fabDeptPO);
         return fabDeptDTO;
     }
@@ -148,6 +158,9 @@ public class DeptServiceImpl extends ServiceImpl<DeptDao, DeptPO> implements Dep
             if(s.equals("true")){
                 queryWrapper.eq(DeptPO.F_ISENABLE, true);
             }
+        }
+        if(pagesDTO.getKeyword().get("rgnId") != null && pagesDTO.getKeyword().get("rgnId").equals("")==false){
+            queryWrapper.and(wrapper -> wrapper.eq(DeptPO.F_RGN_ID, pagesDTO.getKeyword().get("rgnId")));
         }
         if(pagesDTO.getKeyword().get("deptCode") != null && pagesDTO.getKeyword().get("deptCode").equals("")==false){
             queryWrapper.and(wrapper -> wrapper.like(DeptPO.F_DEPT_CODE, pagesDTO.getKeyword().get("deptCode")));
