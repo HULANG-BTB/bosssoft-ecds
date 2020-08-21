@@ -1,5 +1,6 @@
 package com.bosssoft.ecds.exception;
 
+
 import com.bosssoft.ecds.response.ResultCode;
 
 /**
