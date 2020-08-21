@@ -1,10 +1,9 @@
 package com.bosssoft.ecds.entity.po;
 
-import com.baomidou.mybatisplus.annotation.*;
-
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import java.time.LocalDateTime;
 import java.io.Serializable;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -17,23 +16,26 @@ import lombok.experimental.Accessors;
  * @author qiuheng
  * @since 2020-08-12
  */
+@Data
 //flase 不调用父类的属性
 //@EqualsAndHashCode(callSuper = false)
 //控制getter和setter方法形式，set方法返回的是对象名称，更加的直观，适合对象赋值时的连续赋值参数
 //@Accessors(chain = true)
 @TableName("ube_destroy_apply")
-public class ApplyPo{
+public class ApplyPo implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * 主键
      */
-    @TableId(value = "f_id")
+    @TableId("f_id")
     private Long fId;
 
     /**
      * 单号
      */
-    private Long fDestroyNo;
+    private String fDestroyNo;
 
     /**
      * 区划编码
@@ -45,10 +47,10 @@ public class ApplyPo{
      */
     private String fAgenIdCode;
 
-    /*
-     *单位名称
+    /**
+     * 申请人
      */
-    private String fUnitName;
+    private String fApplyAuthor;
 
     /**
      * 备注
@@ -56,10 +58,13 @@ public class ApplyPo{
     private String fDestroyMemo;
 
     /**
+     * 编制日期
+     */
+    private LocalDateTime fDate;
+
+    /**
      * 版本号
      */
-    @Version
-    @TableField(fill = FieldFill.INSERT)
     private Integer fVersion;
 
     /**
@@ -85,7 +90,7 @@ public class ApplyPo{
     /**
      * 申请日期
      */
-    private String fApplyDate;
+    private LocalDateTime fApplyDate;
 
     /**
      * 申请人
@@ -98,127 +103,7 @@ public class ApplyPo{
     private Boolean fDestroyType;
 
     /**
-     * 审核状态：0.未审核；1.已审核但未通过；2.已审核并通过
+     * 审核状态：0.未审核；1.已审核
      */
-    private int fStatus;
-
-    public Long getfId() {
-        return fId;
-    }
-
-    public void setfId(Long fId) {
-        this.fId = fId;
-    }
-
-    public Long getfDestroyNo() {
-        return fDestroyNo;
-    }
-
-    public void setfDestroyNo(Long fDestroyNo) {
-        this.fDestroyNo = fDestroyNo;
-    }
-
-    public String getfRgnCode() {
-        return fRgnCode;
-    }
-
-    public void setfRgnCode(String fRgnCode) {
-        this.fRgnCode = fRgnCode;
-    }
-
-    public String getfAgenIdCode() {
-        return fAgenIdCode;
-    }
-
-    public String getfUnitName() {
-        return fUnitName;
-    }
-
-    public void setfUnitName(String fUnitName) {
-        this.fUnitName = fUnitName;
-    }
-
-    public void setfAgenIdCode(String fAgenIdCode) {
-        this.fAgenIdCode = fAgenIdCode;
-    }
-
-    public String getfDestroyMemo() {
-        return fDestroyMemo;
-    }
-
-    public void setfDestroyMemo(String fDestroyMemo) {
-        this.fDestroyMemo = fDestroyMemo;
-    }
-
-    public Integer getfVersion() {
-        return fVersion;
-    }
-
-    public void setfVersion(Integer fVersion) {
-        this.fVersion = fVersion;
-    }
-
-    public LocalDateTime getfCreateTime() {
-        return fCreateTime;
-    }
-
-    public void setfCreateTime(LocalDateTime fCreateTime) {
-        this.fCreateTime = fCreateTime;
-    }
-
-    public LocalDateTime getfUpdateTime() {
-        return fUpdateTime;
-    }
-
-    public void setfUpdateTime(LocalDateTime fUpdateTime) {
-        this.fUpdateTime = fUpdateTime;
-    }
-
-    public Long getfOperatorId() {
-        return fOperatorId;
-    }
-
-    public void setfOperatorId(Long fOperatorId) {
-        this.fOperatorId = fOperatorId;
-    }
-
-    public String getfOperatorName() {
-        return fOperatorName;
-    }
-
-    public void setfOperatorName(String fOperatorName) {
-        this.fOperatorName = fOperatorName;
-    }
-
-    public String getfApplyDate() {
-        return fApplyDate;
-    }
-
-    public void setfApplyDate(String fApplyDate) {
-        this.fApplyDate = fApplyDate;
-    }
-
-    public String getfApplyMan() {
-        return fApplyMan;
-    }
-
-    public void setfApplyMan(String fApplyMan) {
-        this.fApplyMan = fApplyMan;
-    }
-
-    public Boolean getfDestroyType() {
-        return fDestroyType;
-    }
-
-    public void setfDestroyType(Boolean fDestroyType) {
-        this.fDestroyType = fDestroyType;
-    }
-
-    public int getfStatus() {
-        return fStatus;
-    }
-
-    public void setfStatus(int fStatus) {
-        this.fStatus = fStatus;
-    }
+    private Boolean fStatus;
 }

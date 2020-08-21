@@ -16,8 +16,14 @@ import java.time.LocalDateTime;
  * @author qiuheng
  * @since 2020-08-12
  */
+@Data
+@EqualsAndHashCode(callSuper = false)
+@Accessors(chain = true)
 @TableName("fbe_destroy_confirm")
-public class DestroyConfirmPo{
+public class DestroyConfirmPo implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     /**
      * 销毁审验表id，主键
      */

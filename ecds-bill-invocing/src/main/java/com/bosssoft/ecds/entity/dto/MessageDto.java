@@ -1,9 +1,6 @@
 package com.bosssoft.ecds.entity.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
-
 import java.util.Date;
 
 @Data
@@ -22,8 +19,6 @@ public class MessageDto {
     /**
      * 开票时间
      */
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date fCreateTime;
 
     /**
@@ -56,13 +51,4 @@ public class MessageDto {
      */
     private String fCheckCode;
 
-    /**
-     * 票据类型（非税电子票据）
-     */
-    private String fBillType;
-
-    /**
-     * 票据图片地址
-     */
-    private String fBillImgUrl;
 }
