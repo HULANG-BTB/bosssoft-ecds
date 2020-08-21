@@ -1,5 +1,6 @@
 package com.bosssoft.ecds.common.exception;
 
+import com.alibaba.fastjson.JSON;
 import com.bosssoft.ecds.common.CommonCode;
 import com.bosssoft.ecds.common.ResultCode;
 import com.google.common.collect.ImmutableMap;
@@ -11,6 +12,9 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @ControllerAdvice
 @Slf4j
@@ -49,10 +53,17 @@ public class ExceptionCatch {
             EXCEPTIONS = builder.build();
         }
         ResultCode resultCode = EXCEPTIONS.get(e.getClass());
+        ExceptionDetail detail = new ExceptionDetail();
+        detail.setTags(e.getClass().getSimpleName());
         if (resultCode != null) {
+            detail.setCode(resultCode.code());
+            detail.setMessage(resultCode.message());
+            log.error(JSON.toJSONString(detail));
             return new ResponseResult(resultCode);
         }
-        log.error("catch exception info:{}", e.getMessage());
+        detail.setCode(CommonCode.EMAIL_NOTIFICATION.code());
+        detail.setMessage("Not captured exception:" + e.getClass().getSimpleName() + ",message:" + e.getMessage() + ",time:" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        log.error(JSON.toJSONString(detail));
         e.printStackTrace();
         return new ResponseResult(CommonCode.SERVER_ERROR);
     }

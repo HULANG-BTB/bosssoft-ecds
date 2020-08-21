@@ -15,8 +15,11 @@ public enum CommonCode implements ResultCode {
     METHOD_NOT_SUPPORTED(false, 1005L, "请求方法不受支持"),
     SERVER_ERROR(false, 99999L, "抱歉，系统繁忙，请稍后重试！"),
     DUPLICATE_ERROR(false, 21111L, "该数据已存在"),
-    EMPTY(false, 99999L, "该数据为空！");
-
+    EMPTY(false, 99999L, "该数据为空！"),
+    ENCRYPTION_ERROR(false, 21222L, "加密参数缺失"),
+    EMAIL_NOTIFICATION(false, 29999L, "邮件通知"),
+    PUBLIC_KEY_IS_NULL(false, 29229L, "未获取前端公钥"),
+    PRIVATE_KEY_IS_NULL(false, 29729L, "后端私钥为空");
     /**
      * 操作是否成功
      */
