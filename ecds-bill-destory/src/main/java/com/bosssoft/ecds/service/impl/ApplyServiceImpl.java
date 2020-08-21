@@ -99,10 +99,19 @@ public class ApplyServiceImpl extends ServiceImpl<ApplyMapper, ApplyPo> implemen
     }
 
     @Override
-    public int updateApplyInfo(ApplyDto applyDto) {
+    public int updateApplyInfo(Long fDestroyNo, String fStatus) {
+        QueryWrapper<ApplyPo> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("f_destroy_no", fDestroyNo);
         ApplyPo applyPo = new ApplyPo();
-        BeanUtils.copyProperties(applyDto,applyPo);
-        return applyMapper.updateById(applyPo);
+        if(fStatus.equals("已审核但未通过")){
+            applyPo.setfStatus(1);
+            applyMapper.update(applyPo,queryWrapper);
+        }
+        else if(fStatus.equals("已审核并通过")){
+            applyPo.setfStatus(2);
+            applyMapper.update(applyPo,queryWrapper);
+        }
+        return 0;
     }
 
     @Override

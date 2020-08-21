@@ -1,8 +1,10 @@
 package com.bosssoft.ecds.controller;
 
+import com.bosssoft.ecds.entity.dto.ApplyDto;
 import com.bosssoft.ecds.entity.po.ApplyPo;
 import com.bosssoft.ecds.entity.po.ItemPo;
 import com.bosssoft.ecds.entity.vo.ApplyVo;
+import com.bosssoft.ecds.entity.vo.ResultVo;
 import com.bosssoft.ecds.response.CommonCode;
 import com.bosssoft.ecds.response.QueryResponseResult;
 import com.bosssoft.ecds.response.ResponseResult;
@@ -100,12 +102,12 @@ public class ApplyController {
         itemService.deleteItemInfoByDestroyNo(fDestroyNo);
         return new ResponseResult(CommonCode.SUCCESS);
     }
-    @ApiOperation(value = "更新票据销毁申请信息",notes = "更新票据销毁申请信息")
-    @ApiImplicitParam(name = "applyVo", value = "票据销毁申请VO", paramType = "query", required = true, dataType = "Object")
+
+    @ApiOperation(value = "更新票据销毁申请状态",notes = "更新票据销毁申请状态")
+    @ApiImplicitParam(name = "status", value = "票据销毁审核状态", paramType = "query", required = true, dataType = "String")
     @RequestMapping(value = "updateApplyInfo",method = RequestMethod.POST)
-    public ResponseResult updateApplyInfo(ApplyVo applyVo){
-        applyService.updateApplyInfo(applyVo.getApplyDto());
-        itemService.updateItemInfo(applyVo.getItemDtoList());
+    public ResponseResult updateApplyInfo(@RequestBody ResultVo resultVo){
+        applyService.updateApplyInfo(resultVo.getfDestroyNo(), resultVo.getfStatus());
         return new ResponseResult(CommonCode.SUCCESS);
     }
 

@@ -98,7 +98,7 @@ public class ApplyPo{
     private Boolean fDestroyType;
 
     /**
-     * 审核状态：0.未审核；1.已审核
+     * 审核状态：0.未审核；1.已审核但未通过；2.已审核并通过
      */
     private int fStatus;
 

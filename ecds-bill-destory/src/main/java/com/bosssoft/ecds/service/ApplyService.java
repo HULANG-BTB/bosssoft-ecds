@@ -44,7 +44,7 @@ public interface ApplyService extends IService<ApplyPo> {
     * @return: boolean
     * @date: 2020/8/17
     */
-    int updateApplyInfo(ApplyDto applyDto);
+    int updateApplyInfo(Long fDestroyNo, String fStatus);
 
     int deleteApplyInfoByDestroyNo(String fDestroyNo);
 
