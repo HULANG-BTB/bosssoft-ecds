@@ -2,6 +2,7 @@ package com.bosssoft.ecds.filter.log;
 
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.skywalking.apm.toolkit.trace.TraceContext;
 import org.reactivestreams.Publisher;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
@@ -70,6 +71,7 @@ public class RequestLogFilter implements GlobalFilter, Ordered {
         requestInfo.setInfoType(REQUEST_INFO);
         requestInfo.setNickname(nickname);
         requestInfo.setAuthId(authId);
+        requestInfo.setTid(TraceContext.traceId());
 
 
         ServerHttpResponse response = exchange.getResponse();
