@@ -2,6 +2,7 @@ package com.bosssoft.ecds.controller;
 
 import com.bosssoft.ecds.response.CommonCode;
 import com.bosssoft.ecds.response.ResponseResult;
+import com.bosssoft.ecds.response.SignCode;
 import com.bosssoft.ecds.service.IStampService;
 import com.bosssoft.ecds.util.ResponseUtils;
 import com.netflix.hystrix.contrib.javanica.annotation.DefaultProperties;
@@ -45,9 +46,9 @@ public class StampController {
                                 HttpServletRequest request, HttpServletResponse response) throws Exception {
         boolean result = stampService.stamp(uploadFile, unitSignValue, financeSignValue, request, response);
         if (result){
-            return new ResponseResult(CommonCode.addEnum("STAMP-SUCCESS",true,10000,"成功盖章"));
+            return new ResponseResult(SignCode.STAMP_SUCCESS);
         } else {
-            return new ResponseResult(CommonCode.addEnum("STAMP-FAILURE",false,11111,"盖章失败，签名过期或签名错误"));
+            return new ResponseResult(SignCode.STAMP_FAILURE);
         }
     }
 
