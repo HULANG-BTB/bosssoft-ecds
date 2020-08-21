@@ -1,8 +1,10 @@
 package com.bosssoft.ecds.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bosssoft.ecds.dao.StockInDao;
+import com.bosssoft.ecds.entity.PageResult;
 import com.bosssoft.ecds.entity.constant.StockInChangeConstant;
 import com.bosssoft.ecds.entity.dto.*;
 import com.bosssoft.ecds.entity.po.FinanBillPo;
@@ -10,7 +12,8 @@ import com.bosssoft.ecds.entity.po.StockInChangePO;
 import com.bosssoft.ecds.entity.po.StockInItemPO;
 import com.bosssoft.ecds.entity.po.StockInPO;
 import com.bosssoft.ecds.entity.vo.CurrentBillNumberVO;
-import com.bosssoft.ecds.entity.vo.StockInForChangeVO;
+import com.bosssoft.ecds.entity.vo.StockInInfo;
+import com.bosssoft.ecds.entity.vo.StockInListVO;
 import com.bosssoft.ecds.service.FinanBillService;
 import com.bosssoft.ecds.service.StockInChangeService;
 import com.bosssoft.ecds.service.StockInItemService;
@@ -24,6 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -39,18 +43,18 @@ import java.util.List;
 @Service
 @Slf4j
 public class StockInServiceImpl extends ServiceImpl<StockInDao, StockInPO> implements StockInService {
-    @Autowired
-    private StockInChangeService stockInChangeService;
-    
-    @Autowired
-    private StockInItemService stockInItemService;
-    
     /**
      * 批量操作默认大小
      */
     private static final int BATCH_SIZE = 10000;
     @Autowired
+    private StockInChangeService stockInChangeService;
+    @Autowired
+    private StockInItemService stockInItemService;
+    @Autowired
     private FinanBillService finanBillService;
+    
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     
     /**
      * 获取当前业务号
@@ -64,31 +68,6 @@ public class StockInServiceImpl extends ServiceImpl<StockInDao, StockInPO> imple
         currentBillNumberVO.setNo(id);
         currentBillNumberVO.setNoString("NO." + id);
         return currentBillNumberVO;
-    }
-    
-    /**
-     * 获取未审核列表
-     *
-     * @return 未审核列表
-     */
-    @Override
-    public List<StockInForChangeVO> listUnChange() {
-        List<StockInForChangeVO> stockInForChangeVOS = new ArrayList<>();
-        StockInPO stockInPO = new StockInPO();
-        
-        // 设置查询条件为未审核
-        stockInPO.setChangeState(StockInChangeConstant.UN_CHANGE);
-        List<StockInPO> stockInPOList = list(new QueryWrapper<>(stockInPO));
-        
-        // 如果未审核的列表不为空，封装为对应的VO列表
-        if (stockInPOList.size() > 0) {
-            stockInPOList.forEach(item -> {
-                StockInForChangeVO stockInForChangeVO = new StockInForChangeVO();
-                BeanUtils.copyProperties(item, stockInForChangeVO);
-                stockInForChangeVOS.add(stockInForChangeVO);
-            });
-        }
-        return stockInForChangeVOS;
     }
     
     /**
@@ -208,14 +187,21 @@ public class StockInServiceImpl extends ServiceImpl<StockInDao, StockInPO> imple
         if (isLegal) {
             // 1.删除原入库单的入库明细
             removeStockInItemByPid(updateStockInDTO.getNo());
-            
+    
             // 2.写入新的入库明细
             AddStockInItemDTO[] addStockInItemDTOArray = updateStockInDTO.getAddStockInItemDTOArray();
             saveAddStockInItemDTO(addStockInItemDTOArray, updateStockInDTO.getNo());
-            
+    
             // 3.新增入库变动
             StockInChangePO changePO = convert(updateStockInDTO, updateStockInDTO.getNo(), StockInChangeConstant.UPDATE);
             stockInChangeService.save(changePO);
+    
+            // 4.修改入库单
+            StockInPO stockInPO = getById(updateStockInDTO.getNo());
+            BeanUtils.copyProperties(updateStockInDTO, stockInPO);
+            stockInPO.setId(stockInPO.getNo());
+            stockInPO.setChangeState(StockInChangeConstant.UN_CHANGE);
+            updateById(stockInPO);
             return true;
         }
         return false;
@@ -264,60 +250,65 @@ public class StockInServiceImpl extends ServiceImpl<StockInDao, StockInPO> imple
     }
     
     /**
-     * 检查票据段是否可用
+     * 分页查询入库单
      *
-     * @param checkStoreDTO 传入的DTO
-     * @return 票据段是否可用
+     * @param stockInPageDTO 查询条件
+     * @return 包含分页信息的入库单列表对象
      */
     @Override
-    public boolean checkStore(CheckStoreDTO checkStoreDTO) {
-        log.info(checkStoreDTO.toString());
+    public PageResult listVOPage(StockInPageDTO stockInPageDTO) {
+        // 创建分页条件
+        Page<StockInPO> page = new Page<>();
+        page.setCurrent(stockInPageDTO.getPage());
+        page.setSize(stockInPageDTO.getLimit());
         
-        List<LongPair> longPairs = getLongPairs(checkStoreDTO.getBillCode());
-        
-        log.info(longPairs.toString());
-        
-        if (longPairs.size() == 0) {
-            return true;
+        // 创建查询条件
+        QueryWrapper<StockInPO> stockInPOQueryWrapper = new QueryWrapper<>();
+        // 设置时间区间
+        if (stockInPageDTO.getStart() != null && stockInPageDTO.getEnd() != null) {
+            stockInPOQueryWrapper.between("f_date", stockInPageDTO.getStart(), stockInPageDTO.getEnd());
         }
+        // 设置其他查询条件
+        StockInPO stockInPO = new StockInPO();
+        BeanUtils.copyProperties(stockInPageDTO, stockInPO);
+        stockInPOQueryWrapper.setEntity(stockInPO);
         
-        Long start = checkStoreDTO.getStart();
-        Long end = checkStoreDTO.getEnd();
-        
-        log.info(start.toString() + "+++++++++++" + end.toString());
-        
-        // 判断传入的端点是否在已使用的票据段内
-        for (LongPair pair : longPairs) {
-            if (pair.contain(start) || pair.contain(end)) {
-                return false;
-            }
-        }
-        
-        return true;
+        // 构造结果对象
+        Page<StockInPO> resultPage = page(page, stockInPOQueryWrapper);
+        PageResult pageResult = new PageResult();
+        List<StockInListVO> stockInListVOS = new ArrayList<>();
+        page.getRecords().forEach(item -> {
+            StockInListVO stockInListVO = new StockInListVO();
+            BeanUtils.copyProperties(item, stockInListVO);
+            stockInListVO.setDate(sdf.format(item.getDate()));
+            stockInListVOS.add(stockInListVO);
+        });
+        pageResult.setRow(stockInListVOS);
+        pageResult.setTotal(page.getTotal());
+        pageResult.setLimit(page.getSize());
+        pageResult.setPage(page.getCurrent());
+        return pageResult;
     }
     
     /**
-     * 生成已使用票据段列表
+     * 根据id查询入库单详细信息
      *
-     * @param stockInItemCode
-     * @return
+     * @param id 入库单业务id
+     * @return 入库单详细信息
      */
-    private List<LongPair> getLongPairs(String stockInItemCode) {
-        List<LongPair> pairs = new ArrayList<>();
-        
-        StockInItemPO stockInItemPO = new StockInItemPO();
-        stockInItemPO.setBillCode(stockInItemCode);
-        List<StockInItemPO> list = stockInItemService.list(new QueryWrapper<>(stockInItemPO));
-        
-        if (list != null) {
-            list.forEach(item -> {
-                Long start = Long.parseLong(item.getBillNo1());
-                Long end = Long.parseLong(item.getBillNo2());
-                pairs.add(new LongPair(start, end));
-            });
-        }
-        
-        return pairs;
+    @Override
+    public StockInInfo getStockInInfo(Long id) {
+        StockInPO stockInPO = getById(id);
+        StockInInfo stockInInfo = new StockInInfo();
+        BeanUtils.copyProperties(stockInPO, stockInInfo);
+        List<AddStockInItemDTO> addStockInItemDTOS = new ArrayList<>();
+        listStockInItemsByPid(id).forEach(item -> {
+            AddStockInItemDTO addStockInItemDTO = new AddStockInItemDTO();
+            BeanUtils.copyProperties(item, addStockInItemDTO);
+            addStockInItemDTOS.add(addStockInItemDTO);
+        });
+        stockInInfo.setAddStockInItemDTOArray(addStockInItemDTOS.toArray(new AddStockInItemDTO[addStockInItemDTOS.size()]));
+        return stockInInfo;
     }
     
     /**
@@ -349,49 +340,9 @@ public class StockInServiceImpl extends ServiceImpl<StockInDao, StockInPO> imple
         return finanBillPo;
     }
     
-    /**
-     * 票据段辅助类
-     *
-     * @author cheng
-     * @Date 2020/8/13 16:26
-     */
-    private class LongPair {
-        /**
-         * 起始号
-         */
-        Long start;
-        
-        /**
-         * 终止号
-         */
-        Long end;
-        
-        LongPair() {
-        }
-        
-        LongPair(Long start, Long end) {
-            this.start = start;
-            this.end = end;
-        }
-        
-        /**
-         * 是否包含传入的票据号
-         *
-         * @param num 传入的票据号
-         * @return 是否包含
-         */
-        boolean contain(Long num) {
-            return (num >= start) && (num <= end);
-        }
-        
-        @Override
-        public String toString() {
-            return "LongPair[start: " + start + ", end: " + end + "]";
-        }
-    }
     
     /**
-     * 通过入库单ID逻辑删除相关的入库明细
+     * 辅助方法，通过入库单ID逻辑删除相关的入库明细
      *
      * @param id 入库单ID
      * @return 操作结果
@@ -405,7 +356,19 @@ public class StockInServiceImpl extends ServiceImpl<StockInDao, StockInPO> imple
     }
     
     /**
-     * 使用DTO对象写入入库明细
+     * 根据入库单id查找入库明细
+     *
+     * @param id 入库单id
+     * @return 明细列表
+     */
+    private List<StockInItemPO> listStockInItemsByPid(Long id) {
+        QueryWrapper<StockInItemPO> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("f_pid", id);
+        return stockInItemService.list(queryWrapper);
+    }
+    
+    /**
+     * 辅助方法，使用DTO对象写入入库明细
      *
      * @param addStockInItemDTOArray DTO数组
      * @param pid                    入库单ID
@@ -428,7 +391,7 @@ public class StockInServiceImpl extends ServiceImpl<StockInDao, StockInPO> imple
     }
     
     /**
-     * 转化为StockInChangePO对象
+     * 辅助方法，转化为StockInChangePO对象
      *
      * @param stockInDTO 传入的DTO
      * @param id         操作业务号
@@ -443,6 +406,5 @@ public class StockInServiceImpl extends ServiceImpl<StockInDao, StockInPO> imple
         stockInChangePO.setBussId(id);
         return stockInChangePO;
     }
-    
     
 }
