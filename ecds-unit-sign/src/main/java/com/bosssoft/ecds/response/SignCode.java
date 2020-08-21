@@ -36,8 +36,8 @@ public enum SignCode implements ResultCode{
     /**
      * 证书失效或非法
      */
-    CERT_E(false,11185,"证书非法或失效"),
-    ;
+    CERT_E(false,11185,"证书非法或失效");
+
     /**
      * 操作是否成功
      */
