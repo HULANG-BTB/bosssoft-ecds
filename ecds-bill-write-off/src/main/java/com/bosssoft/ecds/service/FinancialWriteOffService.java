@@ -24,6 +24,10 @@ public interface FinancialWriteOffService {
     // 存入审验结果
     boolean setResult(WriteOffDetailDTO writeOffDetailDTO, WriteOffResultDTO writeOffResultDTO);
 
+    // 存入审验结果
+    boolean setResult(WriteOffResultDTO writeOffResultDTO);
+
+
     // 获取核销申请详细信息
     WriteOffDetailDTO getDetail(String fPid);
 
