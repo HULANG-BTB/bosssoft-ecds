@@ -26,7 +26,8 @@ public class SignUtil {
      */
     public static String signData(String summary, PrivateKey privateKey, AlgorithmType algorithmType,StringType stringType) throws Exception {
         // 根据签名算法，获取签名实例
-        Signature signture = Signature.getInstance(algorithmType.getsignatureAlgorithmType());
+        Signature signture = null;
+        signture = Signature.getInstance(algorithmType.getsignatureAlgorithmType());
         signture.initSign(privateKey);
         // 对数据进行签名
         signture.update(summary.getBytes());
@@ -44,7 +45,7 @@ public class SignUtil {
      * @param stringType 签名编码类型
      * @return 签名是否正确
      */
-    public static boolean verifySign(String summary, String signValue, PublicKey publicKey, AlgorithmType algorithmType,StringType stringType) throws InvalidKeyException,SignatureException,NoSuchAlgorithmException, DecoderException {
+    public static boolean verifySign(String summary, String signValue, PublicKey publicKey, AlgorithmType algorithmType,StringType stringType) throws SignatureException, InvalidKeyException,NoSuchAlgorithmException, DecoderException {
         Signature signature = Signature.getInstance(algorithmType.getsignatureAlgorithmType());
         // 签名初始化公钥，即使用CA公钥解密
         signature.initVerify(publicKey);

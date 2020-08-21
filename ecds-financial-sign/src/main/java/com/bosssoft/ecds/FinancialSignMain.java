@@ -6,12 +6,13 @@ import org.springframework.cloud.client.SpringCloudApplication;
 /**
  * @author LiDaShan
  * @Version 1.0
- * @Date 2020/8/10
+ * @Date 2020/8/13
  * @Content:
  */
 @SpringCloudApplication
-public class UnitSignMain {
+public class FinancialSignMain {
 
-    public static void main(String[] args) { SpringApplication.run(UnitSignMain.class);
+    public static void main(String[] args) {
+        SpringApplication.run(FinancialSignMain.class);
     }
 }
