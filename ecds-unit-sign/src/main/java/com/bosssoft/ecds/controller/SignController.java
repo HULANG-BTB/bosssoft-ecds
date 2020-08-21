@@ -1,6 +1,7 @@
 package com.bosssoft.ecds.controller;
 
 import com.bosssoft.ecds.dto.SignedDataDto;
+import com.bosssoft.ecds.exception.ExceptionCatch;
 import com.bosssoft.ecds.response.CommonCode;
 import com.bosssoft.ecds.response.QueryResponseResult;
 import com.bosssoft.ecds.response.ResponseResult;
@@ -34,7 +35,7 @@ import java.security.cert.CertificateException;
 @Api("签名与验签控制器，提供签名与验签")
 @RestController
 @DefaultProperties(defaultFallback = "fallBackToProtect",
-        commandProperties = {@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds",value = "5000000")},
+        commandProperties = {@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds",value = "5000")},
         ignoreExceptions = Exception.class)
 public class SignController {
 
@@ -49,7 +50,7 @@ public class SignController {
      */
     @PostMapping("/sign")
     @ApiOperation("签名")
-    @HystrixCommand(defaultFallback = "fallBack2")
+    @HystrixCommand(defaultFallback = "fallBack2",ignoreExceptions = Exception.class)
     public QueryResponseResult sign(@ApiParam("需要签名的票据信息") String data) throws Exception {
         SignedDataDto signedDataDto = signService.sign(data);
         return new QueryResponseResult(CommonCode.SUCCESS, signedDataDto);
@@ -83,6 +84,6 @@ public class SignController {
      * @return
      */
     public QueryResponseResult fallBack2(){
-        return new QueryResponseResult(CommonCode.SUCCESS, null);
+        return new QueryResponseResult(CommonCode.SERVER_ERROR, null);
     }
 }
