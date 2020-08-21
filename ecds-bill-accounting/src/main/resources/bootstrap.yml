@@ -7,8 +7,13 @@ spring:
         server-addr: 49.234.75.113:8848
         file-extension: yml
         prefix: bill-accounting
-        group: DEFAULT_GROUP
+        ext‐config:
+          - data‐id: redis-server-dev.yaml
+            group: DEFAULT_GROUP
+            refresh: true
       discovery:
         server-addr: 49.234.75.113:8848
   profiles:
     active: dev
+server:
+  port: 8002

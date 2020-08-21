@@ -104,7 +104,7 @@ public class VoucherServiceImpl extends ServiceImpl<VoucherDao, VoucherPO> imple
             queryWrapper.eq(VoucherPO.F_ACCOUNT_TYPE,pageDTO.getAccountType());
         }
         //keyword为空代表查询全部
-        if(pageDTO.getKeyword().equals("")||pageDTO.getKeyword().equals("null")||pageDTO.getKeyword()==null){
+        if(pageDTO.getKeyword()==""||pageDTO.getKeyword()=="null"||pageDTO.getKeyword()==null){
             //不对queryWrapper进行任何修改
         }else{
             //模糊查询
@@ -122,7 +122,7 @@ public class VoucherServiceImpl extends ServiceImpl<VoucherDao, VoucherPO> imple
                     .like(VoucherPO.F_AGEN_NAME,pageDTO.getKeyword());
         }
         //降序排序
-        if(pageDTO.getSort().equals("+accountId")){
+        if(pageDTO.getSort() == "+accountId"){
             queryWrapper.orderByAsc(VoucherPO.F_ACCOUNT_ID);
         }else {
             queryWrapper.orderByDesc(VoucherPO.F_ACCOUNT_ID);

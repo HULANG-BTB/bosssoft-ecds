@@ -30,7 +30,7 @@ import java.util.List;
  * @since 2020-08-10
  */
 @RestController
-@RequestMapping("/ecds-bill-accounting/account")
+@RequestMapping("/account")
 @Api(tags = "基础入帐信息交互")
 @Slf4j
 public class CbillAccountingController {
