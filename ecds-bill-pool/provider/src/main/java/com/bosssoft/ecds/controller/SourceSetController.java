@@ -2,9 +2,6 @@ package com.bosssoft.ecds.controller;
 
 import com.bosssoft.ecds.entity.dto.SourceSetDto;
 import com.bosssoft.ecds.entity.vo.SourceSetVo;
-import com.bosssoft.ecds.response.CommonCode;
-import com.bosssoft.ecds.response.QueryResponseResult;
-import com.bosssoft.ecds.response.ResponseResult;
 import com.bosssoft.ecds.service.SourceSetService;
 import com.bosssoft.ecds.utils.BeanUtils;
 import io.swagger.annotations.Api;
@@ -31,48 +28,20 @@ public class SourceSetController {
     @Resource
     SourceSetService sourceSetService;
 
-    @PostMapping("/setSource")
-    public ResponseResult setSource(@RequestBody @Valid SourceSetDto sourceSetDto) {
-        return sourceSetService.updateSet(sourceSetDto) > 0 ?
-                new ResponseResult(true, 10000, "设置票据池成功") :
-//                new ResponseResult(CommonCode.SUCCESS):
-                new ResponseResult(CommonCode.SERVER_ERROR);
+    @RequestMapping(value = "/setSource", method = RequestMethod.GET)
+    public int setSource(@RequestBody @Valid SourceSetDto sourceSetDto) {
+        return sourceSetService.updateSet(sourceSetDto);
     }
 
-    @PostMapping("/addSource")
-    public ResponseResult addSource(@RequestBody @Valid SourceSetDto sourceSetDto) {
-        return sourceSetService.updateSet(sourceSetDto) > 0 ?
-                new ResponseResult(true, 10000, "创建票据池成功") :
-//                new ResponseResult(CommonCode.SUCCESS):
-                new ResponseResult(CommonCode.SERVER_ERROR);
-    }
-
-    @PostMapping("/removeSource")
-    public ResponseResult removeSource(@RequestBody @Valid SourceSetDto sourceSetDto) {
-        return sourceSetService.updateSet(sourceSetDto) > 0 ?
-                new ResponseResult(true, 10000, "修改票据池状态成功") :
-//                new ResponseResult(CommonCode.SUCCESS):
-                new ResponseResult(CommonCode.SERVER_ERROR);
-    }
-
-    /**
-     * 获取
-     * @return
-     */
-    @GetMapping("/retrieveSetList")
-    public ResponseResult retrieveSetList() {
+    @RequestMapping(value = "/retrieveSetList", method = RequestMethod.GET)
+    public List<SourceSetVo> retrieveSetList() {
         List<SourceSetVo> list = BeanUtils.convertList(sourceSetService.retrieveSetList(), SourceSetVo.class);
-        return list != null ?
-                new QueryResponseResult<>(CommonCode.SUCCESS, list) :
-                new ResponseResult(CommonCode.FAIL);
-
+        return list;
     }
 
     @RequestMapping(value = "/retrieveSetByCode", method = RequestMethod.GET)
-    public ResponseResult retrieveSetByCode(@RequestParam @Valid @Length(min = 8, max = 8, message = "票号编码不规范") String billTypeCode) {
+    public SourceSetVo retrieveSetByCode(@RequestParam @Valid @Length(min = 8, max = 8, message = "票号编码不规范") String billTypeCode) {
         SourceSetVo sourceSetVo = BeanUtils.convertObject(sourceSetService.retrieveSetByCode(billTypeCode), SourceSetVo.class);
-        return sourceSetVo != null ?
-                new QueryResponseResult<>(CommonCode.SUCCESS, sourceSetVo) :
-                new ResponseResult(CommonCode.FAIL);
+        return sourceSetVo;
     }
 }
