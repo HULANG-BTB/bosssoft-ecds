@@ -2,6 +2,7 @@ package com.bosssoft.ecds.service.imp;
 
 import com.bosssoft.ecds.dao.BillDao;
 import com.bosssoft.ecds.entity.dto.BillDto;
+import com.bosssoft.ecds.entity.dto.ExportBillDto;
 import com.bosssoft.ecds.entity.dto.RetrieveBillDto;
 import com.bosssoft.ecds.entity.po.BillPo;
 import com.bosssoft.ecds.entity.vo.BillVo;
@@ -17,7 +18,10 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -46,14 +50,14 @@ public class BillServiceImpl implements BillService {
     FanoutRabbitUtils fanoutRabbitUtils;
 
     @Override
-    public List retrieveBill(RetrieveBillDto retrieveBillDto) {
+    public ExportBillDto retrieveBill(RetrieveBillDto retrieveBillDto) {
 
         int remainderBill;
         int deleteNumber = 0;
         boolean isLock;
-        List<BillPo> billPoList = new LinkedList<>();
-        List<BillVo> billVoList = new LinkedList<>();
-        List<Integer> deleteList = new LinkedList<>();
+        List<BillPo> billPoList = new ArrayList<>();
+        List<BillVo> billVoList;
+        List<Integer> deleteList = new ArrayList<>();
 
         String table = (String) redisTemplate.opsForHash().get(retrieveBillDto.getBillTypeCode(), "table");
 
@@ -64,6 +68,7 @@ public class BillServiceImpl implements BillService {
             isLock = redLock.tryLock(100L, 10L, TimeUnit.SECONDS);
 
             if (isLock) {
+                logger.info(redisTemplate.opsForHash().entries("remainderBill").toString());
                 remainderBill = (int) redisTemplate.opsForHash().get("remainderBill", retrieveBillDto.getBillTypeCode());
 
                 if (remainderBill < retrieveBillDto.getNumber()) {
@@ -89,11 +94,11 @@ public class BillServiceImpl implements BillService {
             redLock.unlock();
         }
 
+        ExportBillDto exportBillDto = new ExportBillDto(retrieveBillDto.getBillTypeCode(),
+                Long.parseLong(billPoList.get(0).getBillCode()), Long.parseLong(billPoList.get(billPoList.size() - 1).getBillCode()));
         logger.info(deleteNumber + "张票据已出库");
 
-        billVoList = BeanUtils.convertList(billPoList, BillVo.class);
-
-        return billVoList;
+        return exportBillDto;
     }
 
     @Override
@@ -138,6 +143,7 @@ public class BillServiceImpl implements BillService {
         } finally {
             redLock.unlock();
         }
+        logger.info("插入" + createNumber + "个票号");
         return createNumber;
     }
 

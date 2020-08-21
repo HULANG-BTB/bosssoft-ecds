@@ -80,11 +80,12 @@
         <result column="f_bill_type" property="billTypeCode"/>
         <result column="f_pool" property="table"/>
         <result column="f_min_stock" property="threshold"/>
+        <result column="f_push_num" property="pushNumber"/>
     </resultMap>
 
     <select id="retrieveSourceMessageList" resultMap="sourceMessageMap">
-        select u.f_bill_type, u.f_min_stock, b.f_pool from uaa_set_ticketcenter u left join f_bill_pool b
-        on u.f_bill_type = b.f_bill_type
+        select u.f_bill_type, u.f_min_stock, u.f_push_num, b.f_pool from uaa_set_ticketcenter u left join f_bill_pool b
+        on u.f_bill_type = b.f_bill_type where u.f_enable = 1
     </select>
 
     <select id="retrieveSourceMessageByCode" resultMap="sourceMessageMap">

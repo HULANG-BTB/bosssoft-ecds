@@ -2,12 +2,26 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <parent>
+        <artifactId>ecds</artifactId>
+        <groupId>com.bosssoft</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.bosssoft</groupId>
-    <artifactId>ecds</artifactId>
+<<<<<<< HEAD
+    <parent>
+        <groupId>com.bosssoft</groupId>
+        <artifactId>ecds</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+=======
+>>>>>>> b31fb30f68a0705a00cce1fb9893499edf62e0d3
     <packaging>pom</packaging>
-    <version>1.0-SNAPSHOT</version>
+    <artifactId>ecds-bill-pool</artifactId>
 
     <properties>
         <java.version>1.8</java.version>
@@ -18,17 +32,23 @@
         <module>provider</module>
     </modules>
 
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.2.8.RELEASE</version>
-        <relativePath/> <!-- lookup parent from repository -->
-    </parent>
     <dependencies>
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <version>2.3.2.RELEASE</version>
+        </dependency>
+
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -61,6 +81,7 @@
             <artifactId>spring-boot-starter-log4j2</artifactId>
             <version>2.3.2.RELEASE</version>
         </dependency>
+
     </dependencies>
 
     <dependencyManagement>
@@ -75,12 +96,4 @@
         </dependencies>
     </dependencyManagement>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
 </project>

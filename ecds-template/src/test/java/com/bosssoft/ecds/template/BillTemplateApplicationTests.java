@@ -9,5 +9,4 @@ class BillTemplateApplicationTests {
     @Test
     void contextLoads() {
     }
-
 }
