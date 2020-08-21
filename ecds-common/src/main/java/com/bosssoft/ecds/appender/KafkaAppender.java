@@ -1,9 +1,9 @@
 package com.bosssoft.ecds.appender;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
-import ch.qos.logback.classic.spi.LoggingEvent;
 import ch.qos.logback.core.AppenderBase;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
@@ -16,6 +16,7 @@ import java.util.Properties;
  * @author wuliming
  * @date 2020-07-22 13:49
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Slf4j
 public class KafkaAppender extends AppenderBase<ILoggingEvent> {
@@ -70,7 +71,7 @@ public class KafkaAppender extends AppenderBase<ILoggingEvent> {
     @Override
     protected void append(ILoggingEvent eventObject) {
         String msg = eventObject.getFormattedMessage();
-        String result =msg.substring(0,msg.length()-1)+",applicatinoName: \""+applicationName+"\"";
+        String result =msg.substring(0,msg.length()-1)+",\"applicatinoName\": \""+applicationName+"\""+"}";
         log.debug("向kafka推送日志开始:" + msg);
         ProducerRecord<String, String> record = new ProducerRecord<>(logTopic, result);
         producer.send(record);
