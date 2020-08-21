@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bosssoft.ecds.dao.BillWarnArchiveDao">
+    <!--归档预警记录-->
+    <select id="queryBillWarnInfos" resultType="com.bosssoft.ecds.entity.po.BillWarnArchivePO">
+        SELECT
+            f_omonitor_code as agenCode,
+            f_create_time as mntTime,
+            f_evt_name as evtName,
+            f_mnt_cont as mntCont,
+            f_is_hndl as isHndl,
+            f_hndl_name as hndlName,
+            f_hndl_time as hndlTime
+        FROM fab_monitor_record
+        WHERE date_format(f_create_time, '%Y-%m-%d') = date_format(date_sub(SYSDATE(), interval 1 day), '%Y-%m-%d')
+    </select>
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.bosssoft.ecds.entity.po.BillWarnArchivePO">
+        <id column="f_id" property="id"/>
+        <result column="f_agen_code" property="agenCode"/>
+        <result column="f_mnt_time" property="mntTime"/>
+        <result column="f_mnt_cont" property="mntCont"/>
+        <result column="f_evt_name" property="evtName"/>
+        <result column="f_is_hndl" property="isHndl"/>
+        <result column="f_hndl_name" property="hndlName"/>
+        <result column="f_create_time" property="createTime"/>
+        <result column="f_update_time" property="updateTime"/>
+        <result column="f_operator_id" property="operatorId"/>
+        <result column="f_operator" property="operator"/>
+        <result column="f_version" property="version"/>
+        <result column="f_logic_delete" property="logicDelete"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        f_id, f_agen_code, f_mnt_time, f_mnt_cont, f_evt_name, f_is_hndl, f_hndl_name, f_create_time, f_update_time, f_operator_id, f_operator, f_version, f_logic_delete
+    </sql>
+
+</mapper>
