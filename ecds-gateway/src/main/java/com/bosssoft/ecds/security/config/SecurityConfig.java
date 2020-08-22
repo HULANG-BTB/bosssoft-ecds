@@ -55,11 +55,12 @@ public class SecurityConfig {
     CustomReactiveAuthorizationManager customReactiveAuthorizationManager;
 
     @Autowired
-    CustomRedirectServerLogoutSuccessHandler customRedirectServerLogoutSuccessHandler;
+    CustomLogoutSuccessHandler CustomLogoutSuccessHandler;
 
     private static final String[] excludedAuthPages = {
             "/user/login",
-            "/user/logout"
+            "/user/logout",
+            "/pay/**"
     };
 
     /**
@@ -91,7 +92,7 @@ public class SecurityConfig {
                 .accessDeniedHandler(customAuthenticationAccessDeniedHandler)
                 .authenticationEntryPoint(customServerAuthenticationEntryPoint);
 
-        http.logout().logoutUrl("/user/logout").logoutSuccessHandler(customRedirectServerLogoutSuccessHandler);
+        http.logout().logoutUrl("/user/logout").logoutSuccessHandler(CustomLogoutSuccessHandler);
 
         return http.build();
     }

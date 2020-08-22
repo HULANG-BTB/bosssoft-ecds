@@ -9,7 +9,7 @@ spring:
     nacos:
       discovery:
         server-addr: 49.234.212.41:8848
-        ip: 47.97.155.84
+        ip: ${client:} # 指定指定客户端IP
       config:
         server-addr: 49.234.212.41:8848
         file-extension: yaml
