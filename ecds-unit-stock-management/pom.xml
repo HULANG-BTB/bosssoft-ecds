@@ -98,7 +98,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-amqp</artifactId>
             <version>2.2.2.RELEASE</version>
-			</dependency>
+        </dependency>
 
         <dependency>
             <groupId>net.sf.dozer</groupId>

@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: ecds-billpool
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 49.234.75.113
+      config:
+        server-addr: 49.234.75.113
+        file-extension: yaml
+        prefix: nacos-provider
+  profiles:
+    active: dev

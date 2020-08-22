@@ -1,0 +1,35 @@
+spring:
+  #  先不注册服务，本地调试，最后发布在注册，只使用配置中心
+  application:
+    name: ecds-base
+  cloud:
+    nacos:
+      config:
+        server-addr: 49.234.75.113:8848
+        file-extension: yaml
+        prefix: base-datasource
+        ext‐config:
+        - data‐id: redis-server-dev.yaml
+          group: DEFAULT_GROUP
+          refresh: true
+      #  先不注册服务，调试时候本地调试，最后发布在注册
+      discovery:
+        server-addr: 49.234.75.113:8848
+  profiles:
+    active: dev
+server:
+  port: 8001
+
+
+
+
+
+
+
+
+
+
+
+
+
+

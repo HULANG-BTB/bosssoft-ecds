@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bosssoft.ecds.dao.GroupItemDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.bosssoft.ecds.entity.po.GroupItemPO">
+        <id column="f_id" property="id"/>
+        <result column="f_group_code" property="groupCode"/>
+        <result column="f_item_code" property="itemCode"/>
+        <result column="f_operator" property="operator"/>
+        <result column="f_operator_id" property="operatorId"/>
+        <result column="f_create_time" property="createTime"/>
+        <result column="f_update_time" property="updateTime"/>
+        <result column="f_version" property="version"/>
+        <result column="f_note" property="note"/>
+    </resultMap>
+
+    <resultMap id="ItemResultMap" type="com.bosssoft.ecds.entity.po.ItemPO">
+        <id column="f_id" property="id" />
+        <result column="f_rgn_id" property="rgnId" />
+        <result column="f_item_id" property="itemId" />
+        <result column="f_item_name" property="itemName" />
+        <result column="f_item_sort_id" property="itemSortId" />
+        <result column="f_mnen" property="mnen" />
+        <result column="f_item_effdate" property="itemEffdate" />
+        <result column="f_item_expdate" property="itemExpdate" />
+        <result column="f_effdate" property="effdate" />
+        <result column="f_expdate" property="expdate" />
+        <result column="f_isenable" property="isenable" />
+        <result column="f_incom_sort_code" property="incomSortCode" />
+        <result column="f_fundsnature_code" property="fundsnatureCode" />
+        <result column="f_subject" property="subject" />
+        <result column="f_paymode" property="paymode" />
+        <result column="f_operator" property="operator" />
+        <result column="f_operator_id" property="operatorId" />
+        <result column="f_create_time" property="createTime" />
+        <result column="f_update_time" property="updateTime" />
+        <result column="f_logic_delete" property="logicDelete" />
+        <result column="f_version" property="version" />
+        <result column="f_note" property="note" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        f_id, f_group_code, f_item_code, f_operator, f_operator_id, f_create_time, f_update_time, f_version, f_note
+    </sql>
+
+    <select id="getItemInfo" resultMap="ItemResultMap">
+        select *
+        from ecds_financial.fab_item
+        where f_item_id = #{itemCode} and f_logic_delete = 0
+    </select>
+
+</mapper>

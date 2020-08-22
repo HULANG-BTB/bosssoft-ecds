@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bosssoft.ecds.msg.mapper.MailMapper">
+  <resultMap id="BaseResultMap" type="com.bosssoft.ecds.msg.entity.po.MailPo">
+    <!--@mbg.generated-->
+    <!--@Table fbe_stock_mail-->
+    <id column="f_mail_id" jdbcType="BIGINT" property="id" />
+    <result column="f_mail_from" jdbcType="VARCHAR" property="mailFrom" />
+    <result column="f_mail_to" jdbcType="VARCHAR" property="mailTo" />
+    <result column="f_mail_subject" jdbcType="VARCHAR" property="subject" />
+    <result column="f_mail_content" jdbcType="LONGVARCHAR" property="content" />
+    <result column="f_mail_sentdate" jdbcType="TIMESTAMP" property="sentDate" />
+    <result column="f_mail_is_sent" jdbcType="BOOLEAN" property="isSent" />
+    <result column="f_mail_error" jdbcType="LONGVARCHAR" property="error" />
+    <result column="f_create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="f_update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="f_oper_id" jdbcType="INTEGER" property="operatorId" />
+    <result column="f_operator" jdbcType="VARCHAR" property="operator" />
+    <result column="f_version" jdbcType="BIGINT" property="version" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    f_mail_id, f_mail_from, f_mail_to, f_mail_subject, f_mail_content, f_mail_sentDate,
+    f_mail_is_sent, f_mail_error, f_create_time, f_update_time, f_oper_id, f_operator,f_version
+  </sql>
+</mapper>

@@ -43,6 +43,7 @@
         <!--    单位签名    -->
         <module>ecds-unit-sign</module>
         <module>ecds-common</module>
+        <module>ecds-encryption</module>
     </modules>
 
     <packaging>pom</packaging>
@@ -53,7 +54,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <junit.version>4.12</junit.version>
+            <junit.version>4.12</junit.version>
         <lombok.version>1.18.12</lombok.version>
         <log4j.version>1.2.17</log4j.version>
         <mysql.version>8.0.20</mysql.version>
@@ -61,7 +62,7 @@
         <mybatis.spring.boot.version>2.1.3</mybatis.spring.boot.version>
         <mybatis-plus.version>3.3.0</mybatis-plus.version>
         <hutool.version>5.3.10</hutool.version>
-        <swagger.version>2.6.0</swagger.version>
+        <swagger.version>2.9.2</swagger.version>
     </properties>
 
     <!-- 一般用在顶层的父pom中，maven会沿着父子层向上走，一直找的这个标签
@@ -151,12 +152,12 @@
         </dependencies>
     </dependencyManagement>
 
-
     <build>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>2.2.2.RELEASE</version>
                 <configuration>
                     <fork>true</fork>
                     <addResources>true</addResources>
@@ -164,5 +165,6 @@
             </plugin>
         </plugins>
     </build>
+
 
 </project>

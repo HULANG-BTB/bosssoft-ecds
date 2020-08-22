@@ -15,7 +15,7 @@ spring:
     username: guest
     password: guest
   profiles:
-    active: zw
+    active: zdh
 
 server:
   port: 8080
