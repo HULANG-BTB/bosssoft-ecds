@@ -9,6 +9,7 @@ import com.bosssoft.ecds.dao.UserDao;
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.dto.UserDTO;
 import com.bosssoft.ecds.entity.po.RolePO;
+import com.bosssoft.ecds.entity.po.RolePermissionPO;
 import com.bosssoft.ecds.entity.po.UserPO;
 import com.bosssoft.ecds.entity.po.UserRolePO;
 import com.bosssoft.ecds.service.UserService;
@@ -18,7 +19,9 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -93,25 +96,61 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserPO> implements Use
         UserPO userPO = super.getById(userDTO.getId());
         MyBeanUtil.copyProperties(userDTO, userPO);
 
+        // 更新用户信息
+        boolean update = this.updateById(userPO);
+
         // 获得请求中的角色列表
         List<RolePO> newRoleList = MyBeanUtil.copyListProperties(userDTO.getRoles(), RolePO.class);
 
-        // 删除所有原来有的角色列表
+        // 数据库读取已经有的角色列表
         QueryWrapper<UserRolePO> userRolePOQueryWrapper = new QueryWrapper<>();
-        userRolePOQueryWrapper.eq(UserRolePO.F_USER_ID, userDTO.getId());
-        boolean remove = userRoleService.remove(userRolePOQueryWrapper);
+        userRolePOQueryWrapper.eq(UserRolePO.F_USER_ID, userPO.getId());
+        List<UserRolePO> userRolePOList = userRoleService.list(userRolePOQueryWrapper);
 
-        // 添加新的角色列表
-        List<UserRolePO> userRoleList = new ArrayList<>();
-        for (RolePO rolePO : newRoleList) {
-            UserRolePO userRolePO = new UserRolePO();
-            userRolePO.setUserId(userDTO.getId());
-            userRolePO.setRoleId(rolePO.getId());
-            userRoleList.add(userRolePO);
+        Map<Long, Integer> longIntegerHashMap = new HashMap<>();
+
+        // 原来已经有的列表 标记为1
+        for (UserRolePO userRolePO : userRolePOList) {
+            longIntegerHashMap.put(userRolePO.getId(), 1);
         }
-        boolean save = userRoleService.saveBatch(userRoleList);
 
-        return save && remove;
+        // 新加入的列表中 设置标识 +2
+        for (RolePO rolePO : newRoleList) {
+            Integer count = longIntegerHashMap.get(rolePO.getId());
+            if (count == null) {
+                longIntegerHashMap.put(rolePO.getId(), 2);
+            } else {
+                longIntegerHashMap.put(rolePO.getId(), 3);
+            }
+        }
+
+        List<Long> removeList = new ArrayList<>();
+        List<UserRolePO> insertList = new ArrayList<>();
+
+        for (Long roleId : longIntegerHashMap.keySet()) {
+            Integer count = longIntegerHashMap.get(roleId);
+            if (count == 1) {
+                removeList.add(roleId);
+            } else if (count == 2) {
+                UserRolePO userRolePO = new UserRolePO();
+                userRolePO.setUserId(userPO.getId());
+                userRolePO.setRoleId(roleId);
+                insertList.add(userRolePO);
+            }
+        }
+
+        // 批量添加新的权限列表
+        if (insertList.size() > 0) {
+            userRoleService.saveBatch(insertList);
+        }
+        // 批量删除移除的权限列表
+        if (removeList.size() > 0) {
+            QueryWrapper<UserRolePO> removeQueryWrapper = new QueryWrapper<>();
+            removeQueryWrapper.in(RolePermissionPO.F_PERMISSION_ID, removeList).eq(UserRolePO.F_USER_ID, userPO.getId());
+            userRolePOList.remove(removeQueryWrapper);
+        }
+
+        return update;
     }
 
     /**

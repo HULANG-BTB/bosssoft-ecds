@@ -34,5 +34,7 @@
             `user_role`.`f_user_id` = #{id}
             AND
             `role`.`f_logic_delete` = 0
+            AND
+            `user_role`.`f_logic_delete` = 0
     </select>
 </mapper>

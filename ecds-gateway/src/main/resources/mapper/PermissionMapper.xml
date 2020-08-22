@@ -38,6 +38,10 @@
             `user_role`.`f_user_id` = #{id}
             AND
             `permission`.`f_logic_delete` = 0
+            AND
+            `user_role`.`f_logic_delete` = 0
+            AND
+            `role_permission`.`f_logic_delete` = 0
     </select>
 
 </mapper>
