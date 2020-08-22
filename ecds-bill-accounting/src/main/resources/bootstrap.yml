@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: ecds-bill-accounting
+  cloud:
+    nacos:
+      config:
+        file-extension: yml
+        prefix: bill-accounting
+        server-addr: 49.234.212.41:8848
+        extension-configs[x]:
+          - data‐id: redis-server-dev.yaml
+                      group: DEFAULT_GROUP
+                      refresh: true
+      discovery:
+        server-addr: 49.234.212.41:8848
+        ip: 140.143.14.147
+        port: 8080
+  profiles:
+    active: dev
+ #profiles:
+   #active:prod

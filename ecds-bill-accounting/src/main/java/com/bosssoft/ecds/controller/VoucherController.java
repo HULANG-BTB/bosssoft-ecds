@@ -1,12 +1,12 @@
 package com.bosssoft.ecds.controller;
 
 
-import com.bosssoft.ecds.common.response.QueryResponseResult;
-import com.bosssoft.ecds.common.response.ResponseResult;
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.dto.VoucherDTO;
 import com.bosssoft.ecds.entity.vo.PageVO;
 import com.bosssoft.ecds.entity.vo.VoucherVO;
+import com.bosssoft.ecds.response.QueryResponseResult;
+import com.bosssoft.ecds.response.ResponseResult;
 import com.bosssoft.ecds.service.VoucherService;
 import com.bosssoft.ecds.utils.MyBeanUtil;
 import io.swagger.annotations.Api;
@@ -27,7 +27,7 @@ import java.util.List;
  * @since 2020-08-10
  */
 @RestController
-@RequestMapping("/api/voucher")
+@RequestMapping("/ecds-bill-accounting/voucher")
 @Api(tags = "电子凭证")
 public class VoucherController {
     @Autowired
