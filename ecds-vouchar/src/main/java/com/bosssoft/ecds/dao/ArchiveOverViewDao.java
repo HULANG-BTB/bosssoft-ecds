@@ -48,5 +48,6 @@ public interface ArchiveOverViewDao extends BaseMapper<ArchivePO> {
      *
      * @return 数量
      */
+    //@Cacheable(cacheNames = "allTotal")
     Long countInfo();
 }

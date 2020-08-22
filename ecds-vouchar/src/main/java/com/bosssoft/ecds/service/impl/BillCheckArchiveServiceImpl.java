@@ -3,6 +3,7 @@ package com.bosssoft.ecds.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.bosssoft.ecds.common.exception.MyExceptionCode;
 import com.bosssoft.ecds.dao.BillCheckArchiveDao;
 import com.bosssoft.ecds.entity.dto.BillCheckDTO;
 import com.bosssoft.ecds.entity.dto.CBillAccountingDTO;
@@ -11,13 +12,13 @@ import com.bosssoft.ecds.entity.po.ArchivePO;
 import com.bosssoft.ecds.entity.po.BillCheckArchivePO;
 import com.bosssoft.ecds.entity.po.CbillAccountingPO;
 import com.bosssoft.ecds.entity.query.CommonQuery;
+import com.bosssoft.ecds.exception.ExceptionCast;
 import com.bosssoft.ecds.service.ArchiveOverViewService;
 import com.bosssoft.ecds.service.BillCheckArchiveService;
 import com.bosssoft.ecds.utils.MyBeanUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 
 import java.util.HashMap;
 import java.util.List;
@@ -80,7 +81,9 @@ public class BillCheckArchiveServiceImpl extends ServiceImpl<BillCheckArchiveDao
          * 获取各个公司一定时间内的审核信息
          */
         List<CbillAccountingPO> list = billCheckArchiveDao.collectCBillAccountInfo();
-        Assert.notNull(list, "list为空！！");
+        if (list == null || list.isEmpty()) {
+            ExceptionCast.cast(MyExceptionCode.DATE_EMPTY);
+        }
         /*
          * 信息整理  更新
          */
@@ -89,8 +92,6 @@ public class BillCheckArchiveServiceImpl extends ServiceImpl<BillCheckArchiveDao
         /*
          * 各个公司的票据不同阶段的数量
          */
-        Assert.notEmpty(list, "公司的审核信息为空！");
-
         log.info(" " + list);
         list.forEach(
                 item -> {
@@ -127,7 +128,9 @@ public class BillCheckArchiveServiceImpl extends ServiceImpl<BillCheckArchiveDao
          * 读取各公司原来的信息
          */
         List<ArchivePO> infos = archiveOverViewService.list();
-        Assert.notEmpty(infos, "归档对象不为空");
+        if (infos == null || infos.isEmpty()) {
+            ExceptionCast.cast(MyExceptionCode.DATE_EMPTY);
+        }
         infos.forEach(
                 item -> {
                     /*

@@ -1,10 +1,12 @@
 package com.bosssoft.ecds.controller;
 
-import com.bosssoft.ecds.common.response.R;
 import com.bosssoft.ecds.entity.dto.ItemAvailableDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.query.CommonQuery;
 import com.bosssoft.ecds.entity.vo.ItemAvailableVO;
+import com.bosssoft.ecds.entity.vo.PageVO;
+import com.bosssoft.ecds.response.CommonCode;
+import com.bosssoft.ecds.response.QueryResponseResult;
 import com.bosssoft.ecds.service.ItemArchiveService;
 import com.bosssoft.ecds.utils.MyBeanUtil;
 import io.swagger.annotations.Api;
@@ -43,11 +45,14 @@ public class ItemAvailableArchiveController {
     @ApiOperation(value = "获取单位的可用票据情况")
     @ApiImplicitParam("查询参数对象")
     @PostMapping("/info")
-    public R info(@RequestBody @ApiParam("查询参数对象") CommonQuery query) {
+    public QueryResponseResult<PageVO<ItemAvailableVO>> info(@RequestBody @ApiParam("查询参数对象") CommonQuery query) {
+        PageVO<ItemAvailableVO> res = new PageVO<>();
         PageDTO<ItemAvailableDTO> page = itemArchiveService.getItemAvailableInfos(query);
         List<ItemAvailableDTO> data = page.getData();
         List<ItemAvailableVO> vos = MyBeanUtil.copyListProperties(data, ItemAvailableVO::new);
-        return R.ok().data("items", vos).data("total", page.getTotal()).message("单位的可用票据情况");
+        res.setItems(vos);
+        res.setTotal(page.getTotal());
+        return new QueryResponseResult<>(CommonCode.SUCCESS, res);
     }
 }
 

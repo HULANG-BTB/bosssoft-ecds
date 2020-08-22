@@ -1,10 +1,12 @@
 package com.bosssoft.ecds.controller;
 
-import com.bosssoft.ecds.common.response.R;
 import com.bosssoft.ecds.entity.dto.BillWarnDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.query.CommonQuery;
 import com.bosssoft.ecds.entity.vo.BillWarnVO;
+import com.bosssoft.ecds.entity.vo.PageVO;
+import com.bosssoft.ecds.response.CommonCode;
+import com.bosssoft.ecds.response.QueryResponseResult;
 import com.bosssoft.ecds.service.BillWarnArchiveService;
 import com.bosssoft.ecds.utils.MyBeanUtil;
 import io.swagger.annotations.Api;
@@ -43,11 +45,14 @@ public class BillWarnArchiveController {
     @ApiOperation(value = "获取单位的预警信息情况")
     @ApiImplicitParam("查询参数对象")
     @PostMapping("/info")
-    public R info(@RequestBody @ApiParam("查询参数对象") CommonQuery query) {
+    public QueryResponseResult<PageVO<BillWarnVO>> info(@RequestBody @ApiParam("查询参数对象") CommonQuery query) {
+        PageVO<BillWarnVO> res = new PageVO<>();
         PageDTO<BillWarnDTO> page = billWarnArchiveService.getBillWarnInfos(query);
         List<BillWarnDTO> data = page.getData();
         List<BillWarnVO> vos = MyBeanUtil.copyListProperties(data, BillWarnVO::new);
-        return R.ok().data("items", data).data("total", page.getTotal()).message("单位的预警信息情况");
+        res.setItems(vos);
+        res.setTotal(page.getTotal());
+        return new QueryResponseResult<>(CommonCode.SUCCESS, res);
     }
 }
 

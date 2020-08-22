@@ -35,9 +35,9 @@ public class ArchiveCycleServiceImpl implements ArchiveCycleService {
     @Override
     public void exec() {
         billApplyArchiveService.finaBillApplyArchive();
-        billAvailableArchiveService.finaBillApplyArchive();
         itemArchiveService.finaItemAvailableArchive();
         billCheckArchiveService.finaBillCheckArchive();
+        billAvailableArchiveService.finaBillApplyArchive();
         billPayArchiveService.finaBillPayArchive();
         billWarnArchiveService.finaBillWarnArchive();
     }

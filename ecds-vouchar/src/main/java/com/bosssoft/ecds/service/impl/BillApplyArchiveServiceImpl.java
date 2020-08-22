@@ -3,18 +3,20 @@ package com.bosssoft.ecds.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.bosssoft.ecds.common.exception.MyExceptionCode;
 import com.bosssoft.ecds.dao.BillApplyArchiveDao;
 import com.bosssoft.ecds.entity.dto.ArchiveOverViewDTO;
 import com.bosssoft.ecds.entity.dto.BillApplyDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.po.BillApplyArchivePO;
+import com.bosssoft.ecds.entity.query.ArchiveOverViewQuery;
 import com.bosssoft.ecds.entity.query.CommonQuery;
+import com.bosssoft.ecds.exception.ExceptionCast;
 import com.bosssoft.ecds.service.ArchiveOverViewService;
 import com.bosssoft.ecds.service.BillApplyArchiveService;
 import com.bosssoft.ecds.utils.MyBeanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 
 import java.util.List;
 import java.util.Map;
@@ -79,7 +81,9 @@ public class BillApplyArchiveServiceImpl extends ServiceImpl<BillApplyArchiveDao
          * 获取所有单位的票据申领信息
          */
         List<BillApplyArchivePO> billApplyArchivePOS = dao.queryBillApplyAll();
-
+        if (billApplyArchivePOS == null || billApplyArchivePOS.isEmpty()) {
+            ExceptionCast.cast(MyExceptionCode.DATE_EMPTY);
+        }
         /*
          * 记录每家公司申请的总票数*/
         Map<String, Integer> counts = new ConcurrentHashMap<>(16);
@@ -87,7 +91,6 @@ public class BillApplyArchiveServiceImpl extends ServiceImpl<BillApplyArchiveDao
         /*
          * 信息处理
          */
-        Assert.notNull(billApplyArchivePOS, "所有单位票据申请信息为空");
         billApplyArchivePOS.forEach(
                 item -> {
                     /*
@@ -106,8 +109,7 @@ public class BillApplyArchiveServiceImpl extends ServiceImpl<BillApplyArchiveDao
         /*
          *获取归档总览表中所有的公司
          */
-
-        List<ArchiveOverViewDTO> archiveOverViewDTOS = archiveOverViewService.queryOverViewArchiveInfos(null);
+        List<ArchiveOverViewDTO> archiveOverViewDTOS = archiveOverViewService.queryOverViewArchiveInfos(new ArchiveOverViewQuery());
 
         /*
          * 更新归档总览表数量
@@ -121,8 +123,8 @@ public class BillApplyArchiveServiceImpl extends ServiceImpl<BillApplyArchiveDao
                             return 0;
                         }
                 )
-
         );
+        // 若存在该家公司，则更新更新公司数据，若不存在则新增公司信息
         archiveOverViewService.updateBatch(archiveOverViewDTOS);
     }
 }

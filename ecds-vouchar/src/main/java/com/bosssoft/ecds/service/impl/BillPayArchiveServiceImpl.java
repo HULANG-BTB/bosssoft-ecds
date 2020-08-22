@@ -1,14 +1,15 @@
 package com.bosssoft.ecds.service.impl;
 
-import cn.hutool.core.lang.Assert;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.bosssoft.ecds.common.exception.MyExceptionCode;
 import com.bosssoft.ecds.dao.BillPayArchiveDao;
 import com.bosssoft.ecds.entity.dto.BillPayDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.po.BillPayArchivePO;
 import com.bosssoft.ecds.entity.query.CommonQuery;
+import com.bosssoft.ecds.exception.ExceptionCast;
 import com.bosssoft.ecds.service.BillPayArchiveService;
 import com.bosssoft.ecds.utils.MyBeanUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -51,6 +52,9 @@ public class BillPayArchiveServiceImpl extends ServiceImpl<BillPayArchiveDao, Bi
         pageDTO.setTotal(page.getTotal());
         // 获取并且转换数据
         List<BillPayArchivePO> list = page.getRecords();
+        if (list == null || list.isEmpty()) {
+            ExceptionCast.cast(MyExceptionCode.DATE_EMPTY);
+        }
         List<BillPayDTO> dtos = MyBeanUtil.copyListProperties(list, BillPayDTO::new);
         pageDTO.setData(dtos);
         return pageDTO;
@@ -60,7 +64,9 @@ public class BillPayArchiveServiceImpl extends ServiceImpl<BillPayArchiveDao, Bi
     public void finaBillPayArchive() {
         List<BillPayArchivePO> billPayArchivePOS = billPayArchiveDao.queryBillPayInfos();
         log.info("old " + billPayArchivePOS);
-        Assert.notEmpty(billPayArchivePOS, "缴款信息暂时为空");
+        if (billPayArchivePOS == null || billPayArchivePOS.isEmpty()) {
+            ExceptionCast.cast(MyExceptionCode.DATE_EMPTY);
+        }
         /*分组*/
         Map<String, List<BillPayArchivePO>> collect = billPayArchivePOS.stream().collect(
                 Collectors.groupingBy(BillPayArchivePO::getAgenCode)

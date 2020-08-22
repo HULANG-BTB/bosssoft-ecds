@@ -1,10 +1,12 @@
 package com.bosssoft.ecds.controller;
 
-import com.bosssoft.ecds.common.response.R;
 import com.bosssoft.ecds.entity.dto.BillPayDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.query.CommonQuery;
 import com.bosssoft.ecds.entity.vo.BillPayVO;
+import com.bosssoft.ecds.entity.vo.PageVO;
+import com.bosssoft.ecds.response.CommonCode;
+import com.bosssoft.ecds.response.QueryResponseResult;
 import com.bosssoft.ecds.service.BillPayArchiveService;
 import com.bosssoft.ecds.utils.MyBeanUtil;
 import io.swagger.annotations.Api;
@@ -43,11 +45,14 @@ public class BillPayArchiveController {
     @ApiOperation(value = "获取单位的缴款信息情况")
     @ApiImplicitParam("查询参数对象")
     @PostMapping("/info")
-    public R info(@RequestBody @ApiParam("查询参数对象") CommonQuery query) {
+    public QueryResponseResult<PageVO<BillPayVO>> info(@RequestBody @ApiParam("查询参数对象") CommonQuery query) {
+        PageVO<BillPayVO> res = new PageVO<>();
         PageDTO<BillPayDTO> page = billPayArchiveService.getBillPayInfos(query);
-        List<BillPayDTO> res = page.getData();
-        List<BillPayVO> vos = MyBeanUtil.copyListProperties(res, BillPayVO::new);
-        return R.ok().data("items", vos).data("total", page.getTotal()).message("单位的缴款信息情况");
+        List<BillPayDTO> data = page.getData();
+        List<BillPayVO> vos = MyBeanUtil.copyListProperties(data, BillPayVO::new);
+        res.setItems(vos);
+        res.setTotal(page.getTotal());
+        return new QueryResponseResult<>(CommonCode.SUCCESS, res);
     }
 }
 

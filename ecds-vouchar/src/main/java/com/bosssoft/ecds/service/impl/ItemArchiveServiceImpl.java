@@ -3,13 +3,16 @@ package com.bosssoft.ecds.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.bosssoft.ecds.common.exception.MyExceptionCode;
 import com.bosssoft.ecds.dao.ItemArchiveDao;
 import com.bosssoft.ecds.entity.dto.ItemAvailableDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.po.ItemArchivePO;
 import com.bosssoft.ecds.entity.query.CommonQuery;
+import com.bosssoft.ecds.exception.ExceptionCast;
 import com.bosssoft.ecds.service.ItemArchiveService;
 import com.bosssoft.ecds.utils.MyBeanUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +28,7 @@ import java.util.List;
  * @since 2020-08-11
  */
 @Service
+@Slf4j
 public class ItemArchiveServiceImpl extends ServiceImpl<ItemArchiveDao, ItemArchivePO> implements ItemArchiveService {
     @Autowired
     private ItemArchiveDao itemArchiveDao;
@@ -52,6 +56,10 @@ public class ItemArchiveServiceImpl extends ServiceImpl<ItemArchiveDao, ItemArch
     public void finaItemAvailableArchive() {
         /*收集信息归档*/
         List<ItemArchivePO> itemArchivePOS = itemArchiveDao.collectItemAvailableInfo();
+        if (itemArchivePOS == null || itemArchivePOS.isEmpty()) {
+            ExceptionCast.cast(MyExceptionCode.DATE_EMPTY);
+        }
+        log.info("itemPOS => " + itemArchivePOS);
         saveBatch(itemArchivePOS);
     }
 

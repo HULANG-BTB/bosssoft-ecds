@@ -1,18 +1,16 @@
 package com.bosssoft.ecds.controller;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.bosssoft.ecds.common.response.R;
 import com.bosssoft.ecds.entity.dto.ArchiveOverViewDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.query.ArchiveOverViewQuery;
 import com.bosssoft.ecds.entity.vo.ArchiveOverViewVO;
+import com.bosssoft.ecds.entity.vo.PageVO;
+import com.bosssoft.ecds.response.CommonCode;
+import com.bosssoft.ecds.response.QueryResponseResult;
 import com.bosssoft.ecds.service.ArchiveOverViewService;
 import com.bosssoft.ecds.utils.MyBeanUtil;
-import com.bosssoft.ecds.utils.ResponseUtils;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -44,13 +42,13 @@ public class ArchiveOverViewController {
      * @return String
      */
     @ApiOperation(value = "查询单位详细信息")
-    @ApiImplicitParam("查询参数对象")
+    @ApiImplicitParams({@ApiImplicitParam(name = "agenCode", dataType = "String"), @ApiImplicitParam(name = "limit", dataType = "Long"), @ApiImplicitParam(name = "page", dataType = "Long")})
     @PostMapping("/unit/info")
-    public String queryArchiveInfo(@RequestBody @ApiParam("查询参数对象") ArchiveOverViewQuery query) {
+    public QueryResponseResult<ArchiveOverViewVO> queryArchiveInfo(@RequestBody @ApiParam("查询参数对象") ArchiveOverViewQuery query) {
         ArchiveOverViewDTO archiveOverViewDto = service.queryOverViewArchiveInfo(query);
         ArchiveOverViewVO vo = new ArchiveOverViewVO();
         BeanUtil.copyProperties(archiveOverViewDto, vo);
-        return ResponseUtils.getResponse(vo, ResponseUtils.ResultType.SUCCESS);
+        return new QueryResponseResult<>(CommonCode.SUCCESS, vo);
     }
 
     /**
@@ -59,17 +57,21 @@ public class ArchiveOverViewController {
      * @return
      */
     @ApiOperation(value = "查询所有单位的归档信息")
-    @ApiImplicitParam("查询参数对象")
+    @ApiImplicitParams({@ApiImplicitParam(name = "limit", dataType = "Long"), @ApiImplicitParam(name = "page", dataType = "Long")})
     @PostMapping("/fina/allInfo")
-    public R queryArchiveAllInfo(@RequestBody ArchiveOverViewQuery query) {
+    public QueryResponseResult<PageVO<ArchiveOverViewVO>> queryArchiveAllInfo(@RequestBody ArchiveOverViewQuery query) {
         /**
          * 获取全部的单位信息
          */
+        PageVO<ArchiveOverViewVO> res = new PageVO<>();
         PageDTO<ArchiveOverViewDTO> pageDTO = service.queryOverViewArchiveInfoPage(query);
         //转换对象
         List<ArchiveOverViewDTO> data = pageDTO.getData();
         List<ArchiveOverViewVO> vos = MyBeanUtil.copyListProperties(data, ArchiveOverViewVO::new);
-        return R.ok().data("items", vos).data("total", pageDTO.getTotal()).message("归档总览信息");
+        //添加条件
+        res.setItems(vos);
+        res.setTotal(pageDTO.getTotal());
+        return new QueryResponseResult<PageVO<ArchiveOverViewVO>>(CommonCode.SUCCESS, res);
     }
 
 
@@ -80,7 +82,6 @@ public class ArchiveOverViewController {
      * @return
      */
     public String setArchiveCycle(int cycleTime){
-
         return "";
     }
 }
