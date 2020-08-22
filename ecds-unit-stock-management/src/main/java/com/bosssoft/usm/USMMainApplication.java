@@ -12,10 +12,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
  */
 @SpringBootApplication
 @MapperScan("com.bosssoft.usm.dao")
-<<<<<<< HEAD
 @EnableDiscoveryClient
-=======
->>>>>>> dev01
 public class USMMainApplication {
     public static void main(String[] args) {
         SpringApplication.run(USMMainApplication.class,args);
