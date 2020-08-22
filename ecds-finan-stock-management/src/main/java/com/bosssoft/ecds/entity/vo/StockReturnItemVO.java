@@ -1,8 +1,6 @@
-package com.bosssoft.usm.entity.vo;
+package com.bosssoft.ecds.entity.vo;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
@@ -15,11 +13,11 @@ import lombok.ToString;
 @ToString
 public class StockReturnItemVO {
 
+    /**序号**/
+    private Long no;
+
     /**票据代码**/
     private String billCode;
-
-    /**票据名称**/
-    private String billName;
 
     /**数量**/
     private Integer number;

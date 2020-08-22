@@ -8,21 +8,11 @@ spring:
       config:
         server-addr: localhost:8848
         file-extension: yaml #指定yaml格式的配置
-    profiles:
-      active: dev
   rabbitmq:
     host: 192.168.110.128
     username: guest
     password: guest
   profiles:
-    active: zdh
-
+    active: zw
 server:
   port: 8080
-
-mybatis-plus:
-  configuration:
-    map-underscore-to-camel-case: true
-
-
-

@@ -1,4 +1,4 @@
-package com.bosssoft.usm.config;
+package com.bosssoft.ecds.util;
 
 /**
  * 自定义响应状态码
@@ -31,6 +31,7 @@ public class StatusCode {
     //删除失败
     public final static String DELETE_FAILED = "113";
 
+    //
 
 
 }

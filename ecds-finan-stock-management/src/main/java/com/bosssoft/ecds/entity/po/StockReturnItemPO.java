@@ -1,4 +1,4 @@
-package com.bosssoft.usm.entity.po;
+package com.bosssoft.ecds.entity.po;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
@@ -9,13 +9,11 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * <p>
@@ -23,12 +21,9 @@ import org.springframework.format.annotation.DateTimeFormat;
  * </p>
  *
  * @author ZhuWen
- * @since 2020-08-11
+ * @since 2020-08-13
  */
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-@ToString
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @TableName("ube_stock_return_item")
@@ -75,14 +70,10 @@ public class StockReturnItemPO extends Model<StockReturnItemPO> {
 
     @ApiModelProperty(value = "创建时间")
     @TableField(value = "f_create_time", fill = FieldFill.INSERT)
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date createTime;
 
     @ApiModelProperty(value = "修改时间")
     @TableField(value = "f_update_time", fill = FieldFill.INSERT_UPDATE)
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date updateTime;
 
 

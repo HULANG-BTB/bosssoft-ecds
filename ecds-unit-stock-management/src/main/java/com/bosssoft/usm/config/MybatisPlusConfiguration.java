@@ -20,26 +20,26 @@ import java.util.Date;
 @Configuration
 @EnableTransactionManagement(proxyTargetClass = true)
 public class MybatisPlusConfiguration {
-    @Autowired
+    /*@Autowired
     HttpServletRequest httpServletRequest;
 
-    /**
+    *//**
      * 注册字段自动填充
      *
      * @return
-     */
+     *//*
     @Bean
     public MetaObjectHandler getMetaObjectHandler() {
 
         return new MetaObjectHandler() {
             @Override
             public void insertFill(MetaObject metaObject) {
-                /**
+                *//**
                  * String authId = httpServletRequest.getHeader("auth_id");
                  * String authNickname = httpServletRequest.getHeader("auth_nickname");
                  * 生产环境使用上面的方式获取ID和nickname
                  * 测试环境模拟获得ID和nickname使用下面的方式
-                 */
+                 *//*
                 Long authId = 1L;
                 String authNickname = "test";
                 this.setFieldValByName("createTime", new Date(), metaObject);
@@ -51,12 +51,12 @@ public class MybatisPlusConfiguration {
 
             @Override
             public void updateFill(MetaObject metaObject) {
-                /**
+                *//**
                  * String authId = httpServletRequest.getHeader("auth_id");
                  * String authNickname = httpServletRequest.getHeader("auth_nickname");
                  * 生产环境使用上面的方式获取ID和nickname
                  * 测试环境模拟获得ID和nickname使用下面的方式
-                 */
+                 *//*
                 Long authId = 1L;
                 String authNickname = "test";
                 this.setFieldValByName("updateTime", new Date(), metaObject);
@@ -66,23 +66,23 @@ public class MybatisPlusConfiguration {
         };
     }
 
-    /**
+    *//**
      * 乐观锁插件
      *
      * @return
-     */
+     *//*
     @Bean
     public OptimisticLockerInterceptor getOptimisticLockerInterceptor() {
         return new OptimisticLockerInterceptor();
     }
 
-    /**
+    *//**
      * 分页插件
      *
      * @return
-     */
+     *//*
     @Bean
     public PaginationInterceptor paginationInterceptor() {
         return new PaginationInterceptor();
     }
-}
+*/}

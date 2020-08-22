@@ -1,4 +1,4 @@
-package com.bosssoft.usm.entity.vo;
+package com.bosssoft.ecds.entity.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
@@ -8,7 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Date;
 
 /**
- * 根据编制日期和业务单号分页查询退票信息
+ * 根据编制日期查询退票信息
  * @author 朱文
  * create on 2020/8/11 16:33
  */
@@ -32,5 +32,6 @@ public class DateVO {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date endTime;
+
 
 }

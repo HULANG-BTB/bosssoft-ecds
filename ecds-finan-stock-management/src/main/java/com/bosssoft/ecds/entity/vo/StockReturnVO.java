@@ -1,9 +1,7 @@
-package com.bosssoft.usm.entity.vo;
+package com.bosssoft.ecds.entity.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -19,13 +17,16 @@ import java.util.List;
 @ToString
 public class StockReturnVO {
 
-   /**业务单号**/
+    /**序号**/
+    private int num;
+
+    /**业务单号**/
     private Long no;
 
     /**审核状态**/
     private Integer changeState;
 
-   /**编制日期**/
+    /**编制日期**/
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date date;
@@ -42,7 +43,7 @@ public class StockReturnVO {
     /**审核人**/
     private String changeMan;
 
-    /**审核意见**/
+    /** 审核意见**/
     private String changeSitu;
 
     /**退票单位识别码**/

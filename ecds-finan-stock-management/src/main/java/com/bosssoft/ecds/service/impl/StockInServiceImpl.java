@@ -406,5 +406,5 @@ public class StockInServiceImpl extends ServiceImpl<StockInDao, StockInPO> imple
         stockInChangePO.setBussId(id);
         return stockInChangePO;
     }
-    
+  
 }

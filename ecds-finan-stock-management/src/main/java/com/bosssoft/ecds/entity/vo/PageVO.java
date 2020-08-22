@@ -1,4 +1,4 @@
-package com.bosssoft.usm.entity.vo;
+package com.bosssoft.ecds.entity.vo;
 
 import lombok.Data;
 import lombok.ToString;
@@ -12,10 +12,8 @@ import lombok.ToString;
 @ToString
 public class PageVO {
 
-    /** 当前页 **/
     private Integer pageNum;
 
-    /** 每页大小 **/
     private Integer pageSize;
 
 }
