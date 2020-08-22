@@ -8,10 +8,10 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 49.234.75.113:8848
+        server-addr: 49.234.212.41:8848
       config:
         file-extension: yaml
-        server-addr: 49.234.75.113:8848
+        server-addr: 49.234.212.41:8848
 management:
   endpoints:
     web:
