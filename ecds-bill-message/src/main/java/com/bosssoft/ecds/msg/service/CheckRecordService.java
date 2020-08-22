@@ -33,7 +33,6 @@ public interface CheckRecordService extends IService<CheckRecordPo>{
      * 保存查验记录
      * @param billId 票据id
      * @param res 查验结果
-     * @param oper 查验人ip
      */
-    void saveRecord(String billId, int res,String oper);
+    void saveRecord(String billId, int res);
 }
