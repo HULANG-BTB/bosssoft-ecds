@@ -17,7 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -88,25 +90,60 @@ public class RoleServiceImpl extends ServiceImpl<RoleDao, RolePO> implements Rol
         RolePO rolePO = super.getById(roleDTO.getId());
         MyBeanUtil.copyProperties(roleDTO, rolePO);
 
-        // 读取权限列表
+        // 更新角色信息
+        boolean update = this.updateById(rolePO);
+
+        // controller读取权限列表
         List<PermissionPO> newPermissionList = MyBeanUtil.copyListProperties(roleDTO.getPermissions(), PermissionPO.class);
 
-        // 删除原来已经拥有的权限列表
+        // 数据库读取已经有的列表
         QueryWrapper<RolePermissionPO> rolePermissionPOQueryWrapper = new QueryWrapper<>();
         rolePermissionPOQueryWrapper.eq(RolePermissionPO.F_ROLE_ID, roleDTO.getId());
-        boolean remove = rolePermissionService.remove(rolePermissionPOQueryWrapper);
+        List<RolePermissionPO> rolePermissionPOList = rolePermissionService.list(rolePermissionPOQueryWrapper);
 
-        // 批量添加新的角色列表
-        List<RolePermissionPO> insertAndUpdateList = new ArrayList<>();
-        for (PermissionPO permissionPO : newPermissionList) {
-            RolePermissionPO rolePermissionPO = new RolePermissionPO();
-            rolePermissionPO.setRoleId(roleDTO.getId());
-            rolePermissionPO.setPermissionId(permissionPO.getId());
-            insertAndUpdateList.add(rolePermissionPO);
+        Map<Long, Integer> longIntegerHashMap = new HashMap<>();
+
+        // 原来的列表 设置标识 1
+        for (RolePermissionPO rolePermissionPO : rolePermissionPOList) {
+            longIntegerHashMap.put(rolePermissionPO.getPermissionId(), 1);
         }
-        boolean save = rolePermissionService.saveBatch(insertAndUpdateList);
 
-        return save && remove;
+        // 遍历新的列表 设置表示 + 2
+        for (PermissionPO permissionPO : newPermissionList) {
+            Integer count = longIntegerHashMap.get(permissionPO.getId());
+            if (count == null) {
+                longIntegerHashMap.put(permissionPO.getId(), 2);
+            } else {
+                longIntegerHashMap.put(permissionPO.getId(), 3);
+            }
+        }
+
+        List<Long> removeList = new ArrayList<>();
+        List<RolePermissionPO> insertList = new ArrayList<>();
+
+        for (Long permissionId : longIntegerHashMap.keySet()) {
+            Integer count = longIntegerHashMap.get(permissionId);
+            if (count == 1) {
+                removeList.add(permissionId);
+            } else if (count == 2) {
+                RolePermissionPO rolePermissionPO = new RolePermissionPO();
+                rolePermissionPO.setRoleId(rolePO.getId());
+                rolePermissionPO.setPermissionId(permissionId);
+                insertList.add(rolePermissionPO);
+            }
+        }
+
+        // 批量添加新的权限列表
+        if (insertList.size() > 0) {
+            rolePermissionService.saveBatch(insertList);
+        }
+        // 批量删除移除的权限列表
+        if (removeList.size() > 0) {
+            QueryWrapper<RolePermissionPO> removeQueryWrapper = new QueryWrapper<>();
+            removeQueryWrapper.in(RolePermissionPO.F_PERMISSION_ID, removeList).eq(RolePermissionPO.F_ROLE_ID, rolePO.getId());
+            rolePermissionService.remove(removeQueryWrapper);
+        }
+        return update;
     }
 
     /**
