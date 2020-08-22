@@ -1,5 +1,6 @@
 package com.bosssoft.ecds.template.controller;
 
+import com.bosssoft.ecds.template.entity.dto.BillItemDto;
 import com.bosssoft.ecds.template.entity.dto.NontaxBillDto;
 import com.bosssoft.ecds.template.entity.dto.PrintTemplateDto;
 import com.bosssoft.ecds.template.entity.vo.PrintTemplateVo;
@@ -124,7 +125,9 @@ public class PrintTemplateController {
         PrintTemplateDto templateDTO = printTemplateService.getDtoById(id);
         // 渲染空白票据
         NontaxBillDto billDTO = new NontaxBillDto();
-        billDTO.setItems(new ArrayList<>());
+        List<BillItemDto> items = new ArrayList<>();
+        items.add(new BillItemDto());
+        billDTO.setItems(items);
         String htmlTemplate = htmlService.genBillHtml(billDTO, templateDTO.getTemplate());
         return htmlTemplate.getBytes();
     }

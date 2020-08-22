@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.bosssoft.ecds.exception.CustomException;
 import com.bosssoft.ecds.template.entity.dto.PrintTemplateDto;
 import com.bosssoft.ecds.template.entity.po.PrintTemplatePo;
 import com.bosssoft.ecds.template.entity.vo.PrintTemplateVo;
@@ -23,9 +22,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.bosssoft.ecds.response.CommonCode.DUPLICATE_ERROR;
 
 /**
  * <p>
@@ -52,6 +51,8 @@ public class PrintTemplateServiceImpl extends ServiceImpl<PrintTemplateMapper, P
     public boolean add(PrintTemplateDto templateDTO) {
         PrintTemplatePo templatePO = new PrintTemplatePo();
         BeanUtils.copyProperties(templateDTO, templatePO);
+        templatePO.setCreateTime(LocalDateTime.now());
+        templatePO.setUpdateTime(LocalDateTime.now());
         return this.save(templatePO);
     }
 
@@ -124,13 +125,11 @@ public class PrintTemplateServiceImpl extends ServiceImpl<PrintTemplateMapper, P
         String typeId = billCode.substring(2, 4);
         String sortId = billCode.substring(4, 6);
 
-        QueryWrapper<PrintTemplatePo> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda()
-                .eq(PrintTemplatePo::getRgnCode, rgnCode)
-                .eq(PrintTemplatePo::getTypeId, typeId)
-                .eq(PrintTemplatePo::getSortId, sortId);
+        PrintTemplatePo templatePo =
+                printTemplateMapper.selectFirstByBillCode(rgnCode, typeId, sortId);
+        if (templatePo==null)
+            return null;
 
-        PrintTemplatePo templatePo = printTemplateMapper.selectOne(queryWrapper);
         PrintTemplateDto templateDto = new PrintTemplateDto();
         BeanUtils.copyProperties(templatePo, templateDto);
         return templateDto;

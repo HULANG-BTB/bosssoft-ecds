@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bosssoft.ecds.template.entity.po.PrintTemplatePo;
 import com.bosssoft.ecds.template.entity.vo.PrintTemplateVo;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * <p>
@@ -15,5 +16,11 @@ import com.bosssoft.ecds.template.entity.vo.PrintTemplateVo;
  * @since 2020-08-17
  */
 public interface PrintTemplateMapper extends BaseMapper<PrintTemplatePo> {
+
     IPage<PrintTemplateVo> selectTemplateVo(Page<?> page);
+
+    PrintTemplatePo selectFirstByBillCode(
+            @Param("rgnCode") String rgnCode,
+            @Param("typeId") String typeId,
+            @Param("sortId") String sortId);
 }

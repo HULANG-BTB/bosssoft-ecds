@@ -49,4 +49,11 @@ class PrintTemplateServiceTest {
         PrintTemplateDto templateDTO = printTemplateService.getDtoById(11L);
         System.out.println(templateDTO.getTemplate());
     }
+
+    @Test
+    void selectOne(){
+        String billcode = "011602";
+        PrintTemplateDto templateDTO = printTemplateService.getByBillCode(billcode);
+        System.out.println(templateDTO);
+    }
 }
