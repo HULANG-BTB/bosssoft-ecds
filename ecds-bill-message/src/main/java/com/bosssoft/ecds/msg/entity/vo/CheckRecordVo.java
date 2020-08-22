@@ -1,11 +1,11 @@
 package com.bosssoft.ecds.msg.entity.vo;
 
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * @author zhangxiaohui
@@ -14,26 +14,11 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CheckRecordQueryVo {
+public class CheckRecordVo {
     /**
      * 查验记录表_主键
      */
     private Long id;
-
-    /**
-     * 查验类别
-     */
-    private String checkType;
-
-    /**
-     * 日期
-     */
-    private List<Date> period;
-
-    /**
-     * 操作者（查验人）
-     */
-    private String operator;
 
     /**
      * 票据编码
@@ -41,16 +26,23 @@ public class CheckRecordQueryVo {
     private String billCode;
 
     /**
+     * 查验类别
+     */
+    private String checkType;
+
+    /**
      * 结果（0伪1真）
      */
     private Integer result;
+
     /**
-     * 每页大小
+     * 创建日期
      */
-    private Long limit;
+    private Date createTime;
+
     /**
-     * 当前页码
+     * 操作者（查验人）
      */
-    private Long page;
+    private String operator;
 
 }

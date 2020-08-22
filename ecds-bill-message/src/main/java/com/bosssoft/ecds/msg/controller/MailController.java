@@ -57,7 +57,6 @@ public class MailController extends BaseController {
      * 分页查询邮件
      * 根据Id,isSent,mailTo字段查询匹配的邮件
      * page是当前页码，limit是每页大小
-     *
      * @param mailQuery 分页查询对象
      * @return 查询对象
      */

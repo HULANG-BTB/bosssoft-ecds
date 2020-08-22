@@ -8,6 +8,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
+
 /**
  * @author zhangxiaohui
  * 消息推送模块，提供短信、邮件推送功能，票据查验功能
@@ -23,4 +24,6 @@ public class MsgApplication {
     public static void main(String[] args) {
         SpringApplication.run(MsgApplication.class, args);
     }
+
+
 }
