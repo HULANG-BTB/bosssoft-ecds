@@ -21,6 +21,7 @@ public class SignServiceImpl implements SignService {
 
     @Autowired
     private UneCbillMapper uneCbillMapper;
+
     /**
      * 获取票据的签名信息
      * @param billId

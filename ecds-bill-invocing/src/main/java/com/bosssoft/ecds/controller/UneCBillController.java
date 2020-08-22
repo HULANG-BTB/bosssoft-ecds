@@ -19,10 +19,7 @@ import com.bosssoft.ecds.response.QueryResponseResult;
 import com.bosssoft.ecds.response.ResponseResult;
 import com.bosssoft.ecds.service.SignService;
 import com.bosssoft.ecds.service.UneCbillService;
-import com.bosssoft.ecds.service.client.MessageService;
-import com.bosssoft.ecds.service.client.SignatureService;
-import com.bosssoft.ecds.service.client.TemplateService;
-import com.bosssoft.ecds.service.client.UnitManagerService;
+import com.bosssoft.ecds.service.client.*;
 import com.bosssoft.ecds.service.VerifyService;
 import com.bosssoft.ecds.util.CommonUtil;
 import com.bosssoft.ecds.util.ResponseUtils;
@@ -49,12 +46,6 @@ public class UneCBillController {
     @Autowired
     private UneCbillService uneCbillService;
 
-    //@Autowired
-    //private Redisson redisson;
-
-    @Autowired
-    private VerifyService verifyService;
-
     @Autowired
     private CommonUtil commonUtil;
 
@@ -68,6 +59,9 @@ public class UneCBillController {
 
     @Autowired
     private SignService signService;
+
+    @Autowired
+    private BillService billService;
 
     /**
      * 分页查询当前单位的开票记录
@@ -174,13 +168,14 @@ public class UneCBillController {
     /**
      * 获取单位可用票据信息
      *
-     * @param unitName
+     * @param
      * @return
      */
-    public String getBillInfo(@RequestParam String unitName) {
+    @GetMapping("/getBillInfo")
+    public QueryResponseResult getBillInfo() {
         //查询到可用票据，生成唯一校验码
         String checkCode = "";
-        return unitManagerService.hasAvailableBill(unitName);
+        return billService.getBill();
     }
 
     /**
@@ -213,19 +208,17 @@ public class UneCBillController {
         //RLock lock = redisson.getLock(lockKey);
         lock.lock();
         try {
-            //TODO 调用服务新增票据
             UneCbill uneCbill = commonUtil.convert(batchPojo.getUnitName(), batchPojo.getPayerDto(),
                     batchPojo.getUneCbillDto(), commonUtil.generateID(), batchPojo.getfAmt());
             uneCbillService.addUneCbill(uneCbill, itemDtos);
             String singMsg = JSON.toJSONString(batchPojo);
             Object o = Convert.toMap(String.class, Object.class, signatureService.sign(singMsg)).get("data");
-            log.info(o.toString());
             SignedDataDto signedDataDto = Convert.convert(SignedDataDto.class, o);
-            log.info(JSON.toJSONString(signedDataDto));
             Sign sign = new Sign();
             BeanUtil.copyProperties(signedDataDto, sign);
             sign.setSignId(uneCbill.getFId());
             signService.addSign(sign);
+            uneCbillService.updateState(uneCbill.getFBillId(), uneCbill.getFBillNo(), 2);
         } finally {
             lock.unlock();
         }
@@ -371,6 +364,22 @@ public class UneCBillController {
         int total = uneCbillService.passBillCount();
         Page<UneCbill> page = new Page<>(currentPage, pageSize, total);
         return uneCbillService.selectPassBillPage(page);
+    }
+
+    /**
+     * 获取票据在oss上的地址
+     * @param billId
+     * @param billNo
+     * @return
+     */
+    @RequestMapping(path = "/getImgUrl", method = RequestMethod.GET)
+    public QueryResponseResult getImgUrl(String billId, String billNo) {
+//        templateService.getTemplate(billId, billNo);
+        String url = "http://url";
+        if (url != null) {
+            return new QueryResponseResult(CommonCode.SUCCESS, url);
+        }
+        return new QueryResponseResult(CommonCode.FAIL, null);
     }
 
     public String getMsgContent(UneCbill uneCbill,String imgUrl) {

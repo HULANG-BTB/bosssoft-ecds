@@ -197,9 +197,6 @@ public class UneCbillServiceImpl implements UneCbillService {
     public IPage<UneCbillVo> selectPassBillPage(Page<UneCbill> page) {
         List<UneCbill> cbillList = uneCbillMapper.selectPassPageVO(page);
         List<UneCbillVo> cbillVos = new ArrayList<>();
-        /**
-         * 对象类型转换
-         */
         for (UneCbill uneCbill : cbillList) {
             UneCbillVo uneCbillVo = new UneCbillVo();
             BeanUtil.copyProperties(uneCbill, uneCbillVo);
@@ -243,5 +240,22 @@ public class UneCbillServiceImpl implements UneCbillService {
         SignedDataDto signedDataDto = new SignedDataDto();
         UneCbill uneCbill = uneCbillMapper.selectOne(queryWrapper);
         return uneCbill;
+    }
+
+    /**
+     * 跟新票据的状态
+     * @param billId
+     * @param billNo
+     * @param state
+     * @return
+     */
+    @Override
+    public int updateState(String billId, String billNo, int state) {
+        QueryWrapper<UneCbill> queryWrapper = new QueryWrapper();
+        queryWrapper.eq("f_bill_id", billId)
+                .eq("f_bill_no", billNo);
+        UneCbill uneCbill = new UneCbill();
+        uneCbill.setFState(state);
+        return uneCbillMapper.update(uneCbill, queryWrapper);
     }
 }

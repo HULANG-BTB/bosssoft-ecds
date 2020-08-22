@@ -113,4 +113,11 @@ public interface UneCbillService {
      */
     UneCbill getUneCbillByIdAndNo(String billId, String billNo);
 
+    /**
+     * 修改票据对应的状态
+     * @param billId
+     * @param billNo
+     * @return
+     */
+    int updateState(String billId, String billNo, int state);
 }

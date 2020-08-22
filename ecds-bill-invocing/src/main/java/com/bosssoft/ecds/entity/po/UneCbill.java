@@ -3,6 +3,7 @@ package com.bosssoft.ecds.entity.po;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.Version;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -116,6 +117,7 @@ public class UneCbill {
      */
     private int fState;
 
+    @Version
     private int fVersion;
 
     /**
