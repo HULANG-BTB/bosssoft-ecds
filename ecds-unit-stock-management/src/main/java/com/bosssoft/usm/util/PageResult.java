@@ -1,4 +1,4 @@
-package com.bosssoft.ecds.entity;
+package com.bosssoft.usm.util;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -30,4 +30,5 @@ public class PageResult {
     private Long page;
 
     private List<?> row;
+
 }

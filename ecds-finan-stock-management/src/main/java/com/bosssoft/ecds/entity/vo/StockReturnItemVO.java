@@ -13,18 +13,18 @@ import lombok.ToString;
 @ToString
 public class StockReturnItemVO {
 
-    //序号
+    /**序号**/
     private Long no;
 
-    //票据代码
+    /**票据代码**/
     private String billCode;
 
-    //数量
+    /**数量**/
     private Integer number;
 
-    //起始
+    /**起始**/
     private String billNo1;
 
-    //终止
+    /**终止**/
     private String billNo2;
 }

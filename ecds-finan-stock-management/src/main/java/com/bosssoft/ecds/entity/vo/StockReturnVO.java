@@ -17,36 +17,42 @@ import java.util.List;
 @ToString
 public class StockReturnVO {
 
-    // 序号
+    /**序号**/
     private int num;
 
-    //业务单号
+    /**业务单号**/
     private Long no;
 
-    //审核状态
+    /**审核状态**/
     private Integer changeState;
 
-    //编制日期
+    /**编制日期**/
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date date;
 
-    //退票原因
+    /**退票原因**/
     private String returnReason;
 
-    //经办人
+    /**经办人**/
     private String returner;
 
-    //编制人
+    /**编制人**/
     private String author;
 
-    //退票单位识别码
+    /**审核人**/
+    private String changeMan;
+
+    /** 审核意见**/
+    private String changeSitu;
+
+    /**退票单位识别码**/
     private String agenIdCode;
 
-    //是否提交
+    /**是否提交**/
     private Integer submitStatus;
 
-    //申退明细VO
+    /**申退明细VO**/
     private List<StockReturnItemVO> stockReturnItemVOList;
 
 }

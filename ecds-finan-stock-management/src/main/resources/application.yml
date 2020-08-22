@@ -1,6 +1,6 @@
-#server:
-#  # 服务端口号
-#  port: 8082
+server:
+  # 服务端口号
+  port: 8081
 spring:
 #  resources:
 #    static-locations:

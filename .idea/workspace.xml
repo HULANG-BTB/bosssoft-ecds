@@ -2,29 +2,70 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f04359f3-a75c-4646-9f68-963cb74c02bd" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/ecds-finan-stock-management/src/main/java/com/bosssoft/ecds/controller/StockReturnController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ecds-finan-stock-management/src/main/java/com/bosssoft/ecds/controller/StockReturnItemController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ecds-finan-stock-management/src/main/java/com/bosssoft/ecds/dao/StockReturnDao.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ecds-finan-stock-management/src/main/java/com/bosssoft/ecds/dao/StockReturnItemDao.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ecds-finan-stock-management/src/main/java/com/bosssoft/ecds/entity/po/StockReturnItemPO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ecds-finan-stock-management/src/main/java/com/bosssoft/ecds/entity/po/StockReturnPO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ecds-finan-stock-management/src/main/java/com/bosssoft/ecds/entity/vo/DateVO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ecds-finan-stock-management/src/main/java/com/bosssoft/ecds/entity/vo/PageVO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ecds-finan-stock-management/src/main/java/com/bosssoft/ecds/entity/vo/StockReturnItemVO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ecds-finan-stock-management/src/main/java/com/bosssoft/ecds/entity/vo/StockReturnVO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ecds-finan-stock-management/src/main/java/com/bosssoft/ecds/mapper/xml/StockReturnItemMapper.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ecds-finan-stock-management/src/main/java/com/bosssoft/ecds/mapper/xml/StockReturnMapper.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ecds-finan-stock-management/src/main/java/com/bosssoft/ecds/service/StockReturnItemService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ecds-finan-stock-management/src/main/java/com/bosssoft/ecds/service/StockReturnService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ecds-finan-stock-management/src/main/java/com/bosssoft/ecds/service/impl/StockReturnItemServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ecds-finan-stock-management/src/main/java/com/bosssoft/ecds/service/impl/StockReturnServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ecds-finan-stock-management/src/main/java/com/bosssoft/ecds/util/StatusCode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ecds-finan-stock-management/src/main/java/com/bosssoft/ecds/controller/AgenBillController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ecds-finan-stock-management/src/main/java/com/bosssoft/ecds/dao/AgenBillDao.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ecds-finan-stock-management/src/main/java/com/bosssoft/ecds/entity/po/AgenBillPO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ecds-finan-stock-management/src/main/java/com/bosssoft/ecds/entity/vo/StockReturnCheckVO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ecds-finan-stock-management/src/main/java/com/bosssoft/ecds/mapper/xml/AgenBillMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ecds-finan-stock-management/src/main/java/com/bosssoft/ecds/service/AgenBillService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ecds-finan-stock-management/src/main/java/com/bosssoft/ecds/service/impl/AgenBillServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ecds-finan-stock-management/src/main/java/com/bosssoft/ecds/util/ConstantChange.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ecds-unit-stock-management/src/main/java/com/bosssoft/usm/util/EntityPage.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ecds-unit-stock-management/src/main/java/com/bosssoft/usm/util/PageResult.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ecds-unit-stock-management/src/main/java/com/bosssoft/usm/util/ResponseUtils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecds-finan-stock-management/src/main/java/com/bosssoft/ecds/FSMApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/ecds-finan-stock-management/src/main/java/com/bosssoft/ecds/FSMApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecds-finan-stock-management/src/main/java/com/bosssoft/ecds/service/impl/StockInServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/ecds-finan-stock-management/src/main/java/com/bosssoft/ecds/service/impl/StockInServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ecds-finan-stock-management/src/main/java/com/bosssoft/ecds/controller/StockReturnController.java" beforeDir="false" afterPath="$PROJECT_DIR$/ecds-finan-stock-management/src/main/java/com/bosssoft/ecds/controller/StockReturnController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ecds-finan-stock-management/src/main/java/com/bosssoft/ecds/entity/PageResult.java" beforeDir="false" afterPath="$PROJECT_DIR$/ecds-finan-stock-management/src/main/java/com/bosssoft/ecds/entity/PageResult.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ecds-finan-stock-management/src/main/java/com/bosssoft/ecds/entity/po/StockReturnItemPO.java" beforeDir="false" afterPath="$PROJECT_DIR$/ecds-finan-stock-management/src/main/java/com/bosssoft/ecds/entity/po/StockReturnItemPO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ecds-finan-stock-management/src/main/java/com/bosssoft/ecds/entity/po/StockReturnPO.java" beforeDir="false" afterPath="$PROJECT_DIR$/ecds-finan-stock-management/src/main/java/com/bosssoft/ecds/entity/po/StockReturnPO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ecds-finan-stock-management/src/main/java/com/bosssoft/ecds/entity/vo/DateVO.java" beforeDir="false" afterPath="$PROJECT_DIR$/ecds-finan-stock-management/src/main/java/com/bosssoft/ecds/entity/vo/DateVO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ecds-finan-stock-management/src/main/java/com/bosssoft/ecds/entity/vo/PageVO.java" beforeDir="false" afterPath="$PROJECT_DIR$/ecds-finan-stock-management/src/main/java/com/bosssoft/ecds/entity/vo/PageVO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ecds-finan-stock-management/src/main/java/com/bosssoft/ecds/entity/vo/StockReturnItemVO.java" beforeDir="false" afterPath="$PROJECT_DIR$/ecds-finan-stock-management/src/main/java/com/bosssoft/ecds/entity/vo/StockReturnItemVO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ecds-finan-stock-management/src/main/java/com/bosssoft/ecds/entity/vo/StockReturnVO.java" beforeDir="false" afterPath="$PROJECT_DIR$/ecds-finan-stock-management/src/main/java/com/bosssoft/ecds/entity/vo/StockReturnVO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ecds-finan-stock-management/src/main/java/com/bosssoft/ecds/service/StockReturnService.java" beforeDir="false" afterPath="$PROJECT_DIR$/ecds-finan-stock-management/src/main/java/com/bosssoft/ecds/service/StockReturnService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ecds-finan-stock-management/src/main/java/com/bosssoft/ecds/service/impl/StockReturnServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/ecds-finan-stock-management/src/main/java/com/bosssoft/ecds/service/impl/StockReturnServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ecds-finan-stock-management/src/main/java/com/bosssoft/ecds/util/StatusCode.java" beforeDir="false" afterPath="$PROJECT_DIR$/ecds-finan-stock-management/src/main/java/com/bosssoft/ecds/util/StatusCode.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ecds-finan-stock-management/src/main/java/com/bosssoft/ecds/utils/CodeBuilderZ.java" beforeDir="false" afterPath="$PROJECT_DIR$/ecds-finan-stock-management/src/main/java/com/bosssoft/ecds/utils/CodeBuilderZ.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ecds-finan-stock-management/src/main/resources/application-zw.yml" beforeDir="false" afterPath="$PROJECT_DIR$/ecds-finan-stock-management/src/main/resources/application-zw.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ecds-finan-stock-management/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/ecds-finan-stock-management/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ecds-finan-stock-management/target/classes/application-zw.yml" beforeDir="false" afterPath="$PROJECT_DIR$/ecds-finan-stock-management/target/classes/application-zw.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ecds-finan-stock-management/target/classes/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/ecds-finan-stock-management/target/classes/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ecds-finan-stock-management/target/classes/com/bosssoft/ecds/controller/StockReturnController.class" beforeDir="false" afterPath="$PROJECT_DIR$/ecds-finan-stock-management/target/classes/com/bosssoft/ecds/controller/StockReturnController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ecds-finan-stock-management/target/classes/com/bosssoft/ecds/entity/PageResult.class" beforeDir="false" afterPath="$PROJECT_DIR$/ecds-finan-stock-management/target/classes/com/bosssoft/ecds/entity/PageResult.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ecds-finan-stock-management/target/classes/com/bosssoft/ecds/entity/po/StockReturnItemPO.class" beforeDir="false" afterPath="$PROJECT_DIR$/ecds-finan-stock-management/target/classes/com/bosssoft/ecds/entity/po/StockReturnItemPO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ecds-finan-stock-management/target/classes/com/bosssoft/ecds/entity/po/StockReturnPO.class" beforeDir="false" afterPath="$PROJECT_DIR$/ecds-finan-stock-management/target/classes/com/bosssoft/ecds/entity/po/StockReturnPO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ecds-finan-stock-management/target/classes/com/bosssoft/ecds/entity/vo/DateVO.class" beforeDir="false" afterPath="$PROJECT_DIR$/ecds-finan-stock-management/target/classes/com/bosssoft/ecds/entity/vo/DateVO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ecds-finan-stock-management/target/classes/com/bosssoft/ecds/entity/vo/PageVO.class" beforeDir="false" afterPath="$PROJECT_DIR$/ecds-finan-stock-management/target/classes/com/bosssoft/ecds/entity/vo/PageVO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ecds-finan-stock-management/target/classes/com/bosssoft/ecds/entity/vo/StockReturnVO.class" beforeDir="false" afterPath="$PROJECT_DIR$/ecds-finan-stock-management/target/classes/com/bosssoft/ecds/entity/vo/StockReturnVO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ecds-finan-stock-management/target/classes/com/bosssoft/ecds/service/StockReturnService.class" beforeDir="false" afterPath="$PROJECT_DIR$/ecds-finan-stock-management/target/classes/com/bosssoft/ecds/service/StockReturnService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ecds-finan-stock-management/target/classes/com/bosssoft/ecds/service/impl/StockReturnServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/ecds-finan-stock-management/target/classes/com/bosssoft/ecds/service/impl/StockReturnServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ecds-finan-stock-management/target/classes/com/bosssoft/ecds/utils/CodeBuilderZ.class" beforeDir="false" afterPath="$PROJECT_DIR$/ecds-finan-stock-management/target/classes/com/bosssoft/ecds/utils/CodeBuilderZ.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ecds-unit-stock-management/src/main/java/com/bosssoft/usm/controller/FbeStockFinanceapplyController.java" beforeDir="false" afterPath="$PROJECT_DIR$/ecds-unit-stock-management/src/main/java/com/bosssoft/usm/controller/FbeStockFinanceapplyController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ecds-unit-stock-management/src/main/java/com/bosssoft/usm/controller/StockReturnController.java" beforeDir="false" afterPath="$PROJECT_DIR$/ecds-unit-stock-management/src/main/java/com/bosssoft/usm/controller/StockReturnController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ecds-unit-stock-management/src/main/java/com/bosssoft/usm/controller/StockReturnItemController.java" beforeDir="false" afterPath="$PROJECT_DIR$/ecds-unit-stock-management/src/main/java/com/bosssoft/usm/controller/StockReturnItemController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ecds-unit-stock-management/src/main/java/com/bosssoft/usm/entity/po/StockReturnItemPO.java" beforeDir="false" afterPath="$PROJECT_DIR$/ecds-unit-stock-management/src/main/java/com/bosssoft/usm/entity/po/StockReturnItemPO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ecds-unit-stock-management/src/main/java/com/bosssoft/usm/entity/po/StockReturnPO.java" beforeDir="false" afterPath="$PROJECT_DIR$/ecds-unit-stock-management/src/main/java/com/bosssoft/usm/entity/po/StockReturnPO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ecds-unit-stock-management/src/main/java/com/bosssoft/usm/entity/vo/DateVO.java" beforeDir="false" afterPath="$PROJECT_DIR$/ecds-unit-stock-management/src/main/java/com/bosssoft/usm/entity/vo/DateVO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ecds-unit-stock-management/src/main/java/com/bosssoft/usm/entity/vo/PageVO.java" beforeDir="false" afterPath="$PROJECT_DIR$/ecds-unit-stock-management/src/main/java/com/bosssoft/usm/entity/vo/PageVO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ecds-unit-stock-management/src/main/java/com/bosssoft/usm/entity/vo/StockReturnItemVO.java" beforeDir="false" afterPath="$PROJECT_DIR$/ecds-unit-stock-management/src/main/java/com/bosssoft/usm/entity/vo/StockReturnItemVO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ecds-unit-stock-management/src/main/java/com/bosssoft/usm/entity/vo/StockReturnVO.java" beforeDir="false" afterPath="$PROJECT_DIR$/ecds-unit-stock-management/src/main/java/com/bosssoft/usm/entity/vo/StockReturnVO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ecds-unit-stock-management/src/main/java/com/bosssoft/usm/service/AbstractService.java" beforeDir="false" afterPath="$PROJECT_DIR$/ecds-unit-stock-management/src/main/java/com/bosssoft/usm/service/AbstractService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ecds-unit-stock-management/src/main/java/com/bosssoft/usm/service/BaseService.java" beforeDir="false" afterPath="$PROJECT_DIR$/ecds-unit-stock-management/src/main/java/com/bosssoft/usm/service/BaseService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ecds-unit-stock-management/src/main/java/com/bosssoft/usm/service/StockReturnService.java" beforeDir="false" afterPath="$PROJECT_DIR$/ecds-unit-stock-management/src/main/java/com/bosssoft/usm/service/StockReturnService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ecds-unit-stock-management/src/main/java/com/bosssoft/usm/service/impl/StockReturnServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/ecds-unit-stock-management/src/main/java/com/bosssoft/usm/service/impl/StockReturnServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ecds-unit-stock-management/target/classes/com/bosssoft/usm/controller/FbeStockFinanceapplyController.class" beforeDir="false" afterPath="$PROJECT_DIR$/ecds-unit-stock-management/target/classes/com/bosssoft/usm/controller/FbeStockFinanceapplyController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ecds-unit-stock-management/target/classes/com/bosssoft/usm/controller/StockReturnController.class" beforeDir="false" afterPath="$PROJECT_DIR$/ecds-unit-stock-management/target/classes/com/bosssoft/usm/controller/StockReturnController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ecds-unit-stock-management/target/classes/com/bosssoft/usm/controller/StockReturnItemController.class" beforeDir="false" afterPath="$PROJECT_DIR$/ecds-unit-stock-management/target/classes/com/bosssoft/usm/controller/StockReturnItemController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ecds-unit-stock-management/target/classes/com/bosssoft/usm/entity/po/StockReturnItemPO.class" beforeDir="false" afterPath="$PROJECT_DIR$/ecds-unit-stock-management/target/classes/com/bosssoft/usm/entity/po/StockReturnItemPO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ecds-unit-stock-management/target/classes/com/bosssoft/usm/entity/po/StockReturnPO.class" beforeDir="false" afterPath="$PROJECT_DIR$/ecds-unit-stock-management/target/classes/com/bosssoft/usm/entity/po/StockReturnPO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ecds-unit-stock-management/target/classes/com/bosssoft/usm/entity/vo/DateVO.class" beforeDir="false" afterPath="$PROJECT_DIR$/ecds-unit-stock-management/target/classes/com/bosssoft/usm/entity/vo/DateVO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ecds-unit-stock-management/target/classes/com/bosssoft/usm/entity/vo/PageVO.class" beforeDir="false" afterPath="$PROJECT_DIR$/ecds-unit-stock-management/target/classes/com/bosssoft/usm/entity/vo/PageVO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ecds-unit-stock-management/target/classes/com/bosssoft/usm/entity/vo/StockReturnItemVO.class" beforeDir="false" afterPath="$PROJECT_DIR$/ecds-unit-stock-management/target/classes/com/bosssoft/usm/entity/vo/StockReturnItemVO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ecds-unit-stock-management/target/classes/com/bosssoft/usm/entity/vo/StockReturnVO.class" beforeDir="false" afterPath="$PROJECT_DIR$/ecds-unit-stock-management/target/classes/com/bosssoft/usm/entity/vo/StockReturnVO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ecds-unit-stock-management/target/classes/com/bosssoft/usm/service/AbstractService.class" beforeDir="false" afterPath="$PROJECT_DIR$/ecds-unit-stock-management/target/classes/com/bosssoft/usm/service/AbstractService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ecds-unit-stock-management/target/classes/com/bosssoft/usm/service/BaseService.class" beforeDir="false" afterPath="$PROJECT_DIR$/ecds-unit-stock-management/target/classes/com/bosssoft/usm/service/BaseService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ecds-unit-stock-management/target/classes/com/bosssoft/usm/service/StockReturnService.class" beforeDir="false" afterPath="$PROJECT_DIR$/ecds-unit-stock-management/target/classes/com/bosssoft/usm/service/StockReturnService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ecds-unit-stock-management/target/classes/com/bosssoft/usm/service/impl/StockReturnServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/ecds-unit-stock-management/target/classes/com/bosssoft/usm/service/impl/StockReturnServiceImpl.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -76,15 +117,17 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/ecds-finan-stock-management/src/main/java/com/bosssoft/ecds/entity/vo" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="MavenSettings" />
   </component>
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.bosssoft.usm.util" />
       <recent name="com.bosssoft.ecds.util" />
       <recent name="com.bosssoft.ecds.utils" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\Bosssoft_Ecds_Misheep\bosssoft-ecds\ecds-unit-stock-management\src\main\java\com\bosssoft\usm\util" />
       <recent name="E:\Bosssoft_Ecds_Misheep\bosssoft-ecds\ecds-finan-stock-management\src\main\java\com\bosssoft\ecds\entity\vo" />
       <recent name="E:\Bosssoft_Ecds_Misheep\bosssoft-ecds\ecds-finan-stock-management\src\main\java\com\bosssoft\ecds\entity\po" />
     </key>
@@ -157,6 +200,22 @@
       <workItem from="1597279881181" duration="27392000" />
       <workItem from="1597327179852" duration="4148000" />
       <workItem from="1597366412607" duration="1342000" />
+      <workItem from="1597419388691" duration="9809000" />
+      <workItem from="1597475049186" duration="9835000" />
+      <workItem from="1597567284771" duration="2235000" />
+      <workItem from="1597624964926" duration="30382000" />
+      <workItem from="1597711889121" duration="16602000" />
+      <workItem from="1597755784079" duration="3630000" />
+      <workItem from="1597798011237" duration="17297000" />
+      <workItem from="1597834501550" duration="5567000" />
+      <workItem from="1597845763393" duration="4313000" />
+      <workItem from="1597884330549" duration="7947000" />
+      <workItem from="1597897074083" duration="765000" />
+      <workItem from="1597899133518" duration="9667000" />
+      <workItem from="1597970720204" duration="6378000" />
+      <workItem from="1597988982511" duration="12877000" />
+      <workItem from="1598060776309" duration="8353000" />
+      <workItem from="1598084770482" duration="3677000" />
     </task>
     <servers />
   </component>
@@ -167,69 +226,77 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="721" y="163" key="#com.intellij.ide.util.MemberChooser" timestamp="1597331080314">
+    <state x="721" y="163" key="#com.intellij.ide.util.MemberChooser" timestamp="1597661343470">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="721" y="163" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1597331080314" />
-    <state width="1869" height="123" key="GridCell.Tab.0.bottom" timestamp="1597328460426">
+    <state x="721" y="163" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1597661343470" />
+    <state width="1869" height="328" key="GridCell.Tab.0.bottom" timestamp="1598087821451">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1869" height="123" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1597328460426" />
-    <state width="1869" height="123" key="GridCell.Tab.0.center" timestamp="1597328460426">
+    <state width="1869" height="328" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1598087821451" />
+    <state width="1869" height="328" key="GridCell.Tab.0.center" timestamp="1598087821450">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1869" height="123" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1597328460426" />
-    <state width="1869" height="123" key="GridCell.Tab.0.left" timestamp="1597328460426">
+    <state width="1869" height="328" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1598087821450" />
+    <state width="1869" height="328" key="GridCell.Tab.0.left" timestamp="1598087821450">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1869" height="123" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1597328460426" />
-    <state width="1869" height="123" key="GridCell.Tab.0.right" timestamp="1597328460426">
+    <state width="1869" height="328" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1598087821450" />
+    <state width="1869" height="328" key="GridCell.Tab.0.right" timestamp="1598087821451">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1869" height="123" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1597328460426" />
-    <state width="1869" height="123" key="GridCell.Tab.1.bottom" timestamp="1597328460427">
+    <state width="1869" height="328" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1598087821451" />
+    <state width="1869" height="328" key="GridCell.Tab.1.bottom" timestamp="1598087821452">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1869" height="123" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1597328460427" />
-    <state width="1869" height="123" key="GridCell.Tab.1.center" timestamp="1597328460427">
+    <state width="1869" height="328" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1598087821452" />
+    <state width="1869" height="328" key="GridCell.Tab.1.center" timestamp="1598087821451">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1869" height="123" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1597328460427" />
-    <state width="1869" height="123" key="GridCell.Tab.1.left" timestamp="1597328460426">
+    <state width="1869" height="328" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1598087821451" />
+    <state width="1869" height="328" key="GridCell.Tab.1.left" timestamp="1598087821451">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1869" height="123" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1597328460426" />
-    <state width="1869" height="123" key="GridCell.Tab.1.right" timestamp="1597328460427">
+    <state width="1869" height="328" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1598087821451" />
+    <state width="1869" height="328" key="GridCell.Tab.1.right" timestamp="1598087821451">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1869" height="123" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1597328460427" />
-    <state width="1869" height="255" key="GridCell.Tab.2.bottom" timestamp="1597300208512">
+    <state width="1869" height="328" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1598087821451" />
+    <state width="1869" height="237" key="GridCell.Tab.2.bottom" timestamp="1597822694827">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1869" height="255" key="GridCell.Tab.2.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1597300208512" />
-    <state width="1869" height="255" key="GridCell.Tab.2.center" timestamp="1597300208511">
+    <state width="1869" height="237" key="GridCell.Tab.2.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1597822694827" />
+    <state width="1869" height="237" key="GridCell.Tab.2.center" timestamp="1597822694826">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1869" height="255" key="GridCell.Tab.2.center/0.0.1920.1040@0.0.1920.1040" timestamp="1597300208511" />
-    <state width="1869" height="255" key="GridCell.Tab.2.left" timestamp="1597300208511">
+    <state width="1869" height="237" key="GridCell.Tab.2.center/0.0.1920.1040@0.0.1920.1040" timestamp="1597822694826" />
+    <state width="1869" height="237" key="GridCell.Tab.2.left" timestamp="1597822694826">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1869" height="255" key="GridCell.Tab.2.left/0.0.1920.1040@0.0.1920.1040" timestamp="1597300208511" />
-    <state width="1869" height="255" key="GridCell.Tab.2.right" timestamp="1597300208512">
+    <state width="1869" height="237" key="GridCell.Tab.2.left/0.0.1920.1040@0.0.1920.1040" timestamp="1597822694826" />
+    <state width="1869" height="237" key="GridCell.Tab.2.right" timestamp="1597822694826">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1869" height="255" key="GridCell.Tab.2.right/0.0.1920.1040@0.0.1920.1040" timestamp="1597300208512" />
-    <state x="607" y="307" key="com.intellij.ide.util.TipDialog" timestamp="1597327193271">
+    <state width="1869" height="237" key="GridCell.Tab.2.right/0.0.1920.1040@0.0.1920.1040" timestamp="1597822694826" />
+    <state x="607" y="307" key="com.intellij.ide.util.TipDialog" timestamp="1598084786980">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="607" y="307" key="com.intellij.ide.util.TipDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1597327193271" />
+    <state x="607" y="307" key="com.intellij.ide.util.TipDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1598084786980" />
     <state x="413" y="199" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2" timestamp="1597300194798">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="413" y="199" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2/0.0.1920.1040@0.0.1920.1040" timestamp="1597300194798" />
-    <state x="532" y="-5" width="840" height="1032" key="search.everywhere.popup" timestamp="1597327325496">
+    <state x="627" y="244" key="extract.method.dialog" timestamp="1597850357481">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="532" y="-5" width="840" height="1032" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1597327325496" />
+    <state x="627" y="244" key="extract.method.dialog/0.0.1920.1040@0.0.1920.1040" timestamp="1597850357481" />
+    <state x="642" y="86" key="refactoring.ChangeSignatureDialog" timestamp="1597427653348">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="642" y="86" key="refactoring.ChangeSignatureDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1597427653348" />
+    <state x="532" y="-5" width="840" height="1032" key="search.everywhere.popup" timestamp="1597999917577">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="532" y="-5" width="840" height="1032" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1597999917577" />
   </component>
 </project>

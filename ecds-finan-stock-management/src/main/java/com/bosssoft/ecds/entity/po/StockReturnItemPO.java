@@ -47,6 +47,10 @@ public class StockReturnItemPO extends Model<StockReturnItemPO> {
     @TableField("f_bill_code")
     private String billCode;
 
+    @ApiModelProperty(value = "票据名称")
+    @TableField("f_bill_name")
+    private String billName;
+
     @ApiModelProperty(value = "数量")
     @TableField("f_number")
     private Integer number;
