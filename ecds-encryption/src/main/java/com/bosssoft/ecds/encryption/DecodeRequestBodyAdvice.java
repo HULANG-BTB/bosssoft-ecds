@@ -51,6 +51,8 @@ public class DecodeRequestBodyAdvice implements RequestBodyAdvice {
                                            Class<? extends HttpMessageConverter<?>> converterType) throws IOException {
 
         StringBuilder stringBuilder = new StringBuilder();
+        HttpHeaders headers = inputMessage.getHeaders();
+        String token=headers.getFirst(HttpHeaders.AUTHORIZATION);
         BufferedReader bufferedReader = null;
         try {
             //获取请求入参 可以从这里获取流
@@ -78,11 +80,12 @@ public class DecodeRequestBodyAdvice implements RequestBodyAdvice {
         }
         //获取请求数据
         String builderString = stringBuilder.toString();
-        Long userId = 123L;
-        if (redisUtils.get(userId + EncryptionConstant.PRIVATE_KEY) == null) {
+
+        if (redisUtils.get(token + EncryptionConstant.PRIVATE_KEY) == null) {
             throw new CustomException(CommonCode.PRIVATE_KEY_IS_NULL);
         }
-        String privateKey = String.valueOf(redisUtils.get(userId + EncryptionConstant.PRIVATE_KEY));
+
+        String privateKey = String.valueOf(redisUtils.get(token + EncryptionConstant.PRIVATE_KEY));
         try {
             return new MyHttpInputMessage(inputMessage.getHeaders(), builderString, privateKey);
         } catch (Exception e) {

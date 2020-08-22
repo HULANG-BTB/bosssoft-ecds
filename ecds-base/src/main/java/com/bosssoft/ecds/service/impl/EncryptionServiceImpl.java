@@ -10,6 +10,7 @@ import com.bosssoft.ecds.util.RedisUtils;
 import com.bosssoft.ecds.utils.RSAUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,20 +27,20 @@ public class EncryptionServiceImpl implements EncryptionService {
     private RedisUtils redisUtil;
     @Autowired
     private HttpServletRequest httpServletRequest;
-
     @Override
     public QueryResponseResult getRSAPublicKey() {
-        Long userId = 123L;
+        String token=httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
         Map<String, Object> rsa = RSAUtil.genKeyPair();
         String publicKey = RSAUtil.getPublicKey(rsa);
-        redisUtil.set(userId + EncryptionConstant.PRIVATE_KEY, RSAUtil.getPrivateKey(rsa), 600);
+        redisUtil.set(token + EncryptionConstant.PRIVATE_KEY, RSAUtil.getPrivateKey(rsa), 600);
+        log.info(publicKey);
         return new QueryResponseResult(CommonCode.SUCCESS, publicKey);
     }
 
     @Override
     public ResponseResult addRSAPublicKey(RSAPublicKeyVO rsaPublicKeyVO) {
-        Long userId = 123L;
-        redisUtil.set(userId + EncryptionConstant.PUBLIC_KEY, rsaPublicKeyVO.getPublicKey(), 600);
+        String token=httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
+        redisUtil.set(token + EncryptionConstant.PUBLIC_KEY, rsaPublicKeyVO.getPublicKey(), 600);
         return new ResponseResult(CommonCode.SUCCESS);
     }
 }
