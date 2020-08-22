@@ -22,12 +22,9 @@ public class ConverUtil {
         if(sourceList==null || sourceList.isEmpty()) {
             return new ArrayList<>();
         }
-        log.info("进入conver方法...data:{}", sourceList);
         if(targetObjectClass==StockOutChangeDto.class &&
                 sourceList.stream().findAny().get().getClass() == StockOutVo.class){
-            log.info("变动转换...");
             sourceList.forEach(s -> targetList.add((T) outVoToChangeDto((StockOutVo) s)));
-            log.info("data:{}",targetList.toString());
             return targetList;
         }
         sourceList.forEach(s -> targetList.add(Convert.convert(targetObjectClass, s)));

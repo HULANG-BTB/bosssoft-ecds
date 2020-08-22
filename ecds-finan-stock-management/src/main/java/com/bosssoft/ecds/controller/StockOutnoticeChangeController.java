@@ -19,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -32,7 +33,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/out-change")
-@CrossOrigin
+//@CrossOrigin
 @Api(tags = "财政出库变动Controller")
 public class StockOutnoticeChangeController extends BaseController {
 
@@ -46,7 +47,7 @@ public class StockOutnoticeChangeController extends BaseController {
      */
     @ApiOperation("展示变动记录列表")
     @PostMapping("/showAll")
-    public QueryResponseResult<PageResult> showAll(@RequestBody OutChangePageVo pageVo) {
+    public QueryResponseResult<PageResult> showAll(@Valid @RequestBody OutChangePageVo pageVo) {
         log.info("进入showAll方法...");
         Long total = changeService.getCount(pageVo);
         List<StockOutChangeDto> changeDtos = changeService.queryByPageVo(
