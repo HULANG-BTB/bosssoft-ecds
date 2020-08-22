@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bosssoft.ecds.dao.CbillAccountingDao">
+    <!-- DTO查询映射结果 -->
+    <resultMap id="DTOResultMap" type="com.bosssoft.ecds.entity.dto.CbillAccountingDTO">
+        <id column="f_id" property="id" />
+        <result column="f_agen_idcode" property="agenIdcode" />
+        <result column="f_agen_name" property="agenName" />
+        <result column="f_place_id" property="placeId" />
+        <result column="f_agen_time" property="agenTime" />
+        <result column="f_type" property="type" />
+        <result column="f_bill_batch_id" property="billBatchId" />
+        <result column="f_bill_serial_id" property="billSerialId" />
+        <result column="f_bill_no" property="billNo" />
+        <result column="f_time" property="time" />
+        <result column="f_account" property="account" />
+        <result column="f_account_id" property="accountId" />
+        <result column="f_version" property="version" />
+        <result column="f_create_time" property="createTime" />
+        <result column="f_update_time" property="updateTime" />
+        <result column="f_logic_delete" property="logicDelete" />
+        <result column="f_wait_account" property="waitAccount" />
+        <result column="f_account_type" property="accountType" />
+        <result column="f_account_status" property="accountStatus" />
+        <result column="f_operator" property="operator" />
+        <result column="f_operator_id" property="operatorId" />
+        <result column="f_payer_tel" property="payerTel" />
+        <result column="f_node" property="node" />
+    </resultMap>
+
+    <!--DTO查询结果列-->
+    <sql id="DTO_Column_List">
+        f_id, f_agen_idcode, f_agen_name, f_agen_type, f_place_id, f_agen_time, f_type, f_bill_batch_id, f_bill_serial_id, f_bill_no, f_time, f_account, f_account_id, f_version, f_create_time, f_update_time, f_logic_delete, f_wait_account, f_account_type, f_account_status, f_operator, f_operator_id, f_payer_tel, f_node
+    </sql>
+
+</mapper>

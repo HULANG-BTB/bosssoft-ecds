@@ -21,7 +21,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author misheep
- * @since 2020-08-11
+ * @since 2020-08-19
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -36,10 +36,10 @@ public class StockOutnoticeChangePo extends Model<StockOutnoticeChangePo> {
     private Long id;
 
     @ApiModelProperty(value = "业务ID")
-    @TableField("f_buss_id")
-    private Long bussId;
+    @TableField("f_pid")
+    private Long pid;
 
-    @ApiModelProperty(value = "变更状态(0无用1新增2修改3删除)")
+    @ApiModelProperty(value = "审核状态(0新建1保存2提交3通过4退回）")
     @TableField("f_change_state")
     private Integer changeState;
 
@@ -56,7 +56,7 @@ public class StockOutnoticeChangePo extends Model<StockOutnoticeChangePo> {
     @Version
     private Integer version;
 
-    @ApiModelProperty(value = "1新增　2修改   3 删除")
+    @ApiModelProperty(value = "变更状态(0无用1新增2修改3删除)")
     @TableField("f_altercode")
     private Integer altercode;
 
@@ -69,17 +69,17 @@ public class StockOutnoticeChangePo extends Model<StockOutnoticeChangePo> {
     private Date updateTime;
 
     @ApiModelProperty(value = "操作者id")
-    @TableField(value = "f_operator_id", fill = FieldFill.INSERT_UPDATE)
+    @TableField(value = "f_operator_id")
     private Long operatorId;
 
     @ApiModelProperty(value = "操作者name")
-    @TableField(value = "f_operator", fill = FieldFill.INSERT_UPDATE)
+    @TableField(value = "f_operator")
     private String operator;
 
 
     public static final String F_ID = "f_id";
 
-    public static final String F_BUSS_ID = "f_buss_id";
+    public static final String F_PID = "f_pid";
 
     public static final String F_CHANGE_STATE = "f_change_state";
 

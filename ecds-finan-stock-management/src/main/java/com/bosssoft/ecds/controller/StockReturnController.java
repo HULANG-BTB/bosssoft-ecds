@@ -9,6 +9,9 @@ import com.bosssoft.ecds.entity.vo.DateVO;
 import com.bosssoft.ecds.entity.vo.StockReturnCheckVO;
 import com.bosssoft.ecds.entity.vo.StockReturnItemVO;
 import com.bosssoft.ecds.entity.vo.StockReturnVO;
+import com.bosssoft.ecds.response.CommonCode;
+import com.bosssoft.ecds.response.QueryResponseResult;
+import com.bosssoft.ecds.response.ResponseResult;
 import com.bosssoft.ecds.service.StockReturnItemService;
 import com.bosssoft.ecds.service.StockReturnService;
 import lombok.AllArgsConstructor;
@@ -74,10 +77,10 @@ public class StockReturnController {
      * @return
      */
     @PostMapping("/getListStockReturnByDate")
-    public PageResult getStockReturnListByDate(@RequestBody DateVO dateVO) {
+    public QueryResponseResult<PageResult> getStockReturnListByDate(@RequestBody DateVO dateVO) {
         log.info("dateVo："+dateVO);
         PageResult pageResult = stockReturnService.stockReturnVOListByPage(dateVO);
-        return  pageResult;
+        return new QueryResponseResult<>(CommonCode.SUCCESS, pageResult);
     }
 
     /**
@@ -86,8 +89,9 @@ public class StockReturnController {
      * @return
      */
     @PostMapping("/getStockReturnByNo")
-    public StockReturnVO stockRetrunVOByNo (@RequestBody StockReturnVO stockReturnVO1) {
-        return stockReturnService.stockRetrunVOByNo(stockReturnVO1);
+    public QueryResponseResult<StockReturnVO> stockRetrunVOByNo (@RequestBody StockReturnVO stockReturnVO1) {
+        StockReturnVO stockReturnVO = stockReturnService.stockRetrunVOByNo(stockReturnVO1);
+        return new QueryResponseResult<>(CommonCode.SUCCESS, stockReturnVO);
     }
 
     /**
@@ -96,8 +100,12 @@ public class StockReturnController {
      * @return
      */
     @PostMapping("/CheckStatusByNo")
-    public String toCheckStatusByNo(@RequestBody StockReturnCheckVO stockReturnCheckVO){
-        return stockReturnService.CheckStatusByNo(stockReturnCheckVO);
+    public ResponseResult toCheckStatusByNo(@RequestBody StockReturnCheckVO stockReturnCheckVO){
+        boolean status = stockReturnService.CheckStatusByNo(stockReturnCheckVO);
+        if(status == true) {
+            return new ResponseResult(CommonCode.SUCCESS);
+        }
+        return new ResponseResult(CommonCode.FAIL);
     }
 
     /**

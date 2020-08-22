@@ -43,8 +43,8 @@ public class MybatisPlusConfig {
                 String authNickname = "test";
                 this.setFieldValByName("createTime", new Date(), metaObject);
                 this.setFieldValByName("updateTime", new Date(), metaObject);
-                this.setFieldValByName("operatorId", authId, metaObject);
-                this.setFieldValByName("operator", authNickname, metaObject);
+//                this.setFieldValByName("operatorId", authId, metaObject);
+//                this.setFieldValByName("operator", authNickname, metaObject);
 
             }
 
@@ -59,8 +59,8 @@ public class MybatisPlusConfig {
                 Long authId = 1L;
                 String authNickname = "test";
                 this.setFieldValByName("updateTime", new Date(), metaObject);
-                this.setFieldValByName("operatorId", authId, metaObject);
-                this.setFieldValByName("operator", authNickname, metaObject);
+//                this.setFieldValByName("operatorId", authId, metaObject);
+//                this.setFieldValByName("operator", authNickname, metaObject);
             }
         };
     }

@@ -4,6 +4,9 @@ package com.bosssoft.usm.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.bosssoft.ecds.response.CommonCode;
+import com.bosssoft.ecds.response.QueryResponseResult;
+import com.bosssoft.ecds.response.ResponseResult;
 import com.bosssoft.usm.config.StatusCode;
 import com.bosssoft.usm.entity.po.StockReturnItemPO;
 import com.bosssoft.usm.entity.po.StockReturnPO;
@@ -245,9 +248,9 @@ public class StockReturnController {
      * @return
      */
     @PostMapping("/addStockReturn")
-    public String addStockReturn(@RequestBody StockReturnVO stockReturnVO) {
+    public ResponseResult addStockReturn(@RequestBody StockReturnVO stockReturnVO) {
         String status = stockReturnService.addStockReturnPO(stockReturnVO);
-        return status;
+        return getResponseResult(status);
     }
 
     /**
@@ -266,8 +269,10 @@ public class StockReturnController {
      * @return
      */
     @PostMapping("/getListStockReturnPage")
-    public PageResult getPageReslt(@RequestBody DateVO dateVO){
-        return stockReturnService.stockReturnVOListByPage(dateVO);
+    public QueryResponseResult<PageResult> getPageReslt(@RequestBody DateVO dateVO){
+        /*return stockReturnService.stockReturnVOListByPage(dateVO);*/
+        PageResult pageResult = stockReturnService.stockReturnVOListByPage(dateVO);
+        return new QueryResponseResult<>(CommonCode.SUCCESS, pageResult);
     }
 
     /**
@@ -288,8 +293,10 @@ public class StockReturnController {
      */
     @CrossOrigin
     @PostMapping("/getStockReturnByNo")
-    public StockReturnVO getStockReturn(@RequestBody StockReturnVO stockReturnVO) {
-        return stockReturnService.stockRetrunVOByNo(stockReturnVO);
+    public QueryResponseResult<StockReturnVO> getStockReturn(@RequestBody StockReturnVO stockReturnVO) {
+        /*return stockReturnService.stockRetrunVOByNo(stockReturnVO);*/
+        StockReturnVO stockReturnVO1 = stockReturnService.stockRetrunVOByNo(stockReturnVO);
+        return new QueryResponseResult<>(CommonCode.SUCCESS, stockReturnVO1);
     }
 
     /**
@@ -321,8 +328,9 @@ public class StockReturnController {
      * @return
      */
     @PostMapping("/updateByNo")
-    public String updateByNo(@RequestBody StockReturnVO stockReturnVO) {
-        return stockReturnService.updateStockReturn(stockReturnVO);
+    public ResponseResult updateByNo(@RequestBody StockReturnVO stockReturnVO) {
+        String status = stockReturnService.updateStockReturn(stockReturnVO);
+        return getResponseResult(status);
     }
 
     /**
@@ -332,8 +340,9 @@ public class StockReturnController {
      * @return
      */
     @PutMapping("/updateItemByNo")
-    public String updateItemByNo(@RequestBody List<StockReturnItemVO> stockReturnItemVOList, Long no) {
-        return stockReturnService.updateStockReturnItemPO(stockReturnItemVOList, no);
+    public ResponseResult updateItemByNo(@RequestBody List<StockReturnItemVO> stockReturnItemVOList, Long no) {
+        String status = stockReturnService.updateStockReturnItemPO(stockReturnItemVOList, no);
+        return getResponseResult(status);
     }
 
     /**
@@ -343,8 +352,9 @@ public class StockReturnController {
      * @return
      */
     @GetMapping("/deleteByNo")
-    public String deleteByNo(Long no) {
-        return stockReturnService.deleteStockReturn(no);
+    public ResponseResult deleteByNo(Long no) {
+       String status = stockReturnService.deleteStockReturn(no);
+       return getResponseResult(status);
     }
 
     /**
@@ -384,14 +394,14 @@ public class StockReturnController {
      * @return
      */
     @PutMapping("/updateSubmitStatus")
-    public String updateSubmitStatus(Long no) {
+    public ResponseResult updateSubmitStatus(Long no) {
         StockReturnPO stockReturnPO = new StockReturnPO();
         stockReturnPO.setSubmitStatus(1);
         boolean status = stockReturnService.update(stockReturnPO, new QueryWrapper<StockReturnPO>().eq("f_no", no));
         if (status == true) {
-            return StatusCode.UPDATE_SUCCESS;
+            return ResponseResult.SUCCESS();
         }
-        return StatusCode.UPDATE_FAILED;
+        return ResponseResult.FAIL();
     }
 
     /**
@@ -415,6 +425,19 @@ public class StockReturnController {
     @PutMapping("/putSubmit")
     public String submitApply(Long no){
         return null;
+    }
+
+    /**
+     * 返回前端状态码
+     * @param status
+     * @return
+     */
+    private ResponseResult getResponseResult(String status) {
+        if(status.equals(StatusCode.ADD_SUCCESS) || status.equals(StatusCode.DELETE_SUCCESS) ||
+                status.equals(StatusCode.FIND_SUCCESS) || status.equals(StatusCode.UPDATE_SUCCESS)) {
+            return ResponseResult.SUCCESS();
+        }
+        return ResponseResult.FAIL();
     }
 }
 

@@ -68,6 +68,6 @@ public interface StockReturnService extends IService<StockReturnPO> {
      * @param stockReturnCheckVO
      * @return
      */
-    String CheckStatusByNo(StockReturnCheckVO stockReturnCheckVO);
+    boolean CheckStatusByNo(StockReturnCheckVO stockReturnCheckVO);
 
 }

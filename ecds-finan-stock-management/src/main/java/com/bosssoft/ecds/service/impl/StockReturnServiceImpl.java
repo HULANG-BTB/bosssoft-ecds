@@ -193,7 +193,7 @@ public class StockReturnServiceImpl extends ServiceImpl<StockReturnDao, StockRet
      * @return
      */
     @Override
-    public String CheckStatusByNo(StockReturnCheckVO stockReturnCheckVO) {
+    public boolean CheckStatusByNo(StockReturnCheckVO stockReturnCheckVO) {
         StockReturnPO stockReturnPO = new StockReturnPO();
         stockReturnPO = getOne(new QueryWrapper<StockReturnPO>().eq("f_no",stockReturnCheckVO.getNo()));
         if(stockReturnPO != null) {
@@ -219,7 +219,7 @@ public class StockReturnServiceImpl extends ServiceImpl<StockReturnDao, StockRet
                         boolean status1 = finanBillService.update(finanBillPo, queryWrapper);
                         boolean status2 = agenBillService.update(agenBillPO, queryWrapper1);
                         if(status1 == true && status2 == true) {
-                            return "Check Pass Success!";
+                            return true;
                         }
                     }
 
@@ -229,10 +229,10 @@ public class StockReturnServiceImpl extends ServiceImpl<StockReturnDao, StockRet
                     stockReturnPO.setChangeSitu(stockReturnCheckVO.getChangeSitu());
                     stockReturnPO.setChangeDate(new Date());
                     update(stockReturnPO, new QueryWrapper<StockReturnPO>().eq("f_no", stockReturnCheckVO.getNo()));
-                    return "Check NOPass Success!";
+                    return true;
                 }
             }
         }
-        return "Check Pass or NOPass Failed!";
+        return false;
     }
 }

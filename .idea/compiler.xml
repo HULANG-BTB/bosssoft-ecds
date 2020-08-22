@@ -11,12 +11,13 @@
         <module name="ecds-bill-write-off" />
         <module name="ecds-template" />
         <module name="ecds-financial-sign" />
+        <module name="provider" />
         <module name="ecds-bill-destory" />
         <module name="ecds-bill-message" />
-        <module name="ecds-bill-pool" />
         <module name="ecds-verify" />
         <module name="ecds-unit-stock-management" />
         <module name="ecds-unit-sign" />
+        <module name="ecds-encryption" />
         <module name="ecds-common" />
         <module name="ecds-bill-accounting" />
         <module name="ecds-vouchar" />
@@ -37,6 +38,7 @@
       <module name="ecds-bill-pool" target="1.8" />
       <module name="ecds-bill-write-off" target="1.8" />
       <module name="ecds-common" target="1.8" />
+      <module name="ecds-encryption" target="1.8" />
       <module name="ecds-finan-stock-management" target="1.8" />
       <module name="ecds-financial-pay" target="1.8" />
       <module name="ecds-financial-sign" target="1.8" />
@@ -47,6 +49,7 @@
       <module name="ecds-unit-stock-management" target="1.8" />
       <module name="ecds-verify" target="1.8" />
       <module name="ecds-vouchar" target="1.8" />
+      <module name="provider" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

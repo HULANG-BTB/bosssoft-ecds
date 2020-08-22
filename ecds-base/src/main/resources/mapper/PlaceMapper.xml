@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bosssoft.ecds.dao.PlaceDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.bosssoft.ecds.entity.po.PlacePO">
+        <id column="f_id" property="fId" />
+        <result column="f_rgn_id" property="fRgnId" />
+        <result column="f_place_id" property="fPlaceId" />
+        <result column="f_place_name" property="fPlaceName" />
+        <result column="f_agen_id" property="fAgenId" />
+        <result column="f_mmen" property="fMmen" />
+        <result column="f_level" property="fLevel" />
+        <result column="f_isenable" property="fIsenable" />
+        <result column="f_operator" property="fOperator" />
+        <result column="f_operator_id" property="fOperatorId" />
+        <result column="f_create_time" property="fCreateTime" />
+        <result column="f_update_time" property="fUpdateTime" />
+        <result column="f_logic_delete" property="fLogicDelete" />
+        <result column="f_version" property="fVersion" />
+        <result column="f_note" property="fNote" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        f_id, f_rgn_id, f_place_id, f_place_name, f_agen_id, f_mmen, f_level, f_isenable, f_operator, f_operator_id, f_create_time, f_update_time, f_logic_delete, f_version, f_note
+    </sql>
+
+</mapper>
