@@ -1,5 +1,7 @@
 package com.bosssoft.ecds.security.handler;
 
+import com.bosssoft.ecds.util.RedisUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.server.DefaultServerRedirectStrategy;
 import org.springframework.security.web.server.ServerRedirectStrategy;
@@ -18,15 +20,20 @@ import java.net.URI;
  **/
 
 @Component
-public class CustomRedirectServerLogoutSuccessHandler extends RedirectServerLogoutSuccessHandler {
+public class CustomLogoutSuccessHandler extends RedirectServerLogoutSuccessHandler {
     public static final String DEFAULT_LOGOUT_SUCCESS_URL = "/";
 
     private URI logoutSuccessUrl = URI.create(DEFAULT_LOGOUT_SUCCESS_URL);
 
     private ServerRedirectStrategy redirectStrategy = new DefaultServerRedirectStrategy();
 
+    @Autowired
+    RedisUtils redisUtils;
+
     @Override
     public Mono<Void> onLogoutSuccess(WebFilterExchange exchange, Authentication authentication) {
+
+
         return this.redirectStrategy
                 .sendRedirect(exchange.getExchange(), this.logoutSuccessUrl);
     }
