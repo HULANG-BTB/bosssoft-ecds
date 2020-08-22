@@ -9,12 +9,16 @@ public class QueryResponseResult<T> extends ResponseResult {
 
     public T data;
 
-    public QueryResponseResult() {
-
-    }
+    public String aseKey;
 
     public QueryResponseResult(ResultCode code, T data) {
         super(code);
         this.data = data;
+    }
+
+    public QueryResponseResult(ResultCode code, T data, String aseKey) {
+        super(code);
+        this.data = data;
+        this.aseKey = aseKey;
     }
 }

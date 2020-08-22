@@ -83,6 +83,14 @@ public class FinancialWriteOffServiceImpl implements FinancialWriteOffService {
         return true;
     }
 
+    @Override
+    public boolean setResult(WriteOffDetailDTO writeOffDetailDTO , WriteOffResultDTO writeOffResultDTO) {
+        // 点击审验后， 对审验结果进行保存
+        // 保存审验结果
+//        setDetails(writeOffDetailDTO);
+        // 跟新审核结果
+        return false;
+    }
     /**
      * 存入核销结果
      *
@@ -90,11 +98,7 @@ public class FinancialWriteOffServiceImpl implements FinancialWriteOffService {
      * @return java.lang.Object
      */
     @Override
-    public boolean setResult(WriteOffDetailDTO writeOffDetailDTO ,WriteOffResultDTO writeOffResultDTO) {
-        // 点击审验后， 对审验结果进行保存
-        // 保存审验结果
-//        setDetails(writeOffDetailDTO);
-        // 跟新审核结果
+    public boolean setResult(WriteOffResultDTO writeOffResultDTO) {
         if (writeOffResultDTO.getRes().equals("pass")){
             writeOffApplyMapper.setResult(writeOffResultDTO.getFNo(), 2);
         } else {

@@ -8,6 +8,8 @@ import com.bosssoft.ecds.response.CommonCode;
 import com.bosssoft.ecds.response.QueryResponseResult;
 import com.bosssoft.ecds.response.ResponseResult;
 import com.bosssoft.ecds.service.FinancialWriteOffService;
+import com.bosssoft.ecds.service.MonitorRecordService;
+import com.bosssoft.ecds.service.UnitWriteOffService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,11 @@ public class FinancialWriteOffController {
     @Autowired
     private FinancialWriteOffService financialWriteOffService;
 
+    @Autowired
+    private MonitorRecordService monitorRecordService;
+
+    @Autowired
+    private UnitWriteOffService unitWriteOffService;
     /**
      * 获取单位端传来的核销信息
      * 接收一段时间的下级单位传来的核销信息
@@ -94,6 +101,7 @@ public class FinancialWriteOffController {
         writeOffDetailVO.setWriteOffBillInvDetailDTOList(writeOffDetailDTO.getWriteOffBillInvDetailDTOList());
         writeOffDetailVO.setWriteOffIncomeDetailDTOList(writeOffDetailDTO.getWriteOffIncomeDetailDTOList());
         writeOffDetailVO.setWriteOffInvoceDetailDTOList(writeOffDetailDTO.getWriteOffInvoceDetailDTOList());
+        writeOffDetailVO.setWriteOffMonitorDetailDTOList(monitorRecordService.getMonitorDetail(writeOffDetailDTO));
         return new QueryResponseResult(CommonCode.SUCCESS, writeOffDetailVO);
     }
 
@@ -101,29 +109,21 @@ public class FinancialWriteOffController {
      * 通过审核
      * 存储数据
      *
-     * @param writeOffDetailVO
+     * @param writeOffResultVO
      * @return java.lang.String
      */
     @ResponseBody
-    @RequestMapping(value = "/pass", method = RequestMethod.POST)
+    @RequestMapping(value = "/result", method = RequestMethod.POST)
     @ApiOperation(value = "审核通过", notes = "审核通过")
-    @ApiImplicitParam(name = "writeOffDetailVO", dataType = "WriteOffDetailVO", value = "审核结果")
-    public ResponseResult pass(@RequestBody WriteOffDetailVO writeOffDetailVO){
+    @ApiImplicitParam(name = "writeOffResultVO", dataType = "WriteOffResultVO", value = "审核结果")
+    public ResponseResult setResult(@RequestBody WriteOffResultVO writeOffResultVO){
+        System.out.println(writeOffResultVO.getRes());
+        WriteOffResultDTO resultDTO = new WriteOffResultDTO();
+        resultDTO.setFAgenIdCode(writeOffResultVO.getfAgenIdCode());
+        resultDTO.setFNo(writeOffResultVO.getfNo());
+        resultDTO.setRes(writeOffResultVO.getRes());
+        financialWriteOffService.setResult(resultDTO);
         return new ResponseResult(CommonCode.SUCCESS);
     }
 
-    /**
-     * 未通过审核
-     * 存储数据
-     *
-     * @param writeOffDetailVO
-     * @return java.lang.String
-     */
-    @ResponseBody
-    @RequestMapping(value = "/unPass", method = RequestMethod.POST)
-    @ApiOperation(value = "审核不通过", notes = "审核不通过")
-    @ApiImplicitParam(name = "writeOffDetailVO", dataType = "WriteOffDetailVO", value = "审核结果")
-    public ResponseResult unPass(@RequestBody WriteOffDetailVO writeOffDetailVO){
-        return new ResponseResult(CommonCode.SUCCESS);
-    }
 }

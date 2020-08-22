@@ -2,7 +2,6 @@ package com.bosssoft.ecds.dao.unit;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.bosssoft.ecds.entity.po.WriteOffApplyIncomePO;
-import com.bosssoft.ecds.entity.po.WriteOffApplyItemPO;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 

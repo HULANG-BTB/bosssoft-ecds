@@ -1,10 +1,7 @@
 package com.bosssoft.ecds.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.bosssoft.ecds.entity.dto.UnitWriteOffApplyQueryInfoDTO;
-import com.bosssoft.ecds.entity.dto.UnitWriteOffItemQueryInfoDTO;
-import com.bosssoft.ecds.entity.dto.WriteOffApplyDTO;
-import com.bosssoft.ecds.entity.dto.WriteOffApplyItemDTO;
+import com.bosssoft.ecds.entity.dto.*;
 
 import java.util.List;
 
@@ -42,16 +39,30 @@ public interface UnitWriteOffService {
     boolean rescindApply(List<String> noList);
 
     /**
-     * 查询申请明细（已经上报无法更改的情况）
+     * 查询申请明细
      * @param queryInfoDTO 明细查询DTO
      * @return 分页对象
      */
-    IPage<WriteOffApplyItemDTO> selectItemPage(UnitWriteOffItemQueryInfoDTO queryInfoDTO);
+    IPage<WriteOffApplyItemDTO> selectItemPage(UnitWriteOffItemAndIncomeQueryInfoDTO queryInfoDTO);
 
     /**
-     * 查询所有申请明细（新增和修改时）
-     * @param no 业务单号
-     * @return ItemDTO列表
+     * 查询收费项目
+     * @param queryInfoDTO 项目查询DTO
+     * @return 分页对象
      */
-    List<WriteOffApplyItemDTO> selectItems(String no);
+    IPage<WriteOffApplyIncomeDTO> selectIncomePage(UnitWriteOffItemAndIncomeQueryInfoDTO queryInfoDTO);
+
+    /**
+     * 从接口中获取数据并整合
+     * @param billQueryDTO 数据查询DTO
+     * @return 获取之后整合的数据
+     */
+    BillInfoDTO getData(BillQueryDTO billQueryDTO);
+
+    /**
+     * 添加或者更新申请
+     * @param applyDTO 申请DTO
+     * @return 是否成功
+     */
+    boolean addOrUpdateApply(ApplyDTO applyDTO);
 }

@@ -1,10 +1,8 @@
 package com.bosssoft.ecds.service;
 
-import com.bosssoft.ecds.entity.dto.WriteOffApplyItemDTO;
 import com.bosssoft.ecds.entity.dto.WriteOffDetailDTO;
 import com.bosssoft.ecds.entity.dto.WriteOffReceiveDTO;
 import com.bosssoft.ecds.entity.dto.WriteOffResultDTO;
-import com.bosssoft.ecds.entity.po.WriteOffApplyItemPO;
 
 import java.util.List;
 
@@ -23,6 +21,10 @@ public interface FinancialWriteOffService {
 
     // 存入审验结果
     boolean setResult(WriteOffDetailDTO writeOffDetailDTO, WriteOffResultDTO writeOffResultDTO);
+
+    // 存入审验结果
+    boolean setResult(WriteOffResultDTO writeOffResultDTO);
+
 
     // 获取核销申请详细信息
     WriteOffDetailDTO getDetail(String fPid);

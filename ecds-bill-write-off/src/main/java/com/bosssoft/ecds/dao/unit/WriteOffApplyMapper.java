@@ -6,8 +6,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
-import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -16,6 +16,14 @@ import java.util.List;
  */
 @Mapper
 public interface WriteOffApplyMapper extends BaseMapper<WriteOffApplyPO> {
+
+    /**
+     * 返回单位上次核销的截止日期
+     * @param fAgenIdCode 单位代码
+     * @return 日期
+     */
+    @Select("SELECT MAX(f_end_date) FROM ube_writeoff_apply WHERE f_agen_id_code = #{fAgenIdCode} and f_is_upload = 2")
+    Date getMaxEndDate(@Param("fAgenIdCode") String fAgenIdCode);
 
     /**
      * 根据fAgenIdCode单位识别码
