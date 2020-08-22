@@ -13,5 +13,5 @@ import java.io.Serializable;
  *      UserDAO
  **/
 public interface UserDao extends BaseMapper<UserPO> {
-    UserPO selectByUsername(Serializable username);
+
 }
