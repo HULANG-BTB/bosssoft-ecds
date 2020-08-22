@@ -46,7 +46,7 @@ public class CustomReactiveAuthorizationManager implements ReactiveAuthorization
                     String reqUrl = permissionVO.getUrl();
                     String reqMethod = permissionVO.getMethod();
                     // 如果 A 具有访问 /user 的权限，那么 A自动具有访问 /user/* 的权限 此逻辑可以修改 地址和访问方式同时确定是否具有权限
-                    if (reqUrl != null && reqUrl.startsWith(this.path) && method != null && reqMethod.equalsIgnoreCase(this.method)) {
+                    if (reqUrl != null && this.path.startsWith(reqUrl) && method != null && reqMethod.equalsIgnoreCase(this.method)) {
                         return true;
                     }
                     return false;
