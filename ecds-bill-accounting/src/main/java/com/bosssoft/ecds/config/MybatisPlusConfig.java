@@ -25,6 +25,7 @@ import java.util.Date;
 
 @EnableTransactionManagement
 @Configuration
+@MapperScan("com.bosssoft.ecds.dao")
 public class MybatisPlusConfig {
 
     @Autowired

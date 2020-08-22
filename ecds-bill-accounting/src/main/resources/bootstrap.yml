@@ -4,16 +4,20 @@ spring:
   cloud:
     nacos:
       config:
-        server-addr: 49.234.75.113:8848
+        #server-addr: 49.234.75.113:8848
         file-extension: yml
         prefix: bill-accounting
         ext‐config:
           - data‐id: redis-server-dev.yaml
             group: DEFAULT_GROUP
             refresh: true
+        server-addr: 49.234.212.41:8848
       discovery:
-        server-addr: 49.234.75.113:8848
+        server-addr: 49.234.212.41:8848
+      #server-addr: 49.234.75.113:8848
   profiles:
     active: dev
+ #profiles:
+   #active:prod
 server:
-  port: 8002
+  port: 8001

@@ -77,7 +77,7 @@ public class CbillAccountingServiceQueryServiceImpl extends ServiceImpl<CbillAcc
             queryWrapper.eq(CbillAccountingPO.F_ACCOUNT_TYPE,pageDTO.getAccountType());
         }
         //keyword为空代表查询全部
-        if(pageDTO.getKeyword()==""||pageDTO.getKeyword()=="null"||pageDTO.getKeyword()==null){
+        if(pageDTO.getKeyword().equals("")||pageDTO.getKeyword()=="null"||pageDTO.getKeyword()==null){
             //不对queryWrapper进行任何修改
         }else{
             //模糊查询
