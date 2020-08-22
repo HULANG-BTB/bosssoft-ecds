@@ -24,13 +24,12 @@ import java.util.List;
 @Api(tags = "票据查验记录")
 @RestController
 @RequestMapping("/checkRecord")
-@CrossOrigin
+//@CrossOrigin
 @Slf4j
 public class CheckRecordController extends BaseController{
 
     @Resource
     private CheckRecordService checkRecordService;
-
 
     /**
      * 分页查询查验记录
@@ -46,7 +45,6 @@ public class CheckRecordController extends BaseController{
         List<CheckRecordDto> mails = checkRecordService.listPage(recordQuery, recordQuery.getPage(), recordQuery.getLimit());
         // 封装结果集，携带页面参数
         PageResult pageResult = new PageResult(total, recordQuery.getLimit(), recordQuery.getPage(), mails);
-
         return new QueryResponseResult<>(CommonCode.SUCCESS,pageResult);
     }
 
@@ -75,6 +73,5 @@ public class CheckRecordController extends BaseController{
         boolean b = checkRecordService.removeByIds(ids);
         return getRes(b);
     }
-
 
 }

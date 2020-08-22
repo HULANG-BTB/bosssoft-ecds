@@ -12,7 +12,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @Slf4j
 @SpringBootApplication
 @EnableDiscoveryClient
-@RefreshScope
+// @RefreshScope
 @MapperScan("com.bosssoft.ecds.mapper")
 @MapperScan("com.bosssoft.ecds.dao")
 @EnableFeignClients

@@ -3,6 +3,7 @@ package com.bosssoft.ecds.msg.config;
 
 
 import com.alibaba.fastjson.support.spring.FastJsonRedisSerializer;
+import com.bosssoft.ecds.msg.util.BloomFilterHelper;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
@@ -11,6 +12,8 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
+import java.nio.charset.StandardCharsets;
+
 /**
  * @author zhangxiaohui
  * @create 2020/7/27 9:42
@@ -18,6 +21,8 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @Configuration
 @EnableCaching
 public class RedisConfig extends CachingConfigurerSupport {
+
+
     /**
      * Description: redisTemplate序列化
      */
@@ -35,5 +40,13 @@ public class RedisConfig extends CachingConfigurerSupport {
         redisTemplate.setDefaultSerializer(fastJsonRedisSerializer);
         redisTemplate.afterPropertiesSet();
         return redisTemplate;
+    }
+
+    /**
+     *   初始化布隆过滤器，放入到spring容器里面
+     */
+    @Bean
+    public BloomFilterHelper<String> initBloomFilterHelper() {
+        return new BloomFilterHelper<>((from, into) -> into.putString(from, StandardCharsets.UTF_8).putString(from, StandardCharsets.UTF_8), 100000, 0.01);
     }
 }

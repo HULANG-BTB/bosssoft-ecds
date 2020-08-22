@@ -34,10 +34,11 @@ build/
 
 ### Output Images ###
 output
-
+target
 ### Resources ###
 src/main/resources/
 /src/main/resources/application.yml
+/src/main/resources/application-zw.yml
 /src/main/resources/generatorConfig.xml
 /src/main/resources/jdbc.properties
 /src/main/resources/mybatis-config.xml

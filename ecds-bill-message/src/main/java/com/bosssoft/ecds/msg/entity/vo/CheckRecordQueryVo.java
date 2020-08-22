@@ -1,10 +1,10 @@
-package com.boss.msg.entity.vo;
+package com.bosssoft.ecds.msg.entity.vo;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -15,7 +15,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CheckRecordQueryVo {
+public class CheckRecordQueryVo implements Serializable {
     /**
      * 查验记录表_主键
      */

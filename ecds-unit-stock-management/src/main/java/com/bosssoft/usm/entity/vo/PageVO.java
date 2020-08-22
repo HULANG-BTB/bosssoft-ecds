@@ -12,8 +12,10 @@ import lombok.ToString;
 @ToString
 public class PageVO {
 
-    private int pageNum;
+    /** 当前页 **/
+    private Integer pageNum;
 
-    private int pageSize;
+    /** 每页大小 **/
+    private Integer pageSize;
 
 }

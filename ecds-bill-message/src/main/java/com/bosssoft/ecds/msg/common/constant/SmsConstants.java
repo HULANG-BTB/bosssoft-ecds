@@ -1,4 +1,4 @@
-package com.bosssoft.ecds.msg.constant;
+package com.bosssoft.ecds.msg.common.constant;
 
 /**
  * @author zhangxiaohui
