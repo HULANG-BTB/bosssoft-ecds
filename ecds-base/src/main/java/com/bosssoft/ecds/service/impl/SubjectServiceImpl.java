@@ -339,7 +339,7 @@ public class SubjectServiceImpl extends ServiceImpl<SubjectDao, SubjectPO> imple
         subjectPO.setParentId(pid);
         subjectPO.setLeaf(false);
         SubjectDTO subjectDTO = MyBeanUtil.copyProperties(subjectPO, SubjectDTO.class);
-        add(subjectDTO);
+        this.subjectService.add(subjectDTO);
 //        获取当前subjectPO的id
         SubjectPO newSubjectPO = selectByYearAndCode(getCurrentYear(), subjectPO.getCode());
         if (childrenPOS == null || childrenPOS.size() == 0 || childrenPOS.get(0) == null) {
