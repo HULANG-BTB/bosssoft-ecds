@@ -14,5 +14,11 @@ public interface HtmlService {
 
     String genHtml(Map<String, Object> data, String templateString);
 
+    /**
+     * 为非税票据的 DTO 和模板生成对应的 html 代码
+     * @param billDTO 非税票据 DTO
+     * @param templateString 非税票据模板
+     * @return html字符串
+     */
     String genBillHtml(NontaxBillDto billDTO, String templateString);
 }

@@ -13,4 +13,5 @@ import com.bosssoft.ecds.template.entity.po.TemplateDefaultPo;
  */
 public interface TemplateDefaultService extends IService<TemplateDefaultPo> {
 
+    boolean setDefault(String print, String billCode, Long id);
 }

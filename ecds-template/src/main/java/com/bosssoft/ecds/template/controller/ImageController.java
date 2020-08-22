@@ -80,7 +80,7 @@ public class ImageController {
             @RequestBody
                     NontaxBillDto billDTO,
             @RequestParam(defaultValue = "2592000000")
-            @ApiParam(value = "过期时间，默认是1个月", example = "0")
+            @ApiParam(value = "过期时间(毫秒)，默认是1个月", example = "0")
                     Long expireTime
     ) {
         return ResponseBody.ok(imageService.getRemoteImage(billDTO, expireTime));

@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import lombok.Data;
+
 import java.time.LocalDateTime;
 import java.io.Serializable;
 
@@ -16,6 +18,7 @@ import java.io.Serializable;
  * @author Lazyb0x
  * @since 2020-08-22
  */
+@Data
 @TableName("uba_template_default")
 public class TemplateDefaultPo extends Model<TemplateDefaultPo> {
 

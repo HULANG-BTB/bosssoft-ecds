@@ -1,7 +1,10 @@
 package com.bosssoft.ecds.template.service.impl;
 
 import com.bosssoft.ecds.template.entity.dto.NontaxBillDto;
+import com.bosssoft.ecds.template.entity.dto.PrintTemplateDto;
+import com.bosssoft.ecds.template.service.HtmlService;
 import com.bosssoft.ecds.template.service.PdfService;
+import com.bosssoft.ecds.template.service.PrintTemplateService;
 import com.bosssoft.ecds.template.util.AliyunOSSUtil;
 import com.itextpdf.text.pdf.BaseFont;
 import freemarker.template.Configuration;
@@ -39,19 +42,21 @@ public class PdfServiceImpl implements PdfService {
     @Autowired
     AliyunOSSUtil ossUtil;
 
+    @Autowired
+    PrintTemplateService printTemplateService;
+
+    @Autowired
+    HtmlService htmlService;
+
     /**
      * 设置freemarker配置信息
      */
     @Override
     public Configuration getConfiguration() {
         Configuration cfg = new Configuration(Configuration.getVersion());
-        /**
-         * 将默认编码设置为utf-8，解决前端页面中的中文乱码问题
-         */
+        // 将默认编码设置为utf-8，解决前端页面中的中文乱码问题
         cfg.setDefaultEncoding("UTF-8");
-        /**
-         * 设置模板加载路径
-         */
+        // 设置模板加载路径
         cfg.setClassForTemplateLoading(this.getClass(), "/templates");
         return cfg;
     }
@@ -61,24 +66,17 @@ public class PdfServiceImpl implements PdfService {
      *
      * @param data    需要整合的数据
      * @param ftlName html模板地址
-     * @return
      */
     @Override
     public String getOutData(Map<String, Object> data, String ftlName) {
         Configuration cfg = getConfiguration();
         Writer writer = new StringWriter();
-        /**
-         * 整合的数据
-         */
+        // 整合的数据
         String outData = null;
         try {
-            /**
-             * 获取html模板
-             */
+            // 获取html模板
             Template template = cfg.getTemplate(ftlName);
-            /**
-             * 将map中的数据与html模板整合到一起
-             */
+            // 将map中的数据与html模板整合到一起
             template.process(data, writer);
             writer.flush();
             outData = writer.toString();
@@ -107,7 +105,6 @@ public class PdfServiceImpl implements PdfService {
         if (!dir.exists() && !dir.isDirectory()) {
             dir.mkdirs();
         }
-        //log.info(file.getParent());
         try (FileOutputStream outputStream = new FileOutputStream(file)) {
 
             createPdf(htmlData, outputStream);
@@ -124,22 +121,39 @@ public class PdfServiceImpl implements PdfService {
      * @param billDTO
      */
     @Override
-    public void createPdf(NontaxBillDto billDTO) {
-        Map<String, Object> data = new HashMap<>();
+    public boolean createPdf(NontaxBillDto billDTO) {
+        /*Map<String, Object> data = new HashMap<>();
         data.put("billDTO", billDTO);
         String htmlName = getHtmlName(billDTO.getBillCode());
+        String outData = getOutData(data, htmlName);*/
         String pdfDest = defaultPdfDest + getPdfDest(billDTO.getBillCode(), billDTO.getSerialCode());
-        String outData = getOutData(data, htmlName);
-        createPdf(outData, pdfDest);
+
+        // 获取前6位的票据代码，用于查询模板
+        String billCode = billDTO.getBillCode().substring(0, 6);
+        PrintTemplateDto printTemplateDto = printTemplateService.getByBillCode(billCode);
+        if (printTemplateDto==null) return false;
+        String template = printTemplateDto.getTemplate();
+        String htmlData = htmlService.genBillHtml(billDTO, template);
+
+        createPdf(htmlData, pdfDest);
+        return true;
     }
 
     @Override
-    public void createPdf(NontaxBillDto billDTO, OutputStream outputStream) {
-        Map<String, Object> data = new HashMap<>();
+    public boolean createPdf(NontaxBillDto billDTO, OutputStream outputStream) {
+        /*Map<String, Object> data = new HashMap<>();
         data.put("billDTO", billDTO);
         String htmlName = getHtmlName(billDTO.getBillCode());
-        String outData = getOutData(data, htmlName);
-        createPdf(outData, outputStream);
+        String outData = getOutData(data, htmlName);*/
+
+        String billCode = billDTO.getBillCode().substring(0, 6);
+        PrintTemplateDto printTemplateDto = printTemplateService.getByBillCode(billCode);
+        if (printTemplateDto==null) return true;
+        String template = printTemplateDto.getTemplate();
+        String htmlData = htmlService.genBillHtml(billDTO, template);
+
+        createPdf(htmlData, outputStream);
+        return true;
     }
 
     @Override
@@ -165,7 +179,10 @@ public class PdfServiceImpl implements PdfService {
         if (!ossUtil.isExist(path) || isForce) {
             log.info("{}文件不存在，生成。", pdfFileName);
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            createPdf(billDTO, outputStream);
+            boolean success = createPdf(billDTO, outputStream);
+            if (!success) {
+                return "";
+            }
             byte[] pdfBytes = outputStream.toByteArray();
 
             // 文件上传

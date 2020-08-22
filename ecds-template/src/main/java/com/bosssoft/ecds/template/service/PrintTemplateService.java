@@ -40,4 +40,11 @@ public interface PrintTemplateService extends IService<PrintTemplatePo> {
      * @param billCode 票据代码前6位
      */
     PrintTemplateDto getByBillCode(String billCode);
+
+    /**
+     * 设置默认打印模板
+     * @param id 打印模板主键
+     * @return 是否成功
+     */
+    boolean setDefault(Long id);
 }

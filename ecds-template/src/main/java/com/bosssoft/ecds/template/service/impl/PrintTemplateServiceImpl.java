@@ -9,12 +9,14 @@ import com.bosssoft.ecds.template.entity.po.PrintTemplatePo;
 import com.bosssoft.ecds.template.entity.vo.PrintTemplateVo;
 import com.bosssoft.ecds.template.mapper.PrintTemplateMapper;
 import com.bosssoft.ecds.template.service.PrintTemplateService;
+import com.bosssoft.ecds.template.service.TemplateDefaultService;
 import com.bosssoft.ecds.template.util.BeanCopyUtil;
 import com.bosssoft.ecds.template.util.excel.SampleUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.dom4j.DocumentException;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -40,6 +42,9 @@ public class PrintTemplateServiceImpl extends ServiceImpl<PrintTemplateMapper, P
 
     @Resource
     PrintTemplateMapper printTemplateMapper;
+
+    @Autowired
+    TemplateDefaultService templateDefaultService;
 
     @Override
     public List<PrintTemplateDto> listAll() {
@@ -133,5 +138,14 @@ public class PrintTemplateServiceImpl extends ServiceImpl<PrintTemplateMapper, P
         PrintTemplateDto templateDto = new PrintTemplateDto();
         BeanUtils.copyProperties(templatePo, templateDto);
         return templateDto;
+    }
+
+    @Override
+    public boolean setDefault(Long id) {
+        PrintTemplatePo t = printTemplateMapper.selectById(id);
+        if (t==null) return false;
+        String billCode = t.getRgnCode() + t.getTypeId() + t.getSortId();
+        boolean res = templateDefaultService.setDefault("print", billCode, id);
+        return false;
     }
 }

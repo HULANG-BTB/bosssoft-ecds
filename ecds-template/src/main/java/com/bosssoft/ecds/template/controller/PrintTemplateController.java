@@ -181,6 +181,16 @@ public class PrintTemplateController {
         return new QueryResponseResult<>(CommonCode.SUCCESS, list);
     }
 
+    @PostMapping("/setDefault")
+    public ResponseResult setDefault(
+            @RequestParam @ApiParam(value = "主键", example = "0") Long id){
+
+        boolean success = printTemplateService.setDefault(id);
+
+        return success ? new ResponseResult(CommonCode.SUCCESS)
+                : new ResponseResult(CommonCode.FAIL);
+    }
+
     private PrintTemplateDto fillTemplateDto(
             String billCode, String name, String memo, String template
     ) {
