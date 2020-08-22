@@ -27,7 +27,7 @@ import java.util.List;
  * @since 2020-08-10
  */
 @RestController
-@RequestMapping("/voucher")
+@RequestMapping("/ecds-bill-accounting/voucher")
 @Api(tags = "电子凭证")
 public class VoucherController {
     @Autowired

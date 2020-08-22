@@ -28,7 +28,7 @@ import java.util.List;
  * @since 2020-08-10
  */
 @RestController
-@RequestMapping("/accountQuery")
+@RequestMapping("/ecds-bill-accounting/accountQuery")
 @Api(tags = "基础入帐信息查询")
 @Slf4j
 public class CbillAccountingQueryController {

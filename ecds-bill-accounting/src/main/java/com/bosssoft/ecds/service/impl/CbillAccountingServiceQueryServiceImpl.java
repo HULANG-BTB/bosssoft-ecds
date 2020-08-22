@@ -77,7 +77,7 @@ public class CbillAccountingServiceQueryServiceImpl extends ServiceImpl<CbillAcc
             queryWrapper.eq(CbillAccountingPO.F_ACCOUNT_TYPE,pageDTO.getAccountType());
         }
         //keyword为空代表查询全部
-        if(pageDTO.getKeyword().equals("")||pageDTO.getKeyword()=="null"||pageDTO.getKeyword()==null){
+        if("".equals(pageDTO.getKeyword())||"null".equals(pageDTO.getKeyword())||null==pageDTO.getKeyword()){
             //不对queryWrapper进行任何修改
         }else{
             //模糊查询
@@ -95,7 +95,7 @@ public class CbillAccountingServiceQueryServiceImpl extends ServiceImpl<CbillAcc
                     .like(CbillAccountingPO.F_AGEN_NAME,pageDTO.getKeyword());
         }
         //降序排序
-        if(pageDTO.getSort() == "+id"){
+        if("+id".equals(pageDTO.getSort())){
             queryWrapper.orderByAsc(CbillAccountingPO.F_ID);
         }else {
             queryWrapper.orderByDesc(CbillAccountingPO.F_ID);
@@ -316,7 +316,7 @@ public class CbillAccountingServiceQueryServiceImpl extends ServiceImpl<CbillAcc
     private ResultCode checkBillNoExist(String billNo) {
         // 检查票据号码是否存在，不存在不能查询
         QueryWrapper<CbillAccountingPO> queryWrapper = new QueryWrapper<>();
-        queryWrapper.select("f_bill_no").eq(CbillAccountingPO.F_BILL_NO,billNo)
+        queryWrapper.eq(CbillAccountingPO.F_BILL_NO,billNo)
                 .last("limit 1");
         int result = count(queryWrapper);
         if(result==0){

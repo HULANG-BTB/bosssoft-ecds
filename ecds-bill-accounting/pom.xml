@@ -81,10 +81,12 @@
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+            <version>2.2.1.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+            <version>2.2.1.RELEASE</version>
         </dependency>
         <!--velocity-->
         <dependency>
@@ -160,10 +162,10 @@
                     <layout>ZIP</layout>
                     <includes>
                         <!-- 依赖变化去掉打包重新传完jar包后再打开打包 -->
-                         <include>
+                       <!--  <include>
                             <groupId>nothing</groupId>
                             <artifactId>nothing</artifactId>
-                        </include>
+                        </include>-->
                     </includes>
                 </configuration>
                 <executions>
