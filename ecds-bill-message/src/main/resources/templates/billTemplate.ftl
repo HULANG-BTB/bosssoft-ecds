@@ -16,7 +16,8 @@
     <div>校验码：${fCheckCode}</div>
     <div>交款人：${fPayerName}</div>
     <div>总金额：${fTotalAmt} 元</div>
-    <img alt="票据图片"  src="${fBillImgUrl!"null"}"/>
+    <img alt="票据图片" src="${fBillImgUrl!"null"}"/>
+    <div>链接：${fBillImgUrl!"null"} </div>
 </div>
 </body>
 </html>
