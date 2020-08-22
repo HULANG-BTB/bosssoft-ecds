@@ -14,7 +14,6 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 
@@ -39,15 +38,13 @@ public class CheckController extends BaseController {
     private CheckRecordService checkRecordService;
 
     @Resource
-    private HttpServletRequest request;
-
-    @Resource
     private ObjectMapper mapper;
 
     /**
      * 调用远程接口查询开票信息
      * 用户查询 -> 提交票据号码及校验码 -> 参数校验 -> 调用远程接口查询
      * 接口返回结果 -> 保存查验记录 -> 返回查验结果给前端
+     *
      * @param billId    票据号码
      * @param checkCode 校验码
      * @return 票据查验信息，查验成功包括票据具体信息
@@ -59,6 +56,16 @@ public class CheckController extends BaseController {
         if (StringUtils.isBlank(billId) || StringUtils.isBlank(checkCode)) {
             return new ResponseResult(CommonCode.INVLIDATE);
         }
+
+        // 使用布隆过滤器，过滤非法请求
+        String value = billId + checkCode;
+        boolean bloom = redisBloomFilter.includeByBloomFilter(bloomFilterHelper, REDIS_BLOOM_KEY_BILL_ID, value);
+        log.info("bloom >>> bill >>> " + value + " : " + bloom);
+        if(!bloom){
+            log.info("票据ID查验失败，被布隆过滤器拦截");
+            return ResponseResult.FAIL();
+        }
+
         // result 查验结果，0伪1真
         int result = 0;
         String resStr = checkClient.getBillByIdAndCheckCode(billId, checkCode);

@@ -10,7 +10,8 @@ spring:
       discovery:
         ip: 120.27.3.74
       config:
-        # 49.234.75.113:8848
+        # 49.234.75.113:8848 # old
+        # 49.234.212.41:8848 # new
         server-addr: 49.234.212.41:8848
         file-extension: yaml
 

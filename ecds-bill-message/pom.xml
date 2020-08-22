@@ -13,6 +13,13 @@
 
 
     <dependencies>
+
+        <!-- guava -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>23.0</version>
+        </dependency>
         <dependency>
             <groupId>com.bosssoft</groupId>
             <artifactId>ecds-common</artifactId>

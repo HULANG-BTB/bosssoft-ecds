@@ -1,6 +1,8 @@
 package com.bosssoft.ecds.msg.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.aliyuncs.exceptions.ClientException;
+import com.bosssoft.ecds.msg.entity.dto.MessageDto;
 import com.bosssoft.ecds.msg.entity.dto.SmsDto;
 import com.bosssoft.ecds.msg.entity.vo.*;
 import com.bosssoft.ecds.msg.service.SendSmsService;
@@ -29,7 +31,7 @@ import java.util.regex.Pattern;
 @RequestMapping("/sms")
 @CrossOrigin
 @Slf4j
-public class SmsController extends BaseController{
+public class SmsController extends BaseController {
 
     @Resource
     private SendSmsService sendsmsService;
@@ -39,17 +41,42 @@ public class SmsController extends BaseController{
 
     /**
      * 短信发送接口
+     *
      * @param smsVo 短信收件人，及内容是必须的
      * @return 发件成功与否
      */
     @ApiOperation("发送短信")
     @PostMapping("/send")
     public ResponseResult sendSms(@RequestBody SendSmsVo smsVo) throws ClientException, ExecutionException, InterruptedException {
+        log.info(smsVo.toString());
         SmsDto smsDto = DozerUtils.map(smsVo, SmsDto.class);
         SmsDto sentSms = sendsmsService.sendSms(smsDto).get();
         boolean isSent = sentSms.getIsSent();
+        // 向布隆过滤器中添加记录，异步
+        addSmsToBloomFilter(sentSms);
+        // 保存短信记录，异步
         smsService.saveAutoSentSms(sentSms);
         return getRes(isSent);
+    }
+
+    /**
+     * 开票模块每次调用发信接口后
+     * 分别向短信查验和票据查验的布隆过滤器中存入新数据
+     * 1. 短信查验的bloomValue为短信查验字段 tel + verifyCode 的字符串
+     * 2. 票据Id查验的bloomValue为票据查询字段 bilId + checkCode 的字符串
+     */
+    public void addSmsToBloomFilter(SmsDto smsDto) {
+        boolean isSent = smsDto.getIsSent();
+        if (isSent) {
+            // 向SMS布隆过滤器中存入新增数据
+            String smsBloomValue = smsDto.getSmsTo() + smsDto.getVerifyCode();
+            redisBloomFilter.addByBloomFilter(bloomFilterHelper, REDIS_BLOOM_KEY_SMS, smsBloomValue);
+        }
+        // 向BILL布隆过滤器中存入新增数据
+        String content = smsDto.getContent();
+        MessageDto messageDto = JSON.parseObject(content, MessageDto.class);
+        String billIdBloomValue = messageDto.getFBillId() + messageDto.getFCheckCode();
+        redisBloomFilter.addByBloomFilter(bloomFilterHelper, REDIS_BLOOM_KEY_BILL_ID, billIdBloomValue);
     }
 
     /**
@@ -66,15 +93,23 @@ public class SmsController extends BaseController{
         // 电话号码参数校验
         String telRegex = "^1\\d{10}$";
         if (tel == null || !Pattern.matches(telRegex, tel)) {
-            // 电话号码格式有误
             return new ResponseResult(CommonCode.INVLIDATE);
         }
         // 校验码参数校验
         String verifyCodeRegex = "^[A-Za-z0-9]{6}$";
         if (verifyCode == null || !Pattern.matches(verifyCodeRegex, verifyCode)) {
-            // 校验码参数有误
             return new ResponseResult(CommonCode.INVLIDATE);
         }
+
+        // 使用布隆过滤器，过滤非法请求
+        String value = tel + verifyCode;
+        boolean bloom = redisBloomFilter.includeByBloomFilter(bloomFilterHelper, REDIS_BLOOM_KEY_SMS, value);
+        log.info("bloom >>> bill >>> " + value + " : " + bloom);
+        if (!bloom) {
+            log.info("手机号票据查验失败，被布隆过滤器拦截");
+            return ResponseResult.FAIL();
+        }
+
         // 参数无误，查询票据
         String bill = smsService.getBillByKey(tel, verifyCode.toLowerCase());
         if (StringUtils.isNotBlank(bill)) {
