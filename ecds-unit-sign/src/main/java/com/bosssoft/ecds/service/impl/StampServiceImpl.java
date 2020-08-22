@@ -61,6 +61,7 @@ public class StampServiceImpl implements IStampService {
         if ( financeSign == null || "".equals(financeSign) || !financeSign.equals(financeSignValue)){
             return false;
         }
+        redisUtils.del(unitSignValue);
         // 读取要盖章的 pdf 文件
         InputStream is = uploadFile.getInputStream();
         // 盖章后写入response
