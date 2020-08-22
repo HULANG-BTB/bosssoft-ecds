@@ -33,7 +33,7 @@ import java.util.Map;
  * @since 2020-08-11
  */
 @Service
-@Slf4j
+@Slf4j(topic = "kafka_business_logger")
 public class BillCheckArchiveServiceImpl extends ServiceImpl<BillCheckArchiveDao, BillCheckArchivePO> implements BillCheckArchiveService {
 
     @Autowired
@@ -82,7 +82,7 @@ public class BillCheckArchiveServiceImpl extends ServiceImpl<BillCheckArchiveDao
          */
         List<CbillAccountingPO> list = billCheckArchiveDao.collectCBillAccountInfo();
         if (list == null || list.isEmpty()) {
-            ExceptionCast.cast(MyExceptionCode.DATE_EMPTY);
+            ExceptionCast.cast(MyExceptionCode.BILL_CHECK_DATE_EMPTY);
         }
         /*
          * 信息整理  更新
@@ -93,35 +93,33 @@ public class BillCheckArchiveServiceImpl extends ServiceImpl<BillCheckArchiveDao
          * 各个公司的票据不同阶段的数量
          */
         log.info(" " + list);
-        list.forEach(
-                item -> {
-                    /*
-                     * map  数据操作简化  优化时间复杂度
-                     * 根据规则实现自增
-                     */
-                    cMap.computeIfAbsent(item.getAgenIdcode(),
-                            k -> {
-                                CBillAccountingDTO dto = new CBillAccountingDTO();
-                                dto.setAgenIdcode(item.getAgenIdcode());
-                                dto.setBillUsedNumber(0L);
-                                dto.setBillCheckedNumber(0L);
-                                dto.setBillUncheckNumber(0L);
-                                return dto;
-                            });
-                    cMap.computeIfPresent(
-                            item.getAgenIdcode(),
-                            (k, v) -> {
-                                v.setBillUsedNumber(v.getBillUsedNumber() + 1);
-                                if (Boolean.TRUE.equals(item.getAccountStatus())) {
-                                    v.setBillCheckedNumber(v.getBillCheckedNumber() + 1);
-                                } else {
-                                    v.setBillUncheckNumber(v.getBillUncheckNumber() + 1);
-                                }
-                                return v;
-                            }
-                    );
-                }
-        );
+        for (CbillAccountingPO cbillAccountingPO : list) {
+            /**
+             * map  数据操作简化  优化时间复杂度
+             *  根据规则实现自增
+             */
+            cMap.computeIfAbsent(cbillAccountingPO.getAgenIdcode(),
+                    k -> {
+                        CBillAccountingDTO dto = new CBillAccountingDTO();
+                        dto.setAgenIdcode(cbillAccountingPO.getAgenIdcode());
+                        dto.setBillUsedNumber(0L);
+                        dto.setBillCheckedNumber(0L);
+                        dto.setBillUncheckNumber(0L);
+                        return dto;
+                    });
+            cMap.computeIfPresent(
+                    cbillAccountingPO.getAgenIdcode(),
+                    (k, v) -> {
+                        v.setBillUsedNumber(v.getBillUsedNumber() + 1);
+                        if (Boolean.TRUE.equals(cbillAccountingPO.getAccountStatus())) {
+                            v.setBillCheckedNumber(v.getBillCheckedNumber() + 1);
+                        } else {
+                            v.setBillUncheckNumber(v.getBillUncheckNumber() + 1);
+                        }
+                        return v;
+                    }
+            );
+        }
 
         /**
          * 汇总 所有公司不同阶段的票据数量
@@ -129,33 +127,28 @@ public class BillCheckArchiveServiceImpl extends ServiceImpl<BillCheckArchiveDao
          */
         List<ArchivePO> infos = archiveOverViewService.list();
         if (infos == null || infos.isEmpty()) {
-            ExceptionCast.cast(MyExceptionCode.DATE_EMPTY);
+            ExceptionCast.cast(MyExceptionCode.BILL_CHECK_DATE_EMPTY);
         }
-        infos.forEach(
-                item -> {
-                    /*
-                     * 判断该公司的信息是否变化
-                     */
-                    if (cMap.containsKey(item.getAgenCode())) {
-                        log.info("item old info" + item);
-                        CBillAccountingDTO cBillAccountingDTO = cMap.get(item.getAgenCode());
-                        log.info("cbillAcc " + cBillAccountingDTO);
-                        Long oldUseNumber = item.getUseNumber();
-                        Long oldAuthorNumber = item.getAuthorNumber();
-                        Long oldUnAuthorNumber = item.getUnAuthorNumber();
-                        Long billUsedNumber = cBillAccountingDTO.getBillUsedNumber();
-                        Long billCheckedNumber = cBillAccountingDTO.getBillCheckedNumber();
-                        Long billUncheckNumber = cBillAccountingDTO.getBillUncheckNumber();
-                        item.setUseNumber(oldUseNumber + billUsedNumber);
-                        item.setAuthorNumber(oldAuthorNumber + billCheckedNumber);
-                        item.setUnAuthorNumber(oldUnAuthorNumber + billUncheckNumber);
-                        log.info("item new info " + item);
-                    }
-                }
-        );
-        /*
-         * 批量更新
-         */
+        for (ArchivePO item : infos) {
+            // 判断该公司的信息是否变化
+            if (cMap.containsKey(item.getAgenCode())) {
+                log.info("item old info" + item);
+                CBillAccountingDTO cBillAccountingDTO = cMap.get(item.getAgenCode());
+                log.info("cbillAcc " + cBillAccountingDTO);
+                Long oldUseNumber = item.getUseNumber();
+                Long oldAuthorNumber = item.getAuthorNumber();
+                Long oldUnAuthorNumber = item.getUnAuthorNumber();
+                Long billUsedNumber = cBillAccountingDTO.getBillUsedNumber();
+                Long billCheckedNumber = cBillAccountingDTO.getBillCheckedNumber();
+                Long billUncheckNumber = cBillAccountingDTO.getBillUncheckNumber();
+                item.setUseNumber(oldUseNumber + billUsedNumber);
+                item.setAuthorNumber(oldAuthorNumber + billCheckedNumber);
+                item.setUnAuthorNumber(oldUnAuthorNumber + billUncheckNumber);
+                log.info("item new info " + item);
+            }
+        }
+
+        log.info(" infos => " + infos);
         return archiveOverViewService.updateBatchById(infos);
     }
 

@@ -2,13 +2,11 @@ package com.bosssoft.ecds.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.bosssoft.ecds.common.exception.MyExceptionCode;
 import com.bosssoft.ecds.dao.ArchiveOverViewDao;
 import com.bosssoft.ecds.entity.dto.ArchiveOverViewDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.po.ArchivePO;
 import com.bosssoft.ecds.entity.query.ArchiveOverViewQuery;
-import com.bosssoft.ecds.exception.ExceptionCast;
 import com.bosssoft.ecds.service.ArchiveOverViewService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +25,7 @@ import java.util.List;
  * @since 2020-08-11
  */
 @Service
-@Slf4j
+@Slf4j(topic = "kafka_business_logger")
 public class ArchiveOverViewServiceImpl extends ServiceImpl<ArchiveOverViewDao, ArchivePO> implements ArchiveOverViewService {
     @Autowired
     ArchiveOverViewDao archiveDao;
@@ -66,17 +64,9 @@ public class ArchiveOverViewServiceImpl extends ServiceImpl<ArchiveOverViewDao, 
         // 获取总信息条数
         Long total = archiveDao.countInfo();
         // 数据检查
-        if (total == null) {
-            ExceptionCast.cast(MyExceptionCode.DATE_EMPTY);
-        }
-
         pageDTO.setTotal(total);
         // 获取归档总览信息
         List<ArchiveOverViewDTO> dtos = archiveDao.queryOverViewArchivePageAllInfo(archiveOverViewQuery);
-
-        if (dtos == null) {
-            ExceptionCast.cast(MyExceptionCode.DATE_EMPTY);
-        }
         pageDTO.setData(dtos);
         return pageDTO;
     }

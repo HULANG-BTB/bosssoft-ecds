@@ -17,11 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.*;
 
 /**
  * <p>
@@ -33,7 +29,7 @@ import java.util.stream.Collectors;
  * @since 2020-08-11
  */
 @Service
-@Slf4j
+@Slf4j(topic = "kafka_business_logger")
 public class BillPayArchiveServiceImpl extends ServiceImpl<BillPayArchiveDao, BillPayArchivePO> implements BillPayArchiveService {
     @Autowired
     BillPayArchiveDao billPayArchiveDao;
@@ -52,9 +48,6 @@ public class BillPayArchiveServiceImpl extends ServiceImpl<BillPayArchiveDao, Bi
         pageDTO.setTotal(page.getTotal());
         // 获取并且转换数据
         List<BillPayArchivePO> list = page.getRecords();
-        if (list == null || list.isEmpty()) {
-            ExceptionCast.cast(MyExceptionCode.DATE_EMPTY);
-        }
         List<BillPayDTO> dtos = MyBeanUtil.copyListProperties(list, BillPayDTO::new);
         pageDTO.setData(dtos);
         return pageDTO;
@@ -65,12 +58,13 @@ public class BillPayArchiveServiceImpl extends ServiceImpl<BillPayArchiveDao, Bi
         List<BillPayArchivePO> billPayArchivePOS = billPayArchiveDao.queryBillPayInfos();
         log.info("old " + billPayArchivePOS);
         if (billPayArchivePOS == null || billPayArchivePOS.isEmpty()) {
-            ExceptionCast.cast(MyExceptionCode.DATE_EMPTY);
+            ExceptionCast.cast(MyExceptionCode.BILL_PAY_DATE_EMPTY);
         }
         /*分组*/
-        Map<String, List<BillPayArchivePO>> collect = billPayArchivePOS.stream().collect(
-                Collectors.groupingBy(BillPayArchivePO::getAgenCode)
-        );
+        Map<String, List<BillPayArchivePO>> collect = new HashMap<>(16);
+        for (BillPayArchivePO billPayArchivePO : billPayArchivePOS) {
+            collect.computeIfAbsent(billPayArchivePO.getAgenCode(), k -> new ArrayList<>()).add(billPayArchivePO);
+        }
         log.info("collect :" + collect);
 
         /*统计*/

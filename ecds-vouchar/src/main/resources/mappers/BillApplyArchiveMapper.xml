@@ -16,6 +16,21 @@
         WHERE date_format(S.f_create_time, '%Y-%m-%d') = date_format(date_sub(SYSDATE(), interval 1 day), '%Y-%m-%d')
     </select>
 
+    <!--查询新公司信息-->
+    <select id="queryNewAgenInfo" resultType="com.bosssoft.ecds.entity.dto.ArchiveOverViewDTO">
+        SELECT
+            F.f_agen_code as agenCode,
+            F.f_agen_name as agenName,
+            F.f_mnem as mnem,
+            F.f_level as level,
+            F.f_org_code as orgCode,
+            F.f_ind_code as  kindName,
+            F.f_addr as linkAddr,
+            F.f_link_man as linkMan,
+            F.f_dept_name as deptName
+        FROM fab_agen F
+        WHERE F.f_agen_code = #{agenCode}
+    </select>
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.bosssoft.ecds.entity.po.BillApplyArchivePO">
         <id column="f_id" property="id"/>

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
  * @author liuke
  */
 @Service
-@Slf4j
+@Slf4j(topic = "kafka_business_logger")
 public class ArchiveCycleServiceImpl implements ArchiveCycleService {
 
     @Autowired
@@ -31,13 +31,13 @@ public class ArchiveCycleServiceImpl implements ArchiveCycleService {
      * 执行定期归档任务  每天 00:00 执行归档操作
      */
     @Async
-    @Scheduled(cron = "0 0 0 * * ?")
+    @Scheduled(cron = "0 0 1 * * ?")
     @Override
     public void exec() {
         billApplyArchiveService.finaBillApplyArchive();
         itemArchiveService.finaItemAvailableArchive();
-        billCheckArchiveService.finaBillCheckArchive();
         billAvailableArchiveService.finaBillApplyArchive();
+        billCheckArchiveService.finaBillCheckArchive();
         billPayArchiveService.finaBillPayArchive();
         billWarnArchiveService.finaBillWarnArchive();
     }

@@ -28,7 +28,7 @@ import java.util.List;
  * @since 2020-08-11
  */
 @Service
-@Slf4j
+@Slf4j(topic = "kafka_business_logger")
 public class ItemArchiveServiceImpl extends ServiceImpl<ItemArchiveDao, ItemArchivePO> implements ItemArchiveService {
     @Autowired
     private ItemArchiveDao itemArchiveDao;
@@ -57,7 +57,7 @@ public class ItemArchiveServiceImpl extends ServiceImpl<ItemArchiveDao, ItemArch
         /*收集信息归档*/
         List<ItemArchivePO> itemArchivePOS = itemArchiveDao.collectItemAvailableInfo();
         if (itemArchivePOS == null || itemArchivePOS.isEmpty()) {
-            ExceptionCast.cast(MyExceptionCode.DATE_EMPTY);
+            ExceptionCast.cast(MyExceptionCode.ITEM_AVAILABLE_DATE_EMPTY);
         }
         log.info("itemPOS => " + itemArchivePOS);
         saveBatch(itemArchivePOS);

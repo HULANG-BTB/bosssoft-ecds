@@ -12,6 +12,7 @@ import com.bosssoft.ecds.utils.MyBeanUtil;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,6 +29,7 @@ import java.util.List;
  * @author liuke
  * @since 2020-08-13
  */
+@Slf4j(topic = "kafka_logger")
 @RestController
 @RequestMapping("/archive/available")
 public class BillAvailableArchiveController {

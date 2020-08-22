@@ -11,6 +11,7 @@ import com.bosssoft.ecds.response.QueryResponseResult;
 import com.bosssoft.ecds.service.ArchiveOverViewService;
 import com.bosssoft.ecds.utils.MyBeanUtil;
 import io.swagger.annotations.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,6 +29,7 @@ import java.util.List;
  * @since 2020-08-11
  */
 @Api(value = "归档")
+@Slf4j(topic = "kafka_logger")
 @RestController
 @RequestMapping("/archive")
 public class ArchiveOverViewController {
@@ -71,7 +73,7 @@ public class ArchiveOverViewController {
         //添加条件
         res.setItems(vos);
         res.setTotal(pageDTO.getTotal());
-        return new QueryResponseResult<PageVO<ArchiveOverViewVO>>(CommonCode.SUCCESS, res);
+        return new QueryResponseResult<>(CommonCode.SUCCESS, res);
     }
 
 
@@ -82,7 +84,7 @@ public class ArchiveOverViewController {
      * @return
      */
     public String setArchiveCycle(int cycleTime){
-        return "";
+        return "" + cycleTime;
     }
 }
 

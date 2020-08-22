@@ -27,7 +27,7 @@ import java.util.List;
  * @since 2020-08-13
  */
 @Service
-@Slf4j
+@Slf4j(topic = "kafka_business_logger")
 public class BillAvailableArchiveServiceImpl extends ServiceImpl<BillAvailableArchiveDao, BillAvailableArchivePO> implements BillAvailableArchiveService {
 
     @Autowired
@@ -45,10 +45,6 @@ public class BillAvailableArchiveServiceImpl extends ServiceImpl<BillAvailableAr
         Page<BillAvailableArchivePO> page = super.page(pager, lambdaQuery);
         pageDTO.setTotal(page.getTotal());
         List<BillAvailableArchivePO> list = page.getRecords();
-        // 异常处理
-        if (list == null || list.isEmpty()) {
-            ExceptionCast.cast(MyExceptionCode.DATE_EMPTY);
-        }
         // 转换对象
         List<BillAvailableInfoDTO> dtos = MyBeanUtil.copyListProperties(list, BillAvailableInfoDTO::new);
         pageDTO.setData(dtos);
@@ -62,7 +58,7 @@ public class BillAvailableArchiveServiceImpl extends ServiceImpl<BillAvailableAr
         log.info("dtos ==> " + billAvailableInfoDTOS);
         //异常处理
         if (billAvailableInfoDTOS.isEmpty()) {
-            ExceptionCast.cast(MyExceptionCode.DATE_EMPTY);
+            ExceptionCast.cast(MyExceptionCode.BILL_AVAILABLE_DATE_EMPTY);
         }
         //数据格式转换
         List<BillAvailableArchivePO> pos = MyBeanUtil.copyListProperties(billAvailableInfoDTOS, BillAvailableArchivePO.class);

@@ -13,6 +13,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,6 +31,7 @@ import java.util.List;
  * @since 2020-08-11
  */
 @Api("缴销记录接口")
+@Slf4j(topic = "kafka_logger")
 @RestController
 @RequestMapping("/archive/pay")
 public class BillPayArchiveController {
@@ -52,6 +54,8 @@ public class BillPayArchiveController {
         List<BillPayVO> vos = MyBeanUtil.copyListProperties(data, BillPayVO::new);
         res.setItems(vos);
         res.setTotal(page.getTotal());
+        log.info("" + res);
+        log.info("res :" + new QueryResponseResult<>(CommonCode.SUCCESS, res));
         return new QueryResponseResult<>(CommonCode.SUCCESS, res);
     }
 }

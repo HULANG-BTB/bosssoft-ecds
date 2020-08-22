@@ -31,7 +31,7 @@ import java.util.List;
  * @since 2020-08-11
  */
 @Api("归档领用")
-@Slf4j
+@Slf4j(topic = "kafka_logger")
 @RestController
 @RequestMapping("/archive/apply")
 public class BillApplyArchiveController {
@@ -51,10 +51,9 @@ public class BillApplyArchiveController {
         PageVO<BillApplyVO> res = new PageVO<>();
         PageDTO<BillApplyDTO> pageDTO = service.getBillApplyInfo(query);
         List<BillApplyVO> billApplyVOS = MyBeanUtil.copyListProperties(pageDTO.getData(), BillApplyVO::new);
-
         res.setItems(billApplyVOS);
         res.setTotal(pageDTO.getTotal());
-        return new QueryResponseResult<PageVO<BillApplyVO>>(CommonCode.SUCCESS, res);
+        return new QueryResponseResult<>(CommonCode.SUCCESS, res);
     }
 }
 

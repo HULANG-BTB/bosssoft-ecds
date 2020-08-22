@@ -15,9 +15,11 @@ import com.bosssoft.ecds.exception.ExceptionCast;
 import com.bosssoft.ecds.service.ArchiveOverViewService;
 import com.bosssoft.ecds.service.BillApplyArchiveService;
 import com.bosssoft.ecds.utils.MyBeanUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -32,6 +34,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @since 2020-08-11
  */
 @Service
+@Slf4j(topic = "kafka_business_logger")
 public class BillApplyArchiveServiceImpl extends ServiceImpl<BillApplyArchiveDao, BillApplyArchivePO> implements BillApplyArchiveService {
     @Autowired
     private BillApplyArchiveDao dao;
@@ -77,13 +80,17 @@ public class BillApplyArchiveServiceImpl extends ServiceImpl<BillApplyArchiveDao
      */
     @Override
     public void finaBillApplyArchive() {
+        log.info("finaBillApplyArchive  start");
+        /*
+         *获取归档总览表中所有的公司
+         */
+        List<ArchiveOverViewDTO> archiveOverViewDTOS = archiveOverViewService.queryOverViewArchiveInfos(new ArchiveOverViewQuery());
+        log.info("archiveOverViewDTO  =>   " + archiveOverViewDTOS);
         /*
          * 获取所有单位的票据申领信息
          */
         List<BillApplyArchivePO> billApplyArchivePOS = dao.queryBillApplyAll();
-        if (billApplyArchivePOS == null || billApplyArchivePOS.isEmpty()) {
-            ExceptionCast.cast(MyExceptionCode.DATE_EMPTY);
-        }
+        log.info("billApplyArchivePOS  => " + billApplyArchivePOS);
         /*
          * 记录每家公司申请的总票数*/
         Map<String, Integer> counts = new ConcurrentHashMap<>(16);
@@ -91,30 +98,45 @@ public class BillApplyArchiveServiceImpl extends ServiceImpl<BillApplyArchiveDao
         /*
          * 信息处理
          */
-        billApplyArchivePOS.forEach(
-                item -> {
-                    /*
-                     * 记录票数*/
-                    counts.computeIfAbsent(item.getAgenCode(), agenCode -> 0);
-                    counts.computeIfPresent(item.getAgenCode(),
-                            (agenCode, applyNumber) -> applyNumber + item.getBatchNum());
-                }
-        );
-
+        if (billApplyArchivePOS == null || billApplyArchivePOS.isEmpty()) {
+            ExceptionCast.cast(MyExceptionCode.BILL_APPLY_DATE_EMPTY);
+        }
+        for (BillApplyArchivePO billApplyArchivePO : billApplyArchivePOS) {
+            // 记录票数
+            counts.computeIfAbsent(billApplyArchivePO.getAgenCode(), agenCode -> 0);
+            counts.computeIfPresent(billApplyArchivePO.getAgenCode(),
+                    (agenCode, applyNumber) -> applyNumber + billApplyArchivePO.getBatchNum());
+        }
+        log.info("计数：" + counts);
         /*
          * 申领信息归档
          */
         this.saveBatch(billApplyArchivePOS);
+        // 新公司信息
+        List<ArchiveOverViewDTO> newAgenInfo = new ArrayList<>();
+        // 判断该公司是否为新公司
+        if (billApplyArchivePOS == null || billApplyArchivePOS.isEmpty()) {
+            ExceptionCast.cast(MyExceptionCode.BILL_APPLY_DATE_EMPTY);
+        }
+        for (BillApplyArchivePO outer : billApplyArchivePOS) {
+            // 若存在该家公司，则更新更新公司数据，若不存在则新增公司信息  流筛选
+            boolean present = archiveOverViewDTOS
+                    .stream()
+                    .anyMatch(dto -> outer.getAgenCode().equals(dto.getAgenCode()));
+            // 该公司为旧公司
+            String agenCode = outer.getAgenCode();
+            if (!present) {
+                // 新增公司信息
+                ArchiveOverViewDTO archiveOverViewDTO = dao.queryNewAgenInfo(agenCode);
+                log.info("dddttt => " + archiveOverViewDTO);
+                // 赋予票据申请数量
+                Long applyNumber = (long) counts.get(agenCode);
+                archiveOverViewDTO.setApplyNumber(applyNumber);
+                newAgenInfo.add(archiveOverViewDTO);
+            }
+        }
 
-        /*
-         *获取归档总览表中所有的公司
-         */
-        List<ArchiveOverViewDTO> archiveOverViewDTOS = archiveOverViewService.queryOverViewArchiveInfos(new ArchiveOverViewQuery());
-
-        /*
-         * 更新归档总览表数量
-         * 更新每家单位的数量
-         * */
+        //  更新归档总览表数量
         archiveOverViewDTOS.forEach(
                 item -> counts.computeIfPresent(item.getAgenCode(),
                         (agenCode, applyNumber) -> {
@@ -124,7 +146,13 @@ public class BillApplyArchiveServiceImpl extends ServiceImpl<BillApplyArchiveDao
                         }
                 )
         );
-        // 若存在该家公司，则更新更新公司数据，若不存在则新增公司信息
+
+        // 添加到更新队列
+        archiveOverViewDTOS.addAll(newAgenInfo);
+        /*
+         * 批量更新
+         */
+        //总览数据更新
         archiveOverViewService.updateBatch(archiveOverViewDTOS);
     }
 }

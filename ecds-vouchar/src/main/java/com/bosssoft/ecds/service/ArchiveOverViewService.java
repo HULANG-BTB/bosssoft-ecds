@@ -5,6 +5,7 @@ import com.bosssoft.ecds.entity.dto.ArchiveOverViewDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.po.ArchivePO;
 import com.bosssoft.ecds.entity.query.ArchiveOverViewQuery;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -33,7 +34,6 @@ public interface ArchiveOverViewService extends IService<ArchivePO> {
      * @param archiveOverViewQuery
      * @return OverViewArchiveDto
      */
-//    @Cacheable(cacheNames = "allArchiveList")
     List<ArchiveOverViewDTO> queryOverViewArchiveInfos(ArchiveOverViewQuery archiveOverViewQuery);
 
     /**
@@ -50,6 +50,7 @@ public interface ArchiveOverViewService extends IService<ArchivePO> {
      * @param list
      * @return boolean
      */
+    @CacheEvict(cacheNames = "allTotal")
     @Transactional(rollbackFor = Exception.class)
     Boolean updateBatch(List<ArchiveOverViewDTO> list);
 }
