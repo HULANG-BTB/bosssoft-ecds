@@ -15,22 +15,8 @@ spring:
       #  先不注册服务，调试时候本地调试，最后发布在注册
       discovery:
         server-addr: 49.234.212.41:8848
-        ip: 49.234.75.113
+        ip: ${client:} # 指定指定客户端IP
   profiles:
     active: dev
 server:
   port: 8001
-
-
-
-
-
-
-
-
-
-
-
-
-
-
