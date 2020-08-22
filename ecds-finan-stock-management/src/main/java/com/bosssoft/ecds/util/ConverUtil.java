@@ -5,6 +5,7 @@ import com.bosssoft.ecds.entity.dto.StockOutChangeDto;
 import com.bosssoft.ecds.entity.vo.StockOutVo;
 import com.google.common.collect.Lists;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,9 +15,21 @@ import java.util.List;
  * @Date 2020/8/12 20:14
  * @Description
  */
+@Slf4j
 public class ConverUtil {
     public static <T, S> List<T> converList(Class<T> targetObjectClass, List<S> sourceList) {
         List<T> targetList = Lists.newArrayList();
+        if(sourceList==null || sourceList.isEmpty()) {
+            return new ArrayList<>();
+        }
+        log.info("进入conver方法...data:{}", sourceList);
+        if(targetObjectClass==StockOutChangeDto.class &&
+                sourceList.stream().findAny().get().getClass() == StockOutVo.class){
+            log.info("变动转换...");
+            sourceList.forEach(s -> targetList.add((T) outVoToChangeDto((StockOutVo) s)));
+            log.info("data:{}",targetList.toString());
+            return targetList;
+        }
         sourceList.forEach(s -> targetList.add(Convert.convert(targetObjectClass, s)));
         return targetList;
     }
