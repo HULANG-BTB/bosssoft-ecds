@@ -15,11 +15,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -34,10 +37,14 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 public class EncodeResponseBodyAdvice implements ResponseBodyAdvice {
     @Autowired
     private RedisUtils redisUtil;
-
+    @Autowired
+    HttpServletRequest request;
     @Override
     public boolean supports(MethodParameter methodParameter, Class aClass) {
         //只有@Encrypt的方法才会触发该类
+        if("OPTIONS".equals(request.getMethod())){
+            return false;
+        }
         return methodParameter.hasMethodAnnotation(Encrypt.class);
 
     }
@@ -49,6 +56,7 @@ public class EncodeResponseBodyAdvice implements ResponseBodyAdvice {
          * 加密开始
          */
         ObjectMapper objectMapper = new ObjectMapper();
+        String token=request.getHeader(HttpHeaders.AUTHORIZATION);
         //request对象
         try {
             //获取对称密钥
@@ -57,7 +65,7 @@ public class EncodeResponseBodyAdvice implements ResponseBodyAdvice {
             String result = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(body);
             JSONObject jsonObject= JSON.parseObject(result);
             String rs=jsonObject.getString(EncryptionConstant.DATA);
-            String token=jsonObject.getString(EncryptionConstant.ASE_KEY);
+
             if(token==null||rs==null){
                 throw new CustomException(CommonCode.ENCRYPTION_ERROR);
             }

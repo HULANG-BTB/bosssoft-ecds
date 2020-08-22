@@ -111,12 +111,13 @@ public class IncomeSortServiceImpl implements IncomeSortService {
     @Override
 
     public QueryResponseResult getAll() {
+        String token=httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
         List<IncomeSortDTO> incomeSortDTOS = incomeSortDao.getAll();
         List<IncomeSortDTO> incomeSortTree = buildIncomeSortDTOTree(incomeSortDTOS, IncomeSortConstant.INIT_ALL_NUM);
         QueryResult<IncomeSortDTO> queryResult = new QueryResult<>();
         queryResult.setList(incomeSortTree);
         queryResult.setTotal(incomeSortTree.size());
-        return new QueryResponseResult<>(CommonCode.SUCCESS, queryResult,httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION));
+        return new QueryResponseResult<>(CommonCode.SUCCESS, queryResult,token);
     }
 
 
