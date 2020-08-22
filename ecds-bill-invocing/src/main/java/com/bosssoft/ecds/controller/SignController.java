@@ -21,7 +21,6 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -65,10 +64,16 @@ public class SignController {
         SignedDataDto signedDataDto = signService.getSignData(billId, billNo);
         QueryResponseResult response = fIanacialSignService.sign(signedDataDto);
         if (!response.isSuccess()) {
+            log.info("单位签名验证失败");
             return ResponseResult.FAIL();
         }
         SignedDataDto signedDataDto1 = Convert.convert(SignedDataDto.class, response.data);
-
+        //验证财政端的签名
+        ResponseResult result = signatureService.verifySign(signedDataDto1);
+        if (!result.isSuccess()) {
+            log.info("财政签名验证失败");
+            return ResponseResult.FAIL();
+        }
         //获取模板
         UneCbill uneCbill = uneCbillService.getUneCbillByIdAndNo(billId, billNo);
         if(uneCbill == null) {
@@ -85,17 +90,17 @@ public class SignController {
                 signedDataDto1.getUnitSignValue(),
                 signedDataDto1.getFinanceSignValue());
         InputStream inputStream = feign.body().asInputStream();
+        BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
         File pdfFile = new File("../pdfFile.pdf");
         outPutFile(inputStream, pdfFile);
         /**
          * 将pdf文件上传到oss，返回url地址
          */
-        String objectName = "boss-bill/" + billId+billNo+".pdf";
-        aliyunOSSUtil.upload(objectName, inputStream);
+        String objectName = "boss-bill-stamp/" + billId+billNo+".pdf";
+        aliyunOSSUtil.upload(objectName, bufferedInputStream);
         URL pdfUrl = aliyunOSSUtil.temporaryUrl(objectName, 60 * 1000L);
         log.info(pdfUrl.toString());
         inputStream.close();
-        //5 将url地址给到消息推送服务
         return ResponseResult.SUCCESS();
     }
 
@@ -105,14 +110,15 @@ public class SignController {
      * @return
      */
     public static MultipartFile getMultipartFile(File file) {
-        DiskFileItem fileItem = (DiskFileItem) new DiskFileItemFactory().createItem("uploadFile",
-                MediaType.TEXT_PLAIN_VALUE, true, file.getName());
+        DiskFileItem fileItem = (DiskFileItem) new DiskFileItemFactory().createItem("uploadFile", MediaType.TEXT_PLAIN_VALUE, true, file.getName());
         try (InputStream input = new FileInputStream(file); OutputStream os = fileItem.getOutputStream()) {
             IOUtils.copy(input, os);
         } catch (Exception e) {
             throw new IllegalArgumentException("Invalid file: " + e, e);
         }
         MultipartFile uploadFile = new CommonsMultipartFile(fileItem);
+        log.info("======================================");
+        log.info(""+(uploadFile instanceof MultipartFile));
         return uploadFile;
     }
 
