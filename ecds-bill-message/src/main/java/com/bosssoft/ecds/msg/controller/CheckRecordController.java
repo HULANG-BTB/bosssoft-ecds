@@ -24,7 +24,7 @@ import java.util.List;
 @Api(tags = "票据查验记录")
 @RestController
 @RequestMapping("/checkRecord")
-@CrossOrigin
+//@CrossOrigin
 @Slf4j
 public class CheckRecordController extends BaseController{
 

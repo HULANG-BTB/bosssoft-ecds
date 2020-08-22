@@ -2,12 +2,14 @@ package com.bosssoft.ecds.msg.entity.vo;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 
 /**
  * @author zhangxiaohui
  */
 @Data
-public class SendSmsVo {
+public class SendSmsVo implements Serializable {
 
     /**
      * 短信发送人

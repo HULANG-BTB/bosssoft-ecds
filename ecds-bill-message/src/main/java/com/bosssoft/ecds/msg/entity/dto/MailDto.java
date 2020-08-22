@@ -9,6 +9,7 @@ import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -17,7 +18,7 @@ import java.util.List;
  */
 @Data
 @ToString
-public class MailDto {
+public class MailDto implements Serializable {
 
     /**
      * 邮件id
