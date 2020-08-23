@@ -40,7 +40,6 @@ public class IncomeSortController {
 
     @ApiOperation(value = "获取所有收入类别信息", notes = "返回一个多级的树形结构数据")
     @GetMapping("/getAll")
-    @Encrypt
     public QueryResponseResult getAll() {
         return incomeSortService.getAll();
     }

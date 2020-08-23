@@ -167,8 +167,6 @@ public class BillTypeServiceImpl implements BillTypeService {
 
         // 查询所有票据种类及种类
         List<BillTypeShowDTO> bilTypeList = billTypeDao.getAllBillType();
-        String token=httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
-
         // 取出票据分类
         List<BillTypeShowDTO> parentList = bilTypeList.stream().filter(filter -> filter.getCheckSort() == 1).collect(Collectors.toList());
         // 取出票据种类
