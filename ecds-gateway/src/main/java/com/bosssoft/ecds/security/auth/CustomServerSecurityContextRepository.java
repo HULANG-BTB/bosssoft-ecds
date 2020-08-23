@@ -71,7 +71,7 @@ public class CustomServerSecurityContextRepository implements ServerSecurityCont
                 AuthUserDetails authUserDetails = pubey.getInfo();
                 Long id = authUserDetails.getId();
                 String username = authUserDetails.getUsername();
-                String nickname = authUserDetails.getNickname().getBytes(StandardCharsets.UTF_8).toString();
+                String nickname = Base64.getEncoder().encodeToString(authUserDetails.getNickname().getBytes());
 
                 // 从redis中获取具体信息
                 Map<String, Object> info = (Map<String, Object>) redisUtils.get(username + "_" + id + "_info");
