@@ -267,7 +267,7 @@ public class SubjectServiceImpl extends ServiceImpl<SubjectDao, SubjectPO> imple
             return new QueryResponseResult(SubjectResultCode.ENABLE_ERROR, null);
         }
         List<Long> delList = new ArrayList<>();
-        deleteRec(subjectPO, delList);
+        this.subjectService.deleteRec(subjectPO, delList);
 //        删除预算科目
         boolean booleanS = this.removeByIds(delList);
 //        删除中间表
@@ -298,7 +298,7 @@ public class SubjectServiceImpl extends ServiceImpl<SubjectDao, SubjectPO> imple
         List<SubjectPO> subjectPOS = selectByPid(subjectPO.getId());
         if (subjectPOS != null) {
             subjectPOS.forEach(childrenPO -> {
-                deleteRec(childrenPO, delList);
+                this.subjectService.deleteRec(childrenPO, delList);
             });
         }
         delList.add(subjectPO.getId());

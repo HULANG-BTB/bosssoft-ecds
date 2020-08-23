@@ -61,6 +61,14 @@ public interface SubjectService extends IService<SubjectPO> {
     QueryResponseResult delete(Long id);
 
     /**
+     * 递归添加，需要删除的预算科目，到一个集合
+     *
+     * @param
+     * @return
+     */
+    void deleteRec(SubjectPO subjectPO, List<Long> delList);
+
+    /**
      * 复制预算科目
      */
     QueryResponseResult copy(Long id);
