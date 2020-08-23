@@ -47,6 +47,13 @@ public class ImageController {
         return imageService.generateImage(billDTO);
     }
 
+    @ApiOperation("根据传入的票据信息实时渲染，返回盖章的PNG图片")
+    @PostMapping(value = "/stampedImage", produces = MediaType.IMAGE_PNG_VALUE)
+    public byte[] generateStampedImage(@RequestBody NontaxBillDto billDTO) {
+        byte[] img = imageService.generateImage(billDTO);
+        return imageService.addImageMark(img);
+    }
+
     /**
      * 根据传入的票据信息生成图片，返回图片的地址
      * 根据票据代码和号码确定唯一，不会重复生成

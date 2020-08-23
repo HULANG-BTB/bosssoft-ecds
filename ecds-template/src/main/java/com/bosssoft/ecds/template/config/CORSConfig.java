@@ -7,7 +7,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 /**
  * 跨域设置，使用反向代理时请关闭此配置
  */
-@Configuration
+//@Configuration
 public class CORSConfig implements WebMvcConfigurer {
     /**
      * 允许所有源的部分方法跨域

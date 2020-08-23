@@ -56,6 +56,7 @@ public class PrintTemplateServiceImpl extends ServiceImpl<PrintTemplateMapper, P
     public boolean add(PrintTemplateDto templateDTO) {
         PrintTemplatePo templatePO = new PrintTemplatePo();
         BeanUtils.copyProperties(templateDTO, templatePO);
+        templatePO.setVersion(0L);
         templatePO.setCreateTime(LocalDateTime.now());
         templatePO.setUpdateTime(LocalDateTime.now());
         return this.save(templatePO);

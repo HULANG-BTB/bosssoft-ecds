@@ -164,6 +164,13 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
+                    <layout>ZIP</layout>
+                    <includes>
+                        <include>
+                            <groupId>nothing</groupId>
+                            <artifactId>nothing</artifactId>
+                        </include>
+                    </includes>
                     <mainClass>com.bosssoft.ecds.template.BillTemplateApplication</mainClass>
                 </configuration>
                 <executions>
