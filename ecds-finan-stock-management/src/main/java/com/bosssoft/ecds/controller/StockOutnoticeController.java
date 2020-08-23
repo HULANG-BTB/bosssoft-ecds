@@ -16,6 +16,7 @@ import com.bosssoft.ecds.entity.vo.StockOutVo;
 import com.bosssoft.ecds.response.CommonCode;
 import com.bosssoft.ecds.response.QueryResponseResult;
 import com.bosssoft.ecds.response.ResponseResult;
+import com.bosssoft.ecds.service.FinanBillService;
 import com.bosssoft.ecds.service.StockOutnoticeChangeService;
 import com.bosssoft.ecds.service.StockOutnoticeItemService;
 import com.bosssoft.ecds.service.StockOutnoticeService;
@@ -51,6 +52,8 @@ public class StockOutnoticeController extends BaseController {
     private StockOutnoticeItemService itemService;
     @Autowired
     private StockOutnoticeChangeService changeService;
+    @Autowired
+    private FinanBillService billService;
 
 
     /**
@@ -100,6 +103,10 @@ public class StockOutnoticeController extends BaseController {
     public QueryResponseResult getItem(@RequestParam Long pid) {
         log.info("进入getItem方法...");
         List<StockOutItemDto> outItemDtos = itemService.queryItemByPid(pid);
+        outItemDtos.forEach(itemDto -> {
+            itemDto.setMaxNum(billService.getCount(itemDto.getBillPrecode()));
+            itemDto.setBillNo1(billService.getStartNo(itemDto.getBillPrecode()).getBillId());
+        });
         log.info("退出方法，data:{}", outItemDtos);
         return new QueryResponseResult<>(CommonCode.SUCCESS, outItemDtos);
     }
