@@ -22,5 +22,5 @@ public interface GroupService extends IService<GroupPO> {
     ResponseResult update(GroupDTO groupDTO);
     ResponseResult delete(GroupDTO groupDTO);
     ResponseResult listByPage(GroupPageVO<GroupVO> groupPageVO);
-    ResponseResult getGroupName();
+    ResponseResult getGroupByCode(GroupPageVO<Object> groupPageVO);
 }

@@ -22,9 +22,11 @@ import com.google.common.collect.ListMultimap;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -42,6 +44,8 @@ import static com.bosssoft.ecds.enums.BillTypeEnum.*;
 public class BillTypeServiceImpl implements BillTypeService {
 
     private final BillTypeDao billTypeDao;
+
+    private HttpServletRequest httpServletRequest;
 
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -160,6 +164,7 @@ public class BillTypeServiceImpl implements BillTypeService {
 
     @Override
     public ResponseResult queryBillTypeTree() {
+
         // 查询所有票据种类及种类
         List<BillTypeShowDTO> bilTypeList = billTypeDao.getAllBillType();
         // 取出票据分类

@@ -127,8 +127,10 @@ public class GroupServiceImpl extends ServiceImpl<GroupDao, GroupPO> implements 
     }
 
     @Override
-    public ResponseResult getGroupName() {
-        List<GroupPO> groupPOS = groupDao.selectList(null);
+    public ResponseResult getGroupByCode(GroupPageVO<Object> groupPageVO) {
+        QueryWrapper<GroupPO> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(GroupPO.F_AGEN_CODE,groupPageVO.getAgenCode());
+        List<GroupPO> groupPOS = groupDao.selectList(queryWrapper);
         List<GroupVO> groupVOS = MyBeanUtil.copyListProperties(groupPOS, GroupVO::new);
         return new QueryResponseResult<>(CommonCode.SUCCESS,groupVOS);
     }
