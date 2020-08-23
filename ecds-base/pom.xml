@@ -166,6 +166,13 @@
                 <configuration>
                     <!-- 指定该Main Class为全局的唯一入口 -->
                     <mainClass>com.bosssoft.ecds.BaseApplication</mainClass>
+                    <layout>ZIP</layout>
+                    <includes>
+                        <include>
+                            <groupId>nothing</groupId>
+                            <artifactId>nothing</artifactId>
+                        </include>
+                    </includes>
                 </configuration>
                 <executions>
                     <execution>
