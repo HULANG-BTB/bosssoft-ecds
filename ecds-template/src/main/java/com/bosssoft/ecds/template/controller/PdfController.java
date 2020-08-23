@@ -75,7 +75,7 @@ public class PdfController {
         if (success) {
             String url = host + "/pdf/output/"
                     + billDTO.getBillCode() + billDTO.getSerialCode() + ".pdf";
-            return new ResponseResult(CommonCode.SUCCESS);
+            return new QueryResponseResult<>(CommonCode.SUCCESS, url);
         } else {
             return new ResponseResult(CommonCode.FAIL);
         }
@@ -108,8 +108,6 @@ public class PdfController {
 
     /**
      * 返回一个样板PDF
-     *
-     * @return
      */
     @ApiOperation("返回一个样板 PDF")
     @GetMapping(value = "/template", produces = MediaType.APPLICATION_PDF_VALUE)

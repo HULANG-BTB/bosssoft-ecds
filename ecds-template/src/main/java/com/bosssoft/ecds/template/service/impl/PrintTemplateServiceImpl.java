@@ -63,6 +63,9 @@ public class PrintTemplateServiceImpl extends ServiceImpl<PrintTemplateMapper, P
 
     @Override
     public boolean remove(Long id) {
+        String billCode = genBillCode(this.getById(id));
+        // 被删除的可能是默认的打印模板，一并从默认模板表里面删除
+        templateDefaultService.removeDefault("print", billCode);
         return this.removeById(id);
     }
 
@@ -124,16 +127,30 @@ public class PrintTemplateServiceImpl extends ServiceImpl<PrintTemplateMapper, P
 
     @Override
     public PrintTemplateDto getByBillCode(String billCode) {
+
         if (billCode==null || billCode.length()!=6)
             return null;
-        String rgnCode = billCode.substring(0, 2);
-        String typeId = billCode.substring(2, 4);
-        String sortId = billCode.substring(4, 6);
+        PrintTemplatePo templatePo = null;
 
-        PrintTemplatePo templatePo =
-                printTemplateMapper.selectFirstByBillCode(rgnCode, typeId, sortId);
-        if (templatePo==null)
-            return null;
+        // 如果默认模板表里面有记录
+        Long id = templateDefaultService.getDefault("print", billCode);
+        if (id!=0) {
+            templatePo = printTemplateMapper.selectById(id);
+            if (templatePo==null) {
+                return null;
+            }
+        }
+        // 如果没有就从数据库里面找一条
+        else {
+            String rgnCode = billCode.substring(0, 2);
+            String typeId = billCode.substring(2, 4);
+            String sortId = billCode.substring(4, 6);
+
+            templatePo =
+                    printTemplateMapper.selectFirstByBillCode(rgnCode, typeId, sortId);
+            if (templatePo==null)
+                return null;
+        }
 
         PrintTemplateDto templateDto = new PrintTemplateDto();
         BeanUtils.copyProperties(templatePo, templateDto);
@@ -145,7 +162,10 @@ public class PrintTemplateServiceImpl extends ServiceImpl<PrintTemplateMapper, P
         PrintTemplatePo t = printTemplateMapper.selectById(id);
         if (t==null) return false;
         String billCode = t.getRgnCode() + t.getTypeId() + t.getSortId();
-        boolean res = templateDefaultService.setDefault("print", billCode, id);
-        return false;
+        return templateDefaultService.setDefault("print", billCode, id);
+    }
+
+    private String genBillCode(PrintTemplatePo t) {
+        return t==null ? "" : t.getRgnCode() + t.getTypeId() + t.getSortId();
     }
 }

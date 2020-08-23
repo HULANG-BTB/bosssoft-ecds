@@ -1,5 +1,6 @@
 package com.bosssoft.ecds.template.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -8,6 +9,7 @@ import com.bosssoft.ecds.template.mapper.TemplateDefaultMapper;
 import com.bosssoft.ecds.template.service.TemplateDefaultService;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.time.LocalDateTime;
 
 /**
@@ -20,6 +22,9 @@ import java.time.LocalDateTime;
  */
 @Service
 public class TemplateDefaultServiceImpl extends ServiceImpl<TemplateDefaultMapper, TemplateDefaultPo> implements TemplateDefaultService {
+
+    @Resource
+    TemplateDefaultMapper templateDefaultMapper;
 
     @Override
     public boolean setDefault(String type, String billCode, Long id) {
@@ -36,10 +41,10 @@ public class TemplateDefaultServiceImpl extends ServiceImpl<TemplateDefaultMappe
                 .eq(TemplateDefaultPo::getType, type)
                 .set(TemplateDefaultPo::getDefaultId, id);
 
-        this.saveOrUpdate(defaultPo, updateWrapper);
-        return false;
+        return this.saveOrUpdate(defaultPo, updateWrapper);
     }
 
+    @Override
     public Long getDefault(String type, String billCode) {
         Long defaultId = 0L;
         QueryWrapper<TemplateDefaultPo> queryWrapper = new QueryWrapper<>();
@@ -51,7 +56,20 @@ public class TemplateDefaultServiceImpl extends ServiceImpl<TemplateDefaultMappe
         if (def != null) {
             defaultId = def.getDefaultId();
         }
-        
+
         return defaultId;
+    }
+
+    @Override
+    public boolean removeDefault(String type, String billCode) {
+
+        QueryWrapper<TemplateDefaultPo> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda()
+                .eq(TemplateDefaultPo::getType, type)
+                .eq(TemplateDefaultPo::getBillcode, billCode);
+
+        int rows = templateDefaultMapper.delete(queryWrapper);
+
+        return rows>0;
     }
 }

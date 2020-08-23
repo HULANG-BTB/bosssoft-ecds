@@ -181,6 +181,7 @@ public class PrintTemplateController {
         return new QueryResponseResult<>(CommonCode.SUCCESS, list);
     }
 
+    @ApiOperation("设置默认打印模板，生成 pdf 将使用该模板")
     @PostMapping("/setDefault")
     public ResponseResult setDefault(
             @RequestParam @ApiParam(value = "主键", example = "0") Long id){
