@@ -35,13 +35,6 @@ public class CbillAccountingQueryController {
     @Autowired
     private CbillAccountingQueryService cbillAccountingQueryService;
 
-    @GetMapping("/listAll")
-    @ResponseBody
-    @ApiOperation(value = "入账基础信息列表(单纯为练前端功能，不必要集成测试)")
-    public ResponseResult listAll(){
-        return cbillAccountingQueryService.listAll();
-    }
-
     @PostMapping("/listByPage")
     @ApiOperation(value = "分页查询")
     public QueryResponseResult<PageVO> listByPage(@RequestBody @Validated PageVO pageVO){

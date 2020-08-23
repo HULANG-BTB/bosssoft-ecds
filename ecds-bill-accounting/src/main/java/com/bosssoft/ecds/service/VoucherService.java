@@ -28,20 +28,6 @@ public interface VoucherService extends IService<VoucherPO> {
     Boolean generateVoucher(VoucherDTO voucherDTO);
 
     /**
-     * 批量生成入账凭证
-     *
-     * @return Boolean
-     */
-    Boolean generateVoucher(List<VoucherDTO> voucherDTOList);
-
-    /**
-     * 查看入账凭证信息列表
-     *
-     * @return ResponseResult
-     */
-    ResponseResult listAll();
-
-    /**
      * 通过入账凭证号获取电子凭证
      *
      * @return ResponseResult

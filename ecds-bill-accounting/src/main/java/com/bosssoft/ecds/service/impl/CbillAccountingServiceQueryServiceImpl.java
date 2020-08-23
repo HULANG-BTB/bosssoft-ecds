@@ -48,19 +48,6 @@ public class CbillAccountingServiceQueryServiceImpl extends ServiceImpl<CbillAcc
     private VoucherService voucherService;
 
     /**
-     * 查询入账单据列表
-     *
-     * @return 入账数据
-     */
-    @Transactional(rollbackFor = {CustomException.class})
-    @Override
-    public ResponseResult listAll() {
-        List<CbillAccountingDTO> accountingDTOList = MyBeanUtil.copyListProperties(super.list(), CbillAccountingDTO.class);
-        List<CbillAccountingVO> accountingVOList = MyBeanUtil.copyListProperties(accountingDTOList, CbillAccountingVO.class);
-        return new QueryResponseResult<>(SUCCESS,accountingVOList);
-    }
-
-    /**
      * 分页查询
      * pageDTO.getKeyword() 无数据输入时实现查询全部数据，有数据输入时进行模糊查询
      *

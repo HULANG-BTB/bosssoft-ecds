@@ -33,12 +33,6 @@ public class VoucherController {
     @Autowired
     private VoucherService voucherService;
 
-    @GetMapping("/listAll")
-    @ApiOperation(value = "所有电子凭证信息")
-    public ResponseResult listAll(){
-        return voucherService.listAll();
-    }
-
     @PostMapping("/listByPage")
     @ApiOperation(value = "所有电子凭证信息")
     public QueryResponseResult<PageVO> listByPage(@RequestBody @Validated PageVO pageVO){

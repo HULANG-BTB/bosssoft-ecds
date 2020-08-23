@@ -46,30 +46,6 @@ public class VoucherServiceImpl extends ServiceImpl<VoucherDao, VoucherPO> imple
     }
 
     /**
-     * 批量生成入账凭证
-     *
-     * @return Boolean
-     */
-    @Override
-    public Boolean generateVoucher(List<VoucherDTO> voucherDTOList) {
-        List<VoucherPO> voucherPOList = MyBeanUtil.copyListProperties(voucherDTOList, VoucherPO::new);
-        return super.saveBatch(voucherPOList);
-    }
-
-    /**
-     * 查看入账凭证信息列表
-     *
-     * @return ResponseResult
-     */
-    @Override
-    public ResponseResult listAll() {
-        List<VoucherPO> list = super.list();
-        List<VoucherDTO> voucherDTOList = MyBeanUtil.copyListProperties(list, VoucherDTO.class);
-        List<VoucherVO> voucherVOList = MyBeanUtil.copyListProperties(voucherDTOList, VoucherVO.class);
-        return new QueryResponseResult(SUCCESS,voucherVOList);
-    }
-
-    /**
      * 通过入账凭证号获取电子凭证
      *
      * @param voucherDTO

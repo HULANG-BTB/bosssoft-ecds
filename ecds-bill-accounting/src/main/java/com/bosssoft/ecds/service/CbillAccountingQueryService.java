@@ -18,13 +18,6 @@ import java.util.List;
 public interface CbillAccountingQueryService {
 
     /**
-     * 查询入账单据列表
-     *
-     * @return 统一请求
-     */
-    ResponseResult listAll();
-
-    /**
      * 分页查询全部数据
      *
      * @return 统一请求

@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Base64;
 import java.util.Date;
 
 /**
@@ -43,7 +44,7 @@ public class MybatisPlusConfig {
             @Override
             public void insertFill(MetaObject metaObject) {
                 String authId = httpServletRequest.getHeader("auth_id");
-                String authNickname = httpServletRequest.getHeader("auth_nickname");
+                String authNickname = new String(Base64.getDecoder().decode(httpServletRequest.getHeader("auth_nickname")));
                 this.setFieldValByName("createTime", new Date(), metaObject);
                 this.setFieldValByName("updateTime", new Date(), metaObject);
                 this.setFieldValByName("operatorId", authId, metaObject);
