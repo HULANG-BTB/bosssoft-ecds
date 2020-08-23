@@ -21,6 +21,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /**
@@ -70,7 +71,7 @@ public class CustomServerSecurityContextRepository implements ServerSecurityCont
                 AuthUserDetails authUserDetails = pubey.getInfo();
                 Long id = authUserDetails.getId();
                 String username = authUserDetails.getUsername();
-                String nickname = authUserDetails.getNickname();
+                String nickname = authUserDetails.getNickname().getBytes(StandardCharsets.UTF_8).toString();
 
                 // 从redis中获取具体信息
                 Map<String, Object> info = (Map<String, Object>) redisUtils.get(username + "_" + id + "_info");

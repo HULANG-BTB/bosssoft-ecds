@@ -6,6 +6,7 @@ import com.bosssoft.ecds.security.auth.CustomReactiveAuthorizationManager;
 import com.bosssoft.ecds.security.auth.CustomServerAuthenticationEntryPoint;
 import com.bosssoft.ecds.security.handler.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
@@ -79,20 +80,19 @@ public class SecurityConfig {
                 .and()
                 .securityContextRepository(custmoServerSecurityContextRepository)
                 .authenticationManager(customReactiveAuthenticationManager)
+                .logout().logoutUrl("/user/logout").logoutSuccessHandler(CustomLogoutSuccessHandler)
+                .and()
                 .formLogin().loginPage("/user/login")
 //                .authenticationEntryPoint()
                 .authenticationSuccessHandler(customAuthenticationSuccessHandler)
                 .authenticationFailureHandler(customAuthenticationFailureHandler)
                 .and()
                 .httpBasic().disable()
-                .csrf().disable()
-                .logout().disable();
+                .csrf().disable();
 
         http.exceptionHandling()
                 .accessDeniedHandler(customAuthenticationAccessDeniedHandler)
                 .authenticationEntryPoint(customServerAuthenticationEntryPoint);
-
-        http.logout().logoutUrl("/user/logout").logoutSuccessHandler(CustomLogoutSuccessHandler);
 
         return http.build();
     }

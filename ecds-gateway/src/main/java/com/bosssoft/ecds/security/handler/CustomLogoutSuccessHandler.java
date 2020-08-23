@@ -1,7 +1,11 @@
 package com.bosssoft.ecds.security.handler;
 
+import cn.hutool.json.JSONUtil;
+import com.bosssoft.ecds.response.CommonCode;
 import com.bosssoft.ecds.util.RedisUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.buffer.DataBuffer;
+import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.server.DefaultServerRedirectStrategy;
 import org.springframework.security.web.server.ServerRedirectStrategy;
@@ -11,6 +15,8 @@ import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 
 /**
  * @ClassName CustomRedirectServerLogoutSuccessHandler
@@ -21,21 +27,18 @@ import java.net.URI;
 
 @Component
 public class CustomLogoutSuccessHandler extends RedirectServerLogoutSuccessHandler {
-    public static final String DEFAULT_LOGOUT_SUCCESS_URL = "/";
-
-    private URI logoutSuccessUrl = URI.create(DEFAULT_LOGOUT_SUCCESS_URL);
-
-    private ServerRedirectStrategy redirectStrategy = new DefaultServerRedirectStrategy();
-
-    @Autowired
-    RedisUtils redisUtils;
-
+    
     @Override
     public Mono<Void> onLogoutSuccess(WebFilterExchange exchange, Authentication authentication) {
-
-
-        return this.redirectStrategy
-                .sendRedirect(exchange.getExchange(), this.logoutSuccessUrl);
+        ServerHttpResponse response = exchange.getExchange().getResponse();
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("success", CommonCode.SUCCESS.success());
+        map.put("code", CommonCode.SUCCESS.code());
+        map.put("message", CommonCode.SUCCESS.message());
+        map.put("data", "{}");
+        byte[] dataBytes = JSONUtil.toJsonStr(map).getBytes(StandardCharsets.UTF_8);
+        DataBuffer bodyDataBuffer = response.bufferFactory().wrap(dataBytes);
+        return response.writeWith(Mono.just(bodyDataBuffer));
     }
 
 }
