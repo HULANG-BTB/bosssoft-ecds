@@ -19,12 +19,13 @@ public enum BillTypeEnum implements ResultCode {
     BILL_TYPE_CHILD_EXIST(false, 20005, "此票据分类下仍用票据种类"),
     DELETE_BILL_TYPE_FAIL(false, 20006, "删除票据分类失败"),
     BILL_TYPE_ILLEGAL(false, 20007, "只能票据分类做为上级"),
+    BILL_TYPE_PARENT_ILLEGAL(false, 20009, "票据种类上级不为空"),
     DATE_ILLEGAL(false, 20008, "失效日期必须在生效日期之后"),
+    BILL_CODE_LENGTH_ILLEGAL(false, 20010, "票据分类编码为2位的数字,票据分类编码为4位的数字"),
     ;
 
-    //操作是否成功
     boolean success;
-    //操作代码
+
     int code;
 
     BillTypeEnum(boolean success, int code, String message) {

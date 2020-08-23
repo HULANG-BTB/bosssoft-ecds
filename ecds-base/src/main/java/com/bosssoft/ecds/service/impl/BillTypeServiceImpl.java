@@ -22,9 +22,11 @@ import com.google.common.collect.ListMultimap;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -43,9 +45,15 @@ public class BillTypeServiceImpl implements BillTypeService {
 
     private final BillTypeDao billTypeDao;
 
+    private HttpServletRequest httpServletRequest;
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResponseResult add(AddBillTypeVO addBillTypeVO) {
+        // 检查票据种类和分类的长度
+        if (checkBillCodeLength(addBillTypeVO.getCode(),addBillTypeVO.getCheckSort())){
+            return new ResponseResult(BILL_CODE_LENGTH_ILLEGAL);
+        }
         // 检查票据编码和票据名称唯一
         if (checkBillTypeRepeat(addBillTypeVO.getName(), addBillTypeVO.getCode(), null)) {
             return new ResponseResult(BILL_TYPE_NAME_EXIST);
@@ -62,11 +70,13 @@ public class BillTypeServiceImpl implements BillTypeService {
         billType.setCheckLeaf(1 - billType.getCheckSort());
         billType.setLevel(1 - billType.getCheckSort());
         // 叶子插入
-        if (addBillTypeVO.getPid() != null) {
+        if (addBillTypeVO.getPid() != null ) {
             ResultCode result = checkParent(billType);
             if (result != SUCCESS) {
                 return new ResponseResult(result);
             }
+        }else if (addBillTypeVO.getCheckSort().equals(BILL_TYPE)){
+            return new ResponseResult(BILL_TYPE_PARENT_ILLEGAL);
         }
         //插入数据
         int result = billTypeDao.insert(billType);
@@ -81,6 +91,10 @@ public class BillTypeServiceImpl implements BillTypeService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResponseResult update(UpdateBillTypeVO updateBillTypeVO) {
+        // 检查票据种类和分类的长度
+        if (checkBillCodeLength(updateBillTypeVO.getCode(),updateBillTypeVO.getCheckSort())){
+            return new ResponseResult(BILL_CODE_LENGTH_ILLEGAL);
+        }
         // 检查票据编码和票据名称唯一
         if (checkBillTypeRepeat(updateBillTypeVO.getName(), updateBillTypeVO.getCode(), updateBillTypeVO.getId())) {
             return new ResponseResult(BILL_TYPE_NAME_EXIST);
@@ -99,6 +113,8 @@ public class BillTypeServiceImpl implements BillTypeService {
             if (result != SUCCESS) {
                 return new ResponseResult(result);
             }
+        }else if (updateBillTypeVO.getCheckSort().equals(BILL_TYPE)){
+            return new ResponseResult(BILL_TYPE_PARENT_ILLEGAL);
         }
         //;乐观锁
         BillTypePO oldBillType = billTypeDao.selectById(billType.getId());
@@ -148,6 +164,7 @@ public class BillTypeServiceImpl implements BillTypeService {
 
     @Override
     public ResponseResult queryBillTypeTree() {
+
         // 查询所有票据种类及种类
         List<BillTypeShowDTO> bilTypeList = billTypeDao.getAllBillType();
         // 取出票据分类
@@ -219,5 +236,14 @@ public class BillTypeServiceImpl implements BillTypeService {
     private boolean checkDate(Date effDate, Date expDate) {
         // 检查生效日期和失效日期的大小关系
         return effDate.compareTo(expDate) >= 0;
+    }
+    private boolean checkBillCodeLength(String code,Integer checkSort){
+        if (code.length() == SORT_LENGTH && checkSort.equals(BILL_SORT)){
+            return false;
+        }else if (code.length() == TYPE_LENGTH && checkSort.equals(BILL_TYPE)){
+            return false;
+        }else{
+            return true;
+        }
     }
 }

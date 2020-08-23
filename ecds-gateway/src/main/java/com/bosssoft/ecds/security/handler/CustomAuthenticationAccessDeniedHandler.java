@@ -11,6 +11,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+
 
 /**
  * @ClassName CustomAuthenticationAccessDeniedHandler
@@ -31,7 +34,7 @@ public class CustomAuthenticationAccessDeniedHandler implements ServerAccessDeni
         response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
         // 三设置 验证异常返回信息
         QueryResponseResult<String> responseResult = new QueryResponseResult<>(CommonCode.ACCESSDENIED, denied.getMessage());
-        byte[] responseBodyBytes = JSONUtil.toJsonStr(responseResult).getBytes();
+        byte[] responseBodyBytes = JSONUtil.toJsonStr(responseResult).getBytes(StandardCharsets.UTF_8);
         // 写入信息
         return response.writeWith(Mono.just(response.bufferFactory().wrap(responseBodyBytes)));
     }

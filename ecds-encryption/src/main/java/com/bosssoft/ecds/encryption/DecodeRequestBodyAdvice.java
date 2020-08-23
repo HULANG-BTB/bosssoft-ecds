@@ -18,6 +18,7 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.RequestBodyAdvice;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -38,11 +39,15 @@ import java.nio.charset.StandardCharsets;
 public class DecodeRequestBodyAdvice implements RequestBodyAdvice {
     @Autowired
     private RedisUtils redisUtils;
-
+    @Autowired
+    HttpServletRequest request;
     @Override
     public boolean supports(MethodParameter methodParameter, Type targetType,
                             Class<? extends HttpMessageConverter<?>> converterType) {
         //只有@SecretAnnotation的方法才会触发该类
+        if("OPTIONS".equals(request.getMethod())){
+            return false;
+        }
         return methodParameter.hasMethodAnnotation(Decrypt.class);
     }
 
@@ -51,6 +56,9 @@ public class DecodeRequestBodyAdvice implements RequestBodyAdvice {
                                            Class<? extends HttpMessageConverter<?>> converterType) throws IOException {
 
         StringBuilder stringBuilder = new StringBuilder();
+        HttpHeaders headers = inputMessage.getHeaders();
+
+        String token=headers.getFirst(HttpHeaders.AUTHORIZATION);
         BufferedReader bufferedReader = null;
         try {
             //获取请求入参 可以从这里获取流
@@ -78,11 +86,12 @@ public class DecodeRequestBodyAdvice implements RequestBodyAdvice {
         }
         //获取请求数据
         String builderString = stringBuilder.toString();
-        Long userId = 123L;
-        if (redisUtils.get(userId + EncryptionConstant.PRIVATE_KEY) == null) {
+
+        if (redisUtils.get(token + EncryptionConstant.PRIVATE_KEY) == null) {
             throw new CustomException(CommonCode.PRIVATE_KEY_IS_NULL);
         }
-        String privateKey = String.valueOf(redisUtils.get(userId + EncryptionConstant.PRIVATE_KEY));
+
+        String privateKey = String.valueOf(redisUtils.get(token + EncryptionConstant.PRIVATE_KEY));
         try {
             return new MyHttpInputMessage(inputMessage.getHeaders(), builderString, privateKey);
         } catch (Exception e) {
