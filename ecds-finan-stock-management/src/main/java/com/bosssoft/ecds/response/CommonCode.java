@@ -11,6 +11,8 @@ public enum CommonCode implements ResultCode {
 
     //操作成功时返回的状态码
     SUCCESS(true, 10000, "操作成功！"),
+    CREATE_SUCCESS(true, 10000, "创建成功！"),
+    GET_CODE_SUCCESS(true, 10000, "获取财政代码成功！"),
     //操作失败时返回的状态码
     FAIL(false, 11111, "操作失败！"),
     //参数输入有误时返回的状态码

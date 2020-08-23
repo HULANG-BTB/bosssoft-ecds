@@ -1,6 +1,8 @@
 package com.bosssoft.usm.service;
 
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -21,5 +23,7 @@ public interface BaseService<B> {
      void update(B bean);
 
      boolean delete(Serializable primaryKey);
+
+     int updateByWrapper(B bean, Wrapper<B> updateWrapper);
 
 }

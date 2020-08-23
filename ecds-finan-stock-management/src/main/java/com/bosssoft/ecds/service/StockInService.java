@@ -1,12 +1,11 @@
 package com.bosssoft.ecds.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.bosssoft.ecds.entity.PageResult;
 import com.bosssoft.ecds.entity.dto.*;
 import com.bosssoft.ecds.entity.po.StockInPO;
 import com.bosssoft.ecds.entity.vo.CurrentBillNumberVO;
-import com.bosssoft.ecds.entity.vo.StockInForChangeVO;
-
-import java.util.List;
+import com.bosssoft.ecds.entity.vo.StockInInfo;
 
 /**
  * <p>
@@ -23,13 +22,6 @@ public interface StockInService extends IService<StockInPO> {
      * @return 最新的业务号
      */
     CurrentBillNumberVO getBillNumber();
-    
-    /**
-     * 获取未审核列表
-     *
-     * @return 未审核列表
-     */
-    List<StockInForChangeVO> listUnChange();
     
     /**
      * 创建票据入库单
@@ -72,10 +64,18 @@ public interface StockInService extends IService<StockInPO> {
     boolean store(StoreDTO storeDTO);
     
     /**
-     * 检查票据段是否可用
+     * 分页查询入库单
      *
-     * @param checkStoreDTO 传入的DTO
-     * @return 票据段是否可用
+     * @param stockInPageDTO 查询条件
+     * @return 包含分页信息的入库单列表对象
      */
-    boolean checkStore(CheckStoreDTO checkStoreDTO);
+    PageResult listVOPage(StockInPageDTO stockInPageDTO);
+    
+    /**
+     * 根据id查询入库单详细信息
+     *
+     * @param id
+     * @return
+     */
+    StockInInfo getStockInInfo(Long id);
 }

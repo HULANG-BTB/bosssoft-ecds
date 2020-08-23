@@ -6,13 +6,14 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * @author zhangxiaohui
  */
 @Data
-public class SmsDto {
+public class SmsDto implements Serializable {
     /**
      * 短信id
      */

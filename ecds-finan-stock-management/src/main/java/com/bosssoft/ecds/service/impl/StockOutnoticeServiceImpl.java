@@ -1,17 +1,18 @@
 package com.bosssoft.ecds.service.impl;
 
+import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.bosssoft.ecds.entity.constant.StockOutConstant;
+import com.bosssoft.ecds.entity.dto.ReceiveFinanceapplyDto;
 import com.bosssoft.ecds.entity.dto.StockOutDto;
-import com.bosssoft.ecds.entity.dto.StockOutItemDto;
-import com.bosssoft.ecds.entity.po.StockOutnoticeItemPo;
 import com.bosssoft.ecds.entity.po.StockOutnoticePo;
 import com.bosssoft.ecds.entity.vo.StockOutPageVo;
 import com.bosssoft.ecds.mapper.StockOutnoticeMapper;
+import com.bosssoft.ecds.service.FinanBillService;
 import com.bosssoft.ecds.service.StockOutnoticeItemService;
 import com.bosssoft.ecds.service.StockOutnoticeService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -38,6 +40,8 @@ public class StockOutnoticeServiceImpl extends ServiceImpl<StockOutnoticeMapper,
     private StockOutnoticeMapper outMapper;
     @Autowired
     private StockOutnoticeItemService itemService;
+    @Autowired
+    private FinanBillService billService;
 
     /**
      * 新增一个空数据
@@ -150,7 +154,7 @@ public class StockOutnoticeServiceImpl extends ServiceImpl<StockOutnoticeMapper,
     /**
      * 检测判断出库请求中的数据是否合规
      *
-     * @param outDto      出库Dto
+     * @param outDto 出库Dto
      *
      * @return 合规true，违规false
      */
@@ -178,6 +182,20 @@ public class StockOutnoticeServiceImpl extends ServiceImpl<StockOutnoticeMapper,
      */
     @Override
     public Boolean updateChangeState(Long id, Integer changeState) {
+        /*
+        如果审核通过，调用票据出库方法
+         */
+        if (changeState.equals(StockOutConstant.PASSED)) {
+            log.info("通过审核，开始发票...");
+            StockOutDto outDto = Convert.convert(StockOutDto.class, this.getById(id));
+            List<ReceiveFinanceapplyDto> receiveDtos = ConverUtil.converList(ReceiveFinanceapplyDto.class, itemService.queryItemByPid(id));
+            receiveDtos.forEach(dto -> {
+                dto.setAuthor(outDto.getAuthor());
+                dto.setUseMan(outDto.getUseMan());
+            });
+            // 发票
+
+        }
         StockOutnoticePo outnoticePo = new StockOutnoticePo();
         outnoticePo.setId(id);
         outnoticePo.setChangeState(changeState);
@@ -199,11 +217,25 @@ public class StockOutnoticeServiceImpl extends ServiceImpl<StockOutnoticeMapper,
         if (outDtos == null || outDtos.isEmpty()) {
             return false;
         }
+        StockOutDto outDto = outDtos.stream().findAny().get();
+        /*
+        如果审核通过，调用票据出库方法
+         */
+        if (changeState.equals(StockOutConstant.PASSED)) {
+            log.info("通过审核，开始发票...");
+//            List<Long> idlist = outDtos.stream().map(StockOutDto::getId).collect(Collectors.toList());
+            List<ReceiveFinanceapplyDto> receiveDtos = ConverUtil.converList(ReceiveFinanceapplyDto.class, itemService.queryItemByPid(outDto.getId()));
+            receiveDtos.forEach(dto -> {
+                dto.setAuthor(outDto.getAuthor());
+                dto.setUseMan(outDto.getUseMan());
+            });
+            // 发票
+
+        }
         LambdaUpdateWrapper<StockOutnoticePo> wrapper = Wrappers.lambdaUpdate();
         outDtos.forEach(dto -> wrapper.eq(StockOutnoticePo::getId, dto.getId()).or());
         wrapper.set(StockOutnoticePo::getChangeState, changeState);
-        this.update(wrapper);
-        return true;
+        return this.update(wrapper);
     }
 
     /**

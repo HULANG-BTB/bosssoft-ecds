@@ -15,6 +15,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import lombok.experimental.Accessors;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * <p>
@@ -51,6 +52,10 @@ public class StockReturnItemPO extends Model<StockReturnItemPO> {
     @TableField("f_bill_code")
     private String billCode;
 
+    @ApiModelProperty(value = "票据名称")
+    @TableField("f_bill_name")
+    private String billName;
+
     @ApiModelProperty(value = "数量")
     @TableField("f_number")
     private Integer number;
@@ -71,11 +76,13 @@ public class StockReturnItemPO extends Model<StockReturnItemPO> {
     @ApiModelProperty(value = "创建时间")
     @TableField(value = "f_create_time", fill = FieldFill.INSERT)
     @JsonFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date createTime;
 
     @ApiModelProperty(value = "修改时间")
     @TableField(value = "f_update_time", fill = FieldFill.INSERT_UPDATE)
     @JsonFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date updateTime;
 
 

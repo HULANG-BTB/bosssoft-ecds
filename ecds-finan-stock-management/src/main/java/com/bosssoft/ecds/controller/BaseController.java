@@ -12,7 +12,7 @@ public class BaseController {
     private static final String UNKNOWN = "unknown";
     private static final String SPLIT_SYMBOL = ",";
 
-    public ResponseResult getRes(boolean b) {
+    public ResponseResult getRes(Boolean b) {
         if (b) {
             return ResponseResult.SUCCESS();
         }

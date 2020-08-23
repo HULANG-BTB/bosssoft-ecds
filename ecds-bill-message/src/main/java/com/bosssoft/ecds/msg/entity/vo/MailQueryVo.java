@@ -4,6 +4,7 @@ package com.bosssoft.ecds.msg.entity.vo;
 import lombok.Data;
 import lombok.ToString;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -13,7 +14,7 @@ import java.util.List;
  */
 @Data
 @ToString
-public class MailQueryVo {
+public class MailQueryVo implements Serializable {
 
     /**
      * 邮件id

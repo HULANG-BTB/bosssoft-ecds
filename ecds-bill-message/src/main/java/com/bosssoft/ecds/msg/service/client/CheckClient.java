@@ -8,7 +8,8 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @author zhangxiaohui
  * @create 2020/8/14 13:58
  */
-@FeignClient(value = "ecds-bill-invocing" )
+//@FeignClient(value = "ecds-bill-invocing" )
+@FeignClient(value = "bill-invocing" )
 public interface CheckClient {
 
     /**
