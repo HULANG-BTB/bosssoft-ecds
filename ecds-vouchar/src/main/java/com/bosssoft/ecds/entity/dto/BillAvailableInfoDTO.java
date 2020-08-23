@@ -6,6 +6,9 @@ import lombok.Data;
 
 import java.io.Serializable;
 
+/**
+ * @author zhuyeqing
+ */
 @Data
 @ApiModel(value = "BillAvailableInfoDto", description = "可用票据信息传输类")
 public class BillAvailableInfoDTO implements Serializable {

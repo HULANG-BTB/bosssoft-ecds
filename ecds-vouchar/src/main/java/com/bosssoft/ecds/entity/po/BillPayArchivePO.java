@@ -53,17 +53,17 @@ public class BillPayArchivePO extends Model<BillPayArchivePO> {
     private BigDecimal account;
 
     @ApiModelProperty(value = "汇总时间")
-    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Shanghai")
     @TableField(value = "f_summary_time", fill = FieldFill.INSERT)
     private Date summaryTime;
 
     @ApiModelProperty(value = "创建时间")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Shanghai")
     @TableField(value = "f_create_time", fill = FieldFill.INSERT)
     private Date createTime;
 
     @ApiModelProperty(value = "修改时间")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Shanghai")
     @TableField(value = "f_update_time", fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
 

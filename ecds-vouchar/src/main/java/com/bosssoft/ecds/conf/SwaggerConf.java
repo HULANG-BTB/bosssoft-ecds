@@ -25,7 +25,7 @@ public class SwaggerConf {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(getApiInfo())
                 //是否禁用
-                .enable(true)
+                .enable(false)
                 //设置分组
                 .groupName("归档微服务")
                 .select()

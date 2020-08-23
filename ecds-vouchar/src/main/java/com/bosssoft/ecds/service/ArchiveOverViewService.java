@@ -5,6 +5,8 @@ import com.bosssoft.ecds.entity.dto.ArchiveOverViewDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.po.ArchivePO;
 import com.bosssoft.ecds.entity.query.ArchiveOverViewQuery;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -27,7 +29,7 @@ public interface ArchiveOverViewService extends IService<ArchivePO> {
     ArchiveOverViewDTO queryOverViewArchiveInfo(ArchiveOverViewQuery archiveOverViewQuery);
 
     /**
-     * 根据传来的查询信息，查询出归档总览表中信息 (模糊查询)
+     * 根据传来的查询信息，查询出归档总览表中信息
      *
      * @param archiveOverViewQuery
      * @return OverViewArchiveDto
@@ -35,7 +37,7 @@ public interface ArchiveOverViewService extends IService<ArchivePO> {
     List<ArchiveOverViewDTO> queryOverViewArchiveInfos(ArchiveOverViewQuery archiveOverViewQuery);
 
     /**
-     * 查询所有信息 以分页查询的形式
+     * 查询所有信息 以分页查询的形式 模糊查询
      *
      * @param archiveOverViewQuery
      * @return
@@ -48,5 +50,7 @@ public interface ArchiveOverViewService extends IService<ArchivePO> {
      * @param list
      * @return boolean
      */
+    @CacheEvict(cacheNames = "allTotal")
+    @Transactional(rollbackFor = Exception.class)
     Boolean updateBatch(List<ArchiveOverViewDTO> list);
 }

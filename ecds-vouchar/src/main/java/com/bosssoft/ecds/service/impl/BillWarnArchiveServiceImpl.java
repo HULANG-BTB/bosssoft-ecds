@@ -10,6 +10,7 @@ import com.bosssoft.ecds.entity.po.BillWarnArchivePO;
 import com.bosssoft.ecds.entity.query.CommonQuery;
 import com.bosssoft.ecds.service.BillWarnArchiveService;
 import com.bosssoft.ecds.utils.MyBeanUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -26,6 +27,7 @@ import java.util.List;
  * @since 2020-08-11
  */
 @Service
+@Slf4j(topic = "kafka_business_logger")
 public class BillWarnArchiveServiceImpl extends ServiceImpl<BillWarnArchiveDao, BillWarnArchivePO> implements BillWarnArchiveService {
 
     @Autowired
