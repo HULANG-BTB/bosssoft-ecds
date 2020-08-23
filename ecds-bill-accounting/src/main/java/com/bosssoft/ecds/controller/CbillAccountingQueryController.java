@@ -30,8 +30,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/ecds-bill-accounting/accountQuery")
 @Api(tags = "基础入帐信息查询")
-@Slf4j
 public class CbillAccountingQueryController {
+
     @Autowired
     private CbillAccountingQueryService cbillAccountingQueryService;
 

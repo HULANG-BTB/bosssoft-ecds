@@ -19,12 +19,14 @@ import com.bosssoft.ecds.response.ResponseResult;
 import com.bosssoft.ecds.response.ResultCode;
 import com.bosssoft.ecds.service.CbillAccountingQueryService;
 import com.bosssoft.ecds.service.VoucherService;
+import com.bosssoft.ecds.util.RedisUtils;
 import com.bosssoft.ecds.utils.MyBeanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 import static com.bosssoft.ecds.enums.CbillAccountingCode.*;
@@ -38,6 +40,9 @@ import static com.bosssoft.ecds.enums.CbillAccountingCode.*;
  */
 @Service
 public class CbillAccountingServiceQueryServiceImpl extends ServiceImpl<CbillAccountingDao, CbillAccountingPO> implements CbillAccountingQueryService {
+
+    @Resource
+    private RedisUtils redisUtils;
 
     @Autowired
     private VoucherService voucherService;

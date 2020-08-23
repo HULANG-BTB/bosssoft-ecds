@@ -20,7 +20,7 @@
             <artifactId>ecds-common</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-        <!--poi-->
+        <!--poi(office读写文件插件)-->
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi</artifactId>
@@ -88,7 +88,7 @@
             <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
             <version>2.2.1.RELEASE</version>
         </dependency>
-        <!--velocity-->
+        <!--velocity(前后端分离的模板展现层)-->
         <dependency>
             <groupId>org.apache.velocity</groupId>
             <artifactId>velocity-engine-core</artifactId>
@@ -105,6 +105,7 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <!--分页插件-->
         <dependency>
             <groupId>com.github.pagehelper</groupId>
             <artifactId>pagehelper-spring-boot-starter</artifactId>
@@ -127,7 +128,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
-        <!--Alibaba sentinel -->
+        <!--Alibaba sentinel(分布式服务架构的高可用流量防护组件) -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
@@ -149,7 +150,12 @@
             <artifactId>sentinel-datasource-nacos</artifactId>
             <version>1.6.3</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <!-- 启用 -->
+            <optional>true</optional>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -162,10 +168,10 @@
                     <layout>ZIP</layout>
                     <includes>
                         <!-- 依赖变化去掉打包重新传完jar包后再打开打包 -->
-                       <!--  <include>
+                        <include>
                             <groupId>nothing</groupId>
                             <artifactId>nothing</artifactId>
-                        </include>-->
+                        </include>
                     </includes>
                 </configuration>
                 <executions>
