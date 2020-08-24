@@ -1,6 +1,8 @@
 package com.bosssoft.usm.service;
 
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -69,6 +71,10 @@ public abstract class AbstractService<B, M extends BaseMapper<B>> {
 
     public void update(B bean) {
         mapper.updateById(bean);
+    }
+
+    public int updateByWrapper(B bean, Wrapper<B> updateWrapper) {
+       return mapper.update(bean,updateWrapper);
     }
 
     public boolean delete(Serializable primaryKey) {

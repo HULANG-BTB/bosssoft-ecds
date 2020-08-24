@@ -2,6 +2,8 @@ package com.bosssoft.ecds.msg.entity.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -9,7 +11,7 @@ import java.util.List;
  */
 @Data
 @AllArgsConstructor
-public class PageResult {
+public class PageResult implements Serializable {
 
     /**
      * 总页码
@@ -26,5 +28,5 @@ public class PageResult {
      */
     private Long page;
 
-    private List<?> row;
+    private List<? extends Serializable> row;
 }

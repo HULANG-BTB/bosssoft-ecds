@@ -4,13 +4,14 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * @author zhangxiaohui
  */
 @Data
-public class SmsVo{
+public class SmsVo implements Serializable {
     /**
      * 短信id
      */

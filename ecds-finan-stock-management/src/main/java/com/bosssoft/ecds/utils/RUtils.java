@@ -1,6 +1,7 @@
 package com.bosssoft.ecds.utils;
 
 import com.baomidou.mybatisplus.extension.api.R;
+import com.bosssoft.ecds.response.ResponseResult;
 import com.bosssoft.ecds.util.ResponseUtils;
 
 /**
@@ -52,5 +53,18 @@ public class RUtils {
                     errorMsg, null);
         }
         return response;
+    }
+    
+    /**
+     * 根据操作结果返回响应
+     *
+     * @param success 操作结果
+     * @return 对应的响应
+     */
+    public static ResponseResult getResponseResult(boolean success) {
+        if (success) {
+            return ResponseResult.SUCCESS();
+        }
+        return ResponseResult.FAIL();
     }
 }

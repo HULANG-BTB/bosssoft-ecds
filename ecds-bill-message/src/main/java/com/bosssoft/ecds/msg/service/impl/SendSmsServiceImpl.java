@@ -4,7 +4,7 @@ import com.aliyuncs.IAcsClient;
 import com.aliyuncs.dysmsapi.model.v20170525.SendSmsRequest;
 import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.aliyuncs.exceptions.ClientException;
-import com.bosssoft.ecds.msg.constant.SmsConstants;
+import com.bosssoft.ecds.msg.common.constant.SmsConstants;
 import com.bosssoft.ecds.msg.entity.dto.SmsDto;
 import com.bosssoft.ecds.msg.entity.dto.VerifyCode;
 import com.bosssoft.ecds.msg.service.SendSmsService;
@@ -71,7 +71,7 @@ public class SendSmsServiceImpl implements SendSmsService {
             return new AsyncResult<>(smsDto);
         }
         // 请求发送失败
-        String error = "ResponseCode:" + sendSmsResponse.getCode() +
+        String error = "发信错误：ResponseCode:" + sendSmsResponse.getCode() +
                 ",ResponseMessage:" + sendSmsResponse.getMessage() +
                 ",ResponseRequestId:" + sendSmsResponse.getRequestId();
         smsDto.setError(error);

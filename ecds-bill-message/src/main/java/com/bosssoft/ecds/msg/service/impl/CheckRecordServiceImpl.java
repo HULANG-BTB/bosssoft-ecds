@@ -6,6 +6,7 @@ import com.bosssoft.ecds.msg.entity.dto.CheckRecordDto;
 import com.bosssoft.ecds.msg.entity.vo.CheckRecordQueryVo;
 import com.bosssoft.ecds.msg.util.DozerUtils;
 import com.bosssoft.ecds.msg.util.SnowflakeUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bosssoft.ecds.msg.entity.po.CheckRecordPo;
@@ -20,6 +21,7 @@ import java.util.List;
  * @create 2020/8/14 11:34
  */
 @Service
+@Slf4j
 public class CheckRecordServiceImpl extends ServiceImpl<CheckRecordMapper, CheckRecordPo> implements CheckRecordService {
 
 
@@ -39,9 +41,8 @@ public class CheckRecordServiceImpl extends ServiceImpl<CheckRecordMapper, Check
     }
 
     @Override
-    public void saveRecord(String billId, int res, String oper) {
+    public void saveRecord(String billId, int res) {
         CheckRecordPo record = new CheckRecordPo();
-        record.setOperator(oper);
         record.setResult(res);
         record.setBillCode(billId);
         record.setCheckType("COMMON");
