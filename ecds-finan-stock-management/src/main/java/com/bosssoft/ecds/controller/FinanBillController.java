@@ -37,7 +37,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/finan-bill")
-@CrossOrigin
+//@CrossOrigin
 @Api(tags = "财政票据管理Controller")
 public class FinanBillController {
 

@@ -42,7 +42,7 @@ import static com.bosssoft.ecds.entity.constant.StockOutConstant.UN_CHANGE;
 @Slf4j
 @RestController
 @RequestMapping("/stock-out")
-@CrossOrigin
+//@CrossOrigin
 @Api(tags = "财政出库Controller")
 public class StockOutnoticeController extends BaseController {
 
