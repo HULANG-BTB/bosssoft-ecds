@@ -4,17 +4,15 @@ import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.IdUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.bosssoft.ecds.common.exception.CustomException;
-import com.bosssoft.ecds.common.response.QueryResponseResult;
-import com.bosssoft.ecds.common.response.ResponseResult;
-import com.bosssoft.ecds.common.response.ResultCode;
 import com.bosssoft.ecds.dao.CbillAccountingDao;
 import com.bosssoft.ecds.entity.dto.*;
 import com.bosssoft.ecds.entity.po.CbillAccountingPO;
 import com.bosssoft.ecds.entity.vo.AccountInfoVO;
-import com.bosssoft.ecds.entity.vo.StatusVO;
-import com.bosssoft.ecds.entity.vo.WaitAccountVO;
 import com.bosssoft.ecds.enums.CbillAccountingCode;
+import com.bosssoft.ecds.exception.CustomException;
+import com.bosssoft.ecds.response.QueryResponseResult;
+import com.bosssoft.ecds.response.ResponseResult;
+import com.bosssoft.ecds.response.ResultCode;
 import com.bosssoft.ecds.service.CbillAccountingService;
 import com.bosssoft.ecds.service.VoucherService;
 import com.bosssoft.ecds.utils.MyBeanUtil;
@@ -23,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -61,16 +60,20 @@ public class CbillAccountingServiceImpl extends ServiceImpl<CbillAccountingDao, 
         if(!resultCode.success()){
             return new ResponseResult(resultCode);
         }
+        AccountInfoVO accountInfoVO = new AccountInfoVO();
         //校验入账完成状态(防止重复入账)
         ResultCode status = accountStatus(serial);
         if(status==FINISHED){
-            return new ResponseResult(CbillAccountingCode.FINISHED);
+            accountInfoVO.setWaitAccount(BigDecimal.valueOf(0.00));
+            return new QueryResponseResult<>(CbillAccountingCode.FINISHED,accountInfoVO);
         }
         QueryWrapper<CbillAccountingPO> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq(CbillAccountingPO.F_BILL_SERIAL_ID,cbillAccountingDTO.getBillSerialId());
-        AccountInfoVO accountInfoVO = MyBeanUtil.copyProperties(super.getOne(queryWrapper), AccountInfoVO.class);
+        queryWrapper.eq(CbillAccountingPO.F_BILL_SERIAL_ID,cbillAccountingDTO.getBillSerialId())
+                .eq(CbillAccountingPO.F_PAYER_TEL,cbillAccountingDTO.getPayerTel());
+
+        MyBeanUtil.copyProperties(super.getOne(queryWrapper),accountInfoVO);
         //单独列出待缴金额方便以后进行判断
-        return new QueryResponseResult<>(SUCCESS,accountInfoVO);
+        return new QueryResponseResult<>(UNFINISHED,accountInfoVO);
     }
 
     /**
@@ -81,8 +84,9 @@ public class CbillAccountingServiceImpl extends ServiceImpl<CbillAccountingDao, 
     @Transactional(rollbackFor = {CustomException.class, MethodArgumentNotValidException.class})
     @Override
     public ResponseResult insert(AccBaseInfoDTO accBaseInfoDto) {
-        //检查票据校验码是否重复
-        ResultCode resultCode = checkBillSerialIdRepeat(accBaseInfoDto.getCheckCode());
+        //检查票据校验码是否已经存在，若存在重复则不能插入
+        String serial = accBaseInfoDto.getCheckCode();
+        ResultCode resultCode = checkBillSerialIdRepeat(serial);
         if(!resultCode.success()){
             return new ResponseResult(resultCode);
         }
@@ -90,7 +94,7 @@ public class CbillAccountingServiceImpl extends ServiceImpl<CbillAccountingDao, 
         CbillAccountingPO cbillAccountingPO = new CbillAccountingPO();
         MyBeanUtil.copyProperties(accBaseInfoDto,cbillAccountingPO);
         cbillAccountingPO.setWaitAccount(accBaseInfoDto.getTotalAmt());
-        cbillAccountingPO.setBillSerialId(accBaseInfoDto.getCheckCode());
+        cbillAccountingPO.setBillSerialId(serial);
         //插入信息
         boolean result = super.save(cbillAccountingPO);
         if(result){
@@ -98,23 +102,6 @@ public class CbillAccountingServiceImpl extends ServiceImpl<CbillAccountingDao, 
         }else {
             return new ResponseResult(INSERT_FAIL);
         }
-    }
-
-    /**
-     * 开票阶段批量插入基础信息
-     *
-     * @param accBaseInfoDTOList
-     * @return
-     */
-    @Override
-    public ResponseResult insertBatch(List<AccBaseInfoDTO> accBaseInfoDTOList) {
-        //批量检测校验码是否重复
-
-        //更新信息
-
-        //批量插入
-
-        return null;
     }
 
     /**
@@ -127,7 +114,7 @@ public class CbillAccountingServiceImpl extends ServiceImpl<CbillAccountingDao, 
     public ResponseResult insertAccount(AccIntoInfoDTO accIntoInfoDTO) {
         //通过数据校验码查出某条需要插入的数据id
         String serial = accIntoInfoDTO.getBillSerialId();
-        //检查票据校验码唯一性
+        //检查票据校验码存在性
         ResultCode resultCode = checkBillSerialIdExist(serial);
         if(resultCode!=SUCCESS){
             return new ResponseResult(resultCode);
@@ -174,15 +161,20 @@ public class CbillAccountingServiceImpl extends ServiceImpl<CbillAccountingDao, 
     public ResponseResult insertBillInfo(AccBillDTO accBillDto) {
         //通过数据校验码查出某条需要插入的数据
         String serial = accBillDto.getCheckCode();
+        //检查票据校验码存在性
+        ResultCode resultCode = checkBillSerialIdExist(serial);
+        if(resultCode!=SUCCESS){
+            return new ResponseResult(resultCode);
+        }
         //校验入账完成状态
         ResultCode status = accountStatus(serial);
         if(status==UNFINISHED){
             return new ResponseResult(status);
         }
         //校验票据号是否重复
-        ResultCode resultCode = checkBillNoRepeat(accBillDto.getBillNo());
-        if(resultCode!=SUCCESS){
-            return new ResponseResult(resultCode);
+        ResultCode resultCode1 = checkBillNoRepeat(accBillDto.getBillNo());
+        if(resultCode1!=SUCCESS){
+            return new ResponseResult(resultCode1);
         }
         //已经入账完成
         QueryWrapper<CbillAccountingPO> queryWrapper = new QueryWrapper<>();
@@ -193,7 +185,7 @@ public class CbillAccountingServiceImpl extends ServiceImpl<CbillAccountingDao, 
         cbillAccountingDTO.setBillNo(accBillDto.getBillNo());
         //校验时间合理性
         if(checkDate(cbillAccountingDTO.getTime(),accBillDto.getDate())){
-            return new ResponseResult(ACCOUNT_TIME_ILLEGAL);
+            return new ResponseResult(TIME_ILLEGAL);
         }
         cbillAccountingDTO.setAgenTime(accBillDto.getDate());
         //生成凭证ID
@@ -256,7 +248,7 @@ public class CbillAccountingServiceImpl extends ServiceImpl<CbillAccountingDao, 
         //构建批量删除的idList
         ArrayList<Long> idList = new ArrayList<>();
         for (Iterator<CbillAccountingDTO> iterator = cbillAccountingDTOList.iterator(); iterator.hasNext();) {
-            idList.add(iterator.next().getAccountId());
+            idList.add(iterator.next().getId());
         }
         //执行批量删除
         boolean removeByIds = super.removeByIds(idList);
@@ -271,56 +263,23 @@ public class CbillAccountingServiceImpl extends ServiceImpl<CbillAccountingDao, 
     }
 
     /**
-     * 批量查询入账状态信息
+     * 修改入账状态(单纯为练前端功能，不必要)
      *
-     * @param accBaseInfoDTOList
+     * @param cbillAccountingDTO
      * @return
      */
     @Override
-    public ResponseResult selectAllStatus(List<AccBaseInfoDTO> accBaseInfoDTOList) {
-        //获取校验码
-        ArrayList<String> serialIdList = new ArrayList<>();
-        for (Iterator<AccBaseInfoDTO> iterator = accBaseInfoDTOList.iterator(); iterator.hasNext();) {
-            serialIdList.add(iterator.next().getCheckCode());
+    public ResponseResult updateStatus(CbillAccountingDTO cbillAccountingDTO) {
+        //获取id
+        Long id = cbillAccountingDTO.getId();
+        CbillAccountingPO cbillAccountingPO = super.getById(id);
+        cbillAccountingPO.setAccountStatus(!cbillAccountingPO.getAccountStatus());
+        boolean result = super.updateById(cbillAccountingPO);
+        if(result) {
+            return new ResponseResult(SUCCESS);
+        }else {
+            return new ResponseResult(UPDATE_FAIL);
         }
-        //根据校验码获取主键id
-        QueryWrapper<CbillAccountingPO> queryWrapper = new QueryWrapper<>();
-        ArrayList<Long> idList = new ArrayList<>();
-        for (int i = 0;i<serialIdList.size();i++){
-            queryWrapper.eq(CbillAccountingPO.F_BILL_SERIAL_ID,serialIdList.indexOf(i));
-            idList.add(super.getOne(queryWrapper).getId());
-        }
-        //根据主键id序列获取状态信息并复制给VIEW层
-        List<StatusVO> voList = MyBeanUtil.copyListProperties(super.listByIds(idList), StatusVO::new);
-        //返回
-        return new QueryResponseResult<>(SUCCESS,voList);
-    }
-
-    /**
-     * 批量查询代缴金额信息
-     *
-     * @param accountingDTOList
-     * @return
-     */
-    @Override
-    public ResponseResult selectAllAccount(List<CbillAccountingDTO> accountingDTOList) {
-        //获取校验码
-        ArrayList<String> serialIdList = new ArrayList<>();
-        for (Iterator<CbillAccountingDTO> iterator = accountingDTOList.iterator(); iterator.hasNext();) {
-            serialIdList.add(iterator.next().getBillSerialId());
-        }
-        //根据校验码获取主键id
-        QueryWrapper<CbillAccountingPO> queryWrapper = new QueryWrapper<>();
-        ArrayList<Long> idList = new ArrayList<>();
-        for (int i = 0;i<serialIdList.size();i++){
-            queryWrapper.eq(CbillAccountingPO.F_BILL_SERIAL_ID,serialIdList.indexOf(i));
-            idList.add(super.getOne(queryWrapper).getId());
-        }
-        //根据主键id序列获取状态信息并复制给VIEW层
-        List<WaitAccountVO> voList = MyBeanUtil.copyListProperties(super.listByIds(idList), WaitAccountVO::new);
-        //返回
-        return new QueryResponseResult<>(SUCCESS,voList);
-
     }
 
     /**
@@ -369,7 +328,7 @@ public class CbillAccountingServiceImpl extends ServiceImpl<CbillAccountingDao, 
      * @return
      */
     private ResultCode checkBillSerialIdRepeat(String billSerialId) {
-        // 检查票据校验码是否已经存在
+        // 检查票据校验码是否唯一，用于插入前检测重复
         QueryWrapper<CbillAccountingPO> queryWrapper = new QueryWrapper<>();
         queryWrapper.select("f_bill_serial_id").eq(CbillAccountingPO.F_BILL_SERIAL_ID,billSerialId);
         int result = super.count(queryWrapper);
@@ -378,14 +337,17 @@ public class CbillAccountingServiceImpl extends ServiceImpl<CbillAccountingDao, 
         }
         return SUCCESS;
     }
+
     /**
      * 检查票据校验码的存在性
      *
      * @return
      */
     private ResultCode checkBillSerialIdExist(String billSerialId) {
+        //用于查询语句前校验
         QueryWrapper<CbillAccountingPO> queryWrapper = new QueryWrapper<>();
-        queryWrapper.select("f_bill_serial_id").eq(CbillAccountingPO.F_BILL_SERIAL_ID,billSerialId);
+        queryWrapper.select("f_bill_serial_id").eq(CbillAccountingPO.F_BILL_SERIAL_ID,billSerialId)
+                .last("limit 1");
         int result = super.count(queryWrapper);
         if(result==0){
             return BILL_SERIAL_ID_NOT_EXIST;
@@ -405,52 +367,6 @@ public class CbillAccountingServiceImpl extends ServiceImpl<CbillAccountingDao, 
         int result = count(queryWrapper);
         if(result>=1){
             return BILL_NO_REPEAT;
-        }
-        return SUCCESS;
-    }
-
-    /**
-     * 检查票据号是否存在
-     *
-     * @return
-     */
-    private ResultCode checkBillNoExist(String billNo) {
-        // 检查票据号码是否存在，不存在不能查询
-        QueryWrapper<CbillAccountingPO> queryWrapper = new QueryWrapper<>();
-        queryWrapper.select("f_bill_no").eq(CbillAccountingPO.F_BILL_NO,billNo);
-        int result = count(queryWrapper);
-        if(result==0){
-            return BILL_NO_NOT_EXIST;
-        }
-        return SUCCESS;
-    }
-
-    /**
-     * 批量检测校验码唯一性
-     *
-     * @return
-     */
-    private ResultCode checkRepeat(List<String> list) {
-        QueryWrapper<CbillAccountingPO> queryWrapper = new QueryWrapper<>();
-        queryWrapper.select("f_bill_serial_id").eq(CbillAccountingPO.F_BILL_SERIAL_ID,"");
-        int result = super.count(queryWrapper);
-        if(result==0){
-            return BILL_SERIAL_ID_NOT_EXIST;
-        }
-        return SUCCESS;
-    }
-
-    /**
-     * 批量检查票据校验码的存在性
-     *
-     * @return
-     */
-    private ResultCode checkExist(List<String> list) {
-        QueryWrapper<CbillAccountingPO> queryWrapper = new QueryWrapper<>();
-        queryWrapper.select("f_bill_serial_id").eq(CbillAccountingPO.F_BILL_SERIAL_ID,"");
-        int result = super.count(queryWrapper);
-        if(result==0){
-            return BILL_SERIAL_ID_NOT_EXIST;
         }
         return SUCCESS;
     }

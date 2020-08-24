@@ -1,6 +1,5 @@
 package com.bosssoft.ecds.controller;
 
-import com.bosssoft.ecds.common.response.ResponseResult;
 import com.bosssoft.ecds.entity.dto.AccBaseInfoDTO;
 import com.bosssoft.ecds.entity.dto.AccBillDTO;
 import com.bosssoft.ecds.entity.dto.AccIntoInfoDTO;
@@ -9,6 +8,7 @@ import com.bosssoft.ecds.entity.vo.AccBaseInfoVO;
 import com.bosssoft.ecds.entity.vo.AccBillVO;
 import com.bosssoft.ecds.entity.vo.AccIntoInfoVO;
 import com.bosssoft.ecds.entity.vo.CbillAccountingVO;
+import com.bosssoft.ecds.response.ResponseResult;
 import com.bosssoft.ecds.service.CbillAccountingService;
 import com.bosssoft.ecds.utils.MyBeanUtil;
 import io.swagger.annotations.Api;
@@ -30,77 +30,51 @@ import java.util.List;
  * @since 2020-08-10
  */
 @RestController
-@RequestMapping("/api/account")
+@RequestMapping("/ecds-bill-accounting/account")
 @Api(tags = "基础入帐信息交互")
-@Slf4j
 public class CbillAccountingController {
     @Autowired
     private CbillAccountingService cbillAccountingService;
 
     @PostMapping("/insertAccount")
     @ApiOperation(value = "开票阶段基础信息")
-    public ResponseResult insert(@RequestBody @Validated AccBaseInfoVO accBaseInfoVO){
+    public ResponseResult insert(@RequestBody@Validated AccBaseInfoVO accBaseInfoVO){
         AccBaseInfoDTO accBaseInfoDTO = new AccBaseInfoDTO();
         MyBeanUtil.copyProperties(accBaseInfoVO,accBaseInfoDTO);
         return cbillAccountingService.insert(accBaseInfoDTO);
     }
 
-/*    @PostMapping("/insertAccountBatch")
-    @ApiOperation(value = "批量插入开票阶段基础信息")
-    public ResponseResult insertAccountBatch(@RequestBody@Validated List<AccBaseInfoVO> accBaseInfoVOList){
-        List<AccBaseInfoDTO> accBaseInfoDTOList = MyBeanUtil.copyListProperties(accBaseInfoVOList,AccBaseInfoDTO::new);
-        return cbillAccountingService.insertBatch(accBaseInfoDTOList);
-    }*/
-
     @PostMapping("/getAccount")
     @ApiImplicitParam(name = "billSerialId", value = "票据校验码", dataType = "String")
     @ApiOperation(value = "通过票据校验码查询代缴费金额")
-    public ResponseResult getAccount(@RequestBody CbillAccountingVO cbillAccountingVO){
+    public ResponseResult getAccount(@RequestBody@Validated CbillAccountingVO cbillAccountingVO){
         CbillAccountingDTO cbillAccountingDTO = new CbillAccountingDTO();
         MyBeanUtil.copyProperties(cbillAccountingVO,cbillAccountingDTO);
         return cbillAccountingService.selectAccount(cbillAccountingDTO);
     }
 
-/*    @PostMapping("/getAllAccount")
-    @ApiOperation(value = "批量查询代缴费金额")
-    public ResponseResult getAllAccount(@RequestBody@Validated List<CbillAccountingVO> cbillAccountingVOList){
-        List<CbillAccountingDTO> accountingDTOList = MyBeanUtil.copyListProperties(cbillAccountingVOList,CbillAccountingDTO::new);
-        return cbillAccountingService.selectAllAccount(accountingDTOList);
-    }*/
-
     @PostMapping("/updateAccount")
     @ApiOperation(value = "缴费单位传值")
-    public ResponseResult updateAccount(@RequestBody @Validated AccIntoInfoVO accIntoInfoVO){
+    public ResponseResult updateAccount(@RequestBody@Validated AccIntoInfoVO accIntoInfoVO){
         AccIntoInfoDTO accIntoInfoDto = new AccIntoInfoDTO();
         MyBeanUtil.copyProperties(accIntoInfoVO,accIntoInfoDto);
         return cbillAccountingService.insertAccount(accIntoInfoDto);
     }
 
-/*    @PostMapping("/updateAccountBatch")
-    @ApiOperation(value = "批量插入开票阶段基础信息")
-    public ResponseResult updateAccountBatch(){
-        return null;
-    }*/
 
     @PostMapping("/getStatus")
     @ApiImplicitParam(name = "checkCode", value = "票据校验码", dataType = "String")
     @ApiOperation(value = "查询入账状态")
-    public ResponseResult selectStatus(@RequestBody AccBaseInfoVO accBaseInfoVO){
+    public ResponseResult selectStatus(@RequestBody@Validated AccBaseInfoVO accBaseInfoVO){
         AccBaseInfoDTO accBaseInfoDTO = new AccBaseInfoDTO();
         MyBeanUtil.copyProperties(accBaseInfoVO,accBaseInfoDTO);
         return cbillAccountingService.selectStatus(accBaseInfoDTO);
     }
 
- /*   @PostMapping("/getAllStatus")
-    @ApiOperation(value = "查询入账状态")
-    public ResponseResult getAllStatus(@RequestBody@Validated List<AccBaseInfoVO> accBaseInfoVOList){
-        List<AccBaseInfoDTO> accBaseInfoDTOList = MyBeanUtil.copyListProperties(accBaseInfoVOList,AccBaseInfoDTO.class);
-        return cbillAccountingService.selectAllStatus(accBaseInfoDTOList);
-    }*/
 
     @PostMapping("/updateBillInfo")
     @ApiOperation(value = "开票单位发放阶段传值")
-    public ResponseResult updateBillInfo(@RequestBody @Validated AccBillVO accBillVO){
+    public ResponseResult updateBillInfo(@RequestBody@Validated AccBillVO accBillVO){
         AccBillDTO accBillDTO = new AccBillDTO();
         MyBeanUtil.copyProperties(accBillVO,accBillDTO);
         return cbillAccountingService.insertBillInfo(accBillDTO);
@@ -115,11 +89,17 @@ public class CbillAccountingController {
     }
 
     @PostMapping("/batchDelete")
-    @ResponseBody
     @ApiOperation(value = "批量删除入账信息")
     public ResponseResult batchDelete(@RequestBody List<CbillAccountingVO> cbillAccountingVOList){
         List<CbillAccountingDTO> cbillAccountingDTOList = MyBeanUtil.copyListProperties(cbillAccountingVOList, CbillAccountingDTO::new);
         return cbillAccountingService.batchDelete(cbillAccountingDTOList);
+    }
+
+    @PutMapping("/updateStatus")
+    @ApiOperation(value = "更改入账状态")
+    public ResponseResult updateStatus(@RequestBody CbillAccountingVO cbillAccountingVO){
+        CbillAccountingDTO cbillAccountingDTO = MyBeanUtil.myCopyProperties(cbillAccountingVO, CbillAccountingDTO.class);
+        return cbillAccountingService.updateStatus(cbillAccountingDTO);
     }
 
 }

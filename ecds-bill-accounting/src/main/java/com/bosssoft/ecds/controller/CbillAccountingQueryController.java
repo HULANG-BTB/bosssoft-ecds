@@ -1,11 +1,11 @@
 package com.bosssoft.ecds.controller;
 
-import com.bosssoft.ecds.common.response.QueryResponseResult;
-import com.bosssoft.ecds.common.response.ResponseResult;
 import com.bosssoft.ecds.entity.dto.CbillAccountingDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.vo.CbillAccountingVO;
 import com.bosssoft.ecds.entity.vo.PageVO;
+import com.bosssoft.ecds.response.QueryResponseResult;
+import com.bosssoft.ecds.response.ResponseResult;
 import com.bosssoft.ecds.service.CbillAccountingQueryService;
 import com.bosssoft.ecds.utils.MyBeanUtil;
 import io.swagger.annotations.Api;
@@ -28,19 +28,12 @@ import java.util.List;
  * @since 2020-08-10
  */
 @RestController
-@RequestMapping("/api/accountQuery")
+@RequestMapping("/ecds-bill-accounting/accountQuery")
 @Api(tags = "基础入帐信息查询")
-@Slf4j
 public class CbillAccountingQueryController {
+
     @Autowired
     private CbillAccountingQueryService cbillAccountingQueryService;
-
-    @GetMapping("/listAll")
-    @ResponseBody
-    @ApiOperation(value = "入账基础信息列表")
-    public ResponseResult listAll(){
-        return cbillAccountingQueryService.listAll();
-    }
 
     @PostMapping("/listByPage")
     @ApiOperation(value = "分页查询")
@@ -77,7 +70,7 @@ public class CbillAccountingQueryController {
     }
 
     @PostMapping("/updateBill")
-    @ApiOperation(value = "更新单条信息(仅用作前端测试)")
+    @ApiOperation(value = "更新单条信息(单纯为练前端功能，不必要集成测试)")
     public ResponseResult updateBill(@RequestBody CbillAccountingVO cbillAccountingVO){
         CbillAccountingDTO cbillAccountingDTO = new CbillAccountingDTO();
         MyBeanUtil.copyProperties(cbillAccountingVO,cbillAccountingDTO);
@@ -85,7 +78,7 @@ public class CbillAccountingQueryController {
     }
 
     @PostMapping("/insertBill")
-    @ApiOperation(value = "插入单条数据(仅用作前端测试)")
+    @ApiOperation(value = "插入单条信息(单纯为练前端功能，不必要集成测试)")
     public ResponseResult insertBill(@RequestBody CbillAccountingVO cbillAccountingVO){
         CbillAccountingDTO cbillAccountingDTO = new CbillAccountingDTO();
         MyBeanUtil.copyProperties(cbillAccountingVO,cbillAccountingDTO);
@@ -93,7 +86,7 @@ public class CbillAccountingQueryController {
     }
 
     @PostMapping("/batchInsert")
-    @ApiOperation(value = "插入多条数据(仅用作前端测试)")
+    @ApiOperation(value = "批量插入信息(单纯为练前端功能，不必要集成测试)")
     public ResponseResult batchInsertBill(@RequestBody List<CbillAccountingVO> cbillAccountingVOList){
         List<CbillAccountingDTO> cbillAccountingDTOList = new ArrayList<>();
         MyBeanUtil.copyProperties(cbillAccountingVOList,cbillAccountingDTOList);

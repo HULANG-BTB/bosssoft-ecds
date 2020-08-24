@@ -22,7 +22,7 @@ public interface BillAvailableArchiveDao extends BaseMapper<BillAvailableArchive
      * @param entityList
      * @return boolean
      */
-    boolean insertBatch(@Param("items") List entityList);
+    boolean insertBatch(@Param("items") List<Object> entityList);
 
     /**
      * 收集 可用票据信息

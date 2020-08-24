@@ -1,7 +1,9 @@
 package com.bosssoft.ecds.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.bosssoft.ecds.entity.dto.ArchiveOverViewDTO;
 import com.bosssoft.ecds.entity.po.BillApplyArchivePO;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -23,4 +25,11 @@ public interface BillApplyArchiveDao extends BaseMapper<BillApplyArchivePO> {
      */
     List<BillApplyArchivePO> queryBillApplyAll();
 
+    /**
+     * 查询公司信息
+     *
+     * @param agenCode
+     * @return 公司信息
+     */
+    ArchiveOverViewDTO queryNewAgenInfo(@Param("agenCode") String agenCode);
 }

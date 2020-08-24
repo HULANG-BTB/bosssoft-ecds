@@ -1,12 +1,12 @@
 package com.bosssoft.ecds.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.bosssoft.ecds.common.response.QueryResponseResult;
-import com.bosssoft.ecds.common.response.ResponseResult;
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.dto.VoucherDTO;
 import com.bosssoft.ecds.entity.po.VoucherPO;
 import com.bosssoft.ecds.entity.vo.PageVO;
+import com.bosssoft.ecds.response.QueryResponseResult;
+import com.bosssoft.ecds.response.ResponseResult;
 
 import java.util.List;
 
@@ -26,20 +26,6 @@ public interface VoucherService extends IService<VoucherPO> {
      * @return Boolean
      */
     Boolean generateVoucher(VoucherDTO voucherDTO);
-
-    /**
-     * 批量生成入账凭证
-     *
-     * @return Boolean
-     */
-    Boolean generateVoucher(List<VoucherDTO> voucherDTOList);
-
-    /**
-     * 查看入账凭证信息列表
-     *
-     * @return ResponseResult
-     */
-    ResponseResult listAll();
 
     /**
      * 通过入账凭证号获取电子凭证

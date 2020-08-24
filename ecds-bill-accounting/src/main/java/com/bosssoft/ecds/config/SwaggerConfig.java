@@ -1,4 +1,4 @@
-package com.bosssoft.ecds.conf;
+package com.bosssoft.ecds.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,22 +12,25 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
- * swagger配置类
+ * <p>
+ *  mybatis-plus全局配置
+ * </p>
  *
- * @author liuke
+ * @author UoweMe
+ * @since 2020-08-10
  */
 @Configuration
 @EnableSwagger2
-public class SwaggerConf {
+public class SwaggerConfig {
 
     @Bean
     public Docket docket(){
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(getApiInfo())
                 //是否禁用
-                .enable(false)
+                .enable(true)
                 //设置分组
-                .groupName("归档微服务")
+                .groupName("入账微服务")
                 .select()
                 //配置扫描组件  basePackage()更具包进行扫描
                 .apis(RequestHandlerSelectors.any())
@@ -47,10 +50,10 @@ public class SwaggerConf {
         /**
          * 作者信息
          */
-        Contact contact = new Contact("lk", "https://github.com/zhuyeqi", "liuke311@126.com");
+        Contact contact = new Contact("", "", "");
         return new ApiInfoBuilder()
-                .title("归档微服务接口文档")
-                .description("归档微服务")
+                .title("入账微服务接口文档")
+                .description("入账微服务")
                 .version("1.0")
                 .contact(contact)
                 .license("bosssoft")

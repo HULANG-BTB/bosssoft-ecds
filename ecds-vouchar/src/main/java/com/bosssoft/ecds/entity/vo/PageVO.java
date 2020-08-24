@@ -21,7 +21,7 @@ public class PageVO<T> {
      * 查询数据列表
      */
     @ApiModelProperty(value = "数据列表")
-    private List<T> data;
+    private List<T> items;
 
     /**
      * 总数

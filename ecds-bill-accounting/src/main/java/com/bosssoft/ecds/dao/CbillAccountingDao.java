@@ -2,7 +2,6 @@ package com.bosssoft.ecds.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.bosssoft.ecds.entity.po.CbillAccountingPO;
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
@@ -14,7 +13,6 @@ import org.apache.ibatis.annotations.Select;
  * @author UoweMe
  * @since 2020-08-10
  */
-@Mapper
 public interface CbillAccountingDao extends BaseMapper<CbillAccountingPO> {
     /**
      * 通过票据校验码查询入账状态

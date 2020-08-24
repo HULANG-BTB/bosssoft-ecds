@@ -3,8 +3,6 @@ package com.bosssoft.ecds.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.bosssoft.ecds.common.response.QueryResponseResult;
-import com.bosssoft.ecds.common.response.ResponseResult;
 import com.bosssoft.ecds.dao.VoucherDao;
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.dto.VoucherDTO;
@@ -12,6 +10,8 @@ import com.bosssoft.ecds.entity.po.VoucherPO;
 import com.bosssoft.ecds.entity.vo.PageVO;
 import com.bosssoft.ecds.entity.vo.VoucherVO;
 import com.bosssoft.ecds.enums.VoucherCode;
+import com.bosssoft.ecds.response.QueryResponseResult;
+import com.bosssoft.ecds.response.ResponseResult;
 import com.bosssoft.ecds.service.VoucherService;
 import com.bosssoft.ecds.utils.MyBeanUtil;
 import org.springframework.stereotype.Service;
@@ -43,30 +43,6 @@ public class VoucherServiceImpl extends ServiceImpl<VoucherDao, VoucherPO> imple
         VoucherPO voucherPO = new VoucherPO();
         MyBeanUtil.copyProperties(voucherDTO,voucherPO);
         return super.save(voucherPO);
-    }
-
-    /**
-     * 批量生成入账凭证
-     *
-     * @return Boolean
-     */
-    @Override
-    public Boolean generateVoucher(List<VoucherDTO> voucherDTOList) {
-        List<VoucherPO> voucherPOList = MyBeanUtil.copyListProperties(voucherDTOList, VoucherPO::new);
-        return super.saveBatch(voucherPOList);
-    }
-
-    /**
-     * 查看入账凭证信息列表
-     *
-     * @return ResponseResult
-     */
-    @Override
-    public ResponseResult listAll() {
-        List<VoucherPO> list = super.list();
-        List<VoucherDTO> voucherDTOList = MyBeanUtil.copyListProperties(list, VoucherDTO.class);
-        List<VoucherVO> voucherVOList = MyBeanUtil.copyListProperties(voucherDTOList, VoucherVO.class);
-        return new QueryResponseResult(SUCCESS,voucherVOList);
     }
 
     /**
@@ -104,7 +80,7 @@ public class VoucherServiceImpl extends ServiceImpl<VoucherDao, VoucherPO> imple
             queryWrapper.eq(VoucherPO.F_ACCOUNT_TYPE,pageDTO.getAccountType());
         }
         //keyword为空代表查询全部
-        if(pageDTO.getKeyword()==""||pageDTO.getKeyword()=="null"||pageDTO.getKeyword()==null){
+        if("".equals(pageDTO.getKeyword())||"null".equals(pageDTO.getKeyword())||pageDTO.getKeyword()==null){
             //不对queryWrapper进行任何修改
         }else{
             //模糊查询
@@ -122,7 +98,7 @@ public class VoucherServiceImpl extends ServiceImpl<VoucherDao, VoucherPO> imple
                     .like(VoucherPO.F_AGEN_NAME,pageDTO.getKeyword());
         }
         //降序排序
-        if(pageDTO.getSort().equals("+accountId")){
+        if("+accountId".equals(pageDTO.getSort())){
             queryWrapper.orderByAsc(VoucherPO.F_ACCOUNT_ID);
         }else {
             queryWrapper.orderByDesc(VoucherPO.F_ACCOUNT_ID);

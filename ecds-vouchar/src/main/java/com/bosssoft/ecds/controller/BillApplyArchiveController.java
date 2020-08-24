@@ -1,10 +1,12 @@
 package com.bosssoft.ecds.controller;
 
-import com.bosssoft.ecds.common.response.R;
 import com.bosssoft.ecds.entity.dto.BillApplyDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.query.CommonQuery;
 import com.bosssoft.ecds.entity.vo.BillApplyVO;
+import com.bosssoft.ecds.entity.vo.PageVO;
+import com.bosssoft.ecds.response.CommonCode;
+import com.bosssoft.ecds.response.QueryResponseResult;
 import com.bosssoft.ecds.service.BillApplyArchiveService;
 import com.bosssoft.ecds.utils.MyBeanUtil;
 import io.swagger.annotations.Api;
@@ -29,7 +31,7 @@ import java.util.List;
  * @since 2020-08-11
  */
 @Api("归档领用")
-@Slf4j
+@Slf4j(topic = "kafka_logger")
 @RestController
 @RequestMapping("/archive/apply")
 public class BillApplyArchiveController {
@@ -45,11 +47,13 @@ public class BillApplyArchiveController {
     @ApiOperation(value = "获取单位的票据领用情况")
     @ApiImplicitParam("查询参数对象")
     @PostMapping("/info")
-    public R info(@RequestBody @ApiParam("查询参数对象") CommonQuery query) {
+    public QueryResponseResult<PageVO<BillApplyVO>> info(@RequestBody @ApiParam("查询参数对象") CommonQuery query) {
+        PageVO<BillApplyVO> res = new PageVO<>();
         PageDTO<BillApplyDTO> pageDTO = service.getBillApplyInfo(query);
         List<BillApplyVO> billApplyVOS = MyBeanUtil.copyListProperties(pageDTO.getData(), BillApplyVO::new);
-        log.info("con " + billApplyVOS);
-        return R.ok().data("items", billApplyVOS).data("total", pageDTO.getTotal()).message("票据申领情况。");
+        res.setItems(billApplyVOS);
+        res.setTotal(pageDTO.getTotal());
+        return new QueryResponseResult<>(CommonCode.SUCCESS, res);
     }
 }
 

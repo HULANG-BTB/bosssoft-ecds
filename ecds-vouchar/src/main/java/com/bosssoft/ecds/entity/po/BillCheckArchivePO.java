@@ -8,7 +8,6 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -54,8 +53,7 @@ public class BillCheckArchivePO extends Model<BillCheckArchivePO> {
 
     @ApiModelProperty(value = "审核时间")
     @TableField("f_sign_time")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Shanghai")
     private Date signTime;
 
     @ApiModelProperty(value = "(审核)签名状态")
@@ -64,12 +62,12 @@ public class BillCheckArchivePO extends Model<BillCheckArchivePO> {
 
     @ApiModelProperty(value = "创建时间")
     @TableField(value = "f_create_time", fill = FieldFill.INSERT)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Shanghai")
     private Date createTime;
 
     @ApiModelProperty(value = "修改时间")
     @TableField(value = "f_update_time", fill = FieldFill.INSERT_UPDATE)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Shanghai")
     private Date updateTime;
 
     @ApiModelProperty(value = "操作人id")

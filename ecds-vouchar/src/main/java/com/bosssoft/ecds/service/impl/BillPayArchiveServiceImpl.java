@@ -1,14 +1,15 @@
 package com.bosssoft.ecds.service.impl;
 
-import cn.hutool.core.lang.Assert;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.bosssoft.ecds.common.exception.MyExceptionCode;
 import com.bosssoft.ecds.dao.BillPayArchiveDao;
 import com.bosssoft.ecds.entity.dto.BillPayDTO;
 import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.po.BillPayArchivePO;
 import com.bosssoft.ecds.entity.query.CommonQuery;
+import com.bosssoft.ecds.exception.ExceptionCast;
 import com.bosssoft.ecds.service.BillPayArchiveService;
 import com.bosssoft.ecds.utils.MyBeanUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -16,11 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.*;
 
 /**
  * <p>
@@ -32,7 +29,7 @@ import java.util.stream.Collectors;
  * @since 2020-08-11
  */
 @Service
-@Slf4j
+@Slf4j(topic = "kafka_business_logger")
 public class BillPayArchiveServiceImpl extends ServiceImpl<BillPayArchiveDao, BillPayArchivePO> implements BillPayArchiveService {
     @Autowired
     BillPayArchiveDao billPayArchiveDao;
@@ -60,11 +57,14 @@ public class BillPayArchiveServiceImpl extends ServiceImpl<BillPayArchiveDao, Bi
     public void finaBillPayArchive() {
         List<BillPayArchivePO> billPayArchivePOS = billPayArchiveDao.queryBillPayInfos();
         log.info("old " + billPayArchivePOS);
-        Assert.notEmpty(billPayArchivePOS, "缴款信息暂时为空");
+        if (billPayArchivePOS == null || billPayArchivePOS.isEmpty()) {
+            ExceptionCast.cast(MyExceptionCode.BILL_PAY_DATE_EMPTY);
+        }
         /*分组*/
-        Map<String, List<BillPayArchivePO>> collect = billPayArchivePOS.stream().collect(
-                Collectors.groupingBy(BillPayArchivePO::getAgenCode)
-        );
+        Map<String, List<BillPayArchivePO>> collect = new HashMap<>(16);
+        for (BillPayArchivePO billPayArchivePO : billPayArchivePOS) {
+            collect.computeIfAbsent(billPayArchivePO.getAgenCode(), k -> new ArrayList<>()).add(billPayArchivePO);
+        }
         log.info("collect :" + collect);
 
         /*统计*/

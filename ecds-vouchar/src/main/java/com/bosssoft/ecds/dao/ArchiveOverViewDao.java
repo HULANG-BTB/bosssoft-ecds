@@ -5,6 +5,7 @@ import com.bosssoft.ecds.entity.dto.ArchiveOverViewDTO;
 import com.bosssoft.ecds.entity.po.ArchivePO;
 import com.bosssoft.ecds.entity.query.ArchiveOverViewQuery;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.cache.annotation.Cacheable;
 
 import java.util.List;
 
@@ -48,5 +49,6 @@ public interface ArchiveOverViewDao extends BaseMapper<ArchivePO> {
      *
      * @return 数量
      */
+    @Cacheable(cacheNames = "allTotal")
     Long countInfo();
 }
