@@ -8,6 +8,7 @@ package com.bosssoft.ecds.entity.dto;
 public class ExportBillDto {
 
     private String regionCode;
+    private long number;
     private long billCodeBegin;
     private long billCodeEnd;
 
@@ -15,8 +16,9 @@ public class ExportBillDto {
 
     }
 
-    public ExportBillDto(String regionCode, long billCodeBegin, long billCodeEnd) {
+    public ExportBillDto(String regionCode, long number, long billCodeBegin, long billCodeEnd) {
         this.regionCode = regionCode;
+        this.number = number;
         this.billCodeBegin = billCodeBegin;
         this.billCodeEnd = billCodeEnd;
     }
@@ -28,6 +30,14 @@ public class ExportBillDto {
 
     public void setRegionCode(String regionCode) {
         this.regionCode = regionCode;
+    }
+
+    public long getNumber() {
+        return number;
+    }
+
+    public void setNumber(long number) {
+        this.number = number;
     }
 
     public long getBillCodeBegin() {
@@ -50,6 +60,7 @@ public class ExportBillDto {
     public String toString() {
         return "ExportBillDto{" +
                 "regionCode='" + regionCode + '\'' +
+                ", number=" + number +
                 ", billCodeBegin=" + billCodeBegin +
                 ", billCodeEnd=" + billCodeEnd +
                 '}';

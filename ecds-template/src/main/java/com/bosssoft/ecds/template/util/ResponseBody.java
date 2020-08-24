@@ -1,5 +1,7 @@
 package com.bosssoft.ecds.template.util;
 
+import com.bosssoft.ecds.util.ResponseUtils;
+
 /**
  * 统一响应类
  */

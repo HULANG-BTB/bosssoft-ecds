@@ -8,6 +8,5 @@ spring:
       config:
         server-addr: 49.234.75.113
         file-extension: yaml
-        prefix: nacos-provider
-  profiles:
-    active: dev
+        prefix: bill_source
+        group: BILL_SOURCE

@@ -1,5 +1,6 @@
 package com.bosssoft.ecds.template.controller;
 
+import com.bosssoft.ecds.template.entity.dto.BillItemDto;
 import com.bosssoft.ecds.template.entity.dto.NontaxBillDto;
 import com.bosssoft.ecds.template.entity.dto.PrintTemplateDto;
 import com.bosssoft.ecds.template.entity.vo.PrintTemplateVo;
@@ -124,7 +125,9 @@ public class PrintTemplateController {
         PrintTemplateDto templateDTO = printTemplateService.getDtoById(id);
         // 渲染空白票据
         NontaxBillDto billDTO = new NontaxBillDto();
-        billDTO.setItems(new ArrayList<>());
+        List<BillItemDto> items = new ArrayList<>();
+        items.add(new BillItemDto());
+        billDTO.setItems(items);
         String htmlTemplate = htmlService.genBillHtml(billDTO, templateDTO.getTemplate());
         return htmlTemplate.getBytes();
     }
@@ -176,6 +179,17 @@ public class PrintTemplateController {
         }
         List<PrintTemplateVo> list = printTemplateService.searchList(billCode, name);
         return new QueryResponseResult<>(CommonCode.SUCCESS, list);
+    }
+
+    @ApiOperation("设置默认打印模板，生成 pdf 将使用该模板")
+    @PostMapping("/setDefault")
+    public ResponseResult setDefault(
+            @RequestParam @ApiParam(value = "主键", example = "0") Long id){
+
+        boolean success = printTemplateService.setDefault(id);
+
+        return success ? new ResponseResult(CommonCode.SUCCESS)
+                : new ResponseResult(CommonCode.FAIL);
     }
 
     private PrintTemplateDto fillTemplateDto(

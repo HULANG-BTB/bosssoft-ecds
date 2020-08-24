@@ -9,15 +9,15 @@ import java.io.Serializable;
 
 /**
  * <p>
- * 打印模板表
+ * 默认模板表，保存默认的模板编号
  * </p>
  *
  * @author Lazyb0x
- * @since 2020-08-17
+ * @since 2020-08-22
  */
 @Data
-@TableName("uaa_print_template")
-public class PrintTemplatePo extends Model<PrintTemplatePo> {
+@TableName("uba_template_default")
+public class TemplateDefaultPo extends Model<TemplateDefaultPo> {
 
     private static final long serialVersionUID = 1L;
 
@@ -25,25 +25,13 @@ public class PrintTemplatePo extends Model<PrintTemplatePo> {
      * 主键
      */
     @TableId(value = "f_id", type = IdType.AUTO)
-    private Long id;
+    private Long fId;
 
     /**
-     * 区划编码
+     * 6位的票据代码（前6位，没有年度编码）
      */
-    @TableField("f_rgn_code")
-    private String rgnCode;
-
-    /**
-     * 种类编码
-     */
-    @TableField("f_sort_id")
-    private String sortId;
-
-    /**
-     * 分类编码
-     */
-    @TableField("f_type_id")
-    private String typeId;
+    @TableField("f_billcode")
+    private String billcode;
 
     /**
      * 单位识别码
@@ -52,35 +40,16 @@ public class PrintTemplatePo extends Model<PrintTemplatePo> {
     private String agenIdCode;
 
     /**
-     * 开票点ID
+     * 默认模板的类型。打印模板是"print"
      */
-    @TableField("f_place_id")
-    private String placeId;
+    @TableField("f_type")
+    private String type;
 
     /**
-     * 模板名称
+     * 储存模板表的主键，比如打印模板的id
      */
-    @TableField("f_name")
-    private String name;
-
-    /**
-     * 模板文本
-     */
-    @TableField("f_template")
-    private String template;
-
-    /**
-     * 备注
-     */
-    @TableField("f_memo")
-    private String memo;
-
-    /**
-     * 优先级，默认0。1为默认模板
-     */
-
-    @TableField("f_priority")
-    private String priority;
+    @TableField("f_default_id")
+    private Long defaultId;
 
     /**
      * 乐观锁
@@ -113,8 +82,4 @@ public class PrintTemplatePo extends Model<PrintTemplatePo> {
     @TableField("f_update_time")
     private LocalDateTime updateTime;
 
-    @Override
-    protected Serializable pkVal() {
-        return this.id;
-    }
 }

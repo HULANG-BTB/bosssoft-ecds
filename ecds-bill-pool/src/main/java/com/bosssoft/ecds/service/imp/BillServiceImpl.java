@@ -94,7 +94,7 @@ public class BillServiceImpl implements BillService {
             redLock.unlock();
         }
 
-        ExportBillDto exportBillDto = new ExportBillDto(retrieveBillDto.getBillTypeCode(),
+        ExportBillDto exportBillDto = new ExportBillDto(retrieveBillDto.getBillTypeCode(), billPoList.size(),
                 Long.parseLong(billPoList.get(0).getBillCode()), Long.parseLong(billPoList.get(billPoList.size() - 1).getBillCode()));
         logger.info(deleteNumber + "张票据已出库");
 

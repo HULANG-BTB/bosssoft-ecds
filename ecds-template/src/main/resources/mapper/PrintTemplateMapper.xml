@@ -34,6 +34,14 @@
 
     <select id="selectTemplateVo" resultMap="VoResultMap">
         SELECT f_id, f_rgn_code, f_sort_id, f_type_id, f_agen_id_code, f_place_id, f_name, f_memo
-        FROM uaa_print_template
+            FROM uaa_print_template
+    </select>
+
+    <select id="selectFirstByBillCode" resultMap="BaseResultMap">
+        SELECT * FROM ecds_financial.uaa_print_template
+            WHERE f_rgn_code = #{rgnCode}
+                AND f_type_id = #{typeId}
+                AND f_sort_id = #{sortId}
+            LIMIT 1;
     </select>
 </mapper>
