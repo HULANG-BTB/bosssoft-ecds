@@ -1,5 +1,6 @@
 package com.bosssoft.ecds.template.service;
 
+import com.bosssoft.ecds.template.entity.dto.PrintTemplateDto;
 import com.bosssoft.ecds.template.service.TemplateDefaultService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,4 +33,5 @@ class TemplateDefaultServiceTest {
         System.out.println(res);
         assert true;
     }
+
 }

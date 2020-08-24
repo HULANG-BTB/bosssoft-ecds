@@ -71,4 +71,15 @@ class PrintTemplateServiceTest {
         boolean res = printTemplateService.setDefault(id);
         assertTrue(res);
     }
+
+    @Test
+    void edit() {
+        PrintTemplateDto t = new PrintTemplateDto();
+        t.setId(14L);
+        t.setMemo("新的备注");
+        t.setName("一个小小模版啦");
+        boolean res = printTemplateService.edit(t);
+        System.out.println(res);
+        assert true;
+    }
 }
