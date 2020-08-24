@@ -4,6 +4,8 @@ package com.bosssoft.ecds.controller;
 import cn.hutool.core.convert.Convert;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.bosssoft.ecds.entity.PageResult;
+import com.bosssoft.ecds.entity.constant.StockOutConstant;
+import com.bosssoft.ecds.entity.dto.StockOutChangeDto;
 import com.bosssoft.ecds.entity.dto.StockOutDto;
 import com.bosssoft.ecds.entity.dto.StockOutItemDto;
 import com.bosssoft.ecds.entity.po.StockOutnoticeChangePo;
@@ -11,10 +13,10 @@ import com.bosssoft.ecds.entity.po.StockOutnoticeItemPo;
 import com.bosssoft.ecds.entity.po.StockOutnoticePo;
 import com.bosssoft.ecds.entity.vo.StockOutPageVo;
 import com.bosssoft.ecds.entity.vo.StockOutVo;
-//import com.bosssoft.ecds.service.StockOutnoticeChangeService;
 import com.bosssoft.ecds.response.CommonCode;
 import com.bosssoft.ecds.response.QueryResponseResult;
 import com.bosssoft.ecds.response.ResponseResult;
+import com.bosssoft.ecds.service.FinanBillService;
 import com.bosssoft.ecds.service.StockOutnoticeChangeService;
 import com.bosssoft.ecds.service.StockOutnoticeItemService;
 import com.bosssoft.ecds.service.StockOutnoticeService;
@@ -50,8 +52,9 @@ public class StockOutnoticeController extends BaseController {
     private StockOutnoticeItemService itemService;
     @Autowired
     private StockOutnoticeChangeService changeService;
+    @Autowired
+    private FinanBillService billService;
 
-    private static final String SUCCESS = "success";
 
     /**
      * 展示所有已保存等类型的出库请求
@@ -100,6 +103,10 @@ public class StockOutnoticeController extends BaseController {
     public QueryResponseResult getItem(@RequestParam Long pid) {
         log.info("进入getItem方法...");
         List<StockOutItemDto> outItemDtos = itemService.queryItemByPid(pid);
+        outItemDtos.forEach(itemDto -> {
+            itemDto.setMaxNum(billService.getCount(itemDto.getBillPrecode()));
+            itemDto.setBillNo1(billService.getStartNo(itemDto.getBillPrecode()).getBillId());
+        });
         log.info("退出方法，data:{}", outItemDtos);
         return new QueryResponseResult<>(CommonCode.SUCCESS, outItemDtos);
     }
@@ -187,7 +194,13 @@ public class StockOutnoticeController extends BaseController {
     @ApiOperation("提交审核")
     @PutMapping("/submit")
     public ResponseResult submit(@RequestParam Long id) {
+        StockOutVo outVo = Convert.convert(StockOutVo.class, outService.getById(id));
+        outVo.setAltercode(StockOutConstant.ALTER_EDIT);
+        outVo.setChangeState(StockOutConstant.UN_CHANGE);
         Boolean result = outService.updateChangeState(id, UN_CHANGE);
+        changeService.save(Convert.convert(
+                StockOutnoticeChangePo.class,
+                ConverUtil.outVoToChangeDto(outVo)));
         return getRes(result);
     }
 
@@ -202,8 +215,20 @@ public class StockOutnoticeController extends BaseController {
     @ApiOperation("提交审核批量")
     @PutMapping("/submitAll")
     public ResponseResult submitAll(@RequestBody List<StockOutVo> outVos) {
+        outVos.forEach(outVo -> {
+            outVo.setChangeState(StockOutConstant.UN_CHANGE);
+            outVo.setAltercode(StockOutConstant.ALTER_EDIT);
+        });
         List<StockOutDto> outDtos = ConverUtil.converList(StockOutDto.class, outVos);
         Boolean result = outService.updateChangeState(outDtos, UN_CHANGE);
+        /*
+             记录变动到出库变动表
+             通过altercode 确定新增的变动表的altercode变动状态属性
+             */
+        changeService.saveBatch(ConverUtil.converList(
+                StockOutnoticeChangePo.class,
+                outVos
+        ));
         return getRes(result);
     }
 
@@ -217,8 +242,18 @@ public class StockOutnoticeController extends BaseController {
     @ApiOperation("删除出库记录批量")
     @PutMapping("/deleteAll")
     public ResponseResult deleteAll(@RequestBody List<StockOutVo> outVos) {
+        log.info("进入deleteAll方法...");
+        outVos.forEach(outVo -> outVo.setAltercode(StockOutConstant.ALTER_EDIT));
         List<StockOutnoticePo> pos = ConverUtil.converList(StockOutnoticePo.class, outVos);
         Boolean result = outService.deleteByPos(pos);
+        log.info("退出方法，data:{}",outVos.toString());
+        changeService.saveBatch(ConverUtil.converList(
+                StockOutnoticeChangePo.class,
+                ConverUtil.converList(
+                        StockOutChangeDto.class,
+                        outVos
+                )
+        ));
         return getRes(result);
     }
 
@@ -236,7 +271,11 @@ public class StockOutnoticeController extends BaseController {
     public ResponseResult check(@RequestBody StockOutVo outVo) {
         log.info("进入check方法...");
         log.info(outVo.toString());
+        outVo.setAltercode(StockOutConstant.ALTER_EDIT);
         Boolean result = outService.updateChangeState(outVo.getId(), outVo.getChangeState());
+        changeService.save(Convert.convert(
+                StockOutnoticeChangePo.class,
+                ConverUtil.outVoToChangeDto(outVo)));
         log.info("退出方法，data:{}",result);
         return getRes(result);
     }
@@ -258,23 +297,16 @@ public class StockOutnoticeController extends BaseController {
             return getRes(false);
 
         }
+        outVos.forEach(outVo -> outVo.setAltercode(StockOutConstant.ALTER_EDIT));
         List<StockOutDto> outDtos = ConverUtil.converList(StockOutDto.class, outVos);
         Integer changeState = outDtos.stream().findAny().get().getChangeState();
         log.info("changeState(use Stream):{}", changeState);
         Boolean result = outService.updateChangeState(outDtos, changeState);
+        changeService.saveBatch(ConverUtil.converList(
+                StockOutnoticeChangePo.class,
+                outVos
+        ));
         return getRes(result);
-    }
-
-
-    /**
-     * 出库，也许没用？
-     *
-     * @return 结果
-     */
-    @RequestMapping("/stockOut")
-    public String stockOut() {
-
-        return SUCCESS;
     }
 
 

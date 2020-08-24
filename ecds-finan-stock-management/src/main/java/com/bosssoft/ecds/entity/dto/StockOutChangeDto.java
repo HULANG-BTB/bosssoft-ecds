@@ -1,6 +1,7 @@
 package com.bosssoft.ecds.entity.dto;
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -8,7 +9,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -17,19 +17,25 @@ import java.util.Date;
  * </p>
  *
  * @author misheep
- * @since 2020-08-11
+ * @since 2020-08-19
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@ApiModel(value="StockOutnoticeChangeDto对象", description="StockOutnoticeChangeDto对象")
+@ApiModel(value="StockOutChangeDto对象", description="StockOutChangeDto对象")
 public class StockOutChangeDto extends Model<StockOutChangeDto> {
+
+    @ApiModelProperty(value = "主键")
+    private Long id;
 
     @ApiModelProperty(value = "业务ID")
     private Long pid;
 
     @ApiModelProperty(value = "审核状态(0新建1保存2提交3通过4退回）")
     private Integer changeState;
+
+    @ApiModelProperty(value = "变更日期")
+    private Date changeDate;
 
     @ApiModelProperty(value = "变更情况")
     private String changeSitu;
