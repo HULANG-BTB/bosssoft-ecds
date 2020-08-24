@@ -82,11 +82,13 @@ public class StockReturnPO extends Model<StockReturnPO> {
     @ApiModelProperty(value = "创建时间")
     @TableField(value = "f_create_time", fill = FieldFill.INSERT)
     @JsonFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date createTime;
 
     @ApiModelProperty(value = "最后修改时间")
     @TableField(value = "f_update_time", fill = FieldFill.INSERT_UPDATE)
     @JsonFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date updateTime;
 
     @ApiModelProperty(value = "审核状态")
@@ -96,6 +98,7 @@ public class StockReturnPO extends Model<StockReturnPO> {
     @ApiModelProperty(value = "审核日期")
     @TableField("f_change_date")
     @JsonFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date changeDate;
 
     @ApiModelProperty(value = "经办人")

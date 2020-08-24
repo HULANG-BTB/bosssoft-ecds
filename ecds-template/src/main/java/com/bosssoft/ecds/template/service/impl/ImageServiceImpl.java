@@ -6,12 +6,14 @@ import com.bosssoft.ecds.template.service.ImageService;
 import com.bosssoft.ecds.template.util.AliyunOSSUtil;
 import com.bosssoft.ecds.template.util.TextValue;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
@@ -137,10 +139,12 @@ public class ImageServiceImpl implements ImageService {
         String path = "boss-bill/" + fileName;
 
         // 检查OSS上是否存在文件，有就不生成
-        if (!ossUtil.isExist(path)) {
+        // oss 判断文件接口有问题，先直接生成
+        if (true || !ossUtil.isExist(path)) {
             log.info("{}文件不存在，生成。", fileName);
             byte[] bytes = generateImage(billDTO);
-            ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
+            byte[] stamped = addImageMark(bytes);
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(stamped);
 
             // 上传文件到阿里云 OSS
             ossUtil.upload(path, inputStream);
@@ -170,6 +174,50 @@ public class ImageServiceImpl implements ImageService {
             e.printStackTrace();
         }
         return is;
+    }
+
+    @Override
+    public byte[] addImageMark(byte[] imageBytes) {
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(imageBytes);
+        Image img = null;
+        try {
+            img = ImageIO.read(inputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        int width = img.getWidth(null);
+        int height = img.getHeight(null);
+        BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g = bi.createGraphics();
+        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        g.drawImage(img.getScaledInstance(width, height, Image.SCALE_SMOOTH), 0, 0, null);
+
+        ImageIcon imgIcon = new ImageIcon(getStampBytes());
+        Image iconImg = imgIcon.getImage();
+        float clarity = 0.8f;
+        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, clarity));
+        g.drawImage(iconImg, 138, 262, null);
+        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER));
+        g.dispose();
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        try {
+            ImageIO.write(bi, "png", outputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return outputStream.toByteArray();
+    }
+
+    private byte[] getStampBytes() {
+        ClassPathResource resource = new ClassPathResource("templates/stamp.png");
+        byte[] img = new byte[0];
+        try {
+            img = IOUtils.toByteArray(resource.getInputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return img;
     }
 
     /**

@@ -1,7 +1,10 @@
 package com.bosssoft.ecds.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.bosssoft.ecds.entity.vo.*;
+import com.bosssoft.ecds.entity.vo.itembillvo.BillItemsInsertVO;
+import com.bosssoft.ecds.entity.vo.itembillvo.BillItemsVO;
+import com.bosssoft.ecds.entity.vo.itembillvo.ItemBillVO;
+import com.bosssoft.ecds.entity.vo.itembillvo.SelectItemVO;
 
 public interface FabItemBillService {
 

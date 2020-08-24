@@ -1,15 +1,25 @@
 package com.bosssoft.ecds.controller;
 
-
 import cn.hutool.core.bean.BeanUtil;
-import com.bosssoft.ecds.entity.dto.ArchiveOverViewDto;
+import com.bosssoft.ecds.common.response.R;
+import com.bosssoft.ecds.entity.dto.ArchiveOverViewDTO;
+import com.bosssoft.ecds.entity.dto.PageDTO;
 import com.bosssoft.ecds.entity.query.ArchiveOverViewQuery;
-import com.bosssoft.ecds.entity.vo.ArchiveOverViewVo;
+import com.bosssoft.ecds.entity.vo.ArchiveOverViewVO;
 import com.bosssoft.ecds.service.ArchiveOverViewService;
-import com.bosssoft.ecds.util.ResponseUtils;
+import com.bosssoft.ecds.utils.MyBeanUtil;
+import com.bosssoft.ecds.utils.ResponseUtils;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * <p>
@@ -28,17 +38,40 @@ public class ArchiveOverViewController {
     private ArchiveOverViewService service;
 
     /**
-     * 根据单位信息查询单位票据归档的简略信息
+     * 根据单位信息查询单位票据归档的信息 单位信息中包括基础信息
+     *
      * @param query
      * @return String
      */
-    @PostMapping("/info")
-    public String queryArchiveInfo(@RequestBody ArchiveOverViewQuery query){
-        ArchiveOverViewDto archiveOverViewDto = service.queryOverViewArchiveInfo(query);
-        ArchiveOverViewVo vo = new ArchiveOverViewVo();
-        BeanUtil.copyProperties(archiveOverViewDto,vo);
-        return ResponseUtils.getResponse(vo,ResponseUtils.ResultType.OK);
+    @ApiOperation(value = "查询单位详细信息")
+    @ApiImplicitParam("查询参数对象")
+    @PostMapping("/unit/info")
+    public String queryArchiveInfo(@RequestBody @ApiParam("查询参数对象") ArchiveOverViewQuery query) {
+        ArchiveOverViewDTO archiveOverViewDto = service.queryOverViewArchiveInfo(query);
+        ArchiveOverViewVO vo = new ArchiveOverViewVO();
+        BeanUtil.copyProperties(archiveOverViewDto, vo);
+        return ResponseUtils.getResponse(vo, ResponseUtils.ResultType.SUCCESS);
     }
+
+    /**
+     * 获取所有单位的归档信息,并且展示给前台
+     *
+     * @return
+     */
+    @ApiOperation(value = "查询所有单位的归档信息")
+    @ApiImplicitParam("查询参数对象")
+    @PostMapping("/fina/allInfo")
+    public R queryArchiveAllInfo(@RequestBody ArchiveOverViewQuery query) {
+        /**
+         * 获取全部的单位信息
+         */
+        PageDTO<ArchiveOverViewDTO> pageDTO = service.queryOverViewArchiveInfoPage(query);
+        //转换对象
+        List<ArchiveOverViewDTO> data = pageDTO.getData();
+        List<ArchiveOverViewVO> vos = MyBeanUtil.copyListProperties(data, ArchiveOverViewVO::new);
+        return R.ok().data("items", vos).data("total", pageDTO.getTotal()).message("归档总览信息");
+    }
+
 
     /**
      * 用户自定义设置归档周期

@@ -1,5 +1,6 @@
 package com.bosssoft.ecds.template.util;
 
+
 /**
  * 统一响应类
  */

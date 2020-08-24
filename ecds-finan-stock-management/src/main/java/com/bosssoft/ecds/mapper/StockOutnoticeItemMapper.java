@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * </p>
  *
  * @author misheep
- * @since 2020-08-11
+ * @since 2020-08-13
  */
 public interface StockOutnoticeItemMapper extends BaseMapper<StockOutnoticeItemPo> {
 

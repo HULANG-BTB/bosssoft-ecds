@@ -7,7 +7,7 @@ import com.bosssoft.ecds.security.entity.domain.AuthUserDetails;
 import com.bosssoft.ecds.security.entity.domain.Payload;
 import com.bosssoft.ecds.security.service.impl.SecurityUserServiceImpl;
 import com.bosssoft.ecds.security.utils.JwtUtils;
-import com.bosssoft.ecds.security.utils.RedisUtils;
+import com.bosssoft.ecds.util.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;

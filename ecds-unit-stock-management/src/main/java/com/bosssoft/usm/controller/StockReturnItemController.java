@@ -26,6 +26,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/stock-return-item-po")
+@CrossOrigin("http://localhost:9528")
 public class StockReturnItemController {
 
     @Autowired

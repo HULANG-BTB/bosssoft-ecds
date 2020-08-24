@@ -1,15 +1,24 @@
 package com.bosssoft.ecds.controller;
 
 
+import cn.hutool.json.JSONUtil;
+import com.bosssoft.ecds.entity.dto.ReceiveFinanceapplyDto;
+import com.bosssoft.ecds.entity.dto.SentBillDto;
+import com.bosssoft.ecds.entity.dto.StockOutItemDto;
 import com.bosssoft.ecds.entity.po.FinanBillPo;
 import com.bosssoft.ecds.entity.vo.StockOutVo;
+import com.bosssoft.ecds.response.CommonCode;
+import com.bosssoft.ecds.response.QueryResponseResult;
 import com.bosssoft.ecds.service.FinanBillService;
+import com.bosssoft.ecds.util.ResponseUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RestController;
-
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,40 +35,28 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/finan-bill")
+@CrossOrigin
+@Api(tags = "财政票据管理Controller")
 public class FinanBillController {
 
     @Autowired
-    private FinanBillService finanBillService;
-    
-    private static final String SUCCESS = "success";
+    private FinanBillService billService;
 
-    @RequestMapping("/test1")
-    public String test1(){
-        //JSONObject.toJSONString(  (  Hashmap  )  myCart.entrySet().toArray());
-        List<FinanBillPo> finanBillPoS = finanBillService.queryByYear("2020", true);
-        log.info("finanlist.size: {}",finanBillPoS.size());
-        return SUCCESS;
-    }
-    @RequestMapping("/test2")
-    public String test2(){
-        List<FinanBillPo> finanBillPoS = finanBillService.queryBills(
-                "00000120", "0000000001", "0000000006", true);
-        log.info("finanlist.size: {}",finanBillPoS.size());
-//        finanBillService.
-        return SUCCESS;
+    @ApiOperation("票据出库")
+    @PostMapping("/outBills")
+    public QueryResponseResult outBills(@RequestBody List<ReceiveFinanceapplyDto> receiveDtos) {
+        log.info("Controller:进入outBills方法...");
+        log.info("data:{}", receiveDtos);
+        List<SentBillDto> sentBillDtos = billService.outBills(receiveDtos);
+        log.info("退出方法，data:{}", sentBillDtos);
+        return new QueryResponseResult<>(CommonCode.SUCCESS, sentBillDtos);
     }
 
-    /**
-     * 通过仓库id获得当前时间该仓库全部可用的票据
-     *
-     * @param warehouseId 仓库id
-     * @return 结果
-     */
-    @RequestMapping("/queryByWarehouseId")
-    public String queryByWarehouseId(String warehouseId) {
+//        return ResponseUtil.getResponse(
+//                ResponseUtil.ResultType.OK.getCode(),
+//                ResponseUtil.ResultType.OK.getMsg(),
+//                billDto);
 
-        return SUCCESS;
-    }
 
 
 

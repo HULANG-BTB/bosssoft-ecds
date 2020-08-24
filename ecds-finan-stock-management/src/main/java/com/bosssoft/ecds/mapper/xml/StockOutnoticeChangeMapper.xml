@@ -5,7 +5,7 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.bosssoft.ecds.entity.po.StockOutnoticeChangePo">
         <id column="f_id" property="id" />
-        <result column="f_buss_id" property="bussId" />
+        <result column="f_pid" property="pid" />
         <result column="f_change_state" property="changeState" />
         <result column="f_change_date" property="changeDate" />
         <result column="f_change_situ" property="changeSitu" />
@@ -19,7 +19,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        f_id, f_buss_id, f_change_state, f_change_date, f_change_situ, f_version, f_altercode, f_create_time, f_update_time, f_operator_id, f_operator
+        f_id, f_pid, f_change_state, f_change_date, f_change_situ, f_version, f_altercode, f_create_time, f_update_time, f_operator_id, f_operator
     </sql>
 
 </mapper>

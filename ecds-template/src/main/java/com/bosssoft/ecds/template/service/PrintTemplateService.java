@@ -32,4 +32,23 @@ public interface PrintTemplateService extends IService<PrintTemplatePo> {
     List<PrintTemplateVo> searchList(String billCode, String name);
 
     String convertExcel(InputStream inputStream);
+
+    /**
+     * 根据票据代码选出一个打印模板
+     * 如果默认模板表有记录，就返回默认，没有就选择数据库找到的第一条记录
+     * 再没有就返回 null
+     * @param billCode 票据代码前6位
+     */
+    PrintTemplateDto getByBillCode(String billCode);
+
+    /**
+     * 设置默认打印模板
+     * @param id 打印模板主键
+     * @return 是否成功
+     */
+    boolean setDefault(Long id);
+
+    boolean edit(PrintTemplateDto templateDto);
+
+    boolean isDefault(Long id);
 }

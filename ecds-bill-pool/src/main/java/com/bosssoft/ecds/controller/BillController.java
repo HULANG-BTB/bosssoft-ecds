@@ -32,7 +32,6 @@ public class BillController {
 
     @RequestMapping(value = "/retrieveBill", method = RequestMethod.POST)
     public ExportBillDto retrieveBill(@RequestBody @Valid RetrieveBillDto retrieveBillDto) {
-        logger.info("over");
         return billService.retrieveBill(retrieveBillDto);
     }
 }

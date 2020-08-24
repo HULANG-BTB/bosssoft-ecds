@@ -1,10 +1,7 @@
 package com.bosssoft.ecds.template.entity.po;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
-import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -88,6 +85,7 @@ public class PrintTemplatePo extends Model<PrintTemplatePo> {
     /**
      * 乐观锁
      */
+    @Version
     @TableField("f_version")
     private Long version;
 

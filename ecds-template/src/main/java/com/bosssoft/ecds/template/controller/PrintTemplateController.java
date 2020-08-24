@@ -1,7 +1,9 @@
 package com.bosssoft.ecds.template.controller;
 
+import com.bosssoft.ecds.template.entity.dto.BillItemDto;
 import com.bosssoft.ecds.template.entity.dto.NontaxBillDto;
 import com.bosssoft.ecds.template.entity.dto.PrintTemplateDto;
+import com.bosssoft.ecds.template.entity.vo.PrintTemplateUpdateVo;
 import com.bosssoft.ecds.template.entity.vo.PrintTemplateVo;
 import com.bosssoft.ecds.template.service.HtmlService;
 import com.bosssoft.ecds.template.service.PrintTemplateService;
@@ -113,6 +115,19 @@ public class PrintTemplateController {
     }
 
     /**
+     * 编辑模板信息
+     * @param templateVo 模板信息DTO
+     * @return 是否编辑成功
+     */
+    @ApiOperation("编辑模板信息，可以编辑名称和备注")
+    @PutMapping("/update")
+    public ResponseResult updateTemplate(@RequestBody PrintTemplateUpdateVo templateVo) {
+        PrintTemplateDto templateDto = templateVo.toDto();
+        boolean success = printTemplateService.edit(templateDto);
+        return success ? ResponseResult.SUCCESS() : ResponseResult.FAIL();
+    }
+
+    /**
      * 根据模板id获取模板样板，即返回空的票样
      *
      * @param id 模板主键
@@ -124,7 +139,9 @@ public class PrintTemplateController {
         PrintTemplateDto templateDTO = printTemplateService.getDtoById(id);
         // 渲染空白票据
         NontaxBillDto billDTO = new NontaxBillDto();
-        billDTO.setItems(new ArrayList<>());
+        List<BillItemDto> items = new ArrayList<>();
+        items.add(new BillItemDto());
+        billDTO.setItems(items);
         String htmlTemplate = htmlService.genBillHtml(billDTO, templateDTO.getTemplate());
         return htmlTemplate.getBytes();
     }
@@ -176,6 +193,25 @@ public class PrintTemplateController {
         }
         List<PrintTemplateVo> list = printTemplateService.searchList(billCode, name);
         return new QueryResponseResult<>(CommonCode.SUCCESS, list);
+    }
+
+    @ApiOperation("设置默认打印模板，生成 pdf 将使用该模板")
+    @PostMapping("/setDefault")
+    public ResponseResult setDefault(
+            @RequestParam @ApiParam(value = "主键", example = "0") Long id){
+
+        boolean success = printTemplateService.setDefault(id);
+
+        return success ? new ResponseResult(CommonCode.SUCCESS)
+                : new ResponseResult(CommonCode.FAIL);
+    }
+
+    @ApiOperation("查询是否是默认模板")
+    @GetMapping("/isDefault")
+    public ResponseResult isDefault(
+            @RequestParam @ApiParam(value = "主键", example = "0") Long id) {
+        boolean isDefault = printTemplateService.isDefault(id);
+        return new QueryResponseResult<>(CommonCode.SUCCESS, isDefault);
     }
 
     private PrintTemplateDto fillTemplateDto(

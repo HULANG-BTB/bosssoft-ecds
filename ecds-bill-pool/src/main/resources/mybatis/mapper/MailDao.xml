@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bosssoft.ecds.dao.MailDao">
+    <resultMap id="mailResultMap" type="mailPo">
+        <id column="f_id" property="id"/>
+        <result column="f_name" property="name"/>
+        <result column="f_email" property="email"/>
+    </resultMap>
+
+    <select id="retrieveMailList" resultMap="mailResultMap">
+        select * from f_error_admin
+    </select>
+</mapper>

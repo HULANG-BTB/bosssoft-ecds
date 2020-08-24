@@ -4,8 +4,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.bosssoft.ecds.entity.po.VoucherPO;
 import org.apache.ibatis.annotations.Mapper;
 
-;
-
 /**
  * <p>
  *  Mapper 接口

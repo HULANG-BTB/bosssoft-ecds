@@ -5,13 +5,14 @@ spring:
     nacos:
       discovery:
         server-addr: 49.234.212.41
+        ip: 39.98.134.125
   datasource:
     username: root
     password: ubuntumysql
     url: jdbc:mysql://39.98.134.125:3306/bill_source?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=UTC
     driver-class-name: com.mysql.cj.jdbc.Driver
   redis:
-    timeout: 6000
+    timeout: 60000
     password: 123456
     cluster:
       max-redirects: 5
@@ -38,9 +39,10 @@ spring:
     password: ubunturabbitmq
   mail:
     default-encoding: UTF-8
-    host: smtp@qq.com
+    host: smtp.qq.com
     username: 1739887652@qq.com
     password: fnvwcrwczbpqegfc
+    nickname: bill_source_error
 
 server:
   port: 8083

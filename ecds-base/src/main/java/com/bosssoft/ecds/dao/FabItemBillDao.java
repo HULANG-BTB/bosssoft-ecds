@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bosssoft.ecds.entity.po.FabItemBillPO;
 import com.bosssoft.ecds.entity.po.ItemPO;
-import com.bosssoft.ecds.entity.vo.ItemBillVO;
+import com.bosssoft.ecds.entity.vo.itembillvo.ItemBillVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;

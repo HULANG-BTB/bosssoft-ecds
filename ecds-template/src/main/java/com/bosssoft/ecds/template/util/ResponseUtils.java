@@ -4,7 +4,7 @@ package com.bosssoft.ecds.template.util;
  * @ClassName ResponseUitls
  * @Author AloneH
  * @Date 2020/8/9 9:31
- * @Description 统一响应类
+ * @Description  统一响应类
  **/
 
 import cn.hutool.json.JSONUtil;

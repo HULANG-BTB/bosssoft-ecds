@@ -3,6 +3,7 @@ package com.bosssoft.ecds.template.service;
 import com.bosssoft.ecds.template.entity.dto.NontaxBillDto;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 /**
@@ -42,4 +43,6 @@ public interface ImageService {
      * @return 模板图片输入流
      */
     InputStream getTemplateFile();
+
+    byte[] addImageMark(byte[] imageBytes);
 }

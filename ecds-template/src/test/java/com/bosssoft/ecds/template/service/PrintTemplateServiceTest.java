@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 @Slf4j
 @SpringBootTest
 class PrintTemplateServiceTest {
@@ -23,6 +25,7 @@ class PrintTemplateServiceTest {
         for (PrintTemplatePo t : templatePOs) {
             log.info(t.toString());
         }
+        assertNotNull(templatePOs);
     }
 
     @Test
@@ -31,6 +34,7 @@ class PrintTemplateServiceTest {
         for (PrintTemplateDto t : templateDTOs) {
             log.info(t.toString());
         }
+        assertNotNull(templateDTOs);
     }
 
     @Test
@@ -41,12 +45,41 @@ class PrintTemplateServiceTest {
         templateDTO.setRgnCode("01");
         templateDTO.setSortId("16");
         templateDTO.setTypeId("02");
-        printTemplateService.add(templateDTO);
+        boolean res = printTemplateService.add(templateDTO);
+        assert res;
     }
 
     @Test
     void getTest() {
         PrintTemplateDto templateDTO = printTemplateService.getDtoById(11L);
         System.out.println(templateDTO.getTemplate());
+        assertNotNull(templateDTO);
+    }
+
+    //@Test
+    void selectOne(){
+        String billcode = "011602";
+        PrintTemplateDto templateDTO = printTemplateService.getByBillCode(billcode);
+        System.out.println(templateDTO);
+        assertNotNull(templateDTO);
+    }
+
+    @Test
+    @Transactional
+    void setDefault() {
+        Long id = 17L;
+        boolean res = printTemplateService.setDefault(id);
+        assertTrue(res);
+    }
+
+    @Test
+    void edit() {
+        PrintTemplateDto t = new PrintTemplateDto();
+        t.setId(14L);
+        t.setMemo("新的备注");
+        t.setName("一个小小模版啦");
+        boolean res = printTemplateService.edit(t);
+        System.out.println(res);
+        assert true;
     }
 }
