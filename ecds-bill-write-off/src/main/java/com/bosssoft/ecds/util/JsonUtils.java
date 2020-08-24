@@ -1,4 +1,4 @@
-package com.bosssoft.ecds.config;
+package com.bosssoft.ecds.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;

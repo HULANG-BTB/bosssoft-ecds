@@ -1,6 +1,7 @@
 package com.bosssoft.ecds.controller;
 
-import com.bosssoft.ecds.config.JsonUtils;
+import com.alibaba.csp.sentinel.annotation.SentinelResource;
+import com.bosssoft.ecds.util.JsonUtils;
 import com.bosssoft.ecds.entity.dto.WriteOffDetailDTO;
 import com.bosssoft.ecds.entity.dto.WriteOffReceiveDTO;
 import com.bosssoft.ecds.entity.dto.WriteOffResultDTO;
@@ -12,11 +13,8 @@ import com.bosssoft.ecds.service.FinancialWriteOffService;
 import com.bosssoft.ecds.service.MonitorRecordService;
 import com.bosssoft.ecds.service.UnitWriteOffService;
 import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,7 +45,7 @@ public class FinancialWriteOffController {
      * 接收一段时间的下级单位传来的核销信息
      *
      * @param writeOffReceiveUnitInfoVO
-     * @return java.util.List
+     * @return QueryResponseResult
      */
     @ResponseBody
     @RequestMapping(value = "/receive", method = RequestMethod.POST)
@@ -72,7 +70,7 @@ public class FinancialWriteOffController {
      * 需要退回的核销信息根据单位ID回到单位端进行修改
      *
      * @param writeOffReceiveVOList
-     * @return
+     * @return ResponseResult
      */
     @ResponseBody
     @RequestMapping(value = "/sendBack", method = RequestMethod.POST)
@@ -96,7 +94,7 @@ public class FinancialWriteOffController {
      * 获取核销信息详情
      *
      * @param writeOffDetailRequestVO
-     * @return java.lang.Object
+     * @return QueryResponseResult
      */
     @ResponseBody
     @RequestMapping(value = "/getDetails", method = RequestMethod.POST)
@@ -118,7 +116,7 @@ public class FinancialWriteOffController {
      * 存储数据
      *
      * @param writeOffResultVO
-     * @return java.lang.String
+     * @return ResponseResult
      */
     @ResponseBody
     @RequestMapping(value = "/setResult", method = RequestMethod.POST)
@@ -138,7 +136,8 @@ public class FinancialWriteOffController {
     /**
      * 获取核销结果--Redis
      *
-     *
+     * @param resultRequestVO
+     * @return QueryResponseResult
      */
     @ResponseBody
     @RequestMapping(value = "/getResult", method = RequestMethod.POST)

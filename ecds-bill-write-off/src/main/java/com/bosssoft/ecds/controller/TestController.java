@@ -1,9 +1,8 @@
 package com.bosssoft.ecds.controller;
 
-import com.bosssoft.ecds.config.JsonUtils;
+import com.bosssoft.ecds.util.JsonUtils;
 import com.bosssoft.ecds.entity.vo.WriteOffResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
