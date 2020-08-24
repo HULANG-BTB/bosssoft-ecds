@@ -96,7 +96,7 @@ public class PdfController {
             @RequestParam(defaultValue = "2592000000")
             @ApiParam(value = "过期时间(毫秒)，默认是1个月", example = "0")
                     Long expireTime) {
-        String url = pdfService.getRemoteAddress(billDTO, false, expireTime);
+        String url = pdfService.getRemoteAddress(billDTO, true, expireTime);
         log.info(url);
 
         if ("".equals(url)) {

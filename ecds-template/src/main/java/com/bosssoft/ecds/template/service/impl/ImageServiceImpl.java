@@ -139,7 +139,8 @@ public class ImageServiceImpl implements ImageService {
         String path = "boss-bill/" + fileName;
 
         // 检查OSS上是否存在文件，有就不生成
-        if (!ossUtil.isExist(path)) {
+        // oss 判断文件接口有问题，先直接生成
+        if (true || !ossUtil.isExist(path)) {
             log.info("{}文件不存在，生成。", fileName);
             byte[] bytes = generateImage(billDTO);
             byte[] stamped = addImageMark(bytes);
@@ -193,9 +194,9 @@ public class ImageServiceImpl implements ImageService {
 
         ImageIcon imgIcon = new ImageIcon(getStampBytes());
         Image iconImg = imgIcon.getImage();
-        float clarity = 0.6f;
+        float clarity = 0.8f;
         g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, clarity));
-        g.drawImage(iconImg, 20, 20, null);
+        g.drawImage(iconImg, 138, 262, null);
         g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER));
         g.dispose();
 
