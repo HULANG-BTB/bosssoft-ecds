@@ -74,10 +74,6 @@ public class RolePO extends Model<RolePO> {
     @TableField("f_note")
     private String note;
 
-    @ApiModelProperty(value = "权限列表")
-    @TableField(exist = false)
-    private List<PermissionPO> permissions;
-
     public static final String F_ID = "f_id";
 
     public static final String F_ROLE = "f_role";

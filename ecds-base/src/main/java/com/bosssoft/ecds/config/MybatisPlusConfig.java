@@ -12,6 +12,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
+import java.util.Base64;
 import java.util.Date;
 
 /**
@@ -44,8 +45,8 @@ public class MybatisPlusConfig {
                  * 生产环境使用上面的方式获取ID和nickname
                  * 测试环境模拟获得ID和nickname使用下面的方式
                  */
-                Long authId = 1L;
-                String authNickname = "test";
+                Long authId = Long.valueOf(httpServletRequest.getHeader("auth_id"));
+                String authNickname = Base64.getDecoder().decode(httpServletRequest.getHeader("auth_nickname")).toString();
                 this.setFieldValByName("createTime", new Date(), metaObject);
                 this.setFieldValByName("updateTime", new Date(), metaObject);
                 this.setFieldValByName("operatorId", authId, metaObject);
@@ -61,8 +62,8 @@ public class MybatisPlusConfig {
                  * 生产环境使用上面的方式获取ID和nickname
                  * 测试环境模拟获得ID和nickname使用下面的方式
                  */
-                Long authId = 1L;
-                String authNickname = "test";
+                Long authId = Long.valueOf(httpServletRequest.getHeader("auth_id"));
+                String authNickname = new String(Base64.getDecoder().decode(httpServletRequest.getHeader("auth_nickname")));
                 this.setFieldValByName("updateTime", new Date(), metaObject);
                 this.setFieldValByName("operatorId", authId, metaObject);
                 this.setFieldValByName("operator", authNickname, metaObject);

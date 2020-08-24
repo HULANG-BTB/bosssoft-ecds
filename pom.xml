@@ -44,6 +44,7 @@
         <module>ecds-unit-sign</module>
         <module>ecds-common</module>
         <module>ecds-encryption</module>
+        <module>ecds-system</module>
     </modules>
 
     <packaging>pom</packaging>

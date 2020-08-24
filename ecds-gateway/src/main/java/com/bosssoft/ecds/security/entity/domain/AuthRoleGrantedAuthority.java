@@ -1,6 +1,7 @@
 package com.bosssoft.ecds.security.entity.domain;
 
 import com.bosssoft.ecds.security.entity.vo.PermissionVO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -26,14 +27,10 @@ public class AuthRoleGrantedAuthority implements GrantedAuthority {
 
     private String name;
 
-    private List<PermissionVO> permissions;
-
     @Override
+    @JsonIgnore
     public String getAuthority() {
         return this.role;
     }
 
-    public void setAuthority(String role) {
-        this.role = role;
-    }
 }

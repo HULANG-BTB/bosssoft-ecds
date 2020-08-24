@@ -5,7 +5,9 @@ import com.bosssoft.ecds.entity.dto.SubjectDTO;
 import com.bosssoft.ecds.entity.po.SubjectPO;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.bosssoft.ecds.entity.vo.subjectvo.*;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -36,6 +38,15 @@ public interface SubjectService extends IService<SubjectPO> {
     QueryResponseResult add(SubjectDTO subjectDTO);
 
     /**
+     * 预算科目存在对应的收入类别
+     *
+     * @param
+     * @return
+     */
+
+    QueryResponseResult addExists(SubjectPO subjectPO);
+
+    /**
      * 修改预算科目
      *
      * @param updateSubjectVO
@@ -50,9 +61,25 @@ public interface SubjectService extends IService<SubjectPO> {
     QueryResponseResult delete(Long id);
 
     /**
+     * 递归添加，需要删除的预算科目，到一个集合
+     *
+     * @param
+     * @return
+     */
+    void deleteRec(SubjectPO subjectPO, List<Long> delList);
+
+    /**
      * 复制预算科目
      */
     QueryResponseResult copy(Long id);
+
+    /**
+     * 递归复制预算科目
+     *
+     * @param
+     * @return
+     */
+    boolean copyRec(SubjectPO subjectPO, Long pid);
 
     /**
      * 返回导出文件名

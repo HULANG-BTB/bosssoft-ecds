@@ -27,9 +27,11 @@ import com.bosssoft.ecds.response.QueryResult;
 import com.bosssoft.ecds.service.IncomeSortService;
 import com.bosssoft.ecds.utils.CharacterCheckUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -47,6 +49,8 @@ public class IncomeSortServiceImpl implements IncomeSortService {
     private ItemDao itemDao;
     @Autowired
     private IncomeSortSubjectDao incomeSortSubjectDao;
+    @Autowired
+    private HttpServletRequest httpServletRequest;
 
     /**
      * 构建收入类别树
@@ -107,12 +111,13 @@ public class IncomeSortServiceImpl implements IncomeSortService {
     @Override
 
     public QueryResponseResult getAll() {
+        String token=httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
         List<IncomeSortDTO> incomeSortDTOS = incomeSortDao.getAll();
         List<IncomeSortDTO> incomeSortTree = buildIncomeSortDTOTree(incomeSortDTOS, IncomeSortConstant.INIT_ALL_NUM);
         QueryResult<IncomeSortDTO> queryResult = new QueryResult<>();
         queryResult.setList(incomeSortTree);
         queryResult.setTotal(incomeSortTree.size());
-        return new QueryResponseResult<>(CommonCode.SUCCESS, queryResult);
+        return new QueryResponseResult<>(CommonCode.SUCCESS, queryResult,token);
     }
 
 
@@ -208,6 +213,20 @@ public class IncomeSortServiceImpl implements IncomeSortService {
         Date date = new Date();
         incomeSort.setUpdateTime(date);
         incomeSortDao.update(incomeSort, updateWrapper);
+        QueryWrapper<ItemPO> itemPOQueryWrapper = new QueryWrapper<>();
+        itemPOQueryWrapper.eq(IncomeSortConstant.F_INCOM_SORT_CODE, temp.getCode());
+        //修改科目表中编码
+        List<ItemPO> itemPOS = itemDao.selectList(itemPOQueryWrapper);
+        UpdateWrapper<ItemPO> itemPOUpdateWrapper = new UpdateWrapper<>();
+        itemPOUpdateWrapper.eq(IncomeSortConstant.F_INCOM_SORT_CODE, temp.getCode());
+        for (ItemPO itemPO :
+                itemPOS) {
+            ItemPO item = new ItemPO();
+            item.setIncomSortCode(code);
+            item.setVersion(itemPO.getVersion());
+            item.setUpdateTime(new Date());
+            itemDao.update(item, itemPOUpdateWrapper);
+        }
         return true;
     }
 

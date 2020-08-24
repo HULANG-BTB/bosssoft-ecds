@@ -29,7 +29,4 @@ public class RoleVO extends Model<RoleVO> {
     @ApiModelProperty(value = "名称")
     private String name;
 
-    @ApiModelProperty(value = "权限列表")
-    private List<PermissionVO> permissions;
-
 }

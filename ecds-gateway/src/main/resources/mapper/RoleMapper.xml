@@ -15,27 +15,26 @@
         <result column="f_logic_delete" property="logicDelete" />
         <result column="f_version" property="version" />
         <result column="f_note" property="note" />
-        <collection
-                property="permissions"
-                column="f_id"
-                ofType="com.bosssoft.ecds.security.entity.po.PermissionPO"
-                javaType="java.util.List"
-                select="com.bosssoft.ecds.security.dao.PermissionDao.getByRid"
-                ></collection>
     </resultMap>
-
-    <select id="selectByUid" parameterType="Long" resultMap="BaseResultMap">
-        select role.*
-        from faa_role role, faa_user_role user_role
-        where user_role.f_user_id = #{id}
-            and role.f_id = user_role.f_role_id
-            and role.f_logic_delete = 0
-            and user_role.f_logic_delete = 0
-    </select>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         f_id, f_role, f_name, f_description, f_operator, f_operator_id, f_create_time, f_update_time, f_logic_delete, f_version, f_note
     </sql>
 
+    <select id="listByUid" parameterType="Long" resultMap="BaseResultMap">
+        SELECT
+            DISTINCT `role`.*
+        FROM
+            `faa_user_role` `user_role`,
+            `faa_role` `role`
+        WHERE
+            `user_role`.`f_role_id` = `role`.`f_id`
+            AND
+            `user_role`.`f_user_id` = #{id}
+            AND
+            `role`.`f_logic_delete` = 0
+            AND
+            `user_role`.`f_logic_delete` = 0
+    </select>
 </mapper>

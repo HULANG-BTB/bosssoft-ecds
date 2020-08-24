@@ -8,6 +8,7 @@ public class SubjectConstant {
 
     public static final Long INIT_PARENT_ID = 0L;
     public static final Integer INIT_LEVEL = 1;
+    public static final String FILE_suffix = "xlsx";
     public static final String Subject_ID_NOT_NULL = "预算科目id不能为空";
     public static final String Subject_YEAR_NOT_NULL = "预算科目年度不能为空";
     public static final String Subject_PID_NOT_NULL = "预算科目父级id不能为空";

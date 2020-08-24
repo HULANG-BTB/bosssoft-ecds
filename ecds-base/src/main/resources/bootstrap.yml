@@ -5,7 +5,7 @@ spring:
   cloud:
     nacos:
       config:
-        server-addr: 49.234.75.113:8848
+        server-addr: 49.234.212.41:8848
         file-extension: yaml
         prefix: base-datasource
         ext‐config:
@@ -14,22 +14,9 @@ spring:
           refresh: true
       #  先不注册服务，调试时候本地调试，最后发布在注册
       discovery:
-        server-addr: 49.234.75.113:8848
+        server-addr: 49.234.212.41:8848
+        ip: ${client:} # 指定指定客户端IP
   profiles:
     active: dev
 server:
   port: 8001
-
-
-
-
-
-
-
-
-
-
-
-
-
-

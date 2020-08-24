@@ -10,6 +10,7 @@ import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * <p>
@@ -96,4 +97,21 @@ public class RolePermissionPO extends Model<RolePermissionPO> {
         return this.id;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        RolePermissionPO that = (RolePermissionPO) o;
+        return Objects.equals(roleId, that.roleId) &&
+                Objects.equals(permissionId, that.permissionId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(roleId, permissionId);
+    }
 }

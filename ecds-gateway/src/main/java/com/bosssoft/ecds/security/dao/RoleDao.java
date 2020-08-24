@@ -16,11 +16,6 @@ import java.util.List;
  */
 public interface RoleDao extends BaseMapper<RolePO> {
 
-    /**
-     * 通过UID读取
-     * @param uid
-     * @return
-     */
-    List<RolePO> selectByUid(Serializable uid);
+    List<RolePO> listByUid(Serializable id);
 
 }

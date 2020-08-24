@@ -1,5 +1,7 @@
 package com.bosssoft.ecds.security.entity.domain;
 
+import com.bosssoft.ecds.security.entity.po.PermissionPO;
+import com.bosssoft.ecds.security.entity.vo.PermissionVO;
 import com.bosssoft.ecds.security.utils.BeanUtils;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -32,7 +34,11 @@ public class AuthUserDetails implements UserDetails {
 
     private String password;
 
+    // 角色
     private List<GrantedAuthority> authorities;
+
+    // 权限
+    private List<PermissionVO> permissions;
 
     @Override
     public List<GrantedAuthority> getAuthorities() {

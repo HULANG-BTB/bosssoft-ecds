@@ -2,6 +2,7 @@ package com.bosssoft.ecds.controller;
 
 
 import com.bosssoft.ecds.encryption.Decrypt;
+import com.bosssoft.ecds.encryption.Encrypt;
 import com.bosssoft.ecds.entity.vo.incomesortvo.AddIncomeSortVO;
 import com.bosssoft.ecds.entity.vo.incomesortvo.DeleteIncomeSortVO;
 import com.bosssoft.ecds.entity.vo.incomesortvo.FuzzyQueryIncomeSortVO;
@@ -66,7 +67,7 @@ public class IncomeSortController {
     @ApiOperation(value = "新增收入类别信息", notes = "类别名称和编码唯一")
     @PostMapping("/insert")
     @Decrypt
-    public ResponseResult insert(@RequestBody @Validated AddIncomeSortVO addIncomeSortVO) {
+    public ResponseResult insert(@RequestBody  AddIncomeSortVO addIncomeSortVO) {
         incomeSortService.add(addIncomeSortVO);
         return new ResponseResult(CommonCode.SUCCESS);
     }

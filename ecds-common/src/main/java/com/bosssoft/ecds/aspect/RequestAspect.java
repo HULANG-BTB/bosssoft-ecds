@@ -4,6 +4,7 @@ import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.skywalking.apm.toolkit.trace.ActiveSpan;
 import org.apache.skywalking.apm.toolkit.trace.Trace;
+import org.apache.skywalking.apm.toolkit.trace.TraceContext;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -22,7 +23,7 @@ import java.util.Map;
  */
 @Aspect
 @Component
-@Slf4j
+@Slf4j(topic = "kafka_logger")
 public class RequestAspect {
 
     // 定义切点
@@ -35,8 +36,11 @@ public class RequestAspect {
     @Trace(operationName = "requestLog")
     public void log(JoinPoint joinPoint) {
         Map<String, Object> param = this.getNameAndValue(joinPoint);
+        String traceId = TraceContext.traceId();
+        String paramStr = JSONUtil.toJsonStr(param);
+        ActiveSpan.tag("请求参数", paramStr);
+        param.put("tid", traceId);
         String jsonStr = JSONUtil.toJsonStr(param);
-        ActiveSpan.tag("请求参数", jsonStr);
         log.info(jsonStr);
     }
 

@@ -8,9 +8,10 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 49.234.75.113:8848
+        server-addr: 49.234.212.41:8848
+        ip: ${client:} # 指定指定客户端IP
       config:
-        server-addr: 49.234.75.113:8848
+        server-addr: 49.234.212.41:8848
         file-extension: yaml
         prefix: gateway-config
         ext‐config:
@@ -30,7 +31,7 @@ spring:
           group: DEFAULT_GROUP
           refresh: true
 server:
-  port: 8050
+  port: 8810
 
 
 

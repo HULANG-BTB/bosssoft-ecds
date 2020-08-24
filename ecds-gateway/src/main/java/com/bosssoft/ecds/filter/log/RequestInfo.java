@@ -28,4 +28,6 @@ public class RequestInfo {
     String authId;
 
     String message;
+
+    String tid;
 }
