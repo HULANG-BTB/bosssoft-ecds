@@ -29,7 +29,7 @@ import java.util.regex.Pattern;
 @Api(tags = "短信发送及短信发信记录")
 @RestController
 @RequestMapping("/sms")
-//@CrossOrigin
+@CrossOrigin
 @Slf4j
 public class SmsController extends BaseController {
 

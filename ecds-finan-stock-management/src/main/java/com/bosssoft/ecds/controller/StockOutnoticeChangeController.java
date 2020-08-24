@@ -47,7 +47,7 @@ public class StockOutnoticeChangeController extends BaseController {
      */
     @ApiOperation("展示变动记录列表")
     @PostMapping("/showAll")
-    public QueryResponseResult<PageResult> showAll(@Valid @RequestBody OutChangePageVo pageVo) {
+    public QueryResponseResult<PageResult> showAll(@RequestBody OutChangePageVo pageVo) {
         log.info("进入showAll方法...");
         Long total = changeService.getCount(pageVo);
         List<StockOutChangeDto> changeDtos = changeService.queryByPageVo(

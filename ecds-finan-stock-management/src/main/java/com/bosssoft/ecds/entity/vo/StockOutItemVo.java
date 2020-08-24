@@ -35,6 +35,11 @@ public class StockOutItemVo extends Model<StockOutItemVo> {
     @ApiModelProperty(value = "数量")
     private Integer number;
 
+    /**
+     * 最大数量
+     */
+    private Integer maxNum;
+
     @ApiModelProperty(value = "起始号")
     private String billNo1;
 

@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/stockIn")
 @Slf4j
+//@CrossOrigin
 @Api(value = "入库接口")
 public class StockInController {
     @Autowired

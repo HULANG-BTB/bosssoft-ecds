@@ -1,9 +1,11 @@
 package com.bosssoft.ecds.controller;
 
 
+import cn.hutool.core.convert.Convert;
 import cn.hutool.json.JSONUtil;
 import com.bosssoft.ecds.entity.dto.ReceiveFinanceapplyDto;
 import com.bosssoft.ecds.entity.dto.SentBillDto;
+import com.bosssoft.ecds.entity.dto.StockOutDto;
 import com.bosssoft.ecds.entity.dto.StockOutItemDto;
 import com.bosssoft.ecds.entity.po.FinanBillPo;
 import com.bosssoft.ecds.entity.vo.StockOutVo;
@@ -23,11 +25,11 @@ import java.util.List;
 
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
- *
- *      * 接收参数RequestBody处理content-type不是默认的application/x-www-form-urlcoded编码的内容，
- *      * 比如说：application/json或者是application/xml等。一般情况下来说常用其来处理application/json类型。
+ * <p>
+ * * 接收参数RequestBody处理content-type不是默认的application/x-www-form-urlcoded编码的内容，
+ * * 比如说：application/json或者是application/xml等。一般情况下来说常用其来处理application/json类型。
  *
  * @author misheep
  * @since 2020-08-11
@@ -35,7 +37,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/finan-bill")
-@CrossOrigin
+//@CrossOrigin
 @Api(tags = "财政票据管理Controller")
 public class FinanBillController {
 
@@ -52,13 +54,18 @@ public class FinanBillController {
         return new QueryResponseResult<>(CommonCode.SUCCESS, sentBillDtos);
     }
 
-//        return ResponseUtil.getResponse(
+    //        return ResponseUtil.getResponse(
 //                ResponseUtil.ResultType.OK.getCode(),
 //                ResponseUtil.ResultType.OK.getMsg(),
 //                billDto);
-
-
-
-
+    @ApiOperation("获得可用票据段")
+    @GetMapping("/getValid")
+    public QueryResponseResult getValid(@RequestParam String billPrecode) {
+        log.info("Controller:进入outBills方法...");
+        log.info("data:{}", billPrecode);
+        SentBillDto billDto = billService.getValidBills(billPrecode);
+        log.info("退出方法，data:{}", billDto);
+        return new QueryResponseResult<>(CommonCode.SUCCESS, billDto);
+    }
 }
 

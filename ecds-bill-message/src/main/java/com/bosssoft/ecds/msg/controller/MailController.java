@@ -26,7 +26,7 @@ import java.util.concurrent.ExecutionException;
 @RestController
 @RequestMapping("/mail")
 @Slf4j
-//@CrossOrigin
+@CrossOrigin
 public class MailController extends BaseController {
 
     @Resource
@@ -62,7 +62,7 @@ public class MailController extends BaseController {
      */
     @ApiOperation("查询邮件发件记录")
     @PostMapping("/list")
-    public QueryResponseResult<PageResult> listPage( MailQueryVo mailQuery) {
+    public QueryResponseResult<PageResult> listPage(@RequestBody MailQueryVo mailQuery) {
         // 获取匹配记录数
         Long total = mailService.getTotal(mailQuery);
         // 查询匹配记录
