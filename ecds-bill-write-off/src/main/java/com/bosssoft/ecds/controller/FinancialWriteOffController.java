@@ -1,5 +1,6 @@
 package com.bosssoft.ecds.controller;
 
+import com.bosssoft.ecds.config.JsonUtils;
 import com.bosssoft.ecds.entity.dto.WriteOffDetailDTO;
 import com.bosssoft.ecds.entity.dto.WriteOffReceiveDTO;
 import com.bosssoft.ecds.entity.dto.WriteOffResultDTO;
@@ -11,8 +12,12 @@ import com.bosssoft.ecds.service.FinancialWriteOffService;
 import com.bosssoft.ecds.service.MonitorRecordService;
 import com.bosssoft.ecds.service.UnitWriteOffService;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -33,6 +38,10 @@ public class FinancialWriteOffController {
 
     @Autowired
     private UnitWriteOffService unitWriteOffService;
+
+    @Autowired
+    private StringRedisTemplate redisTemplate;
+
     /**
      * 获取单位端传来的核销信息
      * 接收一段时间的下级单位传来的核销信息
@@ -44,7 +53,7 @@ public class FinancialWriteOffController {
     @RequestMapping(value = "/receive", method = RequestMethod.POST)
     @ApiOperation(value = "获取核销请求", notes = "根据单位Id获取该单位上报的核销请求")
     @ApiImplicitParam(name = "writeOffReceiveUnitInfoVO", dataType = "WriteOffReceiveUnitInfoVO", value = "需要核销的单位信息")
-    public QueryResponseResult receive(@RequestBody WriteOffReceiveUnitInfoVO writeOffReceiveUnitInfoVO) {
+    public QueryResponseResult receive (@RequestBody WriteOffReceiveUnitInfoVO writeOffReceiveUnitInfoVO) {
         // 这里DTO要修改成VO， 为了方便测试所以没改，以下的一样
         List<WriteOffReceiveVO> list = new ArrayList<>();
         for (WriteOffReceiveDTO writeOffReceiveDTO : financialWriteOffService.receive(writeOffReceiveUnitInfoVO.getfAgenIdCode())){
@@ -69,7 +78,7 @@ public class FinancialWriteOffController {
     @RequestMapping(value = "/sendBack", method = RequestMethod.POST)
     @ApiOperation(value = "退还核销请求", notes = "根据需要将核销请求退还给单位段")
     @ApiImplicitParam(name = "writeOffReceiveVOList", dataType = "List", value = "退还的核销请求信息")
-    public ResponseResult sendBack(@RequestBody List<WriteOffReceiveVO> writeOffReceiveVOList) {
+    public ResponseResult sendBack (@RequestBody List<WriteOffReceiveVO> writeOffReceiveVOList) {
         List<WriteOffReceiveDTO> list = new ArrayList<>(writeOffReceiveVOList.size());
         for (WriteOffReceiveVO writeOffReceiveVO : writeOffReceiveVOList){
             WriteOffReceiveDTO writeOffReceiveDTO = new WriteOffReceiveDTO();
@@ -93,7 +102,7 @@ public class FinancialWriteOffController {
     @RequestMapping(value = "/getDetails", method = RequestMethod.POST)
     @ApiOperation(value = "获取核销详情", notes = "根据核销单号获取核销详情")
     @ApiImplicitParam(name = "writeOffDetailRequestVO", dataType = "WriteOffDetailRequestVO", value = "核销详情的请求")
-    public QueryResponseResult getDetails(@RequestBody WriteOffDetailRequestVO writeOffDetailRequestVO) {
+    public QueryResponseResult getDetails (@RequestBody WriteOffDetailRequestVO writeOffDetailRequestVO) {
         // 根据业务单号获取详细
         WriteOffDetailDTO writeOffDetailDTO = financialWriteOffService.getDetail(writeOffDetailRequestVO.getfNo());
         WriteOffDetailVO writeOffDetailVO = new WriteOffDetailVO();
@@ -112,17 +121,31 @@ public class FinancialWriteOffController {
      * @return java.lang.String
      */
     @ResponseBody
-    @RequestMapping(value = "/result", method = RequestMethod.POST)
+    @RequestMapping(value = "/setResult", method = RequestMethod.POST)
     @ApiOperation(value = "审核通过", notes = "审核通过")
     @ApiImplicitParam(name = "writeOffResultVO", dataType = "WriteOffResultVO", value = "审核结果")
-    public ResponseResult setResult(@RequestBody WriteOffResultVO writeOffResultVO){
-        System.out.println(writeOffResultVO.getRes());
+    public ResponseResult setResult (@RequestBody WriteOffResultVO writeOffResultVO){
         WriteOffResultDTO resultDTO = new WriteOffResultDTO();
         resultDTO.setFAgenIdCode(writeOffResultVO.getfAgenIdCode());
         resultDTO.setFNo(writeOffResultVO.getfNo());
         resultDTO.setRes(writeOffResultVO.getRes());
         financialWriteOffService.setResult(resultDTO);
+        // 将审验结果存在Redis中
+        redisTemplate.opsForValue().set(writeOffResultVO.getfAgenIdCode()+writeOffResultVO.getfNo(), JsonUtils.objectToJson(writeOffResultVO));
         return new ResponseResult(CommonCode.SUCCESS);
     }
 
+    /**
+     * 获取核销结果--Redis
+     *
+     *
+     */
+    @ResponseBody
+    @RequestMapping(value = "/getResult", method = RequestMethod.POST)
+    @ApiOperation(value = "获取审核结果", notes = "根据单位ID和业务ID获取审核结果")
+    @ApiImplicitParam(name = "resultRequestVO", dataType = "WriteOffResultRequestVO", value = "根据单位ID和业务ID获取审核结果")
+    public QueryResponseResult getResult (@RequestBody WriteOffResultRequestVO resultRequestVO) {
+        return new QueryResponseResult(CommonCode.SUCCESS,
+                JsonUtils.jsonToPojo(redisTemplate.opsForValue().get(resultRequestVO.getUnitId()+resultRequestVO.getId()), WriteOffResultVO.class));
+    }
 }
