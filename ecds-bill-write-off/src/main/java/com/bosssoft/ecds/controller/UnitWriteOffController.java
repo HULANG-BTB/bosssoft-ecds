@@ -20,7 +20,6 @@ import java.util.List;
 /**
  * description: 单位段的核销服务
  */
-@CrossOrigin
 @RestController
 @RequestMapping("/unit")
 public class UnitWriteOffController {

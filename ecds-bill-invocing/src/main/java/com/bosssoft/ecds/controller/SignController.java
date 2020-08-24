@@ -31,7 +31,6 @@ import java.net.URL;
 import java.util.List;
 
 @Slf4j
-@CrossOrigin
 @RestController
 @RequestMapping("/verify")
 public class SignController {

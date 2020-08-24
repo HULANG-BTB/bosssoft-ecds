@@ -32,7 +32,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.locks.ReentrantLock;
 
 @Slf4j
-@CrossOrigin
 @RestController
 @RequestMapping("/billInvoicing")
 public class UneCBillController {

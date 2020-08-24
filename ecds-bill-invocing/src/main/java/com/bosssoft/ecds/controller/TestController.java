@@ -18,7 +18,6 @@ import java.io.File;
 import java.util.concurrent.ExecutionException;
 
 @Slf4j
-@RestController
 @RequestMapping(path = "/test")
 public class TestController {
 

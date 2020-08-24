@@ -23,7 +23,6 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/financial")
-@CrossOrigin
 public class FinancialWriteOffController {
 
     @Autowired
