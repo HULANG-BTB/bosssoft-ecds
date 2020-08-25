@@ -2,6 +2,8 @@ package com.bosssoft.ecds.entity.dto;
 
 import com.bosssoft.ecds.entity.po.UneCbillItem;
 import lombok.Data;
+
+import java.math.BigDecimal;
 import java.util.List;
 
 @Data
@@ -29,7 +31,7 @@ public class WriteOffDto {
     /**
      * 开票金额
      */
-    private double fTotalAmt;
+    private BigDecimal fTotalAmt;
 
     /***
      * 项目明细

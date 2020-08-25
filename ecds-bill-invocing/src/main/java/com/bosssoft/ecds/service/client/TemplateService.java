@@ -16,6 +16,13 @@ public interface TemplateService {
      * 获取模板
      * @return
      */
-    @PostMapping("/pdf/getRemoteAddress")
-    QueryResponseResult getTemplate(@RequestBody NontaxBillDTO nontaxBillDTO)throws ExecutionException, InterruptedException;
+    @PostMapping("/ecds-template/pdf/getRemoteAddress")
+    QueryResponseResult getTemplate(@RequestBody NontaxBillDTO billDTO)throws ExecutionException, InterruptedException;
+
+    /**
+     * 获取模板
+     * @return
+     */
+    @PostMapping("/ecds-template/image/getRemoteAddress")
+    QueryResponseResult getImgTemplate(@RequestBody NontaxBillDTO billDTO)throws ExecutionException, InterruptedException;
 }

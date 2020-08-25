@@ -1,6 +1,7 @@
 package com.bosssoft.ecds.controller;
 
 import cn.hutool.core.convert.Convert;
+import com.alibaba.fastjson.JSON;
 import com.bosssoft.ecds.entity.dto.NontaxBillDTO;
 import com.bosssoft.ecds.entity.dto.SignedDataDto;
 import com.bosssoft.ecds.entity.po.UneCbill;
@@ -14,6 +15,8 @@ import com.bosssoft.ecds.service.client.SignatureService;
 import com.bosssoft.ecds.service.client.TemplateService;
 import com.bosssoft.ecds.util.AliyunOSSUtil;
 import com.bosssoft.ecds.util.FileUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.apache.commons.fileupload.disk.DiskFileItem;
@@ -21,6 +24,7 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,8 +35,9 @@ import java.net.URL;
 import java.util.List;
 
 @Slf4j
-@CrossOrigin
 @RestController
+@CrossOrigin
+@Api(value = "票据盖章模块")
 @RequestMapping("/verify")
 public class SignController {
 
@@ -58,7 +63,8 @@ public class SignController {
      * 获取盖章后的模板
      * @return
      */
-    @RequestMapping("/sign")
+    @ApiOperation(value = "获取盖章后的票据模板")
+    @GetMapping("/sign")
     public ResponseResult sign(String billId, String billNo) throws Exception {
         //验证单位签名
         SignedDataDto signedDataDto = signService.getSignData(billId, billNo);
@@ -67,6 +73,7 @@ public class SignController {
             log.info("单位签名验证失败");
             return ResponseResult.FAIL();
         }
+        log.info((response.data).toString());
         SignedDataDto signedDataDto1 = Convert.convert(SignedDataDto.class, response.data);
         //验证财政端的签名
         ResponseResult result = signatureService.verifySign(signedDataDto1);
@@ -89,18 +96,17 @@ public class SignController {
         Response feign = signatureService.stamp(multipartFile,
                 signedDataDto1.getUnitSignValue(),
                 signedDataDto1.getFinanceSignValue());
+        log.info(String.valueOf(feign.status()));
         InputStream inputStream = feign.body().asInputStream();
         BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
-        File pdfFile = new File("../pdfFile.pdf");
-        outPutFile(inputStream, pdfFile);
-        /**
-         * 将pdf文件上传到oss，返回url地址
-         */
-        String objectName = "boss-bill-stamp/" + billId+billNo+".pdf";
+        //File pdfFile = new File("../pdfFile.pdf");
+        //outPutFile(inputStream, pdfFile);
+        String objectName = "boss-bill/" + billId+billNo+".pdf";
         aliyunOSSUtil.upload(objectName, bufferedInputStream);
         URL pdfUrl = aliyunOSSUtil.temporaryUrl(objectName, 60 * 1000L);
         log.info(pdfUrl.toString());
         inputStream.close();
+        uneCbillService.updateState(uneCbill.getFBillId(), uneCbill.getFBillNo(), 3);
         return ResponseResult.SUCCESS();
     }
 
