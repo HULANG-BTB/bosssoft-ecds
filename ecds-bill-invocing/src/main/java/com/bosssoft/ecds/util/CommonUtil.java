@@ -1,17 +1,26 @@
 package com.bosssoft.ecds.util;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.alibaba.fastjson.JSON;
+import com.bosssoft.ecds.entity.dto.AgenInfoDTO;
 import com.bosssoft.ecds.entity.dto.PayerDto;
+import com.bosssoft.ecds.entity.dto.PlaceInfoDTO;
 import com.bosssoft.ecds.entity.dto.UneCbillDto;
 import com.bosssoft.ecds.entity.po.UneCbill;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 @Component
@@ -38,26 +47,54 @@ public class CommonUtil {
         return UUID.randomUUID().toString().replaceAll("-", "");
     }
 
-    public UneCbill convert(String unitName, PayerDto payerDto, UneCbillDto uneCbillDto, long billItemId, double amt) {
+    /**
+     * 生成6位校验码
+     * @param
+     * @return
+     */
+    public String getRandNum() {
+        String charValue = "";
+        for (int i = 0; i < 6; i++) {
+            char c = (char) (randomInt(0, 10) + '0');
+            charValue += String.valueOf(c);
+        }
+        return charValue;
+    }
+    public int randomInt(int from, int to) {
+        Random r = new Random();
+        return from + r.nextInt(to - from);
+    }
+
+    /**
+     * 新增票据dto转换
+     * @param unitName
+     * @param payerDto
+     * @param uneCbillDto
+     * @param billItemId
+     * @param amt
+     * @return
+     */
+    public UneCbill convert(String unitName, PayerDto payerDto, UneCbillDto uneCbillDto, long billItemId, BigDecimal amt, AgenInfoDTO agenInfoDTO) throws ParseException {
         //BeanUtil.copyProperties();
         UneCbill uneCbill = new UneCbill();
         //开票主表id
         long cbillId = generateID();
         uneCbill.setFId(cbillId);
         //单位
-        uneCbill.setFAgenIdCode(unitName);
-        uneCbill.setFPlaceCode("开票点代码");
-        uneCbill.setFPlaceId("开票点id");
-        uneCbill.setFPlaceName("开票点名称");
-        uneCbill.setFRgnCode("区划码");
-        uneCbill.setFAuthor("samuel");
+        List<PlaceInfoDTO> places = agenInfoDTO.getPlaces();
+        uneCbill.setFAgenIdCode("360102000000");
+        uneCbill.setFPlaceCode(agenInfoDTO.getAgenCode());
+        uneCbill.setFPlaceId("3601020000001");
+        uneCbill.setFPlaceName("博思软件一楼");
+        uneCbill.setFRgnCode(agenInfoDTO.getRgnId());
+        uneCbill.setFAuthor("admin");
         //票据
         uneCbill.setFBillId(uneCbillDto.getfBillId());
         uneCbill.setFBillNo(uneCbillDto.getfBillNo());
         uneCbill.setFType(uneCbillDto.getfType());
         uneCbill.setFDate(new Date());
-        uneCbill.setFTypeCode("票据类型编码");
-        uneCbill.setFBillBatchCode("票据批次号");
+        uneCbill.setFTypeCode("01160201");
+        uneCbill.setFBillBatchCode("1");
         //缴款人
         uneCbill.setFPayerName(payerDto.getfPayerName());
         uneCbill.setFPayerEmail(payerDto.getfPayerEmail());
@@ -72,7 +109,7 @@ public class CommonUtil {
         uneCbill.setFSignId(generateID());
         uneCbill.setFState(1);
         uneCbill.setFPayCode(generateID());
-        uneCbill.setFCheckCode("85c6s");
+        uneCbill.setFCheckCode(uneCbillDto.getCheckCode());
         return uneCbill;
     }
 

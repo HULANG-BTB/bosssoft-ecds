@@ -1,19 +1,24 @@
 package com.bosssoft.ecds.service.fallback;
 
+import com.bosssoft.ecds.entity.dto.AgenInfoDTO;
+import com.bosssoft.ecds.entity.dto.ArrearDTO;
+import com.bosssoft.ecds.entity.dto.ItemInfoDTO;
 import com.bosssoft.ecds.entity.dto.NontaxBillDTO;
-import com.bosssoft.ecds.entity.dto.TemplateDto;
 import com.bosssoft.ecds.response.QueryResponseResult;
 import com.bosssoft.ecds.service.client.TemplateService;
 import com.bosssoft.ecds.service.client.TestService;
 import com.bosssoft.ecds.service.client.UnitManagerService;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+
 @Component
 public class FallBack implements UnitManagerService, TestService , TemplateService {
 
     @Override
-    public boolean isArrear(String unitName) {
-        return false;
+    public ArrearDTO isArrear(String unitName) {
+        return null;
     }
 
     /**
@@ -22,23 +27,13 @@ public class FallBack implements UnitManagerService, TestService , TemplateServi
      * @return
      */
     @Override
-    public String getDetailByUnitName(String unitName) {
+    public AgenInfoDTO getDetailByUnitName(String unitName) {
         //TODO
         return null;
     }
 
     @Override
-    public String getItemList(String unitName) {
-        return null;
-    }
-
-    @Override
-    public boolean isOutLimit(String unitName) {
-        return false;
-    }
-
-    @Override
-    public String hasAvailableBill(String unitName) {
+    public QueryResponseResult getItemInfo(String unitName) {
         return null;
     }
 
@@ -49,6 +44,11 @@ public class FallBack implements UnitManagerService, TestService , TemplateServi
 
     @Override
     public QueryResponseResult getTemplate(NontaxBillDTO nontaxBillDTO) {
+        return null;
+    }
+
+    @Override
+    public QueryResponseResult getImgTemplate(NontaxBillDTO billDTO) throws ExecutionException, InterruptedException {
         return null;
     }
 }

@@ -39,7 +39,9 @@ public class UneCbillServiceImpl implements UneCbillService {
      */
     @Override
     public UneCbill getUneCBillById(String id) {
-        UneCbill uneCbill = uneCbillMapper.selectById(id);
+        QueryWrapper<UneCbill> queryWrapper = new QueryWrapper();
+        queryWrapper.eq("f_bill_no", id);
+        UneCbill uneCbill = uneCbillMapper.selectOne(queryWrapper);
         return uneCbill;
     }
 
@@ -53,9 +55,6 @@ public class UneCbillServiceImpl implements UneCbillService {
     public IPage<UneCbillVo> selectUnecBillPage(Page<UneCbill> page) {
         List<UneCbill> cbillList = uneCbillMapper.selectPageVO(page);
         List<UneCbillVo> cbillVos = new ArrayList<>();
-        /**
-         * 对象类型转换
-         */
         for (UneCbill uneCbill : cbillList) {
             UneCbillVo uneCbillVo = new UneCbillVo();
             BeanUtil.copyProperties(uneCbill, uneCbillVo);
@@ -85,7 +84,7 @@ public class UneCbillServiceImpl implements UneCbillService {
             uneCbillItem.setFId(CommonUtil.generateID());
             uneCbillItem.setFSortNo(i++);
             uneCbillItem.setFStd(itemDto.getfAmt());
-            uneCbillItem.setFVersion(0);
+            uneCbillItem.setFVersion(1);
             uneCbillItem.setFUpdateTime(new Date());
             uneCbillItem.setFOperator("samuel");
             uneCbillItemMapper.insert(uneCbillItem);
@@ -108,6 +107,11 @@ public class UneCbillServiceImpl implements UneCbillService {
         return uneCbillMapper.selectOne(queryWrapper);
     }
 
+    /**
+     * 根据票据id查询明细
+     * @param billId
+     * @return
+     */
     @Override
     public List<UneCbillItem> getItems(String billId) {
         QueryWrapper<UneCbillItem> queryWrapper = new QueryWrapper<>();
@@ -133,14 +137,14 @@ public class UneCbillServiceImpl implements UneCbillService {
     @Override
     public NontaxBillDTO convert(UneCbill uneCbill) {
         NontaxBillDTO nontaxBillDTO = new NontaxBillDTO();
-        nontaxBillDTO.setAddition("ok");
+        nontaxBillDTO.setAddition("同意");
         nontaxBillDTO.setAgenName(uneCbill.getFPlaceName());
         nontaxBillDTO.setBillCode(uneCbill.getFBillId());
         nontaxBillDTO.setCheckCode(uneCbill.getFCheckCode());
         nontaxBillDTO.setDate(uneCbill.getFCreateTime().toString());
         nontaxBillDTO.setTotalAmount(String.valueOf(uneCbill.getFTotalAmt()));
         nontaxBillDTO.setTotalAmountCapital(CommonUtil.toChinese(String.valueOf(uneCbill.getFTotalAmt())));
-        nontaxBillDTO.setChecker("xxxxluu");
+        nontaxBillDTO.setChecker("admin");
         nontaxBillDTO.setPayee(String.valueOf(uneCbill.getFPayerType()));
         nontaxBillDTO.setPayerName(uneCbill.getFPayerName());
         nontaxBillDTO.setRemark(uneCbill.getFMemo());
@@ -254,8 +258,8 @@ public class UneCbillServiceImpl implements UneCbillService {
         QueryWrapper<UneCbill> queryWrapper = new QueryWrapper();
         queryWrapper.eq("f_bill_id", billId)
                 .eq("f_bill_no", billNo);
-        UneCbill uneCbill = new UneCbill();
+        UneCbill uneCbill = uneCbillMapper.selectOne(queryWrapper);
         uneCbill.setFState(state);
-        return uneCbillMapper.update(uneCbill, queryWrapper);
+        return uneCbillMapper.updateById(uneCbill);
     }
 }

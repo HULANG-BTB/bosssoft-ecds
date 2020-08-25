@@ -2,6 +2,8 @@ package com.bosssoft.ecds.entity.dto;
 
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 public class UneCbillItemDto {
     /**
      * 项目编码
@@ -26,7 +28,7 @@ public class UneCbillItemDto {
     /**
      * 金额
      */
-    private double fAmt;
+    private BigDecimal fAmt;
 
     public String getfItemCode() {
         return fItemCode;
@@ -60,11 +62,11 @@ public class UneCbillItemDto {
         this.fNumber = fNumber;
     }
 
-    public double getfAmt() {
+    public BigDecimal getfAmt() {
         return fAmt;
     }
 
-    public void setfAmt(double fAmt) {
+    public void setfAmt(BigDecimal fAmt) {
         this.fAmt = fAmt;
     }
 }

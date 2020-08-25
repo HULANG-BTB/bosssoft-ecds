@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
@@ -110,7 +111,7 @@ public class UneCbill {
     /**
      * 开票金额
      */
-    private double fTotalAmt;
+    private BigDecimal fTotalAmt;
 
     /**
      * 票据状态（1:开票请求,2：单位端审核,3：财政端审核,4：开票成功/开票失败）
