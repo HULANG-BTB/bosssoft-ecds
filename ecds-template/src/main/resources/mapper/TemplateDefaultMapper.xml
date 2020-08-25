@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bosssoft.ecds.template.mapper.TemplateDefaultMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.bosssoft.ecds.template.entity.po.TemplateDefaultPo">
+        <id column="f_id" property="fId" />
+        <result column="f_billcode" property="billcode" />
+        <result column="f_agen_id_code" property="agenIdCode" />
+        <result column="f_type" property="type" />
+        <result column="f_default_id" property="defaultId" />
+        <result column="f_version" property="version" />
+        <result column="f_operator" property="operator" />
+        <result column="f_operator_id" property="operatorId" />
+        <result column="f_create_time" property="createTime" />
+        <result column="f_update_time" property="updateTime" />
+    </resultMap>
+
+</mapper>

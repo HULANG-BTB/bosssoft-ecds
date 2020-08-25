@@ -1,0 +1,37 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  profiles:
+    active: dev
+  application:
+    name: ecds-gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 49.234.212.41:8848
+        ip: ${client:} # 指定指定客户端IP
+      config:
+        server-addr: 49.234.212.41:8848
+        file-extension: yaml
+        prefix: gateway-config
+        ext‐config:
+        - data‐id: rsa-key-dev.yaml
+          group: DEFAULT_GROUP
+          refresh: true
+
+        - data‐id: redis-server-dev.yaml
+          group: DEFAULT_GROUP
+          refresh: true
+
+        - data‐id: gateway-datasource-dev.yaml
+          group: DEFAULT_GROUP
+          refresh: true
+
+        - data‐id: gateway-routes-dev.yaml
+          group: DEFAULT_GROUP
+          refresh: true
+server:
+  port: 8810
+
+
+

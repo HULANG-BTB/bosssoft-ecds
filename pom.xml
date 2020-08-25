@@ -43,6 +43,8 @@
         <!--    单位签名    -->
         <module>ecds-unit-sign</module>
         <module>ecds-common</module>
+        <module>ecds-encryption</module>
+        <module>ecds-system</module>
     </modules>
 
     <packaging>pom</packaging>
@@ -53,7 +55,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <junit.version>4.12</junit.version>
+            <junit.version>4.12</junit.version>
         <lombok.version>1.18.12</lombok.version>
         <log4j.version>1.2.17</log4j.version>
         <mysql.version>8.0.20</mysql.version>
@@ -151,12 +153,12 @@
         </dependencies>
     </dependencyManagement>
 
-
     <build>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>2.2.2.RELEASE</version>
                 <configuration>
                     <fork>true</fork>
                     <addResources>true</addResources>
@@ -164,5 +166,6 @@
             </plugin>
         </plugins>
     </build>
+
 
 </project>

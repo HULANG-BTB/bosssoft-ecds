@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bosssoft.ecds.dao.BillAvailableArchiveDao">
+    <!--可用票据归档批量插入-->
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert
+        into fbr_bill_available_archive (f_agen_code, f_bill_code, f_bill_name, f_number, f_create_time, f_update_time,
+        f_operator_id, f_operator, f_version, f_logic_delete)
+        values
+        <foreach collection="items" item="item" index="index" separator=",">
+            (#{item.agenCode}, #{item.billCode}, #{item.billName}, #{item.number}, #{item.createTime},
+            #{item.updateTime}, #{item.operatorId}, #{item.operator}, #{item.version}, #{item.logicDelete})
+        </foreach>
+    </insert>
+
+    <select id="collectBillAvailableInfo" resultType="com.bosssoft.ecds.entity.dto.BillAvailableInfoDTO">
+        SELECT
+            E.f_agen_code as agenCode,
+            E.f_type_code as billCode,
+            W.f_bill_name as billName,
+            W.f_number as number
+        FROM fab_agen_enable_bill E
+        LEFT JOIN fbe_writeoff_billsummary W ON E.f_type_code = W.f_bill_code
+        WHERE date_format(W.f_create_time, '%Y-%m-%d') = date_format(date_sub(SYSDATE(), interval 1 day), '%Y-%m-%d')
+    </select>
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.bosssoft.ecds.entity.po.BillAvailableArchivePO">
+        <id column="f_id" property="id"/>
+        <result column="f_agen_code" property="agenCode"/>
+        <result column="f_bill_code" property="billCode"/>
+        <result column="f_bill_name" property="billName"/>
+        <result column="f_number" property="number"/>
+        <result column="f_create_time" property="createTime"/>
+        <result column="f_update_time" property="updateTime"/>
+        <result column="f_operator_id" property="operatorId"/>
+        <result column="f_operator" property="operator"/>
+        <result column="f_version" property="version"/>
+        <result column="f_logic_delete" property="logicDelete"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        f_id, f_agen_code, f_bill_code, f_bill_name, f_number, f_create_time, f_update_time, f_operator_id, f_operator, f_version, f_logic_delete
+    </sql>
+
+</mapper>
