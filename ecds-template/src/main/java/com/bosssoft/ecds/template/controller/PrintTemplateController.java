@@ -214,6 +214,13 @@ public class PrintTemplateController {
         return new QueryResponseResult<>(CommonCode.SUCCESS, isDefault);
     }
 
+    @ApiOperation("根据模板ID批量删除")
+    @DeleteMapping("/removeBatch")
+    public ResponseResult removeBatch(@RequestBody List<Integer> ids) {
+        boolean success = printTemplateService.removeByIds(ids);
+        return new ResponseResult(success ? CommonCode.SUCCESS : CommonCode.FAIL);
+    }
+
     private PrintTemplateDto fillTemplateDto(
             String billCode, String name, String memo, String template
     ) {
