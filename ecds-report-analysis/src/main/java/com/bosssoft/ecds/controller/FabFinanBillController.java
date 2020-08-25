@@ -28,7 +28,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/report")
 @Slf4j
-@Api(value = "票据")
+@Api(value = "票据信息")
 public class FabFinanBillController {
 
     @Autowired
@@ -40,17 +40,19 @@ public class FabFinanBillController {
     @Autowired
     private BillDestroyDao billDestroyDao;
 
+    @ApiOperation("查询所有票据信息")
     @GetMapping("/bill")
     public List<FabFinanBillPO> all(){
         return fabFinanBillDao.selectList(null);
     }
 
+    @ApiOperation("根据条件查询票据信息")
     @PostMapping("/search")
     public List<FabFinanBillPO> selectSearch(@RequestBody FabFinanBillSearch fabFinanBillSearch){
         log.info(String.valueOf(fabFinanBillSearch));
         return fabFinanBillDao.selectSearch(fabFinanBillSearch);
     }
-    @ApiOperation(value = "获取最近七天库存数量",tags = {"获取最近七天库存数量接口"},notes = "获取最近七天库存数量")
+    @ApiOperation("获取最近七天库存数量")
     @GetMapping("/num")
     public QueryResponseResult selectNumDate(){
         List<BillNumVO> list=billNumDao.selectNumDate();
@@ -81,8 +83,7 @@ public class FabFinanBillController {
         return new QueryResponseResult(CommonCode.SUCCESS,num);
     }
 
-
-    @ApiOperation(value = "获取最近七天库存销毁数量",tags = {"获取最近七天库存销毁数量接口"},notes = "获取最近七天库存销毁数量")
+    @ApiOperation("获取最近七天库存销毁数量")
     @GetMapping("/desnum")
     public QueryResponseResult selectDestroy(){
         List<BillDestroyVO> list=billDestroyDao.selectNumDate();
