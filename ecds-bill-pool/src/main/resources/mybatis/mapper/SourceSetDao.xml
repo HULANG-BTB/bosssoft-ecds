@@ -61,7 +61,7 @@
         `f_operator_id` bigint(20) NOT NULL COMMENT '操作人ID',
         `f_create_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
         `f_update_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
-         PRIMARY KEY (`f_id`) USING BTREE
+         PRIMARY KEY (`f_id`) USING BTREE,
          UNIQUE INDEX `f_bill_code`(`f_bill_code`) USING BTREE
         )
     </update>

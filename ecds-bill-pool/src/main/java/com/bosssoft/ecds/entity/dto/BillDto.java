@@ -30,6 +30,17 @@ public class BillDto {
     private Date createTime;
     private Date updateTime;
 
+    public void init() {
+        if (billTypeCode != null) {
+            this.regionCode = billTypeCode.substring(0, 2);
+            this.type = billTypeCode.substring(2, 4);
+            this.sort = billTypeCode.substring(4, 6);
+            this.batch = billTypeCode.substring(6, 8);
+            this.operator = "admin";
+            this.operatorId = -1;
+        }
+    }
+
     public int getId() {
         return id;
     }

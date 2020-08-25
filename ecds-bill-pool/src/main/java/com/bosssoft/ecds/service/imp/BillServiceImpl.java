@@ -68,7 +68,6 @@ public class BillServiceImpl implements BillService {
             isLock = redLock.tryLock(100L, 10L, TimeUnit.SECONDS);
 
             if (isLock) {
-                logger.info(redisTemplate.opsForHash().entries("remainderBill").toString());
                 remainderBill = (int) redisTemplate.opsForHash().get("remainderBill", retrieveBillDto.getBillTypeCode());
 
                 if (remainderBill < retrieveBillDto.getNumber()) {
