@@ -87,7 +87,6 @@ public class CommonUtil {
         uneCbill.setFPlaceId("3601020000001");
         uneCbill.setFPlaceName("博思软件一楼");
         uneCbill.setFRgnCode(agenInfoDTO.getRgnId());
-        uneCbill.setFAuthor("admin");
         //票据
         uneCbill.setFBillId(uneCbillDto.getfBillId());
         uneCbill.setFBillNo(uneCbillDto.getfBillNo());

@@ -36,7 +36,6 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@CrossOrigin
 @Api(value = "票据盖章模块")
 @RequestMapping("/verify")
 public class SignController {

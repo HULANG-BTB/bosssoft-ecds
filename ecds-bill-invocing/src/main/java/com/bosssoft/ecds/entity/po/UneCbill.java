@@ -1,9 +1,6 @@
 package com.bosssoft.ecds.entity.po;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.Version;
+import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -71,6 +68,7 @@ public class UneCbill {
     /**
      * 编制人
      */
+    @TableField(value = "f_author", fill = FieldFill.INSERT)
     private String fAuthor;
 
     /**

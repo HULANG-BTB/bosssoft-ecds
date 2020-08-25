@@ -41,7 +41,6 @@ import java.util.concurrent.locks.ReentrantLock;
 
 @Slf4j
 @RestController
-@CrossOrigin
 @Api(value = "开票模块")
 @RequestMapping("/billInvoicing")
 public class UneCBillController {
@@ -79,8 +78,6 @@ public class UneCBillController {
     @RequestMapping(path = "/getPage", method = RequestMethod.GET)
     public QueryResponseResult getCbillPage(@ApiParam("当前页")int currentPage, @ApiParam()int pageSize) {
         int total = uneCbillService.billCount();
-        String nickName = httpServletRequest.getHeader("auth_nickName");
-        log.info(nickName);
         Page<UneCbill> page = new Page<>(currentPage, pageSize, total);
         return new QueryResponseResult(CommonCode.SUCCESS, uneCbillService.selectUnecBillPage(page));
     }
