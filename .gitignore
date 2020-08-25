@@ -1,3 +1,4 @@
 .idea
 *.iml
 */target/*.*
+/ecds-report-analysis/target/

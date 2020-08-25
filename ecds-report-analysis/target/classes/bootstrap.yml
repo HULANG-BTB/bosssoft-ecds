@@ -1,0 +1,17 @@
+spring:
+  profiles:
+    active: dev
+  application:
+    name: ecds-report-analysis
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 49.234.212.41:8848
+        ip: 175.24.10.53
+        namespace: public
+      config:
+        server-addr: 49.234.212.41:8848
+        namespace: public
+        file-extension: yaml
+
+
