@@ -1,0 +1,8 @@
+spring:
+  cloud:
+    nacos:
+      config:
+        enabled: true
+        server-addr: 49.234.212.41:8848
+        file-extension: yml
+        name: archive-server-dev

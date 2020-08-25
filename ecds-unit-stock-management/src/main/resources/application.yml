@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: nacos-service-usm
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848 #配置Nacos地址
+      config:
+        server-addr: localhost:8848
+        file-extension: yaml #指定yaml格式的配置
+  rabbitmq:
+    host: 192.168.110.128
+    username: guest
+    password: guest
+  profiles:
+    active: zw
+server:
+  port: 8080

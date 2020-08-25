@@ -1,8 +1,6 @@
 package com.bosssoft.ecds.response;
 
 
-import com.bosssoft.ecds.util.DynamicEnumUtil;
-
 /**
  * @author: lpb
  * @create: 2020-07-10 09:02
@@ -15,6 +13,7 @@ public enum CommonCode implements ResultCode {
     FAIL(false, 11111, "操作失败！"),
     //参数输入有误时返回的状态码
     INVLIDATE(false, 10003, "非法参数！"),
+    OPTIONS_INVLIDATE(true, 200, "OPTIONS非法参数！"),
     PARAM_VALID_ERROR(false, 10004, "参数验证错误"),
     METHOD_NOT_SUPPORTED(false, 1005, "请求方法不受支持"),
 

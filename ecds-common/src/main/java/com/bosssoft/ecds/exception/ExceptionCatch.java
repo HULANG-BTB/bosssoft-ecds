@@ -6,6 +6,7 @@ import com.bosssoft.ecds.response.ResponseResult;
 import com.bosssoft.ecds.response.ResultCode;
 import com.google.common.collect.ImmutableMap;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -13,7 +14,10 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -28,6 +32,7 @@ import java.util.Date;
 @Slf4j(topic = "kafka_logger")
 public class ExceptionCatch {
 
+
     private ImmutableMap<Class<? extends Throwable>, ResultCode> EXCEPTIONS;
 
     public static ImmutableMap.Builder<Class<? extends Throwable>,ResultCode> builder = ImmutableMap.builder();
@@ -40,15 +45,25 @@ public class ExceptionCatch {
     @ExceptionHandler(Exception.class)
     @ResponseBody
     public ResponseResult systemException(Exception e){
+
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
+                .getRequestAttributes()).getRequest();
+
+
         if(EXCEPTIONS == null){
            EXCEPTIONS = builder.build();
         }
         ResultCode resultCode = EXCEPTIONS.get(e.getClass());
         ExceptionDetail detail = new ExceptionDetail();
         detail.setTags(e.getClass().getSimpleName());
+
         if(resultCode != null){
+
             detail.setCode(resultCode.code());
             detail.setMessage(resultCode.message());
+            if("OPTIONS".equals(request.getMethod())&&detail.getCode()==CommonCode.INVLIDATE.code()){
+                return new ResponseResult(CommonCode.OPTIONS_INVLIDATE);
+            }
             log.error(JSON.toJSONString(detail));
             return new ResponseResult(resultCode);
         }

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bosssoft.ecds.dao.BillCheckArchiveDao">
+    <!--归档审验记录-->
+    <select id="queryBillCheckInfo" resultType="com.bosssoft.ecds.entity.po.BillCheckArchivePO">
+
+    </select>
+
+    <select id="collectBillCheckInfo" resultType="com.bosssoft.ecds.entity.po.BillCheckArchivePO">
+        SELECT
+            W.f_agen_id_code as agenCode,
+            B.f_bill_code as billCode,
+            B.f_bill_name as billName,
+            B.f_invnum as billNumber,
+            W.f_author as signName,
+            W.f_check_date as signTime,
+            W.f_check_result as signStatus
+        FROM fbe_writeoff W
+        LEFT JOIN fbe_writeoff_billitem B ON W.f_apply_id = B.f_pid
+        WHERE date_format(W.f_create_time, '%Y-%m-%d') = date_format(date_sub(SYSDATE(), interval 1 day), '%Y-%m-%d')
+
+    </select>
+
+    <select id="collectCBillAccountInfo" resultType="com.bosssoft.ecds.entity.po.CbillAccountingPO">
+        SELECT
+            f_agen_idcode as agenIdcode,
+            f_account_status as accountStatus
+        FROM fne_cbill_accounting
+        WHERE date_format(f_create_time, '%Y-%m-%d') = date_format(date_sub(SYSDATE(), interval 1 day), '%Y-%m-%d')
+    </select>
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.bosssoft.ecds.entity.po.BillCheckArchivePO">
+        <id column="f_id" property="id"/>
+        <result column="f_agen_code" property="agenCode"/>
+        <result column="f_bill_code" property="billCode"/>
+        <result column="f_bill_name" property="billName"/>
+        <result column="f_sign_name" property="signName"/>
+        <result column="f_sign_time" property="signTime"/>
+        <result column="f_sign_status" property="signStatus"/>
+        <result column="f_create_time" property="createTime"/>
+        <result column="f_update_time" property="updateTime"/>
+        <result column="f_operator_id" property="operatorId"/>
+        <result column="f_operator" property="operator"/>
+        <result column="f_version" property="version"/>
+        <result column="f_logic_delete" property="logicDelete"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        f_id, f_agen_code, f_bill_code, f_bill_name, f_sign_name, f_sign_time, f_sign_status, f_create_time, f_update_time, f_operator_id, f_operator, f_version, f_logic_delete
+    </sql>
+
+</mapper>

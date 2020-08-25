@@ -154,7 +154,11 @@ public class UnitWriteOffServiceImpl implements UnitWriteOffService {
         }
         String start = DateUtil.formatDate(startDate);
         end = DateUtil.formatDate(endDate);
-        Object o = Convert.toMap(String.class, Object.class, billService.getWriteOffInfo(start, end)).get("data");
+        Object result = billService.getWriteOffInfo(start, end);
+        if (result == null) {
+            return null;
+        }
+        Object o = Convert.toMap(String.class, Object.class, result).get("data");
         if (o == null || "票据不存在".equals(o)) {
             return null;
         }

@@ -26,8 +26,8 @@ import java.util.List;
  * @create: 2020-08-12 15:22
  **/
 @RestController
-@RequestMapping(value = "apply")
 @CrossOrigin
+@RequestMapping(value = "apply")
 @Api(description = "票据销毁申请接口")
 public class ApplyController {
 
@@ -109,17 +109,6 @@ public class ApplyController {
     public ResponseResult updateApplyInfo(@RequestBody ResultVo resultVo){
         applyService.updateApplyInfo(resultVo.getfDestroyNo(), resultVo.getfStatus());
         return new ResponseResult(CommonCode.SUCCESS);
-    }
-
-    @ApiOperation(value = "库存票据销毁",notes = "根据单位ID、票据八位数的编码、票据起始号、票据终止号销毁单位库存票据")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "fAgenIdCode", value = "根据单位ID", paramType = "query", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "fBillBatchCode", value = "票据八位数的编码", paramType = "query", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "fBillNo1", value = "票据起始号", paramType = "query", required = true, dataType = "long"),
-            @ApiImplicitParam(name = "fBillNo2", value = "票据终止号", paramType = "query", required = true, dataType = "long"),
-    })
-    public int destroyStockBill(String fAgenIdCode, String fBillBatchCode, long fBillNo1, long fBillNo2){
-        return 0;
     }
 
     }
