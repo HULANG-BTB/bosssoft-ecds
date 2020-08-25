@@ -24,6 +24,7 @@ import java.util.List;
  */
 @Api
 @RestController
+@RequestMapping("/pool")
 public class SourceSetController {
 
     private static final Logger logger = LoggerFactory.getLogger(SourceSetController.class);
