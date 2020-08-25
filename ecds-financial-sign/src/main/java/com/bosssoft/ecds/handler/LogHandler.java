@@ -20,7 +20,7 @@ import java.util.Date;
  */
 @Aspect
 @Component
-@Slf4j
+@Slf4j(topic = "kafka_logger")
 public class LogHandler {
 
     @Pointcut("execution(* com.bosssoft.ecds.controller.*.*(..))")
@@ -59,7 +59,10 @@ public class LogHandler {
         Long startTime = System.currentTimeMillis();
         returnObject = pjp.proceed(args);
         executionTime = System.currentTimeMillis()-startTime;
-        log.info("["+visitTime +"]\tpackage: " +className+"\tmethod: "+methodName+"\targs: "+argsStr+"\texecutionTime: "+executionTime+"\treturnObject"+returnObject);
+        String message = "["+visitTime +"]\tpackage: " +className+"\tmethod: "+methodName+"\targs: "
+                +argsStr+"\texecutionTime: "+executionTime+"\treturnObject"+returnObject;
+        log.info(JSONUtil.toJsonStr(message));
+        log.info(message);
         return returnObject;
     }
 }
