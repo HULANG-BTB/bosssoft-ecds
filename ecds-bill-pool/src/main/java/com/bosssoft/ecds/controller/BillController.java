@@ -7,7 +7,10 @@ import com.bosssoft.ecds.service.BillService;
 import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
@@ -19,6 +22,7 @@ import javax.validation.Valid;
  */
 @Api
 @RestController
+@RequestMapping("/Bill")
 public class BillController {
 
     private static final Logger logger = LoggerFactory.getLogger(BillController.class);

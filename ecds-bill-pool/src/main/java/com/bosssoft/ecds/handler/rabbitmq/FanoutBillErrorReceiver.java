@@ -57,7 +57,7 @@ public class FanoutBillErrorReceiver {
             List<MailPo> mailPoList = mailDao.retrieveMailList();
             List<ErrorMailDto> errorMailDtoList = new ArrayList<>();
 
-            for (int i = 0; i < mailPoList.size(); i ++) {
+            for (int i = 0; i < mailPoList.size(); i++) {
                 ErrorMailDto errorMailDto = new ErrorMailDto(mailPoList.get(i).getEmail(), "自动放票系统发生错误",
                         billTypeCode + "未在规定时间内放票");
                 errorMailDtoList.add(errorMailDto);

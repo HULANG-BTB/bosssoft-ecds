@@ -1,7 +1,6 @@
 package com.bosssoft.ecds.service;
 
 import com.bosssoft.ecds.entity.dto.MailDto;
-import com.bosssoft.ecds.entity.po.MailPo;
 
 import java.util.List;
 
@@ -12,11 +11,34 @@ import java.util.List;
  */
 public interface MailAdminService {
 
+    /**
+     * 创建一个新紧急联系人
+     *
+     * @param mailDto 姓名，邮箱等信息
+     * @return
+     */
     int createMail(MailDto mailDto);
 
+    /**
+     * 更新一个紧急联系人
+     *
+     * @param mailDto 姓名，邮箱等信息
+     * @return
+     */
     int updateMail(MailDto mailDto);
 
+    /**
+     * 删除一个紧急联系人
+     *
+     * @param mailDto 姓名，邮箱等信息
+     * @return
+     */
     int deleteMail(MailDto mailDto);
 
+    /**
+     * 获取所有紧急联系人信息
+     *
+     * @return
+     */
     List<MailDto> retrieveMailList();
 }

@@ -31,7 +31,7 @@ public class BillDto {
     private Date updateTime;
 
     public void init() {
-        if(billTypeCode != null) {
+        if (billTypeCode != null) {
             this.regionCode = billTypeCode.substring(0, 2);
             this.type = billTypeCode.substring(2, 4);
             this.sort = billTypeCode.substring(4, 6);
@@ -40,6 +40,7 @@ public class BillDto {
             this.operatorId = -1;
         }
     }
+
     public int getId() {
         return id;
     }

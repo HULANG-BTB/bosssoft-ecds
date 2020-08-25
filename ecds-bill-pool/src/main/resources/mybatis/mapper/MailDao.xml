@@ -27,4 +27,8 @@
         </set>
         where f_id = #{id}
     </update>
+
+    <delete id="deleteMail" parameterType="mailPo">
+        delete from f_error_admin where f_id = #{id}
+    </delete>
 </mapper>

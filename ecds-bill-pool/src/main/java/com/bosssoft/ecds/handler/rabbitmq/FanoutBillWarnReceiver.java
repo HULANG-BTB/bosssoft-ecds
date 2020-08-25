@@ -1,6 +1,9 @@
 package com.bosssoft.ecds.handler.rabbitmq;
 
-import com.bosssoft.ecds.entity.dto.*;
+import com.bosssoft.ecds.entity.dto.BillDto;
+import com.bosssoft.ecds.entity.dto.BillRefineDto;
+import com.bosssoft.ecds.entity.dto.InsertBillDto;
+import com.bosssoft.ecds.entity.dto.RequestBillDto;
 import com.bosssoft.ecds.service.BillService;
 import com.bosssoft.ecds.utils.FanoutRabbitUtils;
 import org.slf4j.Logger;
@@ -43,7 +46,7 @@ public class FanoutBillWarnReceiver {
     @RabbitListener(queues = "warnQueueFirst")
     @RabbitHandler
     public void handle(String billTypeCode) {
-        fanoutRabbitUtils.sendBillDelayMessage(billTypeCode);
+        /*fanoutRabbitUtils.sendBillDelayMessage(billTypeCode);
 
         int number = (int) redisTemplate.opsForHash().get(billTypeCode, "pushNumber");
         RequestBillDto requestBillDto = new RequestBillDto(billTypeCode, number, "source", "source");
@@ -61,6 +64,6 @@ public class FanoutBillWarnReceiver {
         billDto.setBillCodeEnd(Long.parseLong(insertBillDto.getBillNo2()));
         billDto.init();
 
-        billService.createBill(billDto);
+        billService.createBill(billDto);*/
     }
 }

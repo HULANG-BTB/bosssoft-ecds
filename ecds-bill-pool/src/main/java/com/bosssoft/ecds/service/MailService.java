@@ -12,10 +12,9 @@ import java.util.List;
 public interface MailService {
 
     /**
+     * 发送邮件给紧急联系人
      *
-     * @param to 邮件接收人
-     * @param subject 邮件主题
-     * @param content 邮件内容
+     * @param list 积极联系人邮箱，邮件主题，邮件内容
      */
     void sendTemplateMail(List<ErrorMailDto> list);
 }

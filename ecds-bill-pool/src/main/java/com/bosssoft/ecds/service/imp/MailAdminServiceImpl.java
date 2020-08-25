@@ -23,17 +23,20 @@ public class MailAdminServiceImpl implements MailAdminService {
 
     @Override
     public int createMail(MailDto mailDto) {
-        return 0;
+        MailPo mailPo = BeanUtils.convertObject(mailDto, MailPo.class);
+        return mailDao.createMail(mailPo);
     }
 
     @Override
     public int updateMail(MailDto mailDto) {
-        return 0;
+        MailPo mailPo = BeanUtils.convertObject(mailDto, MailPo.class);
+        return mailDao.updateMail(mailPo);
     }
 
     @Override
     public int deleteMail(MailDto mailDto) {
-        return 0;
+        MailPo mailPo = BeanUtils.convertObject(mailDto, MailPo.class);
+        return mailDao.deleteMail(mailPo);
     }
 
     @Override
