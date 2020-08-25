@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
  **/
 @Slf4j
 @RestController
-@CrossOrigin
 @RequestMapping(value = "confirm")
 @Api(description = "票据销毁审核接口")
 public class ConfirmController {

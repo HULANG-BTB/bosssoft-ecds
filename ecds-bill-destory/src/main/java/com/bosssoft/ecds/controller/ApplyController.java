@@ -26,7 +26,6 @@ import java.util.List;
  * @create: 2020-08-12 15:22
  **/
 @RestController
-@CrossOrigin
 @RequestMapping(value = "apply")
 @Api(description = "票据销毁申请接口")
 public class ApplyController {
