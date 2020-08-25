@@ -3,6 +3,7 @@ package com.bosssoft.ecds.appender;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.AppenderBase;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
@@ -11,11 +12,11 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import java.util.Properties;
 
 /**
- * @ClassName :  KafkaAppender
- * @Description : 将日志放入kafka中
- * @Author : wuliming
- * @Date: 2020-07-22 13:49
+ * 将日志放入kafka中
+ * @author wuliming
+ * @date 2020-07-22 13:49
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Slf4j
 public class KafkaAppender extends AppenderBase<ILoggingEvent> {
@@ -35,6 +36,10 @@ public class KafkaAppender extends AppenderBase<ILoggingEvent> {
      * kafka topic
      */
     private String logTopic;
+    /**
+     * 服务名称
+     */
+    private  String applicationName;
 
     @Override
     public void start() {
@@ -59,16 +64,16 @@ public class KafkaAppender extends AppenderBase<ILoggingEvent> {
             props.put("buffer.memory", 33554432);
             props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
             props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-            producer = new KafkaProducer<String, String>(props);
+            producer = new KafkaProducer<>(props);
         }
     }
 
     @Override
     protected void append(ILoggingEvent eventObject) {
         String msg = eventObject.getFormattedMessage();
-        String key = eventObject.getLevel().toString();
+        String result =msg.substring(0,msg.length()-1)+",\"applicatinoName\": \""+applicationName+"\""+"}";
         log.debug("向kafka推送日志开始:" + msg);
-        ProducerRecord<String, String> record = new ProducerRecord<String, String>(logTopic, key, msg);
+        ProducerRecord<String, String> record = new ProducerRecord<>(logTopic, result);
         producer.send(record);
     }
 }

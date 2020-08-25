@@ -1,0 +1,28 @@
+spring:
+  #  先不注册服务，本地调试，最后发布在注册，只使用配置中心
+  application:
+    name: ecds-system
+  cloud:
+    nacos:
+      config:
+        server-addr: 49.234.75.113:8848
+        file-extension: yaml
+      #  先不注册服务，调试时候本地调试，最后发布在注册
+      discovery:
+        server-addr: 49.234.75.113:8848
+server:
+  port: 8010
+
+
+
+
+
+
+
+
+
+
+
+
+
+

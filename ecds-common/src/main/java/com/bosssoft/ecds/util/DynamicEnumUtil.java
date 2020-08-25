@@ -126,7 +126,9 @@ public class DynamicEnumUtil {
     }
 
 
+    public static void main(String[] args) {
 
+    }
 
 
 }
