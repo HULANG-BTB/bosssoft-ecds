@@ -10,4 +10,21 @@
     <select id="retrieveMailList" resultMap="mailResultMap">
         select * from f_error_admin
     </select>
+
+    <insert id="createMail" parameterType="mailPo">
+        insert into f_error_admin (f_name, f_email) value (#{name}, #{email})
+    </insert>
+
+    <update id="updateMail" parameterType="mailPo">
+        update f_error_admin
+        <set>
+            <if test="name != null">
+                f_name = #{name},
+            </if>
+            <if test="email != null">
+                f_email = #{email},
+            </if>
+        </set>
+        where f_id = #{id}
+    </update>
 </mapper>
