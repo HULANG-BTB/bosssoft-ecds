@@ -36,9 +36,9 @@ public class MailAdminController {
     }
 
     @RequestMapping(value = "/updateMail", method = RequestMethod.POST)
-    public int updateMail(@RequestBody MailVo mailVo) {
+    public ResponseResult  updateMail(@RequestBody MailVo mailVo) {
         MailDto mailDto = BeanUtils.convertObject(mailVo, MailDto.class);
-        return mailAdminService.updateMail(mailDto);
+        return new QueryResponseResult<>(CommonCode.SUCCESS, mailAdminService.updateMail(mailDto));
     }
 
     @RequestMapping(value = "/deleteMail", method = RequestMethod.POST)

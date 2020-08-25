@@ -5,7 +5,6 @@ spring:
     nacos:
       discovery:
         server-addr: 49.234.212.41
-        ip: 39.98.134.125
   datasource:
     username: root
     password: ubuntumysql

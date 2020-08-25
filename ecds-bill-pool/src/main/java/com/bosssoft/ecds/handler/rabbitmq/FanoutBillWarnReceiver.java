@@ -46,7 +46,6 @@ public class FanoutBillWarnReceiver {
     @RabbitListener(queues = "warnQueueFirst")
     @RabbitHandler
     public void handle(String billTypeCode) {
-        /*fanoutRabbitUtils.sendBillDelayMessage(billTypeCode);
 
         int number = (int) redisTemplate.opsForHash().get(billTypeCode, "pushNumber");
         RequestBillDto requestBillDto = new RequestBillDto(billTypeCode, number, "source", "source");
@@ -54,16 +53,23 @@ public class FanoutBillWarnReceiver {
         List<RequestBillDto> list = new ArrayList<>();
         list.add(requestBillDto);
 
-        BillRefineDto refineDto = restTemplate.postForObject("http://finan-stock-management/finan-bill/outBills", list, BillRefineDto.class);
+        try {
+            BillRefineDto refineDto = restTemplate.postForObject("http://finan-stock-management/finan-bill/outBills", list, BillRefineDto.class);
 
-        logger.info(refineDto.toString());
-        InsertBillDto insertBillDto = refineDto.getData().get(0);
-        BillDto billDto = new BillDto();
-        billDto.setBillTypeCode(insertBillDto.getBillPrecode());
-        billDto.setBillCodeBegin(Long.parseLong(insertBillDto.getBillNo1()));
-        billDto.setBillCodeEnd(Long.parseLong(insertBillDto.getBillNo2()));
-        billDto.init();
+            InsertBillDto insertBillDto = refineDto.getData().get(0);
+            BillDto billDto = new BillDto();
+            billDto.setBillTypeCode(insertBillDto.getBillPrecode());
+            billDto.setBillCodeBegin(Long.parseLong(insertBillDto.getBillNo1()));
+            billDto.setBillCodeEnd(Long.parseLong(insertBillDto.getBillNo2()));
+            billDto.init();
 
-        billService.createBill(billDto);*/
+            billService.createBill(billDto);
+        } catch (NullPointerException e) {
+            logger.warn(billTypeCode + "财政段票据为空");
+        } catch (Exception e) {
+            logger.error("出现未知错误" + e);
+        } finally {
+            fanoutRabbitUtils.sendBillDelayMessage(billTypeCode);
+        }
     }
 }

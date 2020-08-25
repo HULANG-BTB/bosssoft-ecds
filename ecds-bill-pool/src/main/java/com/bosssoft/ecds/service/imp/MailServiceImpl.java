@@ -54,7 +54,7 @@ public class MailServiceImpl implements MailService {
                 helper.setText(list.get(i).getContent(), true);
 
                 mailSender.send(message);
-                logger.info("邮件发送成功");
+                logger.info("发送紧急邮件成功，收件人邮箱:" + list.get(i).getTo());
             } catch (MessagingException e) {
                 logger.error("邮件发生异常！", e);
             }
