@@ -1,0 +1,18 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: boss-ecds-bill-message
+  profiles:
+    active: dev
+  cloud:
+    nacos:
+      discovery:
+        ip: 192.168.21.177
+      config:
+        # 49.234.75.113:8848 # old
+        # 49.234.212.41:8848 # new
+        server-addr: 49.234.212.41:8848
+        file-extension: yaml
+
+

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bosssoft.ecds.dao.SourceSetDao">
+
+    <resultMap id="sourceSetMap" type="sourceSetPo">
+        <id column="f_id" property="id"/>
+        <result column="f_bill_type" property="billTypeCode"/>
+        <result column="f_push_num" property="pushNumber"/>
+        <result column="f_min_stock" property="minNumber"/>
+        <result column="f_enable" property="enable"/>
+        <result column="f_alter_code" property="alterCode"/>
+        <result column="f_operator" property="operator"/>
+        <result column="f_operator_id" property="operatorId"/>
+        <result column="f_create_time" property="createDate"/>
+        <result column="f_update_time" property="updateDate"/>
+    </resultMap>
+
+    <update id="updateMin" parameterType="sourceSetPo">
+        update uaa_set_ticketcenter set f_min_stock = #{minNumber}, f_alter_code = #{alterCode},
+        f_operator = #{operator}, f_operator_id = #{operatorId}
+        where f_bill_type = #{billTypeCode}
+    </update>
+
+    <update id="updatePushNumber" parameterType="sourceSetPo">
+        update uaa_set_ticketcenter set f_push_num = #{pushNumber}, f_alter_code = #{alterCode},
+        f_operator = #{operator}, f_operator_id = #{operatorId}
+        where f_bill_type = #{billTypeCode}
+    </update>
+
+    <update id="updateSet" parameterType="sourceSetPo">
+        update uaa_set_ticketcenter
+        <set>
+            <if test="pushNumber != null and pushNumber != 0">
+                f_push_num = #{pushNumber},
+            </if>
+            <if test="minNumber != null and minNumber != 0">
+                f_min_stock = #{minNumber},
+            </if>
+            <if test="enable != null and minNumber != 0">
+                f_enable = #{enable},
+            </if>
+            f_operator = #{operator}, f_operator_id = #{operatorId}
+        </set>
+        where f_bill_type = #{billTypeCode}
+    </update>
+
+    <update id="deleteSourceTable" parameterType="sourceSetPo">
+        DROP TABLE IF EXISTS `bill_source`.f_pool_${billTypeCode}
+    </update>
+
+    <update id="createTable" parameterType="sourceSetPo">
+        CREATE TABLE `bill_source`.f_pool_${billTypeCode} (
+        `f_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+        `f_rgn_code` varchar(2) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL COMMENT '区块编码',
+        `f_type` varchar(2) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL COMMENT '票据编码',
+        `f_sort` varchar(2) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL COMMENT '票据编码',
+        `f_batch` varchar(2) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL COMMENT '年度编码',
+        `f_bill_code` varchar(10) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL COMMENT '票号',
+        `f_version` bigint(11) NOT NULL DEFAULT 0 COMMENT '乐观锁',
+        `f_operator` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '操作人',
+        `f_operator_id` bigint(20) NOT NULL COMMENT '操作人ID',
+        `f_create_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
+        `f_update_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
+         PRIMARY KEY (`f_id`) USING BTREE
+         UNIQUE INDEX `f_bill_code`(`f_bill_code`) USING BTREE
+        )
+    </update>
+
+    <insert id="createTypeToPool" parameterType="sourceSetPo">
+        insert into f_bill_pool (f_bill_type, f_pool, f_operator, f_operator_id) value
+        (#{billTypeCode}, 'f_pool_${billTypeCode}', #{operator}, #{operatorId})
+    </insert>
+
+    <insert id="createSet" parameterType="sourceSetPo">
+        insert into uaa_set_ticketcenter (f_bill_type, f_push_num, f_min_stock, f_enable, f_alter_code, f_operator, f_operator_id)
+        value (#{billTypeCode}, #{pushNumber}, #{minNumber}, #{alterCode}, #{enable}, #{operator}, #{operatorId})
+    </insert>
+
+    <resultMap id="sourceMessageMap" type="sourceMessagePo">
+        <result column="f_bill_type" property="billTypeCode"/>
+        <result column="f_pool" property="table"/>
+        <result column="f_min_stock" property="threshold"/>
+        <result column="f_push_num" property="pushNumber"/>
+    </resultMap>
+
+    <select id="retrieveSourceMessageList" resultMap="sourceMessageMap">
+        select u.f_bill_type, u.f_min_stock, u.f_push_num, b.f_pool from uaa_set_ticketcenter u left join f_bill_pool b
+        on u.f_bill_type = b.f_bill_type where u.f_enable = 1
+    </select>
+
+    <select id="retrieveSourceMessageByCode" resultMap="sourceMessageMap">
+        select u.f_bill_type, u.f_min_stock, b.f_pool from uaa_set_ticketcenter u left join f_bill_pool b
+        on u.f_bill_type = b.f_bill_type where u.f_bill_type = #{billTypeCode}
+    </select>
+
+    <select id="retrieveSetList" resultMap="sourceSetMap">
+        select * from uaa_set_ticketcenter
+    </select>
+
+    <select id="retrieveSetByCode" resultMap="sourceSetMap">
+        select * from uaa_set_ticketcenter where f_bill_type = #{billTypeCode}
+    </select>
+
+</mapper>

@@ -1,0 +1,32 @@
+package com.bosssoft.usm.entity.vo;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
+/**
+ * 退票明细VO
+ * @author 朱文
+ * create on 2020/8/11 14:37
+ */
+
+@Data
+@ToString
+public class StockReturnItemVO {
+
+    /**票据代码**/
+    private String billCode;
+
+    /**票据名称**/
+    private String billName;
+
+    /**数量**/
+    private Integer number;
+
+    /**起始**/
+    private String billNo1;
+
+    /**终止**/
+    private String billNo2;
+}
