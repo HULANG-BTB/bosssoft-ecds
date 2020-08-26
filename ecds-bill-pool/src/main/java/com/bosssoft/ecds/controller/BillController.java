@@ -1,9 +1,13 @@
 package com.bosssoft.ecds.controller;
 
+import com.bosssoft.ecds.dao.MailDao;
 import com.bosssoft.ecds.entity.dto.BillDto;
+import com.bosssoft.ecds.entity.dto.ErrorMailDto;
 import com.bosssoft.ecds.entity.dto.ExportBillDto;
 import com.bosssoft.ecds.entity.dto.RetrieveBillDto;
+import com.bosssoft.ecds.entity.po.MailPo;
 import com.bosssoft.ecds.service.BillService;
+import com.bosssoft.ecds.service.MailService;
 import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +17,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.mail.internet.MailDateFormat;
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author lixin
@@ -26,6 +33,7 @@ import javax.validation.Valid;
 public class BillController {
 
     private static final Logger logger = LoggerFactory.getLogger(BillController.class);
+
     @Resource
     BillService billService;
 

@@ -5,6 +5,8 @@ spring:
     nacos:
       discovery:
         server-addr: 49.234.212.41
+        ip: 39.98.134.125
+        port: 8083
   datasource:
     username: root
     password: ubuntumysql
@@ -42,6 +44,16 @@ spring:
     username: 1739887652@qq.com
     password: fnvwcrwczbpqegfc
     nickname: bill_source_error
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+            required: true
+          auth: true
+          socketFactory:
+            class: javax.net.ssl.SSLSocketFactory
+            port: 465
 
 server:
   port: 8083
