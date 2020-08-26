@@ -25,7 +25,7 @@ public class SummaryUtil {
     public static String getSummary(File file, AlgorithmType algorithmType,StringType stringType) {
         FileInputStream fis = null;
         try {
-            // 使用MD5算法生成摘要
+            // 使用指定算法算法生成摘要
             MessageDigest md = MessageDigest.getInstance(algorithmType.getsummaryAlgorithType());
             fis = new FileInputStream(file);
             byte[] buffer = new byte[2048];

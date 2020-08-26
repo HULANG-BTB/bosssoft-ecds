@@ -79,7 +79,7 @@ public class SignServiceImpl implements ISignService {
         X509Certificate caCrtCert = CACrtUtil.getCert();
         PublicKey caPublicKey = caCrtCert.getPublicKey();
         // 验证证书有效性
-        caCrtCert.verify(caPublicKey);
+        crtCert.verify(caPublicKey);
         return true;
     }
 }
