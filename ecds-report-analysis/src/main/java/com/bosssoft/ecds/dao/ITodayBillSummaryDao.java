@@ -32,8 +32,8 @@ public interface ITodayBillSummaryDao {
             "\tFROM\n" +
             "\t\tfbe_writeoff_billsummary \n" +
             "\tWHERE\n" +
-            "\t\tf_create_time BETWEEN DATE_SUB( CURDATE(), INTERVAL 5 MINUTE ) \n" +
-            "\t\tAND DATE_SUB( CURDATE(), INTERVAL 0 MINUTE ) UNION ALL\n" +
+            "\t\tf_create_time BETWEEN DATE_SUB( NOW(), INTERVAL 5 MINUTE ) \n" +
+            "\t\tAND DATE_SUB( NOW(), INTERVAL 0 MINUTE ) UNION ALL\n" +
             "\tSELECT\n" +
             "\t\tIFNULL(SUM( f_number ),0) AS bill_num,\n" +
             "\t\tIFNULL(SUM(f_amt),0) AS bill_money,\n" +
@@ -41,8 +41,8 @@ public interface ITodayBillSummaryDao {
             "\tFROM\n" +
             "\t\tfbe_writeoff_billsummary \n" +
             "\tWHERE\n" +
-            "\t\tf_create_time BETWEEN DATE_SUB( CURDATE(), INTERVAL 11 MINUTE ) \n" +
-            "\t\tAND DATE_SUB( CURDATE(), INTERVAL 6 MINUTE ) UNION ALL\n" +
+            "\t\tf_create_time BETWEEN DATE_SUB( NOW(), INTERVAL 11 MINUTE ) \n" +
+            "\t\tAND DATE_SUB( NOW(), INTERVAL 6 MINUTE ) UNION ALL\n" +
             "\tSELECT\n" +
             "\t\tIFNULL(SUM( f_number ),0) AS bill_num,\n" +
             "\t\tIFNULL(SUM(f_amt),0) AS bill_money,\n" +
@@ -50,8 +50,8 @@ public interface ITodayBillSummaryDao {
             "\tFROM\n" +
             "\t\tfbe_writeoff_billsummary \n" +
             "\tWHERE\n" +
-            "\t\tf_create_time BETWEEN DATE_SUB( CURDATE(), INTERVAL 17 MINUTE ) \n" +
-            "\t\tAND DATE_SUB( CURDATE(), INTERVAL 12 MINUTE ) UNION ALL\n" +
+            "\t\tf_create_time BETWEEN DATE_SUB( NOW(), INTERVAL 17 MINUTE ) \n" +
+            "\t\tAND DATE_SUB( NOW(), INTERVAL 12 MINUTE ) UNION ALL\n" +
             "\tSELECT\n" +
             "\t\tIFNULL(SUM( f_number ),0) AS bill_num,\n" +
             "\t\tIFNULL(SUM(f_amt),0) AS bill_money,\n" +
@@ -59,8 +59,8 @@ public interface ITodayBillSummaryDao {
             "\tFROM\n" +
             "\t\tfbe_writeoff_billsummary \n" +
             "\tWHERE\n" +
-            "\t\tf_create_time BETWEEN DATE_SUB( CURDATE(), INTERVAL 23 MINUTE ) \n" +
-            "\t\tAND DATE_SUB( CURDATE(), INTERVAL 18 MINUTE ) UNION ALL\n" +
+            "\t\tf_create_time BETWEEN DATE_SUB( NOW(), INTERVAL 23 MINUTE ) \n" +
+            "\t\tAND DATE_SUB( NOW(), INTERVAL 18 MINUTE ) UNION ALL\n" +
             "\tSELECT\n" +
             "\t\tIFNULL(SUM( f_number ),0) AS bill_num,\n" +
             "\t\tIFNULL(SUM(f_amt),0) AS bill_money,\n" +
@@ -68,8 +68,8 @@ public interface ITodayBillSummaryDao {
             "\tFROM\n" +
             "\t\tfbe_writeoff_billsummary \n" +
             "\tWHERE\n" +
-            "\t\tf_create_time BETWEEN DATE_SUB( CURDATE(), INTERVAL 29 MINUTE ) \n" +
-            "\t\tAND DATE_SUB( CURDATE(), INTERVAL 24 MINUTE ) UNION ALL\n" +
+            "\t\tf_create_time BETWEEN DATE_SUB( NOW(), INTERVAL 29 MINUTE ) \n" +
+            "\t\tAND DATE_SUB( NOW(), INTERVAL 24 MINUTE ) UNION ALL\n" +
             "\tSELECT\n" +
             "\t\tIFNULL(SUM( f_number ),0) AS bill_num,\n" +
             "\t\tIFNULL(SUM(f_amt),0) AS bill_money,\n" +
@@ -77,8 +77,8 @@ public interface ITodayBillSummaryDao {
             "\tFROM\n" +
             "\t\tfbe_writeoff_billsummary \n" +
             "\tWHERE\n" +
-            "\t\tf_create_time BETWEEN DATE_SUB( CURDATE(), INTERVAL 35 MINUTE ) \n" +
-            "\t\tAND DATE_SUB( CURDATE(), INTERVAL 30 MINUTE ) UNION ALL\n" +
+            "\t\tf_create_time BETWEEN DATE_SUB( NOW(), INTERVAL 35 MINUTE ) \n" +
+            "\t\tAND DATE_SUB( NOW(), INTERVAL 30 MINUTE ) UNION ALL\n" +
             "\tSELECT\n" +
             "\t\tIFNULL(SUM( f_number ),0) AS bill_num,\n" +
             "\t\tIFNULL(SUM(f_amt),0) AS bill_money,\n" +
@@ -86,8 +86,8 @@ public interface ITodayBillSummaryDao {
             "\tFROM\n" +
             "\t\tfbe_writeoff_billsummary \n" +
             "\tWHERE\n" +
-            "\t\tf_create_time BETWEEN DATE_SUB( CURDATE(), INTERVAL 41 MINUTE ) \n" +
-            "\t\tAND DATE_SUB( CURDATE(), INTERVAL 36 MINUTE ) UNION ALL\n" +
+            "\t\tf_create_time BETWEEN DATE_SUB( NOW(), INTERVAL 41 MINUTE ) \n" +
+            "\t\tAND DATE_SUB( NOW(), INTERVAL 36 MINUTE ) UNION ALL\n" +
             "\tSELECT\n" +
             "\t\tIFNULL(SUM( f_number ),0) AS bill_num,\n" +
             "\t\tIFNULL(SUM(f_amt),0) AS bill_money,\n" +
@@ -95,8 +95,8 @@ public interface ITodayBillSummaryDao {
             "\tFROM\n" +
             "\t\tfbe_writeoff_billsummary \n" +
             "\tWHERE\n" +
-            "\t\tf_create_time BETWEEN DATE_SUB( CURDATE(), INTERVAL 47 MINUTE ) \n" +
-            "\t\tAND DATE_SUB( CURDATE(), INTERVAL 42 MINUTE ) UNION ALL\n" +
+            "\t\tf_create_time BETWEEN DATE_SUB( NOW(), INTERVAL 47 MINUTE ) \n" +
+            "\t\tAND DATE_SUB( NOW(), INTERVAL 42 MINUTE ) UNION ALL\n" +
             "\tSELECT\n" +
             "\t\tIFNULL(SUM( f_number ),0) AS bill_num,\n" +
             "\t\tIFNULL(SUM(f_amt),0) AS bill_money,\n" +
@@ -104,8 +104,8 @@ public interface ITodayBillSummaryDao {
             "\tFROM\n" +
             "\t\tfbe_writeoff_billsummary \n" +
             "\tWHERE\n" +
-            "\t\tf_create_time BETWEEN DATE_SUB( CURDATE(), INTERVAL 53 MINUTE ) \n" +
-            "\t\tAND DATE_SUB( CURDATE(), INTERVAL 48 MINUTE ) UNION ALL\n" +
+            "\t\tf_create_time BETWEEN DATE_SUB( NOW(), INTERVAL 53 MINUTE ) \n" +
+            "\t\tAND DATE_SUB( NOW(), INTERVAL 48 MINUTE ) UNION ALL\n" +
             "\tSELECT\n" +
             "\t\tIFNULL(SUM( f_number ),0) AS bill_num,\n" +
             "\t\tIFNULL(SUM(f_amt),0) AS bill_money,\n" +
@@ -113,8 +113,8 @@ public interface ITodayBillSummaryDao {
             "\tFROM\n" +
             "\t\tfbe_writeoff_billsummary \n" +
             "\tWHERE\n" +
-            "\t\tf_create_time BETWEEN DATE_SUB( CURDATE(), INTERVAL 59 MINUTE ) \n" +
-            "\t\tAND DATE_SUB( CURDATE(), INTERVAL 54 MINUTE ) \n" +
+            "\t\tf_create_time BETWEEN DATE_SUB( NOW(), INTERVAL 59 MINUTE ) \n" +
+            "\t\tAND DATE_SUB( NOW(), INTERVAL 54 MINUTE ) \n" +
             "\t\t\n" +
             "\t) AS t1")
     @Results( id = "todayBillSummaryDto",value = {

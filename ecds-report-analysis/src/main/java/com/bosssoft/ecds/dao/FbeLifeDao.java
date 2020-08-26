@@ -25,6 +25,24 @@ public interface FbeLifeDao {
      * @return java.util.List<com.bosssoft.ecds.domain.po.FbeLifePO>
      * @date 2020/8/24 22:50
      */
-    @Select("select * from fbe_life where f_bill_code = #{code}")
+    @Select("select f_bill_code," +
+            " f_bill_name," +
+            " f_stock_in_author," +
+            " f_stock_in_warehouse_id," +
+            " f_stock_in_create_time," +
+            " f_stock_out_author," +
+            " f_stock_in_change_status," +
+            " f_stock_out_create_time," +
+            " f_stock_out_change_status," +
+            " f_stock_out_warehouse_id," +
+            " f_writeoff_amt," +
+            " f_writeoff_operator," +
+            " f_writeoff_create_time," +
+            " f_writeoff_unit_name," +
+            " f_destrory_unit_name," +
+            " f_destrory_apply_man," +
+            " f_destroy_type," +
+            " f_destrory_status," +
+            " f_destrory_create_time from fbe_life where f_bill_code = #{code}")
     List<FbeLifePO> getLifeList(LifeSearch lifeSearch);
 }

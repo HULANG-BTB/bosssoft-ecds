@@ -3,7 +3,6 @@ package com.bosssoft.ecds.controller;
 import com.bosssoft.ecds.dao.BillDestroyDao;
 import com.bosssoft.ecds.dao.BillNumDao;
 import com.bosssoft.ecds.dao.FabFinanBillDao;
-import com.bosssoft.ecds.domain.po.FabFinanBillPO;
 import com.bosssoft.ecds.domain.search.FabFinanBillSearch;
 import com.bosssoft.ecds.domain.vo.BillDestroyVO;
 import com.bosssoft.ecds.domain.vo.BillNumVO;
@@ -42,15 +41,14 @@ public class FabFinanBillController {
 
     @ApiOperation("查询所有票据信息")
     @GetMapping("/bill")
-    public List<FabFinanBillPO> all(){
-        return fabFinanBillDao.selectList(null);
+    public QueryResponseResult all(){
+        return new QueryResponseResult(CommonCode.SUCCESS,fabFinanBillDao.selectList(null));
     }
 
     @ApiOperation("根据条件查询票据信息")
     @PostMapping("/search")
-    public List<FabFinanBillPO> selectSearch(@RequestBody FabFinanBillSearch fabFinanBillSearch){
-        log.info(String.valueOf(fabFinanBillSearch));
-        return fabFinanBillDao.selectSearch(fabFinanBillSearch);
+    public QueryResponseResult selectSearch(@RequestBody FabFinanBillSearch fabFinanBillSearch){
+        return new QueryResponseResult(CommonCode.SUCCESS,fabFinanBillDao.selectSearch(fabFinanBillSearch));
     }
     @ApiOperation("获取最近七天库存数量")
     @GetMapping("/num")
