@@ -1,6 +1,5 @@
 package com.bosssoft.ecds.service.impl;
 
-import cn.hutool.json.JSONUtil;
 import com.bosssoft.ecds.domain.AlgorithmType;
 import com.bosssoft.ecds.domain.StringType;
 import com.bosssoft.ecds.dto.SignedDataDto;
@@ -8,8 +7,6 @@ import com.bosssoft.ecds.utils.*;
 import com.bosssoft.ecds.service.ISignService;
 import org.apache.commons.codec.DecoderException;
 import org.springframework.stereotype.Service;
-import sun.security.x509.X509CertImpl;
-
 import java.security.*;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
@@ -82,7 +79,7 @@ public class SignServiceImpl implements ISignService {
         X509Certificate caCrtCert = CACrtUtil.getCert();
         PublicKey caPublicKey = caCrtCert.getPublicKey();
         // 验证证书有效性
-        caCrtCert.verify(caPublicKey);
+        crtCert.verify(caPublicKey);
         return true;
     }
 }

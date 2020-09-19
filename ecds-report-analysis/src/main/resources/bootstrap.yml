@@ -1,0 +1,39 @@
+spring:
+  profiles:
+    active: dev
+  application:
+    name: ecds-report-analysis
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 49.234.212.41:8848
+        ip: ${client:}
+        namespace: public
+      config:
+        server-addr: 49.234.212.41:8848
+        namespace: public
+        file-extension: yaml
+    sentinel:
+      transport:
+        dashboard: 123.56.247.54:40200
+        client-ip: ${spring.cloud.nacos.discovery.ip:} #在云环境运行时此ip为云服务器公网IP
+      datasource:
+        flow:
+          nacos:
+            server-addr: 49.234.75.113:8848
+            data-id: ${spring.application.name}-flow-rules
+            group-id: SENTINEL_GROUP
+            rule-type: FLOW
+        degrade:
+          nacos:
+            server-addr: 49.234.75.113:8848
+            data-id: ${spring.application.name}-degrade-rules
+            group-id: SENTINEL_GROUP
+            rule-type: DEGRADE
+        system:
+          nacos:
+            server-addr: 49.234.75.113:8848
+            dataId: ${spring.application.name}-system-rules
+            groupId: SENTINEL_GROUP
+            rule-type: SYSTEM
+

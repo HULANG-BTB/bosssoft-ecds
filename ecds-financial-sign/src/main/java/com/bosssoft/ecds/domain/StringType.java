@@ -2,7 +2,6 @@ package com.bosssoft.ecds.domain;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
 import java.io.Serializable;
 
 /**
@@ -27,5 +26,5 @@ public enum StringType implements Serializable {
      * ASCII编码
      */
     @ApiModelProperty("BASE64编码")
-    ASCII;
+    ASCII
 }

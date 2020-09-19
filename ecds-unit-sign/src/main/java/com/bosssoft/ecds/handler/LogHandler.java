@@ -7,17 +7,10 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Component;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author LiDaShan
@@ -27,7 +20,7 @@ import java.util.Map;
  */
 @Aspect
 @Component
-@Slf4j
+@Slf4j(topic = "kafka_logger")
 public class LogHandler {
 
     @Pointcut("execution(* com.bosssoft.ecds.controller.*.*(..))")
@@ -66,7 +59,10 @@ public class LogHandler {
         Long startTime = System.currentTimeMillis();
         returnObject = pjp.proceed(args);
         executionTime = System.currentTimeMillis()-startTime;
-        log.info("["+visitTime +"]\tpackage: " +className+"\tmethod: "+methodName+"\targs: "+argsStr+"\texecutionTime: "+executionTime+"\treturnObject"+returnObject);
+        String message = "["+visitTime +"]\tpackage: " +className+"\tmethod: "+methodName+"\targs: "
+                +argsStr+"\texecutionTime: "+executionTime+"\treturnObject"+returnObject;
+        log.info(JSONUtil.toJsonStr(message));
+        log.info(message);
         return returnObject;
     }
 }

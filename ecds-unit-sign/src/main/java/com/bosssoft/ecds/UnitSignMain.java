@@ -3,6 +3,7 @@ package com.bosssoft.ecds;
 import org.springframework.boot.SpringApplication;
 import org.springframework.cloud.client.SpringCloudApplication;
 
+
 /**
  * @author LiDaShan
  * @Version 1.0

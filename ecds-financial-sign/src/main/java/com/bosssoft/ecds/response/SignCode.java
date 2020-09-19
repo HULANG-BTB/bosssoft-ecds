@@ -6,6 +6,10 @@ package com.bosssoft.ecds.response;
 public enum SignCode implements ResultCode{
 
     /**
+     * 验签失败，拒绝访问
+     */
+    DENIED(false,11111,"信息被篡改，验签失败"),
+    /**
      * 盖章成功
      */
     STAMP_SUCCESS(true,10000,"成功盖章"),

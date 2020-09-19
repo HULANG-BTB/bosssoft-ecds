@@ -51,9 +51,9 @@ public class SwaggerConfig {
         Contact contact = new Contact("李大山", "http://xxx.xxx.com", "tomato@qq.com");
         return new ApiInfo(
                 // 标题
-                "unit_sign",
+                "financial_sign",
                 // 描述
-                "单位签名微服务接口展示",
+                "财政端签名微服务接口展示",
                 // 版本
                 "v1.0",
                 // 组织链接

@@ -3,7 +3,7 @@ package com.bosssoft.ecds.controller;
 import com.bosssoft.ecds.dto.SignedDataDto;
 import com.bosssoft.ecds.response.CommonCode;
 import com.bosssoft.ecds.response.QueryResponseResult;
-import com.bosssoft.ecds.response.ResponseResult;
+import com.bosssoft.ecds.response.SignCode;
 import com.bosssoft.ecds.service.ISignService;
 import com.netflix.hystrix.contrib.javanica.annotation.DefaultProperties;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
@@ -46,7 +46,7 @@ public class SignController {
             SignedDataDto signedDataDto = signService.sign(signedData);
             return new QueryResponseResult<SignedDataDto>(CommonCode.SUCCESS, signedDataDto);
         }
-        return new QueryResponseResult(CommonCode.addEnum("DENIED",false,11111,"信息被篡改，验签失败"),null);
+        return new QueryResponseResult(SignCode.DENIED,null);
     }
 
     /**

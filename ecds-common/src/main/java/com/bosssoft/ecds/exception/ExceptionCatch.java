@@ -6,7 +6,6 @@ import com.bosssoft.ecds.response.ResponseResult;
 import com.bosssoft.ecds.response.ResultCode;
 import com.google.common.collect.ImmutableMap;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;

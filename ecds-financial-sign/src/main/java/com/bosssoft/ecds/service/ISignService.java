@@ -21,17 +21,17 @@ public interface ISignService {
 
     /**
      * 对票据文件进行签名
-     * @param data 需要签名的数据文件
+     * @param signedData 需要签名的数据文件
      * @return 签名信息
      */
-    public SignedDataDto sign(SignedDataDto signedData) throws Exception;
+    SignedDataDto sign(SignedDataDto signedData) throws Exception;
 
     /**
      * 确认签名
      * @param signedData 签名信息类
      * @return 签名与文件正确
      */
-    public boolean verifySign(SignedDataDto signedData) throws NoSuchProviderException,
+    boolean verifySign(SignedDataDto signedData) throws NoSuchProviderException,
             CertificateException, NoSuchAlgorithmException,
             InvalidKeyException, SignatureException, DecoderException;
 
@@ -41,5 +41,5 @@ public interface ISignService {
      * @return CA 证书是否正确
      * @throws Exception
      */
-    public boolean verifyCrtCert(X509Certificate crtCert) throws Exception;
+    boolean verifyCrtCert(X509Certificate crtCert) throws Exception;
 }

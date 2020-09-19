@@ -1,17 +1,17 @@
 server:
-  port: 8899
+  port: 6699
 spring:
   application:
-    name: unit-sign
+    name: financial-sign
   profiles:
     active: dev
   cloud:
     nacos:
       config:
-        server-addr: localhost:8848
+        server-addr: 49.234.212.41:8848
         file-extension: yaml
       discovery:
-        server-addr: localhost:8848
+        server-addr: 49.234.212.41:8848
 
 management:
   endpoints:

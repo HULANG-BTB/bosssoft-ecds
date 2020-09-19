@@ -1,6 +1,5 @@
 package com.bosssoft.ecds.utils;
 
-
 import com.bosssoft.ecds.domain.StringType;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Base64;
@@ -19,10 +18,10 @@ public class ByteUtill {
      * 编码，将字节数组转为可见的字符串
      * @param data 需要编码的字节数组
      * @param type 采取何种编码方式
-     * @return
+     * @return String 返回编码后字符串
      * @throws Exception
      */
-    public static String encode(byte[] data, StringType type) throws Exception{
+    public static String encode(byte[] data, StringType type) {
         switch (type) {
             case HEX:
                 return Hex.encodeHexString(data);
@@ -37,8 +36,8 @@ public class ByteUtill {
      * 解密，将字符串解码为原先的字节数组
      * @param data 需要解码的字符串数据
      * @param type 编码方式
-     * @return
-     * @throws Exception
+     * @return byte[] 返回解码后的字节数组
+     * @throws DecoderException 抛出解码异常
      */
     public static byte[] decode(String data,StringType type) throws DecoderException {
         switch (type) {
