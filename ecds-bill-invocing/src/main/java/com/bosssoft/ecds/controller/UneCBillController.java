@@ -11,12 +11,11 @@ import com.bosssoft.ecds.entity.po.Sign;
 import com.bosssoft.ecds.entity.po.UneCbill;
 import com.bosssoft.ecds.entity.po.UneCbillItem;
 import com.bosssoft.ecds.entity.pojo.BatchPojo;
-import com.bosssoft.ecds.entity.vo.SendMailVo;
-import com.bosssoft.ecds.entity.vo.SendSmsVo;
-import com.bosssoft.ecds.entity.vo.UneCbillVo;
+import com.bosssoft.ecds.entity.vo.*;
 import com.bosssoft.ecds.response.CommonCode;
 import com.bosssoft.ecds.response.QueryResponseResult;
 import com.bosssoft.ecds.response.ResponseResult;
+import com.bosssoft.ecds.response.ResultCode;
 import com.bosssoft.ecds.service.SignService;
 import com.bosssoft.ecds.service.UneCbillService;
 import com.bosssoft.ecds.service.client.*;
@@ -24,15 +23,25 @@ import com.bosssoft.ecds.service.VerifyService;
 import com.bosssoft.ecds.util.CommonUtil;
 import com.bosssoft.ecds.util.ResponseUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.locks.ReentrantLock;
 
 @Slf4j
 @RestController
+@Api(value = "开票模块")
 @RequestMapping("/billInvoicing")
 public class UneCBillController {
 
@@ -62,31 +71,22 @@ public class UneCBillController {
     @Autowired
     private BillService billService;
 
-    /**
-     * 分页查询当前单位的开票记录
-     *
-     * @param currentPage
-     * @param pageSize
-     * @return
-     */
+    @Autowired
+    HttpServletRequest httpServletRequest;
+
+    @ApiOperation(value = "查询单位开票记录请求", notes = "根据单位Id，页码，每页数据数量获取该单位开票记录")
     @RequestMapping(path = "/getPage", method = RequestMethod.GET)
-    public IPage<UneCbillVo> getCbillPage(int currentPage, int pageSize) {
+    public QueryResponseResult getCbillPage(@ApiParam("当前页")int currentPage, @ApiParam()int pageSize) {
         int total = uneCbillService.billCount();
         Page<UneCbill> page = new Page<>(currentPage, pageSize, total);
-        return uneCbillService.selectUnecBillPage(page);
+        return new QueryResponseResult(CommonCode.SUCCESS, uneCbillService.selectUnecBillPage(page));
     }
 
-    /**
-     * 查询单张票据
-     *
-     * @param billId
-     * @return
-     */
+    @ApiOperation(value = "查询单张票据信息", notes = "根据票据号码获取票据信息")
     @RequestMapping(value = "/getUneCbillById", method = RequestMethod.GET)
-    public String getUneCbillById(String billId) {
-        log.info(billId);
+    public String getUneCbillById(String billNo) {
         UneCbillVo uneCbillVo = new UneCbillVo();
-        UneCbill uneCbill = uneCbillService.getUneCBillById(billId);
+        UneCbill uneCbill = uneCbillService.getUneCBillById(billNo);
         if (uneCbill != null) {
             BeanUtil.copyProperties(uneCbill, uneCbillVo);
             return ResponseUtils.getResponse(uneCbillVo, ResponseUtils.ResultType.OK);
@@ -94,121 +94,75 @@ public class UneCBillController {
         return ResponseUtils.getResponse(404, "票据不存在");
     }
 
-    /**
-     * 根据票据ID和校验码查询票据
-     *
-     * @param billId
-     * @param checkCode
-     * @return
-     */
+    @ApiOperation(value = "验票", notes = "根据票据号码和校验码获取票据信息")
     @RequestMapping(value = "/getBillByIdAndCheckCode", method = RequestMethod.GET)
     public String getBillByIdAndCheckCode(String billId, String checkCode) throws ExecutionException, InterruptedException, JsonProcessingException {
         // 查bill
         QueryWrapper<UneCbill> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("f_bill_id", billId)
+        queryWrapper.eq("f_bill_no", billId)
                 .eq("f_check_code", checkCode);
         UneCbill uneCbill = uneCbillService.getBillByIdAndCheckCode(queryWrapper);
         // 查询图片地址，并返回
         if (uneCbill != null) {
             // 获取图片地址
+            NontaxBillDTO nontaxBillDTO = getNontax(uneCbill.getFBillId(), uneCbill.getFBillNo());
+            String imgUrl = Convert.convert(String.class, (templateService.getImgTemplate(nontaxBillDTO)).data);
             log.info(uneCbill.getFBillId() + " :" + uneCbill.getFBillNo());
-            NontaxBillDTO nontaxBillDTO = new NontaxBillDTO();
-            nontaxBillDTO.setBillCode(uneCbill.getFBillId());
-            nontaxBillDTO.setSerialCode(uneCbill.getFBillNo());
-            String url = null;
-            String content = getMsgContent(uneCbill, url);
+            String content = getMsgContent(uneCbill, imgUrl);
             QueryResponseResult<String> res = new QueryResponseResult<>(CommonCode.SUCCESS, content);
             return JSON.toJSONString(res);
         }
         return JSON.toJSONString(new QueryResponseResult<>(CommonCode.FAIL, null));
     }
 
-    /**
-     * 开票前验证
-     *
-     * @param unitName
-     * @return
-     */
+    @ApiOperation(value = "开票验证", notes = "根据单位名称验证单位是否具备开票条件")
     @RequestMapping(value = "/addVerify", method = RequestMethod.GET)
-    public String addBillVerify(@RequestParam String unitName) {
-        //TODO 执行开票前验证（单位是否欠缴/开票点开票数是否已经达到上限/当前单位是否有可用票据）--->返回预警信息
-        WarnDto warnDto = new WarnDto();
-        /*
-        int total = uneCbillService.billCount();
-        if (unitManagerService.isOutLimit(unitName)) {
-            warnDto.setEvtName("单位开票数限制");
-            warnDto.setMntCont("单位目前开票数已经达到最大开票限制，禁止开票");
-            warnDto.setMntTime(new Date());
-            return ResponseUtils.getResponse(失败);
-        }else if(unitManagerService.isArrear(batchPojo.getUnitName())){
-            warnDto.setEvtName("单位欠缴");
-            warnDto.setMntCont("单位目前已欠缴，禁止开票");
-            warnDto.setMntTime(new Date());
-        } else if(!unitManagerService.hasAvailableBill) {
-            warnDto.setEvtName("单位无可用票据");
-            warnDto.setMntCont("单位目前已没有可以使用的票据，禁止开票");
-            warnDto.setMntTime(new Date());
+    public ResponseResult addBillVerify(@RequestParam String unitName) {
+        ArrearDTO arrearDTO = unitManagerService.isArrear(unitName);
+        if (!arrearDTO.getIsunpaid() || arrearDTO == null) {
+            return new ResponseResult(CommonCode.SUCCESS);
         }
-        */
-        return ResponseUtils.getResponse(ResponseUtils.ResultType.OK);
+        return new ResponseResult(CommonCode.SUCCESS, "单位存在欠缴情况");
     }
 
-    /**
-     * 获取单位信息
-     *
-     * @param unitName
-     * @return
-     */
-    @RequestMapping(value = "/getUnitInfo", method = RequestMethod.GET)
-    public String getUnitInfo(@RequestParam String unitName) {
-        return unitManagerService.getDetailByUnitName(unitName);
+    @ApiOperation(value = "获取票据", notes = "获取本次开票需要使用的票据")
+    @GetMapping("/getAvaBill")
+    @ResponseBody
+    public QueryResponseResult getAvaBill() throws ExecutionException, InterruptedException {
+        QueryResponseResult queryResponseResult = billService.getBill();
+        if (queryResponseResult.data != null) {
+            UneCbillDto uneCbillDto = new UneCbillDto();
+            FabAgenBillDTO fabAgenBillDTO = Convert.convert(FabAgenBillDTO.class, queryResponseResult.data);
+            uneCbillDto.setfBillId("0" + fabAgenBillDTO.getFbillId());
+            uneCbillDto.setfBillNo(fabAgenBillDTO.getFbillNo());
+            uneCbillDto.setfType(fabAgenBillDTO.getFtype());
+            uneCbillDto.setCheckCode(commonUtil.getRandNum());
+            return new QueryResponseResult(CommonCode.SUCCESS, uneCbillDto);
+        }
+        return new QueryResponseResult(CommonCode.FAIL, "不存在可用票据");
     }
 
-    /**
-     * 获取单位可用票据信息
-     *
-     * @param
-     * @return
-     */
-    @GetMapping("/getBillInfo")
-    public QueryResponseResult getBillInfo() {
-        //查询到可用票据，生成唯一校验码
-        String checkCode = "";
-        return billService.getBill();
+    @ApiOperation(value = "获取收费项", notes = "获取本单位收费项目")
+    @RequestMapping(path = "/getItemInfo", method = RequestMethod.GET)
+    public QueryResponseResult getItemInfo(String unitName) {
+        QueryResponseResult res = unitManagerService.getItemInfo(unitName);
+        if (res.isSuccess()) {
+            return new QueryResponseResult(CommonCode.SUCCESS, res.data);
+        }
+        return new QueryResponseResult(CommonCode.FAIL, "该单位没有可用的收费项");
     }
 
-    /**
-     * 开票选择开票项目列表
-     * 项目（通过UnitManagerService调用远程接口查询单位包含项目list）：项目编码，项目名称，收费标准，计量单位
-     *
-     * @return
-     */
-    @RequestMapping(path = "getItemList", method = RequestMethod.GET)
-    public String getItemList(String unitName) {
-        String itemList = unitManagerService.getItemList(unitName);
-        return "";
-    }
-
-    /**
-     * 新增开票
-     * 所需字段：
-     * 单位（通过UnitManagerService调用远程接口查询）：区划id，单位识别码，单位编码，开票点id，开票点编码，开票点名称
-     * 缴款人信息 http request body中直接获取
-     * 项目（接收项目列表）：项目编码，项目名称，收费标准，计量单位
-     * 编制人：当前登录用户(redis中获取)
-     * 校验码：commonUtil工具类生成
-     *
-     * @return
-     */
+    @ApiOperation(value = "开票", notes = "新增一张开票")
+    @ApiImplicitParam(name = "batchPojo", dataType = "BatchPojo", value = "新增开票的信息")
     @RequestMapping(path = "/addBill", method = RequestMethod.POST)
-    public String addBill(@RequestBody BatchPojo batchPojo) {
+    public QueryResponseResult addBill(@RequestBody BatchPojo batchPojo) {
+        log.info(batchPojo.toString());
         List<UneCbillItemDto> itemDtos = batchPojo.getItemDtos();
-        //2 分布式下，防止多个进程同时开票
-        //RLock lock = redisson.getLock(lockKey);
         lock.lock();
         try {
+            AgenInfoDTO agenInfoDTO = unitManagerService.getDetailByUnitName(batchPojo.getUnitName());
             UneCbill uneCbill = commonUtil.convert(batchPojo.getUnitName(), batchPojo.getPayerDto(),
-                    batchPojo.getUneCbillDto(), commonUtil.generateID(), batchPojo.getfAmt());
+                    batchPojo.getUneCbillDto(), commonUtil.generateID(),new BigDecimal(batchPojo.getfAmt()), agenInfoDTO);
             uneCbillService.addUneCbill(uneCbill, itemDtos);
             String singMsg = JSON.toJSONString(batchPojo);
             Object o = Convert.toMap(String.class, Object.class, signatureService.sign(singMsg)).get("data");
@@ -218,37 +172,28 @@ public class UneCBillController {
             sign.setSignId(uneCbill.getFId());
             signService.addSign(sign);
             uneCbillService.updateState(uneCbill.getFBillId(), uneCbill.getFBillNo(), 2);
+        } catch (ParseException e) {
+            e.printStackTrace();
         } finally {
             lock.unlock();
         }
-        return ResponseUtils.getResponse(ResponseUtils.ResultType.OK);
+        return new QueryResponseResult(CommonCode.SUCCESS, "开票成功");
     }
 
-    /**
-     * 获取票据模板
-     *
-     * @param billId
-     * @return
-     */
+    @ApiOperation(value = "获取模板", notes = "根据开票信息获取票据的电子模板")
     @RequestMapping(path = "/getTemplate", method = RequestMethod.GET)
     public String getTemplate(String billId) throws ExecutionException, InterruptedException {
         UneCbill uneCbill = uneCbillService.getUneCBillById(billId);
         if (uneCbill != null) {
             List<UneCbillItem> uneCbillItems = uneCbillService.getItems(billId);
             NontaxBillDTO nontaxBillDTO = uneCbillService.getNontaxBillDto(uneCbill, uneCbillItems);
-            String url = Convert.convert(String.class, (templateService.getTemplate(nontaxBillDTO)).data) ;
+            String url = Convert.convert(String.class, ((templateService.getTemplate(nontaxBillDTO)).data));
             return ResponseUtils.getResponse(url, ResponseUtils.ResultType.OK);
         }
         return ResponseUtils.getResponse(404, "票据不存在");
     }
 
-    /**
-     * 缴款方需要的DTO
-     *
-     * @param fPayerTel
-     * @param checkCode
-     * @return
-     */
+    @ApiOperation(value = "获取缴款方需要的收费项目")
     @RequestMapping(path = "/getItems", method = RequestMethod.GET)
     public QueryResponseResult getItems(String fPayerTel, String checkCode) {
         QueryWrapper<UneCbill> queryWrapper = new QueryWrapper<>();
@@ -267,24 +212,18 @@ public class UneCBillController {
                 itemDtos.add(uneCbillItemDto);
             }
             payDto.setUneCbillItems(itemDtos);
-            responseResult = new QueryResponseResult(CommonCode.SUCCESS, payDto);
-            return responseResult;
+            return new QueryResponseResult(CommonCode.SUCCESS, payDto);
         }
-        responseResult = new QueryResponseResult(CommonCode.FAIL, "查询票据不存在");
-        return responseResult;
+        return new QueryResponseResult(CommonCode.FAIL, "空");
     }
 
-    /**
-     * 发送邮件
-     *
-     * @param billId
-     * @return
-     */
+    @ApiOperation(value = "发送邮件通知")
     @RequestMapping(path = "/sendMail", method = RequestMethod.GET)
-    public ResponseResult sendMail(String billId) throws ExecutionException, InterruptedException, JsonProcessingException {
-        UneCbill uneCbill = uneCbillService.getUneCBillById(billId);
+    public ResponseResult sendMail(String billNo) throws ExecutionException, InterruptedException, JsonProcessingException {
+        UneCbill uneCbill = uneCbillService.getUneCBillById(billNo);
         if (uneCbill != null) {
-            String imgUrl = null;
+            NontaxBillDTO nontaxBillDTO = getNontax(uneCbill.getFBillId(), billNo);
+            String imgUrl = Convert.convert(String.class, (templateService.getImgTemplate(nontaxBillDTO)).data);
             String content = getMsgContent(uneCbill, imgUrl);
             SendMailVo sendMailVo = new SendMailVo();
             sendMailVo.setContent(content);
@@ -301,23 +240,18 @@ public class UneCBillController {
         return ResponseResult.FAIL();
     }
 
-    /**
-     * 发送短信
-     *
-     * @param billId
-     * @return
-     */
+    @ApiOperation(value = "发送短信通知")
     @RequestMapping(path = "/sendSms", method = RequestMethod.GET)
-    public ResponseResult sendSms(String billId) throws ExecutionException, InterruptedException {
-        UneCbill uneCbill = uneCbillService.getUneCBillById(billId);
+    public ResponseResult sendSms(String billNo) throws ExecutionException, InterruptedException {
+        UneCbill uneCbill = uneCbillService.getUneCBillById(billNo);
         if (uneCbill != null) {
-            String imgUrl = null;
+            NontaxBillDTO nontaxBillDTO = getNontax(uneCbill.getFBillId(), billNo);
+            String imgUrl = Convert.convert(String.class, (templateService.getImgTemplate(nontaxBillDTO)).data);
             String content = getMsgContent(uneCbill, imgUrl);
             SendSmsVo sendSmsVo = new SendSmsVo();
             sendSmsVo.setSmsFrom("开票单位：boss");
             sendSmsVo.setSmsTo(uneCbill.getFPayerTel());
             sendSmsVo.setContent(content);
-            log.info("before");
             ResponseResult res = messageService.send(sendSmsVo);
             if (res.isSuccess()) {
                 return ResponseResult.SUCCESS();
@@ -327,13 +261,7 @@ public class UneCBillController {
         return ResponseResult.FAIL();
     }
 
-    /**
-     * 查询核销票据
-     *
-     * @param start
-     * @param end
-     * @return
-     */
+    @ApiOperation(value = "获取核销所需票据信息")
     @GetMapping("/writeOffInfo")
     public ResponseResult writeOffInfo(String start, String end) {
         List<UneCbill> list = uneCbillService.writeOff(start, end);
@@ -352,35 +280,43 @@ public class UneCBillController {
         return new QueryResponseResult(CommonCode.FAIL, "票据不存在");
     }
 
-    /**
-     * 分页查询单位端审核通过记录
-     * @param currentPage
-     * @param pageSize
-     * @return
-     */
-    @RequestMapping(path = "/getPassBill", method = RequestMethod.GET)
-    public IPage<UneCbillVo> getPassBill(int currentPage, int pageSize) {
-        int total = uneCbillService.passBillCount();
-        Page<UneCbill> page = new Page<>(currentPage, pageSize, total);
-        return uneCbillService.selectPassBillPage(page);
+    @ApiOperation(value = "修改票据当前状态")
+    @GetMapping("/update")
+    public QueryResponseResult updateState(String billNo, int state) {
+        int res = uneCbillService.updateState("01160201", billNo, state);
+        if (res == 1) {
+            return new QueryResponseResult(CommonCode.SUCCESS, "状态已更新");
+        }
+        return new QueryResponseResult(CommonCode.FAIL, "更新出现故障");
     }
 
-    /**
-     * 获取票据在oss上的地址
-     * @param billId
-     * @param billNo
-     * @return
-     */
+    @ApiOperation(value = "获取已经通过单位审核的票据")
+    @RequestMapping(path = "/getPassBill", method = RequestMethod.GET)
+    public QueryResponseResult getPassBill(int currentPage, int pageSize) {
+        int total = uneCbillService.passBillCount();
+        Page<UneCbill> page = new Page<>(currentPage, pageSize, total);
+        return new QueryResponseResult(CommonCode.SUCCESS, uneCbillService.selectPassBillPage(page));
+    }
+
+    @ApiOperation(value = "获取票据模板的图片url")
     @RequestMapping(path = "/getImgUrl", method = RequestMethod.GET)
-    public QueryResponseResult getImgUrl(String billId, String billNo) {
-//        templateService.getTemplate(billId, billNo);
-        String url = "http://url";
+    public QueryResponseResult getImgUrl(String billId, String billNo) throws ExecutionException, InterruptedException {
+        NontaxBillDTO nontaxBillDTO = getNontax(billId, billNo);
+        QueryResponseResult queryResponseResult = templateService.getImgTemplate(nontaxBillDTO);
+        String url = Convert.convert(String.class, queryResponseResult.data);
+        log.info(url);
         if (url != null) {
             return new QueryResponseResult(CommonCode.SUCCESS, url);
         }
         return new QueryResponseResult(CommonCode.FAIL, null);
     }
 
+    /**
+     * 获取消息推送内容
+     * @param uneCbill
+     * @param imgUrl
+     * @return
+     */
     public String getMsgContent(UneCbill uneCbill,String imgUrl) {
         MessageDto messageDto = new MessageDto();
         BeanUtil.copyProperties(uneCbill, messageDto);
@@ -391,4 +327,25 @@ public class UneCBillController {
         return JSON.toJSONStringWithDateFormat(messageDto, "yyyy-MM-dd HH:mm:ss");
     }
 
+    /**
+     * 获取NontaxBillDTO
+     * @param billId
+     * @param billNo
+     * @return
+     */
+    public NontaxBillDTO getNontax(String billId, String billNo) {
+        UneCbill uneCbill = uneCbillService.getUneCbillByIdAndNo(billId, billNo);
+        if(uneCbill == null) {
+            return null;
+        }
+        SimpleDateFormat sdf=new SimpleDateFormat("YYYY-MM-dd");
+        Date date = uneCbill.getFDate();
+        log.info(date.toString());
+        String crTime = sdf.format(date);
+        log.info(crTime);
+        List<UneCbillItem> uneCbillItems = uneCbillService.getItems(String.valueOf(uneCbill.getFId()));
+        NontaxBillDTO nontaxBillDTO = uneCbillService.getNontaxBillDto(uneCbill, uneCbillItems);
+        nontaxBillDTO.setDate(crTime);
+        return nontaxBillDTO;
+    }
 }

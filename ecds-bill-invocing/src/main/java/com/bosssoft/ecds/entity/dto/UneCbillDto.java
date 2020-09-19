@@ -18,6 +18,11 @@ public class UneCbillDto {
      */
     private String fType;
 
+    /**
+     * 校验码
+     */
+    private String checkCode;
+
     public String getfBillId() {
         return fBillId;
     }
@@ -40,5 +45,13 @@ public class UneCbillDto {
 
     public void setfType(String fType) {
         this.fType = fType;
+    }
+
+    public String getCheckCode() {
+        return checkCode;
+    }
+
+    public void setCheckCode(String checkCode) {
+        this.checkCode = checkCode;
     }
 }

@@ -1,13 +1,11 @@
 package com.bosssoft.ecds.entity.po;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.Version;
+import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
@@ -70,6 +68,7 @@ public class UneCbill {
     /**
      * 编制人
      */
+    @TableField(value = "f_author", fill = FieldFill.INSERT)
     private String fAuthor;
 
     /**
@@ -110,7 +109,7 @@ public class UneCbill {
     /**
      * 开票金额
      */
-    private double fTotalAmt;
+    private BigDecimal fTotalAmt;
 
     /**
      * 票据状态（1:开票请求,2：单位端审核,3：财政端审核,4：开票成功/开票失败）
