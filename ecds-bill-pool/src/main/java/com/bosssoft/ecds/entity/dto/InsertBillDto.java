@@ -7,19 +7,19 @@ package com.bosssoft.ecds.entity.dto;
  */
 public class InsertBillDto {
 
-    private String billPreCode;
+    private String billPrecode;
     private Integer number;
     private String billNo1;
     private String billNo2;
     private String useMan;
     private String author;
 
-    public String getBillPreCode() {
-        return billPreCode;
+    public String getBillPrecode() {
+        return billPrecode;
     }
 
-    public void setBillPreCode(String billPreCode) {
-        this.billPreCode = billPreCode;
+    public void setBillPrecode(String billPrecode) {
+        this.billPrecode = billPrecode;
     }
 
     public Integer getNumber() {
@@ -65,7 +65,7 @@ public class InsertBillDto {
     @Override
     public String toString() {
         return "InsertBillDto{" +
-                "billPreCode='" + billPreCode + '\'' +
+                "billPrecode='" + billPrecode + '\'' +
                 ", number=" + number +
                 ", billNo1='" + billNo1 + '\'' +
                 ", billNo2='" + billNo2 + '\'' +

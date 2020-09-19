@@ -176,7 +176,7 @@ public class PdfServiceImpl implements PdfService {
         String pdfFileName = getPdfDest(billDTO.getBillCode(), billDTO.getSerialCode());
         String path = "boss-bill/" + pdfFileName;
 
-        if (!ossUtil.isExist(path) || isForce) {
+        if (isForce || !ossUtil.isExist(path)) {
             log.info("{}文件不存在，生成。", pdfFileName);
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             boolean success = createPdf(billDTO, outputStream);

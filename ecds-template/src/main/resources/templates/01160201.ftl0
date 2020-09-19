@@ -89,7 +89,7 @@
             </#list>
         </#if>
         <tr>
-            <td colspan="5">金额合计（小写）{(billDTO.totalAmount)!$' '}</td>
+            <td colspan="5">金额合计（小写）${(billDTO.totalAmount)!' '}</td>
             <td></td>
         </tr>
         <tr>

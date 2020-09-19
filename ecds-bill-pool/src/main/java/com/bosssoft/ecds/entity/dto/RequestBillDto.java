@@ -7,24 +7,25 @@ package com.bosssoft.ecds.entity.dto;
  */
 public class RequestBillDto {
 
-    private String billPreCode;
+    private String billPrecode;
     private Integer number;
     private String useMan;
     private String author;
 
-    public RequestBillDto(String billPreCode, Integer number, String useMan, String author) {
-        this.billPreCode = billPreCode;
+    public RequestBillDto(String billPrecode, Integer number, String useMan, String author) {
+
+        this.billPrecode = billPrecode;
         this.number = number;
         this.useMan = useMan;
         this.author = author;
     }
 
-    public String getBillPreCode() {
-        return billPreCode;
+    public String getBillPrecode() {
+        return billPrecode;
     }
 
-    public void setBillPreCode(String billPreCode) {
-        this.billPreCode = billPreCode;
+    public void setBillPrecode(String billPrecode) {
+        this.billPrecode = billPrecode;
     }
 
     public Integer getNumber() {
@@ -54,7 +55,7 @@ public class RequestBillDto {
     @Override
     public String toString() {
         return "RequestBillDto{" +
-                "billPreCode='" + billPreCode + '\'' +
+                "billPrecode='" + billPrecode + '\'' +
                 ", number=" + number +
                 ", useMan='" + useMan + '\'' +
                 ", author='" + author + '\'' +

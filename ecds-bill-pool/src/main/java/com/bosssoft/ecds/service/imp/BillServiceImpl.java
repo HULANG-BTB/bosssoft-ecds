@@ -55,6 +55,7 @@ public class BillServiceImpl implements BillService {
         int remainderBill;
         int deleteNumber = 0;
         boolean isLock;
+        ExportBillDto exportBillDto = new ExportBillDto();
         List<BillPo> billPoList = new ArrayList<>();
         List<BillVo> billVoList;
         List<Integer> deleteList = new ArrayList<>();
@@ -68,7 +69,6 @@ public class BillServiceImpl implements BillService {
             isLock = redLock.tryLock(100L, 10L, TimeUnit.SECONDS);
 
             if (isLock) {
-                logger.info(redisTemplate.opsForHash().entries("remainderBill").toString());
                 remainderBill = (int) redisTemplate.opsForHash().get("remainderBill", retrieveBillDto.getBillTypeCode());
 
                 if (remainderBill < retrieveBillDto.getNumber()) {
@@ -87,15 +87,16 @@ public class BillServiceImpl implements BillService {
                 remainderBill = billDao.retrieveNumber(table);
 
                 redisTemplate.opsForHash().put("remainderBill", retrieveBillDto.getBillTypeCode(), remainderBill);
+
+                exportBillDto = new ExportBillDto(retrieveBillDto.getBillTypeCode(), billPoList.size(),
+                        Long.parseLong(billPoList.get(0).getBillCode()), Long.parseLong(billPoList.get(billPoList.size() - 1).getBillCode()));
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("取票失败");
         } finally {
             redLock.unlock();
         }
 
-        ExportBillDto exportBillDto = new ExportBillDto(retrieveBillDto.getBillTypeCode(), billPoList.size(),
-                Long.parseLong(billPoList.get(0).getBillCode()), Long.parseLong(billPoList.get(billPoList.size() - 1).getBillCode()));
         logger.info(deleteNumber + "张票据已出库");
 
         return exportBillDto;

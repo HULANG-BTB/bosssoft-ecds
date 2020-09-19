@@ -47,4 +47,8 @@ public interface PrintTemplateService extends IService<PrintTemplatePo> {
      * @return 是否成功
      */
     boolean setDefault(Long id);
+
+    boolean edit(PrintTemplateDto templateDto);
+
+    boolean isDefault(Long id);
 }

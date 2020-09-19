@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>欢迎光临</title>
+</head>
+<body>
+<div>
+    <p th:text="${message}"></p>请点击下发连接及时处理<br/>
+    <a href="#" th:href="@{http://49.234.212.41:8848/nacos}">登录</a>
+</div>
+</body>
+</html>

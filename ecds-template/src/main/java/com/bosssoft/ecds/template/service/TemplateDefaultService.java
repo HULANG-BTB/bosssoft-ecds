@@ -18,4 +18,6 @@ public interface TemplateDefaultService extends IService<TemplateDefaultPo> {
     Long getDefault(String type, String billCode);
 
     boolean removeDefault(String type, String billCode);
+
+    boolean isDefault(String type, Long defaultId);
 }

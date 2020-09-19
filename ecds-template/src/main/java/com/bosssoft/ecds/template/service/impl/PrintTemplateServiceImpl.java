@@ -1,6 +1,7 @@
 package com.bosssoft.ecds.template.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -164,6 +165,20 @@ public class PrintTemplateServiceImpl extends ServiceImpl<PrintTemplateMapper, P
         if (t==null) return false;
         String billCode = t.getRgnCode() + t.getTypeId() + t.getSortId();
         return templateDefaultService.setDefault("print", billCode, id);
+    }
+
+    @Override
+    public boolean edit(PrintTemplateDto templateDto) {
+        PrintTemplatePo templatePo = new PrintTemplatePo();
+        BeanUtils.copyProperties(templateDto, templatePo);
+        templatePo.setUpdateTime(LocalDateTime.now());
+        int res = printTemplateMapper.updateById(templatePo);
+        return res!=0;
+    }
+
+    @Override
+    public boolean isDefault(Long id) {
+        return templateDefaultService.isDefault("print", id);
     }
 
     private String genBillCode(PrintTemplatePo t) {

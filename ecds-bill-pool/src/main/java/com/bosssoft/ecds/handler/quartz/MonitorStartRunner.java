@@ -30,8 +30,8 @@ public class MonitorStartRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        scheduleJob.scheduleJobs();
         updateSourceMessageUtils.update();
+        scheduleJob.scheduleJobs();
         logger.info("定时任务已经启动!" + dateFormat.format(new Date()));
     }
 }

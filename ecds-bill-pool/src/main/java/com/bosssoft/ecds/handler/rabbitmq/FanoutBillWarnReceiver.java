@@ -1,6 +1,10 @@
 package com.bosssoft.ecds.handler.rabbitmq;
 
-import com.bosssoft.ecds.entity.dto.*;
+import com.bosssoft.ecds.entity.dto.BillDto;
+import com.bosssoft.ecds.entity.dto.BillRefineDto;
+import com.bosssoft.ecds.entity.dto.InsertBillDto;
+import com.bosssoft.ecds.entity.dto.RequestBillDto;
+import com.bosssoft.ecds.service.BillService;
 import com.bosssoft.ecds.utils.FanoutRabbitUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +16,8 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author lixin
@@ -29,25 +35,41 @@ public class FanoutBillWarnReceiver {
     FanoutRabbitUtils fanoutRabbitUtils;
 
     @Resource
+    RestTemplate restTemplate;
+
+    @Resource
     RedisTemplate redisTemplate;
+
+    @Resource
+    BillService billService;
 
     @RabbitListener(queues = "warnQueueFirst")
     @RabbitHandler
     public void handle(String billTypeCode) {
-        RestTemplate restTemplate = new RestTemplate();
-        Integer number = (Integer) redisTemplate.opsForHash().get(billTypeCode, "pushNumber");
-        RequestBillDto billDto = new RequestBillDto(billTypeCode, number, "source", "source");
-        ExportBillDto exportBillDto;
-        RetrieveBillDto retrieveBillDto = new RetrieveBillDto();
-        retrieveBillDto.setBillTypeCode("88888888");
-        retrieveBillDto.setNumber(10);
-        InsertBillDto insertBillDto = new InsertBillDto();
-        exportBillDto = restTemplate.postForObject("http://127.0.0.1:8083/retrieveBill", retrieveBillDto, ExportBillDto.class);
-        BillDto dto = new BillDto();
-        dto.setBillTypeCode(exportBillDto.getRegionCode());
-        dto.setBillCodeBegin(exportBillDto.getBillCodeBegin());
-        dto.setBillCodeEnd(exportBillDto.getBillCodeEnd());
-        restTemplate.postForObject("http://127.0.0.1:8083/createBill", dto, int.class);
-        fanoutRabbitUtils.sendBillDelayMessage(billTypeCode);
+
+        int number = (int) redisTemplate.opsForHash().get(billTypeCode, "pushNumber");
+        RequestBillDto requestBillDto = new RequestBillDto(billTypeCode, number, "source", "source");
+
+        List<RequestBillDto> list = new ArrayList<>();
+        list.add(requestBillDto);
+
+        try {
+            BillRefineDto refineDto = restTemplate.postForObject("http://finan-stock-management/finan-bill/outBills", list, BillRefineDto.class);
+
+            InsertBillDto insertBillDto = refineDto.getData().get(0);
+            BillDto billDto = new BillDto();
+            billDto.setBillTypeCode(insertBillDto.getBillPrecode());
+            billDto.setBillCodeBegin(Long.parseLong(insertBillDto.getBillNo1()));
+            billDto.setBillCodeEnd(Long.parseLong(insertBillDto.getBillNo2()));
+            billDto.init();
+
+            billService.createBill(billDto);
+        } catch (NullPointerException e) {
+            logger.warn(billTypeCode + "财政段票据为空");
+        } catch (Exception e) {
+            logger.error("出现未知错误" + e);
+        } finally {
+            fanoutRabbitUtils.sendBillDelayMessage(billTypeCode);
+        }
     }
 }

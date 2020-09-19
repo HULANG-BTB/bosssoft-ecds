@@ -61,6 +61,16 @@ public class TemplateDefaultServiceImpl extends ServiceImpl<TemplateDefaultMappe
     }
 
     @Override
+    public boolean isDefault(String type, Long defaultId) {
+        QueryWrapper<TemplateDefaultPo> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda()
+                .eq(TemplateDefaultPo::getType, type)
+                .eq(TemplateDefaultPo::getDefaultId, defaultId);
+        TemplateDefaultPo po = this.getOne(queryWrapper, false);
+        return po!=null;
+    }
+
+    @Override
     public boolean removeDefault(String type, String billCode) {
 
         QueryWrapper<TemplateDefaultPo> queryWrapper = new QueryWrapper<>();

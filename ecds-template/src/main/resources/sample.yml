@@ -1,0 +1,35 @@
+# 配置文件样例
+# 命名为 application.yml 放在本地
+# 或者命名为 ecds-template-dev.yaml 放在 Nacos 配置中心
+server:
+  port: 8080
+  servlet:
+    context-path: /ecds-template
+spring:
+  application:
+    name: ecds-template
+  cloud:
+    nacos:
+      discovery:
+        # server-addr: [册中心地址]
+        # ip: [公网 IP 地址]
+        # port: [公网端口]
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/ecds_financial?characterEncoding=UTF-8&serverTimezone=UTC
+    username: root
+    password: root
+
+aliyun:
+  oss:
+    # endpoint: https://oss-cn-shenzhen.aliyuncs.com
+    # accessKeyId: <accessKeyId>
+    # accessKeySecret: <accessKeySecret>
+    # bucketName: <bucketName>
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+pdfDest: output/
+fontType: simsun.ttc

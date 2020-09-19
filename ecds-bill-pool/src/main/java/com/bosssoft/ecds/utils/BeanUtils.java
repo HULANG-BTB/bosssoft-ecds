@@ -15,7 +15,6 @@ import java.util.concurrent.ConcurrentMap;
  */
 public class BeanUtils {
 
-    @SuppressWarnings("AlibabaConstantFieldShouldBeUpperCase")
     private static ConcurrentMap<String, BeanCopier> beanCopierMap = new ConcurrentHashMap<>();
 
     public static <T> T convertObject(Object source, Class<T> target) {
